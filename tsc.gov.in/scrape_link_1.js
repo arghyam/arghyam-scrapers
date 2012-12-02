@@ -1,9 +1,12 @@
 var x           = require('casper').selectXPath,
     casper      = require('casper').create({
                         clientScripts       : "jquery.min.js"
-                    }),
+                  }),
     fs = require('fs'),
-    handle;
+    handle,
+    districtData;
+
+var i =10;
 
 // csv(array_of_arrays) --> csv string
 var csv = (function(delimiter) {
@@ -53,19 +56,17 @@ casper.start('http://tsc.gov.in/Report/Financial/RptFinancialProgressStatewiseDi
     },{stateTbId: stateTbId});
     handle.write(csv(stateData));
     handle.close();
-    handle = fs.open('districtData_L1.csv', 'w');
-    var districtData;
+    var results = [];
     casper.each(stateTbIds, function(casper, stateID, index)
     {
         this.then(function()
         {
             this.click(x('//*[@id="'+ stateID +'"]'));
         });
+
         this.then(function()
         {
-            // returns data from the district table
-            districtData = 
-            this.evaluate(function(districtTbId){
+            districtData = this.evaluate(function(districtTbId) {
                 return $('#'+ districtTbId +' tbody tr')
                     .slice(2)
                     .map(function(){
@@ -80,11 +81,16 @@ casper.start('http://tsc.gov.in/Report/Financial/RptFinancialProgressStatewiseDi
                                 ];
                     }).get();    
             }, {districtTbId: districtTbId});
-            handle.write(csv(districtData));
+            results.push.apply(results, districtData);
+            console.log('State:', index, 'out of', stateTbIds.length, results.length, 'rows');
             this.back();
         });
     });
-    handle.close();
+    casper.then(function() {
+        handle = fs.open('districtData_L1.csv', 'w');
+        handle.write(csv(results));
+        handle.close();
+    });
 });
 
 casper.run();

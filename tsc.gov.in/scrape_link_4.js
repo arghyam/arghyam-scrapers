@@ -24,7 +24,6 @@ var csv = (function(delimiter) {
 
 casper.start('http://tsc.gov.in/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home', function()
 {
-    handle = fs.open('stateData_L4.csv','w');
     var stateTbClassname = "Table";
     var stateTbIDstartswith = "ctl00_ContentPlaceHolder1_rptAbstract";
     // return state table IDs
@@ -36,6 +35,8 @@ casper.start('http://tsc.gov.in/Report/Physical/RptPhysicalProgessStateWiseDistr
     }, {stateTbIDstartswith:stateTbIDstartswith});
     var distTableClassname = "Table";
     // return state table data
+    var stateArr = [];
+    var districtArr = [];
     var stateData = 
     this.evaluate(function(stateTbClassname){
         return $('.'+stateTbClassname+' tbody')
@@ -53,9 +54,12 @@ casper.start('http://tsc.gov.in/Report/Physical/RptPhysicalProgessStateWiseDistr
                         ];  
             }).get();  
     },{stateTbClassname: stateTbClassname});
-    handle.write(csv(stateData));
-    handle.close();
-    handle = fs.open('districtData_L4.csv','w');
+    stateArr.push.apply(stateArr, stateData);
+    casper.then(function() {
+        handle = fs.open('stateData_L4.csv', 'w');
+        handle.write(csv(stateArr));
+        handle.close();
+    });
     casper.each(stateTbIDs, function(casper, stateID, index)
     {
         this.then(function()
@@ -81,11 +85,16 @@ casper.start('http://tsc.gov.in/Report/Physical/RptPhysicalProgessStateWiseDistr
                                 ];  
                     }).get();    
             }, {distTableClassname: distTableClassname});
-            handle.write(csv(districtData));
+            districtArr.push.apply(districtArr, districtData);
+            console.log('District:', index, 'out of', stateTbIDs.length, districtArr.length, 'rows');
             this.back();
         });
     });
-    handle.close();
+    casper.then(function() {
+        handle = fs.open('districtData_L4.csv', 'w');
+        handle.write(csv(districtArr));
+        handle.close();
+    });
 });
 
 casper.run();

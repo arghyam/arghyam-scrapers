@@ -28,6 +28,7 @@ casper.start('http://tsc.gov.in/Report/Special%20Report/RptCoverageCensusPer.asp
     var dropdownList1 = this.evaluate(function () {
         return $('#ctl00_ContentPlaceHolder1_listBoxState')
             .children()
+            .eq(0)
             .map(function(){ 
                 return $(this)
                     .attr('value') 
@@ -43,11 +44,10 @@ casper.start('http://tsc.gov.in/Report/Special%20Report/RptCoverageCensusPer.asp
                     .attr('value') 
             }).get();
     });
-    var districtData;
     // iterate through 'dropdownList1's and 'dropdownList2's in a nested fashion
-    casper.each(dropdownList1, function(casper, dropdownList1option, index) {
-        casper.each(dropdownList2, function(casper, dropdownList2option, index) {
-            handle = fs.open(''+dropdownList1option+'_'+dropdownList2option+'_L7.csv','w');
+    casper.each(dropdownList2, function(casper, dropdownList2option, index) {
+        var sanitationArr = [];
+        casper.each(dropdownList1, function(casper, dropdownList1option, index) {
             this.then(function () {
                 // fill form but don't submit
                 this.fill('form#aspnetForm', {
@@ -58,12 +58,11 @@ casper.start('http://tsc.gov.in/Report/Special%20Report/RptCoverageCensusPer.asp
                 this.click(x('//*[@id="ctl00_ContentPlaceHolder1_btnSubmit"]'));
             })
             this.then(function () {
-                // returns state/district table data
-                districtData = 
+                // returns district table data
+                var sanitationData = 
                 this.evaluate(function(distTableClassname){   
                     return $('.'+ distTableClassname +' tbody tr')
-                        .slice(4)
-                        .not(':last')
+                        .slice(2)
                         .map(function(){  
                             return [
                                 $(this)
@@ -76,12 +75,19 @@ casper.start('http://tsc.gov.in/Report/Special%20Report/RptCoverageCensusPer.asp
                                     ];  
                         }).get();    
                 }, {distTableClassname: distTableClassname});
-                handle.write(csv(districtData));
-                handle.close();
+                sanitationArr.push.apply(sanitationArr, sanitationData);
+                console.log(dropdownList2option,'-->', dropdownList1option, 'collected :', sanitationArr.length);
                 this.back();
             })
         });
+        casper.then(function() {
+        handle = fs.open(''+dropdownList2option+'_L7.csv', 'w');
+        handle.write(csv(sanitationArr));
+        handle.close();
+
+        });
     });
+
 });
 
 casper.run();

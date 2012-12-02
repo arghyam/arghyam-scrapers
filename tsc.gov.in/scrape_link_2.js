@@ -21,7 +21,7 @@ var csv = (function(delimiter) {
         return rows.map(formatRow).join("\n");
     };
 })(',');
-
+var results = [];
 casper.start('http://tsc.gov.in/Report/ProjectSanctioned/RptProjectApprovedStatewise_net.aspx?id=Home', function()
 {
     handle = fs.open('stateData_L2.csv', 'w');
@@ -85,12 +85,19 @@ casper.start('http://tsc.gov.in/Report/ProjectSanctioned/RptProjectApprovedState
                                 ];  
                     }).get();    
             }, {distTableClassname: distTableClassname});
+            results.push.apply(results, districtData);
+            console.log('District:', index, 'out of', stateTbIDs.length, results.length, 'rows');
             this.back();
-            handle.write(csv(districtData));
         });
     });
-    handle.close();
+    casper.then(function() {
+        handle = fs.open('districtData_L2.csv', 'w');
+        handle.write(csv(results));
+        handle.close();
+    });
 });
+
+
 
 casper.run();
 

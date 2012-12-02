@@ -53,7 +53,7 @@ casper.start('http://tsc.gov.in/Report/otherreports/RptFinancialProgofSchemes.as
                       }).get();  
     },{stateTbClassname: stateTbClassname});
     // write csv file
-    write('stateData-L8.csv', arr);
+    write('stateData_L8.csv', arr);
 });
 
 casper.run();

@@ -21,7 +21,8 @@ var csv = (function(delimiter) {
         return rows.map(formatRow).join("\n");
     };
 })(',');
-
+var physicalArr = [];
+var financialArr = [];
 casper.start('http://tsc.gov.in/Report/Status%20Note/RptStateNoteGeneral_net.aspx?id=Home', function() {
     var financialTbClassname = 'Table';
     var physicalTbId  = 'ctl00_ContentPlaceHolder1_Table1';
@@ -29,23 +30,20 @@ casper.start('http://tsc.gov.in/Report/Status%20Note/RptStateNoteGeneral_net.asp
     var dropdownList = this.evaluate(function () {
         return $('#ctl00_ContentPlaceHolder1_ddlState')
                                                         .children()
-                                                        .slice(1)
                                                         .map(function(){ 
                                                             return $(this)
                                                                             .attr('value') 
                                                         }).get();
     });
-    casper.each(dropdownList, function(casper, dropdownListoption, index) {
-        handle = fs.open(''+dropdownListoption+'.csv', 'w');
-        this.then(function () {
-            this.fill('form#aspnetForm', {
-                'ctl00$ContentPlaceHolder1$ddlState'   :    ''+dropdownListoption+''
-            }, false);
-        });
+    casper.then(function () {
+        this.fill('form#aspnetForm', {
+                'ctl00$ContentPlaceHolder1$ddlState'   :    ''+dropdownList[1]+''
+        }, false);
         this.then(function () {
             // returns data from the physical progress table
             var physicalData =  this.evaluate(function(physicalTbId){
-                                    return $('#'+physicalTbId+' tbody tr')
+                                    return $('.Table tbody').eq(0)
+                                        .children()
                                         .slice(3)
                                         .map(function(){
                                             return [
@@ -59,13 +57,13 @@ casper.start('http://tsc.gov.in/Report/Status%20Note/RptStateNoteGeneral_net.asp
                                                     ];  
                                         }).get();  
                                 },{physicalTbId: physicalTbId});
-            handle.write(csv(physicalData));
+            physicalArr.push.apply(physicalArr, physicalData);
+            console.log('Physical State:',physicalArr.length,'rows');
             // returns data from the financial progress table
             var financialData = this.evaluate(function(financialTbClassname){
-                                    return $('.'+financialTbClassname+' tbody')
+                                    return $('.Table tbody').eq(1)
                                         .children()
                                         .slice(2)
-                                        .not(':last')
                                         .map(function(){
                                             return [
                                                 $(this)
@@ -78,10 +76,79 @@ casper.start('http://tsc.gov.in/Report/Status%20Note/RptStateNoteGeneral_net.asp
                                                     ];
                                         }).get();  
                                 },{financialTbClassname: financialTbClassname});
-            handle.write(csv(financialData));
+            financialArr.push.apply(financialArr, financialData);
+            console.log('Financial State:',financialArr.length,'rows');
+        });
+    });
+    casper.then(function() {
+        handle = fs.open('statePhysicalData_L3.csv', 'w');
+        handle.write(csv(physicalArr));
+        handle.close();
+        physicalArr = [];
+    });
+    casper.then(function() {
+        handle1 = fs.open('stateFinancialData_L3.csv', 'w');
+        handle1.write(csv(financialArr));
+        handle1.close();
+        financialArr = [];
+    });
+    casper.each(dropdownList.slice(2), function(casper, dropdownListoption, index) {
+        this.then(function () {
+            this.fill('form#aspnetForm', {
+                'ctl00$ContentPlaceHolder1$ddlState'   :    ''+dropdownListoption+''
+            }, false);
+        });
+        this.then(function () {
+            // returns data from the physical progress table
+            var physicalData =  this.evaluate(function(physicalTbId){
+                                    return $('.Table tbody').eq(0)
+                                        .children()
+                                        .slice(4)
+                                        .map(function(){
+                                            return [
+                                                    $(this)
+                                                        .children()
+                                                        .map(function(){ 
+                                                            return $(this)
+                                                                .text()
+                                                                .trim(); 
+                                                        }).get()
+                                                    ];  
+                                        }).get();  
+                                },{physicalTbId: physicalTbId});
+            physicalArr.push.apply(physicalArr, physicalData);
+            console.log('Physical - State:', index, 'out of', dropdownList.length, physicalArr.length, 'rows');
+            // returns data from the financial progress table
+            var financialData = this.evaluate(function(financialTbClassname){
+                                    return $('.Table tbody').eq(1)
+                                        .children()
+                                        .slice(3)
+                                        .map(function(){
+                                            return [
+                                                $(this)
+                                                    .children()
+                                                    .map(function(){ 
+                                                        return $(this)
+                                                            .text()
+                                                            .trim(); 
+                                                    }).get()
+                                                    ];
+                                        }).get();  
+                                },{financialTbClassname: financialTbClassname});
+            financialArr.push.apply(financialArr, financialData);
+            console.log('Financial - State:', index, 'out of', dropdownList.length, financialArr.length, 'rows');
         });
     })
-    handle.close();
+    casper.then(function() {
+        handle = fs.open('districtPhysicalData_L3.csv', 'w');
+        handle.write(csv(physicalArr));
+        handle.close();
+    });
+    casper.then(function() {
+        handle1 = fs.open('districtFinancialData_L3.csv', 'w');
+        handle1.write(csv(financialArr));
+        handle1.close();
+    });
 });
 
 casper.run();
