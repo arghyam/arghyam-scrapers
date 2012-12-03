@@ -1,26 +1,6 @@
-var x       = require('casper').selectXPath,
-    casper  = require('casper').create({
-                    clientScripts       : "jquery.min.js"
-                }),
-    fs      = require('fs'),
-    handle;
-
-// csv(array_of_arrays) --> csv string
-var csv = (function(delimiter) {
-    reFormat = new RegExp("[\"" + delimiter + "\n]");
-
-    function formatRow(row) {
-        return row.map(formatValue).join(delimiter);
-    }
-
-    function formatValue(text) {
-        return reFormat.test(text) ? "\"" + text.replace(/\"/g, "\"\"") + "\"" : text;
-    }
-
-    return function (rows) {
-        return rows.map(formatRow).join("\n");
-    };
-})(',');
+var x = require('casper').selectXPath,
+    casper = require('casper').create({clientScripts: "jquery.min.js"}),
+    write = require('./csv').write;
 
 casper.start('http://tsc.gov.in/Report/Release/RptReleaseDataBetweenDates.aspx?id=Home', function() {
 
@@ -30,9 +10,8 @@ casper.start('http://tsc.gov.in/Report/Release/RptReleaseDataBetweenDates.aspx?i
         return $('#ctl00_ContentPlaceHolder1_ddlState')
             .children()
             .slice(1)
-            .map(function(){ 
-                return $(this)
-                    .attr('value') 
+            .map(function(){
+                return $(this).attr('value');
             }).get();
     });
     var districtArr = [];
@@ -51,17 +30,17 @@ casper.start('http://tsc.gov.in/Report/Release/RptReleaseDataBetweenDates.aspx?i
                 return $('#'+ districtTbId +' tbody tr')
                     .slice(4)
                     .not(':last')
-                    .map(function(){  
+                    .map(function(){
                         return [
                             $(this)
                                 .children()
-                                .map(function(){ 
+                                .map(function(){
                                     return $(this)
                                         .text()
-                                        .trim(); 
+                                        .trim();
                                 }).get()
-                                ];  
-                    }).get();    
+                                ];
+                    }).get();
             }, {districtTbId: districtTbId});
             districtArr.push.apply(districtArr, districtData);
             console.log('District:', index, 'out of', dropdownList.length, districtArr.length, 'rows');
@@ -69,9 +48,7 @@ casper.start('http://tsc.gov.in/Report/Release/RptReleaseDataBetweenDates.aspx?i
         });
     });
     casper.then(function() {
-        handle = fs.open('districtData_L6.csv', 'w');
-        handle.write(csv(districtArr));
-        handle.close();
+        write('districtData_L6.csv', districtArr);
     });
 
 });

@@ -1,26 +1,6 @@
-var x           = require('casper').selectXPath,
-    casper      = require('casper').create({
-                    clientScripts       : "jquery.min.js"
-                    }),
-    fs          = require('fs'),
-    handle;
-
-// csv(array_of_arrays) --> csv string
-var csv = (function(delimiter) {
-    reFormat = new RegExp("[\"" + delimiter + "\n]");
-
-    function formatRow(row) {
-        return row.map(formatValue).join(delimiter);
-    }
-
-    function formatValue(text) {
-        return reFormat.test(text) ? "\"" + text.replace(/\"/g, "\"\"") + "\"" : text;
-    }
-
-    return function (rows) {
-        return rows.map(formatRow).join("\n");
-    };
-})(',');
+var x = require('casper').selectXPath,
+    casper = require('casper').create({clientScripts: "jquery.min.js"}),
+    write = require('./csv').write;
 
 casper.start('http://tsc.gov.in/Report/Special%20Report/RptCoverageCensusPer.aspx?id=Home', function() {
     var distTableClassname = "Table";
@@ -29,9 +9,8 @@ casper.start('http://tsc.gov.in/Report/Special%20Report/RptCoverageCensusPer.asp
         return $('#ctl00_ContentPlaceHolder1_listBoxState')
             .children()
             .eq(0)
-            .map(function(){ 
-                return $(this)
-                    .attr('value') 
+            .map(function(){
+                return $(this).attr('value');
             }).get();
     });
 
@@ -39,9 +18,8 @@ casper.start('http://tsc.gov.in/Report/Special%20Report/RptCoverageCensusPer.asp
     var dropdownList2 = this.evaluate(function () {
         return $('#ctl00_ContentPlaceHolder1_listBoxDistrict')
             .children()
-            .map(function(){ 
-                return $(this)
-                    .attr('value') 
+            .map(function(){
+                return $(this).attr('value');
             }).get();
     });
     // iterate through 'dropdownList1's and 'dropdownList2's in a nested fashion
@@ -56,35 +34,32 @@ casper.start('http://tsc.gov.in/Report/Special%20Report/RptCoverageCensusPer.asp
                 }, false);
                 // submit
                 this.click(x('//*[@id="ctl00_ContentPlaceHolder1_btnSubmit"]'));
-            })
+            });
             this.then(function () {
                 // returns district table data
-                var sanitationData = 
-                this.evaluate(function(distTableClassname){   
+                var sanitationData =
+                this.evaluate(function(distTableClassname){
                     return $('.'+ distTableClassname +' tbody tr')
                         .slice(2)
-                        .map(function(){  
+                        .map(function(){
                             return [
                                 $(this)
                                     .children()
-                                    .map(function(){ 
+                                    .map(function(){
                                         return $(this)
                                             .text()
-                                            .trim(); 
+                                            .trim();
                                     }).get()
-                                    ];  
-                        }).get();    
+                                    ];
+                        }).get();
                 }, {distTableClassname: distTableClassname});
                 sanitationArr.push.apply(sanitationArr, sanitationData);
                 console.log(dropdownList2option,'-->', dropdownList1option, 'collected :', sanitationArr.length);
                 this.back();
-            })
+            });
         });
         casper.then(function() {
-        handle = fs.open(''+dropdownList2option+'_L7.csv', 'w');
-        handle.write(csv(sanitationArr));
-        handle.close();
-
+            write(''+dropdownList2option+'_L7.csv', sanitationArr);
         });
     });
 

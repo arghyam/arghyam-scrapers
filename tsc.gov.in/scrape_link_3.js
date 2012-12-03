@@ -1,26 +1,7 @@
-var x       = require('casper').selectXPath,
-    casper  = require('casper').create({
-                clientScripts       : "jquery.min.js"
-            }),
-    fs      = require('fs'),
-    handle;
+var x = require('casper').selectXPath,
+    casper = require('casper').create({clientScripts: "jquery.min.js"}),
+    write = require('./csv').write;
 
-// csv(array_of_arrays) --> csv string
-var csv = (function(delimiter) {
-    reFormat = new RegExp("[\"" + delimiter + "\n]");
-
-    function formatRow(row) {
-        return row.map(formatValue).join(delimiter);
-    }
-
-    function formatValue(text) {
-        return reFormat.test(text) ? "\"" + text.replace(/\"/g, "\"\"") + "\"" : text;
-    }
-
-    return function (rows) {
-        return rows.map(formatRow).join("\n");
-    };
-})(',');
 var physicalArr = [];
 var financialArr = [];
 casper.start('http://tsc.gov.in/Report/Status%20Note/RptStateNoteGeneral_net.aspx?id=Home', function() {
@@ -29,11 +10,10 @@ casper.start('http://tsc.gov.in/Report/Status%20Note/RptStateNoteGeneral_net.asp
     // returns values in drop-down input
     var dropdownList = this.evaluate(function () {
         return $('#ctl00_ContentPlaceHolder1_ddlState')
-                                                        .children()
-                                                        .map(function(){ 
-                                                            return $(this)
-                                                                            .attr('value') 
-                                                        }).get();
+                .children()
+                .map(function(){
+                    return $(this).attr('value');
+                }).get();
     });
     casper.then(function () {
         this.fill('form#aspnetForm', {
@@ -49,13 +29,13 @@ casper.start('http://tsc.gov.in/Report/Status%20Note/RptStateNoteGeneral_net.asp
                                             return [
                                                     $(this)
                                                         .children()
-                                                        .map(function(){ 
+                                                        .map(function(){
                                                             return $(this)
                                                                 .text()
-                                                                .trim(); 
+                                                                .trim();
                                                         }).get()
-                                                    ];  
-                                        }).get();  
+                                                    ];
+                                        }).get();
                                 },{physicalTbId: physicalTbId});
             physicalArr.push.apply(physicalArr, physicalData);
             console.log('Physical State:',physicalArr.length,'rows');
@@ -68,28 +48,24 @@ casper.start('http://tsc.gov.in/Report/Status%20Note/RptStateNoteGeneral_net.asp
                                             return [
                                                 $(this)
                                                     .children()
-                                                    .map(function(){ 
+                                                    .map(function(){
                                                         return $(this)
                                                             .text()
-                                                            .trim(); 
+                                                            .trim();
                                                     }).get()
                                                     ];
-                                        }).get();  
+                                        }).get();
                                 },{financialTbClassname: financialTbClassname});
             financialArr.push.apply(financialArr, financialData);
             console.log('Financial State:',financialArr.length,'rows');
         });
     });
     casper.then(function() {
-        handle = fs.open('statePhysicalData_L3.csv', 'w');
-        handle.write(csv(physicalArr));
-        handle.close();
+        write('statePhysicalData_L3.csv', physicalArr);
         physicalArr = [];
     });
     casper.then(function() {
-        handle1 = fs.open('stateFinancialData_L3.csv', 'w');
-        handle1.write(csv(financialArr));
-        handle1.close();
+        write('stateFinancialData_L3.csv', financialArr);
         financialArr = [];
     });
     casper.each(dropdownList.slice(2), function(casper, dropdownListoption, index) {
@@ -108,13 +84,13 @@ casper.start('http://tsc.gov.in/Report/Status%20Note/RptStateNoteGeneral_net.asp
                                             return [
                                                     $(this)
                                                         .children()
-                                                        .map(function(){ 
+                                                        .map(function(){
                                                             return $(this)
                                                                 .text()
-                                                                .trim(); 
+                                                                .trim();
                                                         }).get()
-                                                    ];  
-                                        }).get();  
+                                                    ];
+                                        }).get();
                                 },{physicalTbId: physicalTbId});
             physicalArr.push.apply(physicalArr, physicalData);
             console.log('Physical - State:', index, 'out of', dropdownList.length, physicalArr.length, 'rows');
@@ -127,27 +103,23 @@ casper.start('http://tsc.gov.in/Report/Status%20Note/RptStateNoteGeneral_net.asp
                                             return [
                                                 $(this)
                                                     .children()
-                                                    .map(function(){ 
+                                                    .map(function(){
                                                         return $(this)
                                                             .text()
-                                                            .trim(); 
+                                                            .trim();
                                                     }).get()
                                                     ];
-                                        }).get();  
+                                        }).get();
                                 },{financialTbClassname: financialTbClassname});
             financialArr.push.apply(financialArr, financialData);
             console.log('Financial - State:', index, 'out of', dropdownList.length, financialArr.length, 'rows');
         });
-    })
-    casper.then(function() {
-        handle = fs.open('districtPhysicalData_L3.csv', 'w');
-        handle.write(csv(physicalArr));
-        handle.close();
     });
     casper.then(function() {
-        handle1 = fs.open('districtFinancialData_L3.csv', 'w');
-        handle1.write(csv(financialArr));
-        handle1.close();
+        write('districtPhysicalData_L3.csv', physicalArr);
+    });
+    casper.then(function() {
+        write('districtFinancialData_L3.csv', financialArr);
     });
 });
 
