@@ -10,7 +10,7 @@ casper.start('http://tsc.gov.in/Report/ProjectSanctioned/RptProjectApprovedState
     var stateTbIDs = this.evaluate(function(stateTbIDstartswith){
         return $('a[id^='+stateTbIDstartswith+']')
             .map(function(){
-                return $(this).attr('id');
+                return [[ $(this).attr('id'),$(this).text() ]];
             }).get();
     }, {stateTbIDstartswith:stateTbIDstartswith});
     var distTableClassname = "Table";
@@ -39,27 +39,27 @@ casper.start('http://tsc.gov.in/Report/ProjectSanctioned/RptProjectApprovedState
     {
         this.then(function()
         {
-            this.click(x('//*[@id="'+ stateID +'"]'));
+            this.click(x('//*[@id="'+ stateID[0] +'"]'));
         });
         this.then(function()
         {
+            var stateName = stateID[1];
             // returns district table data
-            var districtData = this.evaluate(function(distTableClassname){
+            var districtData = this.evaluate(function(distTableClassname,stateName){
                 return $('.'+ distTableClassname +' tbody tr')
                     .slice(4)
                     .not(':last')
-                    .map(function(){
-                        return [
-                            $(this)
-                                .children()
-                                .map(function(){
-                                    return $(this)
-                                        .text()
-                                        .trim();
-                                }).get()
-                                ];
-                    }).get();
-            }, {distTableClassname: distTableClassname});
+                    .map(function(){  
+                                        var values = $(this)
+                                                            .children()
+                                                            .map(function(){
+                                                                return $(this)
+                                                                    .text()
+                                                                    .trim();
+                                                            }).get();
+                                        return [values];
+                                    }).get();
+            }, {distTableClassname: distTableClassname,stateName:stateName});
             results.push.apply(results, districtData);
             console.log('District:', index, 'out of', stateTbIDs.length, results.length, 'rows');
             this.back();

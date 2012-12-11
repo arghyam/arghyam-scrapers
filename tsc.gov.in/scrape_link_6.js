@@ -1,6 +1,7 @@
 var x = require('casper').selectXPath,
     casper = require('casper').create({clientScripts: "jquery.min.js"}),
-    write = require('./csv').write;
+    write = require('./csv').write,
+    stateName;
 
 casper.start('http://tsc.gov.in/Report/Release/RptReleaseDataBetweenDates.aspx?id=Home', function() {
 
@@ -11,14 +12,18 @@ casper.start('http://tsc.gov.in/Report/Release/RptReleaseDataBetweenDates.aspx?i
             .children()
             .slice(1)
             .map(function(){
-                return $(this).attr('value');
+                return [[
+                                $(this).attr('value'),
+                                $(this).text()
+                           ]]
             }).get();
     });
     var districtArr = [];
     casper.each(dropdownList, function(casper, dropdownListoption, index) {
         this.then(function () {
+            stateName = dropdownListoption[1];
             this.fill('form#aspnetForm', {
-                'ctl00$ContentPlaceHolder1$ddlState'   :    ''+dropdownListoption+''
+                'ctl00$ContentPlaceHolder1$ddlState'   :    ''+dropdownListoption[0]+''
             }, false);
         });
         this.then(function () {
@@ -26,22 +31,20 @@ casper.start('http://tsc.gov.in/Report/Release/RptReleaseDataBetweenDates.aspx?i
         });
         this.then(function () {
             var districtData =
-            this.evaluate(function(districtTbId){
+            this.evaluate(function(districtTbId,stateName){
                 return $('#'+ districtTbId +' tbody tr')
                     .slice(4)
                     .not(':last')
                     .map(function(){
-                        return [
-                            $(this)
-                                .children()
-                                .map(function(){
-                                    return $(this)
-                                        .text()
-                                        .trim();
-                                }).get()
-                                ];
+                                                var values = $(this).children().map(function(){
+                                                    return $(this).text().trim();
+                                        }).get();
+                        values.splice(0, 0, stateName);
+                        return [values];
                     }).get();
-            }, {districtTbId: districtTbId});
+            }, {districtTbId: districtTbId,
+                stateName:stateName
+            });
             districtArr.push.apply(districtArr, districtData);
             console.log('District:', index, 'out of', dropdownList.length, districtArr.length, 'rows');
             this.back();

@@ -12,12 +12,15 @@ casper.start('http://tsc.gov.in/Report/Status%20Note/RptStateNoteGeneral_net.asp
         return $('#ctl00_ContentPlaceHolder1_ddlState')
                 .children()
                 .map(function(){
-                    return $(this).attr('value');
+                    return [[
+                                $(this).attr('value'),
+                                $(this).text()
+                           ]]
                 }).get();
     });
     casper.then(function () {
         this.fill('form#aspnetForm', {
-                'ctl00$ContentPlaceHolder1$ddlState'   :    ''+dropdownList[1]+''
+                'ctl00$ContentPlaceHolder1$ddlState'   :    ''+dropdownList[1][0]+''
         }, false);
         this.then(function () {
             // returns data from the physical progress table
@@ -26,16 +29,12 @@ casper.start('http://tsc.gov.in/Report/Status%20Note/RptStateNoteGeneral_net.asp
                                         .children()
                                         .slice(3)
                                         .map(function(){
-                                            return [
-                                                    $(this)
-                                                        .children()
-                                                        .map(function(){
-                                                            return $(this)
-                                                                .text()
-                                                                .trim();
-                                                        }).get()
-                                                    ];
+                                                var values = $(this).children().map(function(){
+                                                    return $(this).text().trim();
                                         }).get();
+                        
+                        return [values];
+                    }).get();
                                 },{physicalTbId: physicalTbId});
             physicalArr.push.apply(physicalArr, physicalData);
             console.log('Physical State:',physicalArr.length,'rows');
@@ -45,16 +44,12 @@ casper.start('http://tsc.gov.in/Report/Status%20Note/RptStateNoteGeneral_net.asp
                                         .children()
                                         .slice(2)
                                         .map(function(){
-                                            return [
-                                                $(this)
-                                                    .children()
-                                                    .map(function(){
-                                                        return $(this)
-                                                            .text()
-                                                            .trim();
-                                                    }).get()
-                                                    ];
+                                                    var values = $(this).children().map(function(){
+                                                        return $(this).text().trim();
                                         }).get();
+                        
+                        return [values];
+                    }).get();
                                 },{financialTbClassname: financialTbClassname});
             financialArr.push.apply(financialArr, financialData);
             console.log('Financial State:',financialArr.length,'rows');
@@ -70,47 +65,44 @@ casper.start('http://tsc.gov.in/Report/Status%20Note/RptStateNoteGeneral_net.asp
     });
     casper.each(dropdownList.slice(2), function(casper, dropdownListoption, index) {
         this.then(function () {
+            stateName = dropdownListoption[1];
             this.fill('form#aspnetForm', {
-                'ctl00$ContentPlaceHolder1$ddlState'   :    ''+dropdownListoption+''
+                'ctl00$ContentPlaceHolder1$ddlState'   :    ''+dropdownListoption[0]+''
             }, false);
         });
         this.then(function () {
             // returns data from the physical progress table
-            var physicalData =  this.evaluate(function(physicalTbId){
+            var physicalData =  this.evaluate(function(physicalTbId, stateName){
                                     return $('.Table tbody').eq(0)
                                         .children()
                                         .slice(4)
                                         .map(function(){
-                                            return [
-                                                    $(this)
-                                                        .children()
-                                                        .map(function(){
-                                                            return $(this)
-                                                                .text()
-                                                                .trim();
-                                                        }).get()
-                                                    ];
+                                            var values = $(this).children().map(function(){
+                                                    return $(this).text().trim();
                                         }).get();
-                                },{physicalTbId: physicalTbId});
+                        values.splice(0, 0, stateName);
+                        return [values];
+                    }).get();
+                                },{physicalTbId: physicalTbId,
+                                    stateName:stateName
+
+                                });
             physicalArr.push.apply(physicalArr, physicalData);
             console.log('Physical - State:', index, 'out of', dropdownList.length, physicalArr.length, 'rows');
             // returns data from the financial progress table
-            var financialData = this.evaluate(function(financialTbClassname){
+            var financialData = this.evaluate(function(financialTbClassname, stateName){
                                     return $('.Table tbody').eq(1)
                                         .children()
                                         .slice(3)
                                         .map(function(){
-                                            return [
-                                                $(this)
-                                                    .children()
-                                                    .map(function(){
-                                                        return $(this)
-                                                            .text()
-                                                            .trim();
-                                                    }).get()
-                                                    ];
+                                            var values = $(this).children().map(function(){
+                                                return $(this).text().trim();
                                         }).get();
-                                },{financialTbClassname: financialTbClassname});
+                        values.splice(0, 0, stateName);
+                        return [values];
+                    }).get();
+                                },{financialTbClassname: financialTbClassname,
+                                    stateName:stateName});
             financialArr.push.apply(financialArr, financialData);
             console.log('Financial - State:', index, 'out of', dropdownList.length, financialArr.length, 'rows');
         });

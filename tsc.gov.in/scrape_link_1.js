@@ -1,6 +1,6 @@
-var x = require('casper').selectXPath,
-    casper = require('casper').create({clientScripts: "jquery.min.js"}),
-    write = require('./csv').write;
+var x       = require('casper').selectXPath,
+    casper  = require('casper').create({clientScripts: "jquery.min.js"}),
+    write   = require('./csv').write;
 
 casper.start('http://tsc.gov.in/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home', function()
 {
@@ -9,8 +9,10 @@ casper.start('http://tsc.gov.in/Report/Financial/RptFinancialProgressStatewiseDi
     var stateTbIds = this.evaluate(function(stateTbId){
         return $('a[id^='+stateTbId+']')
             .map(function(){
-                return $(this)
-                    .attr('id');
+                return [[
+                         $(this).attr('id'),
+                         $(this).text()
+                       ]]
         }).get();
     }, {stateTbId:stateTbId});
     // returns data from the state table
@@ -36,26 +38,25 @@ casper.start('http://tsc.gov.in/Report/Financial/RptFinancialProgressStatewiseDi
     {
         this.then(function()
         {
-            this.click(x('//*[@id="'+ stateID +'"]'));
+            this.click(x('//*[@id="'+ stateID[0] +'"]'));
         });
 
         this.then(function()
         {
-            var districtData = this.evaluate(function(districtTbId) {
+            var districtData = this.evaluate(function(districtTbId, stateName) {
                 return $('#'+ districtTbId +' tbody tr')
                     .slice(2)
                     .map(function(){
-                        return [
-                            $(this)
-                                .children()
-                                .map(function(){
-                                    return $(this)
-                                        .text()
-                                        .trim();
-                                }).get()
-                                ];
+                        var values = $(this).children().map(function(){
+                                        return $(this).text().trim();
+                                     }).get();
+                        values.splice(0, 0, stateName);
+                        return [values];
                     }).get();
-            }, {districtTbId: districtTbId});
+            }, {
+                districtTbId: districtTbId, stateName:stateID[1]
+            });
+
             results.push.apply(results, districtData);
             console.log('State:', index, 'out of', stateTbIds.length, results.length, 'rows');
             this.back();
