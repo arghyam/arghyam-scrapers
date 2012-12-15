@@ -2,16 +2,16 @@ var x       = require('casper').selectXPath,
     casper  = require('casper').create({clientScripts: "jquery.min.js"}),
     write   = require('./csv').write;
 
-var stateTbId           = "tblAbstract",
-    stateTbSel          = '#'+ stateTbId +' tbody tr:gt(1)',
+var stateTbId           = "ctl00_ContentPlaceHolder1_div_Data",
+    stateTbSel          = '#'+ stateTbId +' tbody tr:gt(3)',
     stateTbIds;
 
-var districtTbId  = 'tblAbstract',
-    districtTbSel = '#'+ districtTbId +' tbody tr:gt(2)';
+var districtTbId  = 'ctl00_ContentPlaceHolder1_div_Data',
+    districtTbSel = '#'+ districtTbId +' tbody tr:gt(4)';
 
 var buffer  =  [];
 
-casper.start('http://tsc.gov.in/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home', function()
+casper.start('http://tsc.gov.in/Report/MonitoringStatusReport/RptAchofIEC_HRDStatewiseDistrictwiseDetails.aspx?fin=2012-2013&id=AIP', function()
 {
   stateTbIds    = this.evaluate(function(stateTbId)
   {
@@ -26,16 +26,19 @@ casper.start('http://tsc.gov.in/Report/Physical/RptPhysicalProgessStateWiseDistr
 
   stateData = casper.evaluate(function(stateTbSel)
   {
-    var rows = $(stateTbSel).map(function()
+    var rows = $(stateTbSel).map(function(i)
     {
       return [ $(this).children().map(function(){ if($(this).text() != '') { return $(this).text().trim(); } }).get() ]
     }).get();
+    // <-- specific to this link
+    rows[ rows.length -1 ].splice(0,0,'')
+    // -->
     return rows
   },{stateTbSel: stateTbSel});
 
   this.then(function()
   {
-    write('stateData_L4.csv', stateData);
+    write('stateData_L12.csv', stateData);
   });
 
   this.each(stateTbIds, function(casper, stateID, index)
@@ -57,7 +60,7 @@ casper.start('http://tsc.gov.in/Report/Physical/RptPhysicalProgessStateWiseDistr
             if($(this).text() != '') { return $(this).text().trim(); }
           }).get();
           // --->
-          if ((rows.length - 1) == i) { row.splice(2, 0, '', ''); }
+          if ((rows.length - 1) == i) { row.splice(0, 0, ''); }
           // <---
           row.splice(0, 0, stateName);
           return [row];
@@ -79,7 +82,7 @@ casper.start('http://tsc.gov.in/Report/Physical/RptPhysicalProgessStateWiseDistr
 
   this.then(function()
   {
-    write('districtData_L4.csv', buffer);
+    write('districtData_L12.csv', buffer);
   });
 
 });

@@ -1,73 +1,92 @@
-var x = require('casper').selectXPath,
-    casper = require('casper').create({clientScripts: "jquery.min.js"}),
-    write = require('./csv').write;
+var x       = require('casper').selectXPath,
+    casper  = require('casper').create({clientScripts: "jquery.min.js"}),
+    write   = require('./csv').write;
+
+var stateTbId           = "ctl00_ContentPlaceHolder1_div_Data",
+    stateTbSel          = '#'+ stateTbId +' tr:gt(2):lt(31)',
+    stateTbIds;
+
+var districtTbId  = 'ctl00_ContentPlaceHolder1_div_Data',
+    districtTbSel = '#'+ districtTbId +' tbody tr:gt(3)';
+
+var buffer  =  [];
 
 casper.start('http://tsc.gov.in/Report/ProjectSanctioned/RptProjectApprovedStatewise_net.aspx?id=Home', function()
 {
-    var stateTbClassname = "Table";
-    var stateTbIDstartswith = "ctl00_ContentPlaceHolder1_rpt_Report_StateWise";
-    // return state table IDs
-    var stateTbIDs = this.evaluate(function(stateTbIDstartswith){
-        return $('a[id^='+stateTbIDstartswith+']')
-            .map(function(){
-                return [[ $(this).attr('id'),$(this).text() ]];
-            }).get();
-    }, {stateTbIDstartswith:stateTbIDstartswith});
-    var distTableClassname = "Table";
-    // returns state table data
-    var stateData =
-    this.evaluate(function(stateTbClassname){
-        return $('.'+stateTbClassname+' tbody')
-            .children()
-            .slice(3)
-            .not(':last')
-            .map(function(){
-                return [
-                    $(this)
-                        .children()
-                        .map(function(){
-                            return $(this)
-                                .text()
-                                .trim();
-                        }).get()
-                        ];
-            }).get();
-    },{stateTbClassname: stateTbClassname});
-    write('stateData_L2.csv', stateData);
-    var results = [];
-    casper.each(stateTbIDs, function(casper, stateID, index)
+  stateTbIds    = this.evaluate(function(stateTbId)
+  {
+    return $('#'+ stateTbId +'').find('a').map(function()
     {
-        this.then(function()
-        {
-            this.click(x('//*[@id="'+ stateID[0] +'"]'));
-        });
-        this.then(function()
-        {
-            var stateName = stateID[1];
-            // returns district table data
-            var districtData = this.evaluate(function(distTableClassname,stateName){
-                return $('.'+ distTableClassname +' tbody tr')
-                    .slice(4)
-                    .not(':last')
-                    .map(function(){  
-                                        var values = $(this)
-                                                            .children()
-                                                            .map(function(){
-                                                                return $(this)
-                                                                    .text()
-                                                                    .trim();
-                                                            }).get();
-                                        return [values];
-                                    }).get();
-            }, {distTableClassname: distTableClassname,stateName:stateName});
-            results.push.apply(results, districtData);
-            console.log('District:', index, 'out of', stateTbIDs.length, results.length, 'rows');
-            this.back();
-        });
+      return [[ $(this).attr('id'), $(this).text() ]] 
+    }).get();
+  }, 
+  {
+    stateTbId:stateTbId
+  });
+
+  stateData = casper.evaluate(function(stateTbSel)
+  {
+    var rows = $(stateTbSel).map(function(i)
+    {
+      return [ $(this).children().map(function(){ if($(this).text() != '') { return $(this).text().trim(); } }).get() ]
+    }).get();
+    // <-- specific to this link
+    rows[ rows.length -1 ].splice(0,0,'')
+    // -->
+    return rows
+  },{stateTbSel: stateTbSel});
+
+  this.then(function()
+  {
+    write('stateData_L2.csv', stateData);
+  });
+
+  this.each(stateTbIds, function(casper, stateID, index)
+  {
+    this.then(function()
+    {
+      this.click(x('//*[@id="' + stateID[0] + '"]'));
     });
-    casper.then(function() {
-        write('districtData_L2.csv', results);
+    this.then(function()
+    {
+      // returns [[ANDHRA PRADESH, 7, KARIMNAGAR, 13-02-2003, 11/2012, 10849.48, 7165.48, 2612.85, 1071.15, 5602.87, 1943.23, 176.13, 7722.23, 4840.01, 1939.23, 176.13, 6955.37],..]
+      districtData = this.evaluate(function(districtTbSel, stateName)
+      {
+        // --->
+        var rows = $(districtTbSel).not(':last')
+        // <---
+        rows = rows.map(function(i)
+        {
+          var row = $(this).children().map(function()
+          {
+            if($(this).text() != '') { return $(this).text().trim(); }
+          }).get();
+          // --->
+          if ((rows.length - 1) == i) { row.splice(0, 0, ''); }
+          // <---
+          row.splice(0, 0, stateName);
+          return [row];
+        }).get();
+        return rows
+      },
+      {
+        districtTbSel  :  districtTbSel,
+        stateName      :  stateID[1]
+      });
+      buffer.push.apply(buffer, districtData);
+      console.log('District : Completed ', index + 1, 'out of', stateTbIds.length, buffer.length, 'rows');
     });
+    this.then(function()
+    {
+      this.back();
+    });
+  });
+
+  this.then(function()
+  {
+    write('districtData_L2.csv', buffer);
+  });
+
 });
 
 casper.run();
