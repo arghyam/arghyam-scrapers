@@ -1,18 +1,25 @@
-var x       = require('casper').selectXPath,
-    casper  = require('casper').create({clientScripts: "jquery.min.js"}),
-    write   = require('./csv').write;
+var x               = require('casper').selectXPath,
+    casper          = require('casper').create({clientScripts: "jquery.min.js"}),
+    write           = require('./csv').write;
 
-var stateSel   = '#ctl00_ContentPlaceHolder1_Div1 ul:gt(0) li a';
-var stateTbSel = '#ctl00_ContentPlaceHolder2_divData table tbody:eq(1) tr:gt(0),#ctl00_ContentPlaceHolder2_divData table tbody:eq(2) tr:gt(0)';
-var stateList;
+var stateSel        = '#ctl00_ContentPlaceHolder1_Div1 ul:gt(0) li a',
+    stateTbSel      = '#ctl00_ContentPlaceHolder2_divData table tbody:eq(1) tr:gt(0),#ctl00_ContentPlaceHolder2_divData table tbody:eq(2) tr:gt(0)',
+    stateData,
+    stateList;
 
-var districtSel = '#ctl00_ContentPlaceHolder1_Div1 ul:gt(0) li a'
-var districtTbSel = '#ctl00_ContentPlaceHolder2_div_Data table:eq(0) tr:gt(4) td:nth-child(2), #ctl00_ContentPlaceHolder2_div_Data table:eq(3) tr:gt(1):lt(9) td:nth-child(3),#ctl00_ContentPlaceHolder2_div_Data table:eq(3) tr:gt(1):lt(9) td:nth-child(4),#ctl00_ContentPlaceHolder2_div_Data table:eq(3) tr:gt(1):lt(9) td:nth-child(5)'
-var districtData;
-var districtList;
+var districtSel     = '#ctl00_ContentPlaceHolder1_Div1 ul:gt(0) li a',
+    districtTbSel   = '#ctl00_ContentPlaceHolder2_div_Data table:eq(0) tr:gt(4) td:nth-child(2), #ctl00_ContentPlaceHolder2_div_Data table:eq(3) tr:gt(1):lt(9) td:nth-child(3),#ctl00_ContentPlaceHolder2_div_Data table:eq(3) tr:gt(1):lt(9) td:nth-child(4),#ctl00_ContentPlaceHolder2_div_Data table:eq(3) tr:gt(1):lt(9) td:nth-child(5)',
+    districtData,
+    districtList;
 
-var buffer_state     = [];
-var buffer_district     = [];
+var gpSel           = '#ctl00_ContentPlaceHolder1_Div1 ul:gt(0) li a',
+    gpTbSel         = '#ctl00_ContentPlaceHolder1_div_Data table:eq(1) tr:gt(1) td:nth-child(3),#ctl00_ContentPlaceHolder1_div_Data table:eq(1) tr:gt(1) td:nth-child(4),#ctl00_ContentPlaceHolder1_div_Data table:eq(1) tr:gt(1) td:nth-child(5),#ctl00_ContentPlaceHolder1_div_Data table:eq(2) tr:gt(1):lt(7) td:gt(1),#ctl00_ContentPlaceHolder1_gvSch tr:gt(0) td:gt(0)',
+    gpData,
+    gpList;
+
+var buffer_state    = [],
+    buffer_gp       = [],
+    buffer_district = [];
 
 casper.start('http://tsc.gov.in/NBA/NBAHome.aspx', function()
 {
@@ -45,7 +52,7 @@ casper.start('http://tsc.gov.in/NBA/NBAHome.aspx', function()
         state      : state
       });
       buffer_state.push.apply(buffer_state, stateData);
-      console.log('State '+ (index + 1) +' out of '+stateList.length+' completed');
+      console.log('State '+ (index + 1) +' out of '+stateList.length+' completed '+buffer_state.length+'Collected');
     });
     
     // district level ---->
@@ -79,8 +86,52 @@ casper.start('http://tsc.gov.in/NBA/NBAHome.aspx', function()
           });
           
           buffer_district.push.apply(buffer_district, districtData);
-          console.log('District '+ (index + 1) +' out of '+districtList.length+' completed');
+          console.log('District '+ (index + 1) +' out of '+districtList.length+' completed '+buffer_district.length+'Collected');
         });
+
+        //-----------> GP Level
+
+        this.then(function()
+        {
+          gpList = this.evaluate(function(gpSel)
+          {
+            return $(gpSel).map(function(){ return [[ $(this).attr('id'),$(this).text().trim() ]] }).get();
+          },
+          {
+            gpSel : gpSel
+          });
+          
+          this.each(gpList, function(casper, gp, index)
+          {
+            this.then(function()
+            {
+              this.click(x('//*[@id="'+ gp[0] +'"]'));
+            });
+            this.then(function()
+            {
+              gpData = this.evaluate(function(gpTbSel, gp)
+              {
+                var rows = $(gpTbSel);
+                rows = rows.map(function(){ return $(this).children().map(function(){ return $(this).text().trim() }).get().slice(1); }).get();
+                rows.splice(0,0, gp[1])
+                return [rows];
+              },
+              {
+                gpTbSel       : gpTbSel,
+                gp            : gp
+              });
+              buffer_gp.push.apply(buffer_gp, gpData);
+              console.log('GP '+ (index + 1) +' out of '+gpList.length+' completed '+buffer_gp.length+'Collected');
+            });
+            this.then(function()
+            {
+              this.back();
+            });
+          });
+        });
+
+        // <---------- GP Level
+
         this.then(function()
         {
           this.back();
@@ -101,7 +152,11 @@ casper.start('http://tsc.gov.in/NBA/NBAHome.aspx', function()
   });
   this.then(function()
   {
-    write('districtData_L14.csv', buffer_state);
+    write('districtData_L14.csv', buffer_district);
+  });
+  this.then(function()
+  {
+    write('GP_L14.csv', buffer_gp);
   });
 });
 
