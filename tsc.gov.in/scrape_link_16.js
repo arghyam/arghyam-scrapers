@@ -1,11 +1,11 @@
-var x = require('casper').selectXPath,
-    casper = require('casper').create({clientScripts: "jquery.min.js"}),
-    write = require('./csv').write;
+var x       = require('casper').selectXPath,
+    casper  = require('casper').create({clientScripts: "jquery.min.js"}),
+    write   = require('./csv').write;
 
 var buffer      = [],
-    stateTbSel  = '#ctl00_ContentPlaceHolder1_div_Data tbody tbody tr:gt(2):lt(31)';
+    stateTbSel  = '#ctl00_ContentPlaceHolder1_div_Data table:eq(1) tr:gt(3)';
 
-casper.start('http://tsc.gov.in/Report/otherreports/RptFinancialProgofSchemes.aspx?id=Home', function()
+casper.start('http://tsc.gov.in/Report/otherreports/RptStatewsiseBasicInfo.aspx?id=PHY', function()
 {
   buffer = this.evaluate(function(stateTbSel)
   {
@@ -20,7 +20,7 @@ casper.start('http://tsc.gov.in/Report/otherreports/RptFinancialProgofSchemes.as
     }).get();
     return rows;
   },{stateTbSel: stateTbSel});
-  write('stateData_L7.csv', buffer);
+  write('stateData_L16.csv', buffer);
 });
 
 casper.run();

@@ -1,118 +1,162 @@
-var x = require('casper').selectXPath,
-    casper = require('casper').create({clientScripts: "jquery.min.js"}),
-    write = require('./csv').write;
+var x               = require('casper').selectXPath,
+    casper          = require('casper').create({clientScripts: "jquery.min.js"}),
+    write           = require('./csv').write;
 
-var dropdownId = 'ctl00_ContentPlaceHolder1_ddl_quarter';
-var dropdownSel = '#'+ dropdownId +' option:gt(0)';
-var dropdownList;
-var dropdownListoption;
+var stateSel        = '#ctl00_ContentPlaceHolder1_Div1 ul:gt(0) li a',
+    stateTbSel      = '#ctl00_ContentPlaceHolder2_divData table tbody:eq(1) tr:gt(0),#ctl00_ContentPlaceHolder2_divData table tbody:eq(2) tr:gt(0)',
+    stateData,
+    stateList;
 
-var stateTbId           = "ctl00_ContentPlaceHolder1_div_Data",
-    stateTbSel          = '#'+ stateTbId +' tbody tr:gt(2)',
-    stateTbIds;
+var districtSel     = '#ctl00_ContentPlaceHolder1_Div1 ul:gt(0) li a',
+    districtTbSel   = '#ctl00_ContentPlaceHolder2_div_Data table:eq(0) tr:gt(4) td:nth-child(2), #ctl00_ContentPlaceHolder2_div_Data table:eq(3) tr:gt(1):lt(9) td:nth-child(3),#ctl00_ContentPlaceHolder2_div_Data table:eq(3) tr:gt(1):lt(9) td:nth-child(4),#ctl00_ContentPlaceHolder2_div_Data table:eq(3) tr:gt(1):lt(9) td:nth-child(5)',
+    districtData,
+    districtList;
 
-var districtTbId  = 'ctl00_ContentPlaceHolder1_div_Data',
-    districtTbSel = '#'+ districtTbId +' tbody tr:gt(3)';
+var gpSel           = '#ctl00_ContentPlaceHolder1_Div1 ul:gt(0) li a',
+    gpTbSel         = '#ctl00_ContentPlaceHolder1_div_Data table:eq(1) tr:gt(1) td:nth-child(3),#ctl00_ContentPlaceHolder1_div_Data table:eq(1) tr:gt(1) td:nth-child(4),#ctl00_ContentPlaceHolder1_div_Data table:eq(1) tr:gt(1) td:nth-child(5),#ctl00_ContentPlaceHolder1_div_Data table:eq(2) tr:gt(1):lt(7) td:gt(1),#ctl00_ContentPlaceHolder1_gvSch tr:gt(0) td:gt(0)',
+    gpData,
+    gpList;
 
-var buffer  = [];
+var buffer_state    = [],
+    buffer_gp       = [],
+    buffer_district = [];
 
-casper.start('http://tsc.gov.in/Report/MonitoringStatusReport/RptAIPQuarterPlanVsAchievementStatewise_net.aspx?fin=2012-2013&id=AIP', function() 
+casper.start('http://tsc.gov.in/NBA/NBAHome.aspx', function()
 {
-  dropdownList = this.evaluate(function(dropdownSel)
+  
+  stateList = this.evaluate(function(stateSel)
   {
-    return $(dropdownSel).map(function(){ return [[ $(this).attr('value'),$(this).text().trim() ]] }).get();
-  },{
-    dropdownSel : dropdownSel
+    return $(stateSel).map(function(){ return [[ $(this).attr('id'),$(this).text().trim() ]] }).get();
+  },
+  {
+    stateSel : stateSel
   });
-  this.each(dropdownList,function(casper, dropdownListoption, index)
+
+  this.each(stateList, function(casper, state, index)
   {
     this.then(function()
     {
-      // --->
-      this.fill('form#aspnetForm',
-      {
-        'ctl00$ContentPlaceHolder1$ddl_quarter' : dropdownListoption[0]
-      }, false);
-      // <---
+      this.click(x('//*[@id="'+ state[0] +'"]'));
     });
     this.then(function()
     {
-// -------------------->
-      stateTbIds    = this.evaluate(function(stateTbId)
+      stateData = this.evaluate(function(stateTbSel, state)
       {
-        return $('#'+ stateTbId +'').find('a').map(function()
-        {
-          if (!$(this).attr('disabled')) { return [[ $(this).attr('id'), $(this).text() ]]  }
-        }).get();
-      }, 
+        var rows = $(stateTbSel);
+        rows = rows.map(function(){ return $(this).children().map(function(){ return $(this).text().trim() }).get().slice(1); }).get();
+        rows.splice(0,0, state[1])
+        return [rows];
+      },
       {
-        stateTbId:stateTbId
+        stateTbSel : stateTbSel,
+        state      : state
       });
-
-      stateData = casper.evaluate(function(stateTbSel)
+      buffer_state.push.apply(buffer_state, stateData);
+      console.log('State '+ (index + 1) +' out of '+stateList.length+' completed '+buffer_state.length+'Collected');
+    });
+    
+    // district level ---->
+    this.then(function()
+    {
+      districtList = this.evaluate(function(districtSel)
       {
-        var rows = $(stateTbSel).map(function(i)
-        {
-          return [ $(this).children().map(function(){ if($(this).text() != '') { return $(this).text().trim(); } }).get() ]
-        }).get();
-        // <-- specific to this link
-            rows[ rows.length -1 ].splice(0,0,'')
-        // -->
-        return rows
-      },{stateTbSel: stateTbSel});
-
-      this.then(function()
+        return $(districtSel).map(function(){ return [[ $(this).attr('id'),$(this).text().trim() ]] }).get();
+      },
       {
-        write(dropdownListoption[1] + '_stateData_L13.csv', stateData);
+        districtSel : districtSel
       });
-
-      this.each(stateTbIds, function(casper, stateID, index)
+      this.each(districtList, function(casper, district, index)
       {
         this.then(function()
         {
-          this.click(x('//*[@id="' + stateID[0] + '"]'));
+          this.click(x('//*[@id="'+ district[0] +'"]'));
         });
         this.then(function()
         {
-          // returns [[ANDHRA PRADESH, 7, KARIMNAGAR, 13-02-2003, 11/2012, 10849.48, 7165.48, 2612.85, 1071.15, 5602.87, 1943.23, 176.13, 7722.23, 4840.01, 1939.23, 176.13, 6955.37],..]
-          districtData = this.evaluate(function(districtTbSel, stateName)
+          districtData = this.evaluate(function(districtTbSel, district)
           {
-            var rows = $(districtTbSel)
-            rows = rows.map(function(i)
-            {
-              var row = $(this).children().map(function()
-              {
-                if($(this).text() != '') { return $(this).text().trim(); }
-              }).get();
-              // --->
-              if ((rows.length - 1) == i) { row.splice(0, 0, ''); }
-              // <---
-              row.splice(0, 0, stateName);
-              return [row];
-            }).get();
-            return rows
+            var rows = $(districtTbSel);
+            rows = rows.map(function(){ return $(this).children().map(function(){ return $(this).text().trim() }).get().slice(1); }).get();
+            rows.splice(0,0, district[1])
+            return [rows];
           },
           {
-            districtTbSel  :  districtTbSel,
-            stateName      :  stateID[1]
+            districtTbSel : districtTbSel,
+            district      : district
           });
-          buffer.push.apply(buffer, districtData);
-          console.log('District : ' + dropdownListoption[1] + 'Completed ', index + 1, 'out of', stateTbIds.length, buffer.length, 'rows');
+          
+          buffer_district.push.apply(buffer_district, districtData);
+          console.log('District '+ (index + 1) +' out of '+districtList.length+' completed '+buffer_district.length+'Collected');
         });
+
+        //-----------> GP Level
+
+        this.then(function()
+        {
+          gpList = this.evaluate(function(gpSel)
+          {
+            return $(gpSel).map(function(){ return [[ $(this).attr('id'),$(this).text().trim() ]] }).get();
+          },
+          {
+            gpSel : gpSel
+          });
+          
+          this.each(gpList, function(casper, gp, index)
+          {
+            this.then(function()
+            {
+              this.click(x('//*[@id="'+ gp[0] +'"]'));
+            });
+            this.then(function()
+            {
+              gpData = this.evaluate(function(gpTbSel, gp)
+              {
+                var rows = $(gpTbSel);
+                rows = rows.map(function(){ return $(this).children().map(function(){ return $(this).text().trim() }).get().slice(1); }).get();
+                rows.splice(0,0, gp[1])
+                return [rows];
+              },
+              {
+                gpTbSel       : gpTbSel,
+                gp            : gp
+              });
+              buffer_gp.push.apply(buffer_gp, gpData);
+              console.log('GP '+ (index + 1) +' out of '+gpList.length+' completed '+buffer_gp.length+'Collected');
+            });
+            this.then(function()
+            {
+              this.back();
+            });
+          });
+        });
+
+        // <---------- GP Level
+
         this.then(function()
         {
           this.back();
         });
       });
-    
-      this.then(function()
-      {
-        write(dropdownListoption[1] + '_districtData_L13.csv', buffer);
-        buffer = [];
-      });
-// <--------------------
+    });
+    // <----
+
+    this.then(function()
+    {
       this.back();
     });
+  });
+
+  this.then(function()
+  {
+    write('stateData_L13.csv', buffer_state);
+  });
+  this.then(function()
+  {
+    write('districtData_L13.csv', buffer_district);
+  });
+  this.then(function()
+  {
+    write('GP_L13.csv', buffer_gp);
   });
 });
 

@@ -1,57 +1,66 @@
 var x = require('casper').selectXPath,
     casper = require('casper').create({clientScripts: "jquery.min.js"}),
-    write = require('./csv').write,
-    stateName;
+    write = require('./csv').write;
 
-casper.start('http://tsc.gov.in/Report/Release/RptReleaseDataBetweenDates.aspx?id=Home', function() {
-
-    var districtTbId = 'ctl00_ContentPlaceHolder1_gvshow';
-    // returns the values in the drop-down box
-    var dropdownList = this.evaluate(function () {
-        return $('#ctl00_ContentPlaceHolder1_ddlState')
+casper.start('http://tsc.gov.in/Report/Special%20Report/RptCoverageCensusPer.aspx?id=Home', function() {
+    var distTableClassname = "Table";
+    // get all the elements from the 1st drop down box
+    var dropdownList1 = this.evaluate(function () {
+        return $('#ctl00_ContentPlaceHolder1_listBoxState')
             .children()
-            .slice(1)
+            .eq(0)
             .map(function(){
-                return [[
-                                $(this).attr('value'),
-                                $(this).text()
-                           ]]
+                return $(this).attr('value');
             }).get();
     });
-    var districtArr = [];
-    casper.each(dropdownList, function(casper, dropdownListoption, index) {
-        this.then(function () {
-            stateName = dropdownListoption[1];
-            this.fill('form#aspnetForm', {
-                'ctl00$ContentPlaceHolder1$ddlState'   :    ''+dropdownListoption[0]+''
-            }, false);
-        });
-        this.then(function () {
-            this.click(x('//*[@id="ctl00_ContentPlaceHolder1_btnSubmit"]'));
-        });
-        this.then(function () {
-            var districtData =
-            this.evaluate(function(districtTbId,stateName){
-                return $('#'+ districtTbId +' tbody tr')
-                    .slice(4)
-                    .not(':last')
-                    .map(function(){
-                                                var values = $(this).children().map(function(){
-                                                    return $(this).text().trim();
-                                        }).get();
-                        values.splice(0, 0, stateName);
-                        return [values];
-                    }).get();
-            }, {districtTbId: districtTbId,
-                stateName:stateName
-            });
-            districtArr.push.apply(districtArr, districtData);
-            console.log('District:', index, 'out of', dropdownList.length, districtArr.length, 'rows');
-            this.back();
-        });
+
+    // get all the elements from the 2nd drop down box
+    var dropdownList2 = this.evaluate(function () {
+        return $('#ctl00_ContentPlaceHolder1_listBoxDistrict')
+            .children()
+            .map(function(){
+                return $(this).attr('value');
+            }).get();
     });
-    casper.then(function() {
-        write('districtData_L6.csv', districtArr);
+    // iterate through 'dropdownList1's and 'dropdownList2's in a nested fashion
+    casper.each(dropdownList2, function(casper, dropdownList2option, index) {
+        var sanitationArr = [];
+        casper.each(dropdownList1, function(casper, dropdownList1option, index) {
+            this.then(function () {
+                // fill form but don't submit
+                this.fill('form#aspnetForm', {
+                    'ctl00$ContentPlaceHolder1$listBoxState'   :    ''+dropdownList1option+'',
+                    'ctl00$ContentPlaceHolder1$listBoxDistrict'  :    ''+dropdownList2option+''
+                }, false);
+                // submit
+                this.click(x('//*[@id="ctl00_ContentPlaceHolder1_btnSubmit"]'));
+            });
+            this.then(function () {
+                // returns district table data
+                var sanitationData =
+                this.evaluate(function(distTableClassname){
+                    return $('.'+ distTableClassname +' tbody tr')
+                        .slice(2)
+                        .map(function(){
+                            return [
+                                $(this)
+                                    .children()
+                                    .map(function(){
+                                        return $(this)
+                                            .text()
+                                            .trim();
+                                    }).get()
+                                    ];
+                        }).get();
+                }, {distTableClassname: distTableClassname});
+                sanitationArr.push.apply(sanitationArr, sanitationData);
+                console.log(dropdownList2option,'-->', dropdownList1option, 'collected :', sanitationArr.length);
+                this.back();
+            });
+        });
+        casper.then(function() {
+            write(''+dropdownList2option+'_L6.csv', sanitationArr);
+        });
     });
 
 });
