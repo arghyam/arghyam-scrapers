@@ -11,10 +11,11 @@ var stateTbId     = 'ctl00_ContentPlaceHolder1_div_Data',
     stateData,
     stateName;
 
-var districtTbId  = 'ctl00_ContentPlaceHolder1_div_Data',
-    districtTbSel = '#'+ districtTbId +' tbody tr:gt(2)',
+var districtTbId    = 'ctl00_ContentPlaceHolder1_div_Data',
+    districtTbSel   = '#'+ districtTbId +' tbody tr:gt(2)',
     districtData,
-    buffer = [];
+    buffer_district = [],
+    buffer_state    = [];
 
 casper.start('http://tsc.gov.in/Report/Physical/RptOtherThanTSCProgramsStatewiseDistrictwise_net.aspx?id=PHY', function() {
   stateTbIds    = this.evaluate(function(stateTbId) {
@@ -33,9 +34,10 @@ casper.start('http://tsc.gov.in/Report/Physical/RptOtherThanTSCProgramsStatewise
   },{stateTbSel: stateTbSel});
 
   console.log('State : Completed', stateTbIds.length, 'out of', stateTbIds.length);
+  buffer_state.push.apply(buffer_state, stateData);
 
   this.then(function() {
-    write('stateData_L24.csv', stateData);
+    write('stateData_L24.csv', buffer_state);
   });
 
   this.each(stateTbIds, function(casper, stateID, index) {
@@ -58,8 +60,8 @@ casper.start('http://tsc.gov.in/Report/Physical/RptOtherThanTSCProgramsStatewise
         districtTbSel  :  districtTbSel,
         stateName      :  stateID[1]
       });
-      buffer.push.apply(buffer, districtData);
-      console.log('District : Completed ', index + 1, 'out of', stateTbIds.length, buffer.length, 'rows');
+      buffer_district.push.apply(buffer_district, districtData);
+      console.log('District : Completed ', index + 1, 'out of', stateTbIds.length, buffer_district.length, 'rows');
     });
     this.then(function() {
       this.back();
@@ -67,7 +69,7 @@ casper.start('http://tsc.gov.in/Report/Physical/RptOtherThanTSCProgramsStatewise
   });
 
   this.then(function() {
-    write('districtData_L24.csv', buffer);
+    write('districtData_L24.csv', buffer_district);
   });
 
 });
