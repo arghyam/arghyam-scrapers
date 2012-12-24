@@ -17,7 +17,6 @@ var districtTbId  = 'ctl00_ContentPlaceHolder1_gvDistrict',
     buffer = [];
 
 casper.start('http://tsc.gov.in/Report/Physical/RptPerwiseAchCensus_net.aspx?id=PHY', function() {
-  // returns [[ 'ctl00_ContentPlaceHolder1_gvshow_ctl03_lnkStnm', 'ANDHRA PRADESH' ],..]
   stateTbIds    = this.evaluate(function(stateTbId) {
     return $('#'+ stateTbId +'').find('a').map(function() {
       return [[ $(this).text() ]]
@@ -26,7 +25,6 @@ casper.start('http://tsc.gov.in/Report/Physical/RptPerwiseAchCensus_net.aspx?id=
     stateTbId:stateTbId
   });
 
-  // returns [[30, WEST BENGAL, 174147.94, 111799.51, 43820.36, 18528.07, 65937.91, 19561.67, 32452.01, 117951.59, 53544.69, 18085.02, 32131.10, 103760.81],..]
   stateData = casper.evaluate(function(stateTbSel) {
     return $(stateTbSel).map(function() {
       var rows = $(this).children().map(function(){ if($(this).text() != '') { return $(this).text().trim(); } }).get();
@@ -45,7 +43,6 @@ casper.start('http://tsc.gov.in/Report/Physical/RptPerwiseAchCensus_net.aspx?id=
       this.clickLabel(stateID[0], 'a');
     });
     this.then(function() {
-      // returns [[ANDHRA PRADESH, 7, KARIMNAGAR, 13-02-2003, 11/2012, 10849.48, 7165.48, 2612.85, 1071.15, 5602.87, 1943.23, 176.13, 7722.23, 4840.01, 1939.23, 176.13, 6955.37],..]
       districtData = this.evaluate(function(districtTbSel, stateName) {
         var rows = $(districtTbSel);
         return rows.map(function(i) {
