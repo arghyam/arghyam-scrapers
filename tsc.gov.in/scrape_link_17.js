@@ -3,6 +3,7 @@ var x       = require('casper').selectXPath,
     write   = require('./csv').write;
 
 var dropdownList,
+    stateName,
     dropdownSel     = '#ctl00_ContentPlaceHolder1_ddlState option',
     dropdownOption;
 
@@ -38,11 +39,19 @@ casper.start('http://tsc.gov.in/Report/Physical/RptStateWisePerAch_OnlyTSC_net.a
       {
         stateData = this.evaluate(function(stateTbSel)
         {
-          var rows = $(stateTbSel).map(function()
+          var rows = $(stateTbSel);
+          rows = rows.map(function(i)
           {
-            return [ $(this).children().map(function(){ if($(this).text() != '') { return $(this).text().trim(); } }).get() ]
+            var row = $(this).children().map(function(i)
+            {
+              if($(this).text() != '') { return $(this).text().trim(); }
+            }).get();
+            // --->
+            if ((rows.length - 1) == i) { row.splice(0, 0, ''); }
+            // <---
+            return [row];
           }).get();
-          return rows
+          return rows;
         },
         {
           stateTbSel : stateTbSel
@@ -52,21 +61,27 @@ casper.start('http://tsc.gov.in/Report/Physical/RptStateWisePerAch_OnlyTSC_net.a
       }
       if (index > 0)
       {
-        districtData = this.evaluate(function(districtTbSel)
+        stateName = dropdownOption[1];
+        districtData = this.evaluate(function(districtTbSel, stateName)
         {
-          var rows = $(districtTbSel);
-          return rows.map(function(i)
+          var rows = $(districtTbSel).not(':last()');
+          rows = rows.map(function(i)
           {
-            var row = $(this).children().map(function()
+            var row = $(this).children().map(function(i)
             {
               if($(this).text() != '') { return $(this).text().trim(); }
             }).get();
-            row.splice(0, 0, dropdownList[1]);
+            // --->
+            if ((rows.length - 1) == i) { row.splice(0, 0, ''); }
+            // <---
+            row.splice(0, 0, stateName);
             return [row];
           }).get();
+          return rows;
         },
         {
-          districtTbSel : districtTbSel
+          districtTbSel : districtTbSel,
+          stateName     : stateName
         });
         buffer_district.push.apply(buffer_district, districtData);
         console.log('District : '+index+' out of '+dropdownList.length+' completed ( Collected : '+buffer_district.length+' )');
