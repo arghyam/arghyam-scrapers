@@ -1,118 +1,107 @@
-var x = require('casper').selectXPath,
-    casper = require('casper').create({clientScripts: "jquery.min.js"}),
-    write = require('./csv').write;
+var x       = require('casper').selectXPath,
+    casper  = require('casper').create({clientScripts: "jquery.min.js"}),
+    write   = require('./csv').write;
 
-var physicalArr = [];
-var financialArr = [];
+var dropdownList,
+    stateName,
+    dropdownSel     = '#ctl00_ContentPlaceHolder1_ddlState option:gt(0)',
+    dropdownOption;
+
+var physicalArr = [],
+    financialArr = [];
+
+var financialTbSel,
+    physicalTbSel;
+
 casper.start('http://tsc.gov.in/Report/Status%20Note/RptStateNoteGeneral_net.aspx?id=Home', function() {
-    var financialTbClassname = 'Table';
-    var physicalTbId  = 'ctl00_ContentPlaceHolder1_Table1';
-    // returns values in drop-down input
-    var dropdownList = this.evaluate(function () {
-        return $('#ctl00_ContentPlaceHolder1_ddlState')
-                .children()
-                .map(function(){
-                    return [[
-                                $(this).attr('value'),
-                                $(this).text()
-                           ]]
-                }).get();
-    });
-    casper.then(function () {
-        this.fill('form#aspnetForm', {
-                'ctl00$ContentPlaceHolder1$ddlState'   :    ''+dropdownList[1][0]+''
-        }, false);
-        this.then(function () {
-            // returns data from the physical progress table
-            var physicalData =  this.evaluate(function(physicalTbId){
-                                    return $('.Table tbody').eq(0)
-                                        .children()
-                                        .slice(3)
-                                        .map(function(){
-                                                var values = $(this).children().map(function(){
-                                                    return $(this).text().trim();
-                                        }).get();
-                        
-                        return [values];
-                    }).get();
-                                },{physicalTbId: physicalTbId});
-            physicalArr.push.apply(physicalArr, physicalData);
-            console.log('Physical State:',physicalArr.length,'rows');
-            // returns data from the financial progress table
-            var financialData = this.evaluate(function(financialTbClassname){
-                                    return $('.Table tbody').eq(1)
-                                        .children()
-                                        .slice(2)
-                                        .map(function(){
-                                                    var values = $(this).children().map(function(){
-                                                        return $(this).text().trim();
-                                        }).get();
-                        
-                        return [values];
-                    }).get();
-                                },{financialTbClassname: financialTbClassname});
-            financialArr.push.apply(financialArr, financialData);
-            console.log('Financial State:',financialArr.length,'rows');
-        });
-    });
-    casper.then(function() {
-        write('statePhysicalData_L3.csv', physicalArr);
-        physicalArr = [];
-    });
-    casper.then(function() {
-        write('stateFinancialData_L3.csv', financialArr);
-        financialArr = [];
-    });
-    casper.each(dropdownList.slice(2), function(casper, dropdownListoption, index) {
-        this.then(function () {
-            stateName = dropdownListoption[1];
-            this.fill('form#aspnetForm', {
-                'ctl00$ContentPlaceHolder1$ddlState'   :    ''+dropdownListoption[0]+''
-            }, false);
-        });
-        this.then(function () {
-            // returns data from the physical progress table
-            var physicalData =  this.evaluate(function(physicalTbId, stateName){
-                                    return $('.Table tbody').eq(0)
-                                        .children()
-                                        .slice(4)
-                                        .map(function(){
-                                            var values = $(this).children().map(function(){
-                                                    return $(this).text().trim();
-                                        }).get();
-                        values.splice(0, 0, stateName);
-                        return [values];
-                    }).get();
-                                },{physicalTbId: physicalTbId,
-                                    stateName:stateName
+  dropdownList = this.evaluate(function (dropdownSel) {
+    return $(dropdownSel).map(function(){ return [[ $(this).attr('value'),$(this).text().trim() ]] }).get();
+  }, { dropdownSel:dropdownSel });
 
-                                });
-            physicalArr.push.apply(physicalArr, physicalData);
-            console.log('Physical - State:', index, 'out of', dropdownList.length, physicalArr.length, 'rows');
-            // returns data from the financial progress table
-            var financialData = this.evaluate(function(financialTbClassname, stateName){
-                                    return $('.Table tbody').eq(1)
-                                        .children()
-                                        .slice(3)
-                                        .map(function(){
-                                            var values = $(this).children().map(function(){
-                                                return $(this).text().trim();
-                                        }).get();
-                        values.splice(0, 0, stateName);
-                        return [values];
-                    }).get();
-                                },{financialTbClassname: financialTbClassname,
-                                    stateName:stateName});
-            financialArr.push.apply(financialArr, financialData);
-            console.log('Financial - State:', index, 'out of', dropdownList.length, financialArr.length, 'rows');
+  this.each(dropdownList, function(casper, dropdownOption, index)
+  {
+    this.then(function() {
+      this.fill('form#aspnetForm', {
+        'ctl00$ContentPlaceHolder1$ddlState'   :    ''+dropdownOption[0]+''
+      }, false);
+    });
+
+    this.then(function()
+    {
+      if (index == 0) {
+        financialTbSel = '.Table tbody:eq(1) tr:gt(1)',
+        physicalTbSel  = '.Table tbody:eq(0) tr:gt(2)';
+      }
+      if (index > 0) {
+        financialTbSel = '.Table tbody:eq(1) tr:gt(2)',
+        physicalTbSel  = '.Table tbody:eq(0) tr:gt(3)';
+      }
+      stateName = dropdownOption[1];
+      var physicalData =  this.evaluate(function(physicalTbSel, stateName) {
+        var rows = $(physicalTbSel)
+        rows = rows.map(function(i)
+        {
+          var row = $(this).children().map(function()
+          {
+            if($(this).text() != '') { return $(this).text().trim(); }
+          }).get();
+          // --->
+          if ((rows.length - 1) == i) { row.splice(0, 1, '', ''); }
+          // <---
+          row.splice(0, 0, stateName);
+          return [row];
+        }).get();
+        return rows
+      },{physicalTbSel: physicalTbSel, stateName:stateName});
+
+      physicalArr.push.apply(physicalArr, physicalData);
+      console.log('Physical District/State:',physicalArr.length,'rows');
+
+      var financialData = this.evaluate(function(financialTbSel, stateName) {
+        var rows = $(financialTbSel)
+        rows = rows.map(function(i)
+        {
+          var row = $(this).children().map(function()
+          {
+            if($(this).text() != '') { return $(this).text().trim(); }
+          }).get();
+          // --->
+          if ((rows.length - 1) == i) { row.splice(0, 1, '', ''); }
+          // <---
+          row.splice(0, 0, stateName);
+          return [row];
+        }).get();
+        return rows
+      },{financialTbSel: financialTbSel, stateName:stateName});
+
+      financialArr.push.apply(financialArr, financialData);
+      console.log('Financial District/State:',financialArr.length,'rows');
+
+      if (index == 0) {
+        this.then(function() {
+          write('statePhysicalData_L3.csv', physicalArr);
         });
+        this.then(function() {
+          write('stateFinancialData_L3.csv', financialArr);
+        });
+      }
+      if (index > 0) {
+        this.then(function() {
+          write('districtPhysicalData_L3.csv', physicalArr);
+        });
+        this.then(function() {
+          write('districtFinancialData_L3.csv', financialArr);
+        });
+      }
     });
-    casper.then(function() {
-        write('districtPhysicalData_L3.csv', physicalArr);
+    this.then(function()
+    {
+      physicalArr = [];
+      financialArr = [];
+      this.back();
     });
-    casper.then(function() {
-        write('districtFinancialData_L3.csv', financialArr);
-    });
+  });
+  
 });
 
 casper.run();
