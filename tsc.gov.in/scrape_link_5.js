@@ -1,58 +1,58 @@
 var x = require('casper').selectXPath,
     casper = require('casper').create({clientScripts: "jquery.min.js"}),
-    write = require('./csv').write,
-    stateName;
+    write = require('./csv').write;
+
+var dropdownList,
+    dropdownSel       = '#ctl00_ContentPlaceHolder1_ddlState option:gt(0)',
+    dropdownOption;
+
+var stateName,
+    buffer_district = [];
+
+var districtTbSel     = '#ctl00_ContentPlaceHolder1_gvshow tr:gt(3)',
+    districtData;
 
 casper.start('http://tsc.gov.in/Report/Release/RptReleaseDataBetweenDates.aspx?id=Home', function() {
+  dropdownList = this.evaluate(function(dropdownSel) {
+    return $(dropdownSel).map(function(){ return [[ $(this).attr('value'),$(this).text().trim() ]] }).get();
+  }, {
+    dropdownSel : dropdownSel
+  });
 
-    var districtTbId = 'ctl00_ContentPlaceHolder1_gvshow';
-    // returns the values in the drop-down box
-    var dropdownList = this.evaluate(function () {
-        return $('#ctl00_ContentPlaceHolder1_ddlState')
-            .children()
-            .slice(1)
-            .map(function(){
-                return [[
-                                $(this).attr('value'),
-                                $(this).text()
-                           ]]
-            }).get();
+  this.each(dropdownList, function(casper, dropdownOption, index) {
+    this.then(function() {
+      this.fill('form#aspnetForm', {
+        'ctl00$ContentPlaceHolder1$ddlState'  :  ''+dropdownOption[0]+''
+      }, true);
     });
-    var districtArr = [];
-    casper.each(dropdownList, function(casper, dropdownListoption, index) {
-        this.then(function () {
-            stateName = dropdownListoption[1];
-            this.fill('form#aspnetForm', {
-                'ctl00$ContentPlaceHolder1$ddlState'   :    ''+dropdownListoption[0]+''
-            }, false);
-        });
-        this.then(function () {
-            this.click(x('//*[@id="ctl00_ContentPlaceHolder1_btnSubmit"]'));
-        });
-        this.then(function () {
-            var districtData =
-            this.evaluate(function(districtTbId,stateName){
-                return $('#'+ districtTbId +' tbody tr')
-                    .slice(4)
-                    .not(':last')
-                    .map(function(){
-                                                var values = $(this).children().map(function(){
-                                                    return $(this).text().trim();
-                                        }).get();
-                        values.splice(0, 0, stateName);
-                        return [values];
-                    }).get();
-            }, {districtTbId: districtTbId,
-                stateName:stateName
-            });
-            districtArr.push.apply(districtArr, districtData);
-            console.log('District:', index, 'out of', dropdownList.length, districtArr.length, 'rows');
-            this.back();
-        });
+    this.then(function () {
+        this.click(x('//*[@id="ctl00_ContentPlaceHolder1_btnSubmit"]'));
     });
-    casper.then(function() {
-        write('districtData_L5.csv', districtArr);
+    this.then(function() {
+      districtData = this.evaluate(function(districtTbSel, state) {
+        return $(districtTbSel).not(':last').map(function() {
+          var row = $(this).children().map(function() {
+            if($(this).text() != '') { return $(this).text().trim();
+            }
+          }).get();
+          row.splice(0, 1);
+          row.splice(0, 0, state);
+          return [row];
+        }).get();
+      }, {
+        districtTbSel : districtTbSel,
+        state         : dropdownOption[1]
+      });
+      buffer_district.push.apply(buffer_district, districtData);
+      console.log('District level : '+ (index+1) +' out of '+dropdownList.length+' completed ( Collected : '+buffer_district.length+' )');
     });
+    this.then(function() {
+      this.back();
+    });
+  });
+  this.then(function() {
+    write('districtData_L5.csv', buffer_district);
+  });
 
 });
 
