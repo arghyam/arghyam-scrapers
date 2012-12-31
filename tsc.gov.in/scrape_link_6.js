@@ -2,65 +2,47 @@ var x = require('casper').selectXPath,
     casper = require('casper').create({clientScripts: "jquery.min.js"}),
     write = require('./csv').write;
 
-casper.start('http://tsc.gov.in/Report/Special%20Report/RptCoverageCensusPer.aspx?id=Home', function() {
-    var distTableClassname = "Table";
-    // get all the elements from the 1st drop down box
-    var dropdownList1 = this.evaluate(function () {
-        return $('#ctl00_ContentPlaceHolder1_listBoxState')
-            .children()
-            .eq(0)
-            .map(function(){
-                return $(this).attr('value');
-            }).get();
-    });
+var dropdownList1Sel = "#ctl00_ContentPlaceHolder1_listBoxState option",
+    dropdownList2Sel = "#ctl00_ContentPlaceHolder1_listBoxDistrict option";
 
-    // get all the elements from the 2nd drop down box
-    var dropdownList2 = this.evaluate(function () {
-        return $('#ctl00_ContentPlaceHolder1_listBoxDistrict')
-            .children()
-            .map(function(){
-                return $(this).attr('value');
+var districtTbSel = ".Table tr:gt(1)";
+
+casper.start('http://tsc.gov.in/Report/Special%20Report/RptCoverageCensusPer.aspx?id=Home', function() {
+    dropdownList1 = this.evaluate(function (dropdownList1Sel) {
+      return $(dropdownList1Sel).map(function(){ return [[ $(this).attr('value'),$(this).text().trim() ]] }).get();
+    }, { dropdownList1Sel:dropdownList1Sel });
+
+    dropdownList2 = this.evaluate(function (dropdownList2Sel) {
+      return $(dropdownList2Sel).map(function(){ return [[ $(this).attr('value'),$(this).text().trim() ]] }).get();
+    }, { dropdownList2Sel:dropdownList2Sel });
+
+    this.each(dropdownList2, function(casper, dropdownList2option, index) {
+      var bufferArr = [];
+      this.each(dropdownList1, function(casper, dropdownList1option, index) {
+        this.then(function () {
+          this.fill('form#aspnetForm', {
+            'ctl00$ContentPlaceHolder1$listBoxState'   :    ''+dropdownList1option[0]+'',
+            'ctl00$ContentPlaceHolder1$listBoxDistrict'  :    ''+dropdownList2option[0]+''
+          }, false);
+          this.click(x('//*[@id="ctl00_ContentPlaceHolder1_btnSubmit"]'));
+        });
+        this.then(function () {
+          districtData = this.evaluate(function(districtTbSel, state) {
+            return $(districtTbSel).map(function() {
+              var row = $(this).children().map(function() {
+                if($(this).text() != '') { return $(this).text().trim(); }
+              }).get();
+              return [row];
             }).get();
-    });
-    // iterate through 'dropdownList1's and 'dropdownList2's in a nested fashion
-    casper.each(dropdownList2, function(casper, dropdownList2option, index) {
-        var sanitationArr = [];
-        casper.each(dropdownList1, function(casper, dropdownList1option, index) {
-            this.then(function () {
-                // fill form but don't submit
-                this.fill('form#aspnetForm', {
-                    'ctl00$ContentPlaceHolder1$listBoxState'   :    ''+dropdownList1option+'',
-                    'ctl00$ContentPlaceHolder1$listBoxDistrict'  :    ''+dropdownList2option+''
-                }, false);
-                // submit
-                this.click(x('//*[@id="ctl00_ContentPlaceHolder1_btnSubmit"]'));
-            });
-            this.then(function () {
-                // returns district table data
-                var sanitationData =
-                this.evaluate(function(distTableClassname){
-                    return $('.'+ distTableClassname +' tbody tr')
-                        .slice(2)
-                        .map(function(){
-                            return [
-                                $(this)
-                                    .children()
-                                    .map(function(){
-                                        return $(this)
-                                            .text()
-                                            .trim();
-                                    }).get()
-                                    ];
-                        }).get();
-                }, {distTableClassname: distTableClassname});
-                sanitationArr.push.apply(sanitationArr, sanitationData);
-                console.log(dropdownList2option,'-->', dropdownList1option, 'collected :', sanitationArr.length);
-                this.back();
-            });
+          }, { districtTbSel: districtTbSel });
+          bufferArr.push.apply(bufferArr, districtData);
+          console.log(dropdownList2option+'-->'+dropdownList1option+'(Collected: '+bufferArr.length+')');
+          this.back();
         });
-        casper.then(function() {
-            write(''+dropdownList2option+'_L6.csv', sanitationArr);
-        });
+      });
+      this.then(function() {
+        write(''+dropdownList2option[0]+'_L6.csv', bufferArr);
+      });
     });
 
 });
