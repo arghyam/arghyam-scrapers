@@ -5,7 +5,7 @@ var x = require('casper').selectXPath,
 var buffer      = [],
     stateTbSel  = '#ctl00_ContentPlaceHolder1_div_Data tbody tbody tr:gt(2):lt(31)';
 
-casper.start('http://tsc.gov.in/Report/otherreports/RptFinancialProgofSchemes.aspx?id=Home', function()
+casper.start('http://tsc.gov.in/tsc/Report/otherreports/RptFinancialProgofSchemes.aspx?id=Home', function()
 {
   buffer = this.evaluate(function(stateTbSel)
   {

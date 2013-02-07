@@ -11,7 +11,7 @@ var districtTbSel     = '#ctl00_ContentPlaceHolder1_div2 tr:gt(5)',
 
 var buffer_district   = [];
 
-casper.start('http://tsc.gov.in/Report/Financial/RptStateLevelFinyrwise_net.aspx?id=FIN',function() {
+casper.start('http://tsc.gov.in/tsc/Report/Financial/RptStateLevelFinyrwise_net.aspx?id=FIN',function() {
   dropdownList = this.evaluate(function(dropdownSel) {
     return $(dropdownSel).map(function(){ return [[ $(this).attr('value'),$(this).text().trim() ]] }).get();
   }, {

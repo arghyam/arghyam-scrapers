@@ -11,7 +11,7 @@ var districtTbId  = 'ctl00_ContentPlaceHolder1_div_Data',
 
 var buffer  = [];
 
-casper.start('http://tsc.gov.in/Report/Physical/RptStateWiseSelective_net.aspx?id=PHY', function()
+casper.start('http://tsc.gov.in/tsc/Report/Physical/RptStateWiseSelective_net.aspx?id=PHY', function()
 {
   this.fill('form#aspnetForm', 
   {

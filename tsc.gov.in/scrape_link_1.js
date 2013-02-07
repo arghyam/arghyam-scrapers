@@ -16,7 +16,7 @@ var districtTbId  = 'ctl00_ContentPlaceHolder1_gvDistrict',
     districtData,
     buffer = [];
 
-casper.start('http://tsc.gov.in/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home', function()
+casper.start('http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home', function()
 {
 
   // returns [[ 'ctl00_ContentPlaceHolder1_gvshow_ctl03_lnkStnm', 'ANDHRA PRADESH' ],..]

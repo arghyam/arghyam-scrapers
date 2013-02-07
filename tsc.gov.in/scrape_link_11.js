@@ -11,7 +11,7 @@ var districtTbId  = 'ctl00_ContentPlaceHolder1_div_Data',
 
 var buffer  =  [];
 
-casper.start('http://tsc.gov.in/Report/MonitoringStatusReport/RptAchofIEC_HRDStatewiseDistrictwiseDetails.aspx?fin=2012-2013&id=AIP', function()
+casper.start('http://tsc.gov.in/tsc/Report/MonitoringStatusReport/RptAchofIEC_HRDStatewiseDistrictwiseDetails.aspx?fin=2012-2013&id=AIP', function()
 {
   stateTbIds    = this.evaluate(function(stateTbId)
   {

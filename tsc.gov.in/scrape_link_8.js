@@ -15,7 +15,7 @@ var stateName;
 
 var buffer = [];
 
-casper.start('http://tsc.gov.in/Report/Financial/RptStateLevelFinyrwise_net.aspx?id=FIN', function()
+casper.start('http://tsc.gov.in/tsc/Report/Financial/RptStateLevelFinyrwise_net.aspx?id=FIN', function()
 {
   dropdownList = this.evaluate(function(dropdownSel)
   {

@@ -14,7 +14,7 @@ var districtTbSel = '#ctl00_ContentPlaceHolder1_tabledistrict table tr:gt(4)',
     buffer_state    = [],
     buffer_district = [];
 
-casper.start('http://tsc.gov.in/Report/Physical/RptStateWisePerAch_OnlyTSC_net.aspx?id=PHY',function()
+casper.start('http://tsc.gov.in/tsc/Report/Physical/RptStateWisePerAch_OnlyTSC_net.aspx?id=PHY',function()
 {
   dropdownList = this.evaluate(function(dropdownSel)
   {

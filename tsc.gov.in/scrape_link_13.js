@@ -21,7 +21,7 @@ var buffer_state    = [],
     buffer_gp       = [],
     buffer_district = [];
 
-casper.start('http://tsc.gov.in/NBA/NBAHome.aspx', function()
+casper.start('http://tsc.gov.in/tsc/NBA/NBAHome.aspx', function()
 {
   
   stateList = this.evaluate(function(stateSel)

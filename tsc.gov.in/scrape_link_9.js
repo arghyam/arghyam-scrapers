@@ -11,7 +11,7 @@ var districtTbId  = 'ctl00_ContentPlaceHolder1_divDistrictWise',
 
 var buffer  =  [];
 
-casper.start('http://tsc.gov.in/Report/Financial/RptPercentageFinComponentStatewiseDistrictwise_net.aspx?id=FIN', function()
+casper.start('http://tsc.gov.in/tsc/Report/Financial/RptPercentageFinComponentStatewiseDistrictwise_net.aspx?id=FIN', function()
 {
   stateTbIds    = this.evaluate(function(stateTbId)
   {

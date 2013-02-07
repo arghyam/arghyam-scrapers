@@ -12,7 +12,7 @@ var stateName,
 var districtTbSel     = '#ctl00_ContentPlaceHolder1_gvshow tr:gt(3)',
     districtData;
 
-casper.start('http://tsc.gov.in/Report/Release/RptReleaseDataBetweenDates.aspx?id=Home', function() {
+casper.start('http://tsc.gov.in/tsc/Report/Release/RptReleaseDataBetweenDates.aspx?id=Home', function() {
   dropdownList = this.evaluate(function(dropdownSel) {
     return $(dropdownSel).map(function(){ return [[ $(this).attr('value'),$(this).text().trim() ]] }).get();
   }, {

@@ -11,7 +11,7 @@ var districtTbSel     = '#ctl00_ContentPlaceHolder1_gv_report tr:gt(3)',
 
 var buffer_district   = [];
 
-casper.start('http://tsc.gov.in/Report/Release/RptCentreReleaseDistrictwise_net.aspx?id=REL',function() {
+casper.start('http://tsc.gov.in/tsc/Report/Release/RptCentreReleaseDistrictwise_net.aspx?id=REL',function() {
   dropdownList = this.evaluate(function(dropdownSel) {
     return $(dropdownSel).map(function(){ return [[ $(this).attr('value'),$(this).text().trim() ]] }).get();
   }, {

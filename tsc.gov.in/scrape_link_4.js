@@ -11,7 +11,7 @@ var districtTbId  = 'tblAbstract',
 
 var buffer  =  [];
 
-casper.start('http://tsc.gov.in/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home', function()
+casper.start('http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home', function()
 {
   stateTbIds    = this.evaluate(function(stateTbId)
   {

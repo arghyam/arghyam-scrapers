@@ -20,7 +20,7 @@ var buffer_year = [],
     buffer_state = [],
     buffer_district = [];
 
-casper.start('http://tsc.gov.in/Report/Physical/RptYearWiseCountryLevelAch.aspx?id=PHY', function() {
+casper.start('http://tsc.gov.in/tsc/Report/Physical/RptYearWiseCountryLevelAch.aspx?id=PHY', function() {
 
   yearList = this.evaluate(function(yearTbSel) {
     return $(yearTbSel).find('a').map(function() {

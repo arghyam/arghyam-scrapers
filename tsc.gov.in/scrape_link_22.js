@@ -6,7 +6,7 @@ var stateData,
     stateTbSel = '#ctl00_ContentPlaceHolder1_gvState tr:gt(1)',
     buffer_State = [];
 
-casper.start('http://tsc.gov.in/Report/Physical/RptYearWiseStateLevelAch_net.aspx?id=PHY', function() {
+casper.start('http://tsc.gov.in/tsc/Report/Physical/RptYearWiseStateLevelAch_net.aspx?id=PHY', function() {
   this.click(x('//*[@id="ctl00_ContentPlaceHolder1_btnView"]'));
   this.then(function() {
     stateData = this.evaluate(function(stateTbSel) {

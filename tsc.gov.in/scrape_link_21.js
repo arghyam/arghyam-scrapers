@@ -15,7 +15,7 @@ var districtTbSel = "#ctl00_ContentPlaceHolder1_gvState tr:gt(2)",
     districtData,
     buffer_district = [];
 
-casper.start('http://tsc.gov.in/Report/Physical/RptPhyAchinTimePeriod_net.aspx?id=PHY',function() {
+casper.start('http://tsc.gov.in/tsc/Report/Physical/RptPhyAchinTimePeriod_net.aspx?id=PHY',function() {
   dropdownList = this.evaluate(function (dropdownListSel) {
     return $(dropdownListSel).map(function(){ return [[ $(this).attr('value'),$(this).text().trim() ]] }).get();
   }, { dropdownListSel:dropdownListSel });

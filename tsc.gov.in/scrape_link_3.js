@@ -13,7 +13,7 @@ var physicalArr = [],
 var financialTbSel,
     physicalTbSel;
 
-casper.start('http://tsc.gov.in/Report/Status%20Note/RptStateNoteGeneral_net.aspx?id=Home', function() {
+casper.start('http://tsc.gov.in/tsc/Report/Status%20Note/RptStateNoteGeneral_net.aspx?id=Home', function() {
   dropdownList = this.evaluate(function (dropdownSel) {
     return $(dropdownSel).map(function(){ return [[ $(this).attr('value'),$(this).text().trim() ]] }).get();
   }, { dropdownSel:dropdownSel });

@@ -16,7 +16,7 @@ var districtTbId  = 'ctl00_ContentPlaceHolder1_gvDistrict',
     districtData,
     buffer = [];
 
-casper.start('http://tsc.gov.in/Report/Physical/RptPerwiseAchCensus_net.aspx?id=PHY', function() {
+casper.start('http://tsc.gov.in/tsc/Report/Physical/RptPerwiseAchCensus_net.aspx?id=PHY', function() {
   stateTbIds    = this.evaluate(function(stateTbId) {
     return $('#'+ stateTbId +'').find('a').map(function() {
       return [[ $(this).text() ]]

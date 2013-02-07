@@ -7,7 +7,7 @@ var dropdownList1Sel = "#ctl00_ContentPlaceHolder1_listBoxState option",
 
 var districtTbSel = ".Table tr:gt(1)";
 
-casper.start('http://tsc.gov.in/Report/Special%20Report/RptCoverageCensusPer.aspx?id=Home', function() {
+casper.start('http://tsc.gov.in/tsc/Report/Special%20Report/RptCoverageCensusPer.aspx?id=Home', function() {
     dropdownList1 = this.evaluate(function (dropdownList1Sel) {
       return $(dropdownList1Sel).map(function(){ return [[ $(this).attr('value'),$(this).text().trim() ]] }).get();
     }, { dropdownList1Sel:dropdownList1Sel });

@@ -15,7 +15,7 @@ var districtTbSel = '#ctl00_ContentPlaceHolder1_div_Data table:eq(2) tr:gt(4)',
     districtData,
     buffer = [];
 
-casper.start('http://tsc.gov.in/Report/Physical/RptCategoriesIHHLStatewiseDistrictwise_net.aspx?id=PHY', function()
+casper.start('http://tsc.gov.in/tsc/Report/Physical/RptCategoriesIHHLStatewiseDistrictwise_net.aspx?id=PHY', function()
 {
 
   // returns [[ 'ctl00_ContentPlaceHolder1_gvshow_ctl03_lnkStnm', 'ANDHRA PRADESH' ],..]

@@ -11,7 +11,7 @@ var districtTbId  = 'ctl00_ContentPlaceHolder1_div_Data',
 
 var buffer  =  [];
 
-casper.start('http://tsc.gov.in/Report/ProjectSanctioned/RptProjectApprovedStatewise_net.aspx?id=Home', function()
+casper.start('http://tsc.gov.in/tsc/Report/ProjectSanctioned/RptProjectApprovedStatewise_net.aspx?id=Home', function()
 {
   stateTbIds    = this.evaluate(function(stateTbId)
   {

@@ -5,7 +5,7 @@ var x       = require('casper').selectXPath,
 var buffer      = [],
     stateTbSel  = '#ctl00_ContentPlaceHolder1_div_Data table tr:gt(4)';
 
-casper.start('http://tsc.gov.in/Report/Release/RptCentreReleaseStatewise_net.aspx?id=REL', function() {
+casper.start('http://tsc.gov.in/tsc/Report/Release/RptCentreReleaseStatewise_net.aspx?id=REL', function() {
   buffer = this.evaluate(function(stateTbSel) {
     var rows = $(stateTbSel);
     rows = rows.map(function(i) {
