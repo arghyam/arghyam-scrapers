@@ -6,7 +6,7 @@ var x       = require('casper').selectXPath,
     write   = require('./csv').write;
 
 var stateTbId     = 'ctl00_ContentPlaceHolder1_div_Data',
-    stateTbSel = '#ctl00_ContentPlaceHolder1_div_Data tr:gt(2):lt(31)',
+    stateTbSel = '#ctl00_ContentPlaceHolder1_div_Data tr:gt(2):lt(32)',
     stateData;
 
 var gpinfoTbSel = '#ctl00_ContentPlaceHolder1_div1 table:eq(0) tr:gt(1), #ctl00_ContentPlaceHolder1_div1 table:eq(1) tr:gt(1)',
@@ -33,8 +33,12 @@ var gpBuffer = [];
 
 var districtBuffer = [];
 
-casper.start('http://tsc.gov.in/tsc/Report/PanchayatReport/RptMarkingProjectedGps_net.aspx?id=Home', function()
+casper.start('http://tsc.gov.in/tsc/Report/PanchayatReport/RptStateWiseBaseLineServeyData_net.aspx?id=Home', function()
 {
+  this.then(function() {
+    this.click(x('//*[@id="ctl00_ContentPlaceHolder1_btnSubmit"]'));
+  });
+  this.then(function() {
   stateLinks    = this.evaluate(function(stateTbId)
   {
     return $('#'+ stateTbId +' .TdItems_Left a[href]').map(function()
@@ -46,7 +50,7 @@ casper.start('http://tsc.gov.in/tsc/Report/PanchayatReport/RptMarkingProjectedGp
 
       stateData = this.evaluate(function(stateTbSel)
       {
-        var rows = $(stateTbSel);
+        var rows = $(stateTbSel).not(':last');
         return rows.map(function(i)
         {
           var row = $(this).children().map(function()
@@ -62,7 +66,7 @@ casper.start('http://tsc.gov.in/tsc/Report/PanchayatReport/RptMarkingProjectedGp
       });
   this.then(function()
   {
-    write('stateData_L31.csv', stateData);
+    write('stateData_L32.csv', stateData);
   });
 
 
@@ -91,7 +95,7 @@ casper.start('http://tsc.gov.in/tsc/Report/PanchayatReport/RptMarkingProjectedGp
       {districtTbId:districtTbId});
       districtData = this.evaluate(function(districtTbSel, stateName)
       {
-        var rows = $(districtTbSel).not(':last').not(':last');
+        var rows = $(districtTbSel).not(':last');
         return rows.map(function(i)
         {
           var row = $(this).children().map(function()
@@ -112,7 +116,7 @@ casper.start('http://tsc.gov.in/tsc/Report/PanchayatReport/RptMarkingProjectedGp
     this.then(function()
     {
       console.log('State: '+ state[1] +' '+ (index+1) +'/'+ stateLinks.length +' Buffer: '+ districtBuffer.length);
-      write('districtData_L31.csv', districtBuffer);
+      write('districtData_L32.csv', districtBuffer);
       districtBuffer = [];
     });
 
@@ -144,7 +148,7 @@ this.then(function() {
 
       blockData = this.evaluate(function(blockTbSel, stateName, districtName)
       {
-        var rows = $(blockTbSel).not(':last').not(':last');
+        var rows = $(blockTbSel).not(':last');
         return rows.map(function(i)
         {
           var row = $(this).children().map(function()
@@ -166,7 +170,7 @@ this.then(function() {
     this.then(function()
     {
       console.log('District: '+ district[1] +' '+ (index+1) +'/'+ districtLinks.length +' Buffer: '+ blockBuffer.length);
-      write('blockData_L31.csv', blockBuffer);
+      write('blockData_L32.csv', blockBuffer);
       blockBuffer = [];
     });
 
@@ -186,18 +190,9 @@ this.then(function() {
 
     this.then(function()
     {
-      gpLinks    = this.evaluate(function(gpTbId)
-      {
-        return $('#'+ gpTbId +' .TdItems_Left a[href]').map(function()
-        {
-          return [[ $(this).attr('id'), $(this).text() ]];
-        }).get();
-      },
-      {gpTbId:gpTbId});
-
       gpData = this.evaluate(function(gpTbSel, stateName, districtName, blockName)
       {
-        var rows = $(gpTbSel).not(':last').not(':last').not(':last').not(':last');
+        var rows = $(gpTbSel).not(':last');
         return rows.map(function(i)
         {
           var row = $(this).children().map(function()
@@ -220,68 +215,10 @@ this.then(function() {
     this.then(function()
     {
       console.log('Block: '+ block[1] +' '+ (index+1) +'/'+ blockLinks.length +' Buffer: '+ gpBuffer.length);
-      write('gpData_L31.csv', gpBuffer);
+      write('gpData_L32.csv', gpBuffer);
       gpBuffer = [];
     });
 
-    //-->
-
-this.then(function() {
-  this.each(gpLinks, function(casper, gp, index)
-  {
-    this.then(function()
-    {
-      this.waitFor(function check() {
-        return this.exists(x('//*[@id="' + gp[0] + '"]'));
-      }, function then() {
-        this.click(x('//*[@id="' + gp[0] + '"]'));
-      }, function notThen() {
-        this.reload();
-      }, 10000000);
-    });
-
-    this.then(function()
-    {
-      gpInfoData = this.evaluate(function(gpinfoTbSel, stateName, districtName, blockName, gpName)
-      {
-        var rows = $(gpinfoTbSel).not(':last').not(':last');
-        resultRows = rows.map(function(i)
-        {
-          var row = $(this).children().map(function()
-          {
-            if($(this).text() != '') { return $(this).text().trim(); }
-          }).get();
-          return [row];
-        }).get();
-        tempRows = $(resultRows).map(function(){ return $(this).splice(2,($(this).length-1)); }).get();
-        tempRowsFinal = tempRows.splice(0, 0, stateName, districtName, blockName, gpName);
-        return [tempRows];
-      },
-      {
-        gpinfoTbSel       :  gpinfoTbSel,
-        stateName         :  state[1],
-        districtName      :  district[1],
-        blockName         :  block[1],
-        gpName            :  gp[1]
-      });
-      gpInfoBuffer.push.apply(gpInfoBuffer, gpInfoData);
-    });
-    this.then(function()
-    {
-      console.log('GP: '+ gp[1] +' '+ (index+1) +'/'+ gpLinks.length +' Buffer: '+ gpInfoBuffer.length);
-      write('gpInfoData_L31.csv', gpInfoBuffer);
-      gpInfoBuffer = [];
-    });
-    this.then(function()
-    {
-      this.back();
-    });
-  });
-});
-
-
-    //<--
-
     this.then(function()
     {
       this.back();
@@ -302,6 +239,7 @@ this.then(function() {
     });
   });
 
+});
 });
 
 casper.run();
