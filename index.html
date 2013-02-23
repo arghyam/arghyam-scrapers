@@ -26,6 +26,7 @@
   <h1 id="title"></h1>
   <svg class="treemap" width="100%" height="500"></svg>
   <p id="story"></p>
+  <p><a target="_blank" href="http://tsc.gov.in/" id="source">Source</a></p>
 </div>
 
 <script src="js/jquery.min.js"></script>
@@ -35,10 +36,6 @@
 <script src="stories.js"></script>
 <script>
 var svg = d3.select('svg.treemap');
-var RYG = d3.scale.linear()
-    .clamp(true)
-    .domain([0, .5, 1])
-    .range(['#D73027', '#FFFFBF', '#1A9850']);
 
 var menu = d3.nest().key(function(d) { return d.menu; }).entries(stories);
 var parentmenu = d3.select('ul.nav')
@@ -74,6 +71,7 @@ function draw(story) {
   d3.select('#menu').text(story.menu);
   d3.select('#title').text(story.title);
   d3.select('#story').text(story.story);
+  d3.select('#source').attr('href', story.url);
 
   // Filter the data
   d3.csv(story.file, function(data) {
