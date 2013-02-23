@@ -34,7 +34,7 @@ var stories = [
     },
     {
         'menu'  : 'Physical Progress',
-        'title' : 'IIHL BPL toilets',
+        'title' : 'Below poverty household toilets',
         'file'  : 'data/tsc.gov.in/districtData_L4.csv',
         'url'   : 'http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home',
         'filter': function(d) { return (d.Date == '10-12-2012') && (!d.District_Name.match(/^Total/)); },
@@ -46,7 +46,7 @@ var stories = [
     },
     {
         'menu'  : 'Physical Progress',
-        'title' : 'IIHL APL toilets',
+        'title' : 'Above poverty household toilets',
         'file'  : 'data/tsc.gov.in/districtData_L4.csv',
         'url'   : 'http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home',
         'filter': function(d) { return (d.Date == '10-12-2012') && (!d.District_Name.match(/^Total/)); },

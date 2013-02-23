@@ -46,25 +46,25 @@ var parentmenu = d3.select('ul.nav')
     .classed('dropdown', true);
 
 parentmenu
-    .append('a')
-    .attr('href', '#')
-    .classed('dropdown-toggle', true)
-    .attr('data-toggle', 'dropdown')
-    .text(function(d) { return d.key + ' '; })
-        .append('b')
-        .classed('caret', true);
+  .append('a')
+  .attr('href', '#')
+  .classed('dropdown-toggle', true)
+  .attr('data-toggle', 'dropdown')
+  .text(function(d) { return d.key + ' '; })
+      .append('b')
+      .classed('caret', true);
 
 parentmenu
-    .append('ul')
-    .classed('dropdown-menu', true)
-    .selectAll('li')
-        .data(function(d) { return d.values; })
-      .enter()
-        .append('li')
-          .append('a')
-          .attr('href', '#')
-          .text(function(d) { return d.title; })
-          .on('click', draw)
+  .append('ul')
+  .classed('dropdown-menu', true)
+  .selectAll('li')
+      .data(function(d) { return d.values; })
+    .enter()
+      .append('li')
+        .append('a')
+        .attr('href', '#')
+        .text(function(d) { return d.title; })
+        .on('click', draw)
 
 function draw(story) {
   // Set the title and story
@@ -94,28 +94,28 @@ function draw(story) {
     });
 
     var node = svg.selectAll('rect')
-        .data(treemap.nodes)
-        .call(position)
-        .attr('fill', story.color)
+      .data(treemap.nodes)
+      .call(position)
+      .attr('fill', story.color)
     node.select('title')
-          .text(story.hover);
+      .text(story.hover);
     node.enter().append('rect')
-        .call(position)
-        .attr('fill', story.color)
-        .append('title')
-          .text(story.hover);
+      .call(position)
+      .attr('fill', story.color)
+      .append('title')
+        .text(story.hover);
     node.exit().remove();
   });
 }
 
 function position() {
-    this.transition()
-        .duration(400)
-        .attr('x', function(d) { return d.x; })
-        .attr('y', function(d) { return d.y; })
-        .attr('width', function(d) { return d.dx; })
-        .attr('height', function(d) { return d.dy; })
-        .attr('stroke', '#fff')
+  this.transition()
+    .duration(400)
+    .attr('x', function(d) { return d.x; })
+    .attr('y', function(d) { return d.y; })
+    .attr('width', function(d) { return d.dx; })
+    .attr('height', function(d) { return d.dy; })
+    .attr('stroke', '#fff')
 }
 
 </script>
