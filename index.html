@@ -5,6 +5,18 @@
   <style>
     body { padding-top: 60px; }
     h2 { font-size: 125%; line-height: 1.25; color: #c0504d; }
+    #treemap .l2 {
+      opacity: 0;
+      pointer-events: none;
+      -webkit-transition: all 0.3s ease-out;  /* Chrome 1-25, Safari 3.2+ */
+         -moz-transition: all 0.3s ease-out;  /* Firefox 4-15 */
+           -o-transition: all 0.3s ease-out;  /* Opera 10.50–12.00 */
+              transition: all 0.3s ease-out;  /* Chrome 26, Firefox 16+, IE 10+, Opera 12.50+ */
+    }
+    .drilldown #treemap .l2 {
+      opacity: 1;
+      pointer-events: auto;
+    }
   </style>
   <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
 </head><body>
@@ -57,6 +69,7 @@
 <script src="js/bootstrap.min.js"></script>
 <script src="stories.js"></script>
 <script>
+// Clicking on the home button...
 d3.select('#visual').style('display', 'none');
 d3.select('#home').on('click', function() {
   d3.event.preventDefault();
@@ -64,6 +77,7 @@ d3.select('#home').on('click', function() {
   d3.select('#about').style('display', 'block');
 })
 
+// Display the menus
 var menu = d3.nest().key(function(d) { return d.menu; }).entries(stories);
 var parentmenu = d3.select('ul.nav')
   .selectAll('li.dropdown')
@@ -110,6 +124,13 @@ d3.select('#about').append('ul')
         .text(function(d) { return d.title; })
         .on('click', draw);
 
+var svg = d3.select('#treemap')
+    .on('click', function() {
+      var drilldown = d3.select('#visual').classed('drilldown');
+      d3.select('#visual').classed('drilldown', !drilldown);
+    });
+
+
 // When any menu option is clicked, draw it.
 function draw(story) {
   d3.event.preventDefault();
@@ -124,7 +145,6 @@ function draw(story) {
   d3.select('#source').attr('href', story.url).text(story.url);
 
   // Filter the data
-  var svg = d3.select('#treemap');
   d3.csv(story.file, function(data) {
     var subset = _.filter(data, story.filter);
 
@@ -167,6 +187,7 @@ function position() {
     .attr('width', function(d) { return d.dx; })
     .attr('height', function(d) { return d.dy; })
     .attr('stroke', '#fff')
+    .attr('class', function(d) { return "l" + d.depth; })
 }
 
 </script>
