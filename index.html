@@ -1,11 +1,10 @@
 <!DOCTYPE html><html lang="en">
 <head>
-  <title>Arghyam scrapers</title>
+  <title>Nirmal Bharat Abhiyan: trends</title>
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <style>
     body { padding-top: 60px; }
-    .controls { display: none; }
-    #menu { font-size: 125%; line-height: 1.25; color: #c0504d; }
+    h2 { font-size: 125%; line-height: 1.25; color: #c0504d; }
   </style>
   <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
 </head><body>
@@ -13,7 +12,7 @@
 <div class="navbar navbar-fixed-top">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">TSC</a>
+      <a id="home" class="brand" href="#">TSC</a>
       <ul class="nav">
         <!-- li><a href="#">About</a></li -->
       </ul>
@@ -21,12 +20,35 @@
   </div>
 </div>
 
-<div class="container">
+<div id="visual" class="container">
   <h2 id="menu"></h2>
   <h1 id="title"></h1>
-  <svg class="treemap" width="100%" height="500"></svg>
+
+  <svg id="legend" width="100%" height="30">
+    <rect width="100%" height="30" fill="url(#gradient_legend)"/>
+    <text x="5%"  y="15" fill="#fff" text-anchor="middle" dominant-baseline="middle">0%</text>
+    <text x="35%" y="15" fill="#000" text-anchor="middle" dominant-baseline="middle">50%</text>
+    <text x="70%" y="15" fill="#fff" text-anchor="middle" dominant-baseline="middle">100%</text>
+    <text x="95%" y="15" fill="#fff" text-anchor="middle" dominant-baseline="middle">200%</text>
+    <defs>
+      <linearGradient id="gradient_legend">
+        <stop offset="5%"  stop-color="#D73027"/>
+        <stop offset="37%" stop-color="#FFFFBF"/>
+        <stop offset="70%" stop-color="#1A9850"/>
+        <stop offset="95%" stop-color="#000000"/>
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <svg id="treemap" width="100%" height="500"></svg>
   <p id="story"></p>
-  <p><a target="_blank" href="http://tsc.gov.in/" id="source">Source</a></p>
+  <p>Source: <a target="_blank" href="http://tsc.gov.in/" id="source"></a></p>
+</div>
+
+<div id="about" class="container">
+  <h2>Ministry of Water &amp; Sanitation</h2>
+  <h1>Nirmal Bharat Abhiyan: Trends</h1>
+  <p>Introduction... to be written.</p>
 </div>
 
 <script src="js/jquery.min.js"></script>
@@ -35,7 +57,12 @@
 <script src="js/bootstrap.min.js"></script>
 <script src="stories.js"></script>
 <script>
-var svg = d3.select('svg.treemap');
+d3.select('#visual').style('display', 'none');
+d3.select('#home').on('click', function() {
+  d3.event.preventDefault();
+  d3.select('#visual').style('display', 'none');
+  d3.select('#about').style('display', 'block');
+})
 
 var menu = d3.nest().key(function(d) { return d.menu; }).entries(stories);
 var parentmenu = d3.select('ul.nav')
@@ -66,14 +93,38 @@ parentmenu
         .text(function(d) { return d.title; })
         .on('click', draw)
 
+// Create the menu on #about as well
+d3.select('#about').append('ul')
+  .selectAll('li')
+    .data(menu)
+  .enter()
+    .append('li')
+    .text(function(d) { return d.key; })
+    .append('ul')
+    .selectAll('li')
+        .data(function(d) { return d.values; })
+      .enter()
+        .append('li')
+        .append('a')
+        .attr('href', '#')
+        .text(function(d) { return d.title; })
+        .on('click', draw);
+
+// When any menu option is clicked, draw it.
 function draw(story) {
+  d3.event.preventDefault();
+
+  d3.select('#about').style('display', 'none')
+  d3.select('#visual').style('display', 'block');
+
   // Set the title and story
   d3.select('#menu').text(story.menu);
   d3.select('#title').text(story.title);
   d3.select('#story').text(story.story);
-  d3.select('#source').attr('href', story.url);
+  d3.select('#source').attr('href', story.url).text(story.url);
 
   // Filter the data
+  var svg = d3.select('#treemap');
   d3.csv(story.file, function(data) {
     var subset = _.filter(data, story.filter);
 
