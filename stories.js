@@ -82,5 +82,38 @@ var stories = [
         'num'   : ['Built APL toilets', 'PP_IHHL_APL'],
         'den'   : ['Planned APL toilets', 'PO_IHHL_APL'],
         'story' : 'Story to be written...'
+    }),
+    storify({
+        'menu'  : 'Financial Progress',
+        'title' : '% SC in Total Release',
+        'file'  : 'data/tsc.gov.in/districtData_L6.csv',
+        'url'   : 'http://tsc.gov.in/tsc/Report/Release/RptReleaseDataBetweenDates.aspx?id=Home',
+        'group' : ['State_Name'],
+        'area'  : ['Total Release', 'ReleaseAmt_Total'],
+        'den'   : ['Total Release', 'ReleaseAmt_Total'],
+        'num'   : ['SC Release', 'ReleaseAmt_ST'],
+        'story' : 'Story to be written...'
+    }),
+    storify({
+        'menu'  : 'Financial Progress',
+        'title' : '% ST in Total Release',
+        'file'  : 'data/tsc.gov.in/districtData_L6.csv',
+        'url'   : 'http://tsc.gov.in/tsc/Report/Release/RptReleaseDataBetweenDates.aspx?id=Home',
+        'group' : ['State_Name'],
+        'area'  : ['Total Release', 'ReleaseAmt_Total'],
+        'den'   : ['Total Release', 'ReleaseAmt_Total'],
+        'num'   : ['ST Release', 'ReleaseAmt_SC'],
+        'story' : 'Story to be written...'
+    }),
+    storify({
+        'menu'  : 'Financial Progress',
+        'title' : '% General in Total Release',
+        'file'  : 'data/tsc.gov.in/districtData_L6.csv',
+        'url'   : 'http://tsc.gov.in/tsc/Report/Release/RptReleaseDataBetweenDates.aspx?id=Home',
+        'group' : ['State_Name'],
+        'area'  : ['Total Release', 'ReleaseAmt_Total'],
+        'den'   : ['Total Release', 'ReleaseAmt_Total'],
+        'num'   : ['General Release', 'ReleaseAmt_General'],
+        'story' : 'Story to be written...'
     })
 ];
