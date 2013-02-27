@@ -5,6 +5,9 @@
   <style>
     body { padding-top: 60px; }
     h2 { font-size: 125%; line-height: 1.25; color: #c0504d; }
+    .l0 {
+      fill: #fff;
+    }
     #treemap .l2 {
       opacity: 0;
       pointer-events: none;
@@ -12,6 +15,10 @@
          -moz-transition: all 0.3s ease-out;  /* Firefox 4-15 */
            -o-transition: all 0.3s ease-out;  /* Opera 10.50–12.00 */
               transition: all 0.3s ease-out;  /* Chrome 26, Firefox 16+, IE 10+, Opera 12.50+ */
+    }
+    .drilldown #treemap .l1 {
+      stroke: none;
+      fill: #fff;
     }
     .drilldown #treemap .l2 {
       opacity: 1;
@@ -152,6 +159,7 @@ function draw(story) {
       .size([parseInt(svg.style('width')), svg.attr('height')])
       .sticky(true)
       .children(function(d) { return d.values; })
+      .padding(1.5)
       .value(story.size);
 
     var nodes = d3.nest();
