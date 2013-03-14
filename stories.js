@@ -9,8 +9,8 @@ var N = d3.format(',.0f'); // Number == int
 var P = d3.format('.1%');  // Percent
 
 function sum(d, metric) {
-    return d.depth == 2 ? d[metric] || parseInt(d[metric[0]]) + parseInt(d[metric[1]]) :
-           d.depth == 1 ? d3.sum(d.values, function(v) { return v[metric] || parseInt(v[metric[0]]) + parseInt(v[metric[1]]); })
+    return d.depth == 2 ? d[metric] || d3.sum(metric, function(s) { return d[s] }) :
+           d.depth == 1 ? d3.sum(d.values, function(v) { return v[metric] || d3.sum(metric, function(s) { return v[s] }) })
                         : 0
 }
 
