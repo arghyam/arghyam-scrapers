@@ -9,9 +9,9 @@ var N = d3.format(',.0f'); // Number == int
 var P = d3.format('.1%');  // Percent
 
 function sum(d, metric) {
-    return d.depth == 2 ? d[metric] :
-           d.depth == 1 ? d3.sum(d.values, function(v) { return v[metric]; })
-                        : 0;
+    return d.depth == 2 ? d[metric] || parseInt(d[metric[0]]) + parseInt(d[metric[1]]) :
+           d.depth == 1 ? d3.sum(d.values, function(v) { return v[metric] || parseInt(v[metric[0]]) + parseInt(v[metric[1]]); })
+                        : 0
 }
 
 function hover_text(story) {
@@ -114,6 +114,17 @@ var stories = [
         'area'  : ['Total Release', 'ReleaseAmt_Total'],
         'den'   : ['Total Release', 'ReleaseAmt_Total'],
         'num'   : ['General Release', 'ReleaseAmt_General'],
+        'story' : 'Story to be written...'
+    }),
+    storify({
+        'menu'  : 'Financial Progress',
+        'title' : '% (SC + ST) in Total Release',
+        'file'  : 'data/tsc.gov.in/districtData_L6.csv',
+        'url'   : 'http://tsc.gov.in/tsc/Report/Release/RptReleaseDataBetweenDates.aspx?id=Home',
+        'group' : ['State_Name'],
+        'area'  : ['Total Release', 'ReleaseAmt_Total'],
+        'den'   : ['Total Release', 'ReleaseAmt_Total'],
+        'num'   : ['% (SC + ST) in Total Release', ['ReleaseAmt_SC', 'ReleaseAmt_ST']],
         'story' : 'Story to be written...'
     })
 ];
