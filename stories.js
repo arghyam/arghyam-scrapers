@@ -15,27 +15,36 @@ function sum(d, metric) {
 }
 
 function hover_text(story) {
-  return function(d) {
-    var prefix = d.depth == 2 ? d['State_Name'] + ' - ' + d['District_Name'] + ': ' :
-                 d.depth == 1 ? d['key'] + ': '
-                              : '';
-    var num = sum(d, story.num[1]);
-    var den = sum(d, story.den[1]);
-    var size = sum(d, story.area[1]);
-    return (prefix +
-        story.area[0] + ' = ' + N(size) + '. ' +
-        story.num[0] + ' / ' + story.den[0] + ' = ' +
-        N(num) + ' / ' + N(den) + ' = ' + P(num / den)
-    );
-  };
+  return ;
 }
 
 function treemap_story(story) {
+    story.type = 'treemap';
     story.size = function(d) { return d[story.area[1]]; };
     story.filter = function(d) { return !d.District_Name.match(/^Total/); };
     story.color = function(d) { return color(sum(d, story.num[1]) / sum(d, story.den[1])); };
-    story.hover = hover_text(story);
-    story.type = 'treemap';
+    story.hover = function(d) {
+      var prefix = d.depth == 2 ? d['State_Name'] + ' - ' + d['District_Name'] + ': ' :
+                   d.depth == 1 ? d['key'] + ': '
+                                : '';
+      var num = sum(d, story.num[1]);
+      var den = sum(d, story.den[1]);
+      var size = sum(d, story.area[1]);
+      return (prefix +
+          story.area[0] + ' = ' + N(size) + '. ' +
+          story.num[0] + ' / ' + story.den[0] + ' = ' +
+          N(num) + ' / ' + N(den) + ' = ' + P(num / den)
+      );
+    };
+    return story;
+}
+
+function scatter_story(story) {
+    story.type = 'scatter';
+    story.filter = function(d) { return !d.District_Name.match(/^Total/); };
+    story.color = function(d) { return '#ccf'; };
+    story.cx = story.x[1];
+    story.cy = story.y[1];
     return story;
 }
 
@@ -126,6 +135,18 @@ var stories = [
         'area'  : ['Total Release', 'ReleaseAmt_Total'],
         'den'   : ['Total Release', 'ReleaseAmt_Total'],
         'num'   : ['% (SC + ST) in Total Release', ['ReleaseAmt_SC', 'ReleaseAmt_ST']],
+        'story' : 'Story to be written...'
+    }),
+    scatter_story({
+        'menu'  : 'Performance',
+        'title' : 'Financial vs Physical progress',
+        'file'  : 'data.csv',
+        'url'   : 'http://tsc.gov.in/tsc/Report/Release/RptReleaseDataBetweenDates.aspx?id=Home',
+        'group' : ['State_Name'],
+        'area'  : ['# BPL toilets required', 'PO_IHHL_BPL'],
+        'x'     : ['Expenses / Outlay', function(d) { return d['ExpReported_Total'] / d['Total_Projects_Outlay']; }],
+        'y'     : ['% BPL toilets constructed', function(d) { return d['PP_IHHL_BPL'] / d['PO_IHHL_BPL']; }],
+        'R'     : 40,
         'story' : 'Story to be written...'
     })
 ];
