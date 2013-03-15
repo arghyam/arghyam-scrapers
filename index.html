@@ -151,6 +151,10 @@ function draw(story) {
   d3.select('#story').text(story.story);
   d3.select('#source').attr('href', story.url).text(story.url);
 
+  window['draw_' + story.type](story);
+}
+
+function draw_treemap(story) {
   // Filter the data
   d3.csv(story.file, function(data) {
     var subset = _.filter(data, story.filter);

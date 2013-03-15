@@ -30,19 +30,20 @@ function hover_text(story) {
   };
 }
 
-function storify(story) {
+function treemap_story(story) {
     story.size = function(d) { return d[story.area[1]]; };
-    story.filter = function(d) { return (d.Date == '10-12-2012') && (!d.District_Name.match(/^Total/)); };
+    story.filter = function(d) { return !d.District_Name.match(/^Total/); };
     story.color = function(d) { return color(sum(d, story.num[1]) / sum(d, story.den[1])); };
     story.hover = hover_text(story);
+    story.type = 'treemap';
     return story;
 }
 
 var stories = [
-    storify({
+    treemap_story({
         'menu'  : 'Financial Progress',
         'title' : 'Project outlay used',
-        'file'  : 'data/tsc.gov.in/districtData_L1.csv',
+        'file'  : 'data.csv',
         'url'   : 'http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home',
         'group' : ['State_Name'],
         'area'  : ['Total outlay', 'Total_Projects_Outlay'],
@@ -50,10 +51,10 @@ var stories = [
         'den'   : ['Total outlay', 'Total_Projects_Outlay'],
         'story' : 'Story to be written...'
     }),
-    storify({
+    treemap_story({
         'menu'  : 'Financial Progress',
         'title' : 'Share of centre',
-        'file'  : 'data/tsc.gov.in/districtData_L1.csv',
+        'file'  : 'data.csv',
         'url'   : 'http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home',
         'group' : ['State_Name'],
         'area'  : ['Total outlay', 'Total_Projects_Outlay'],
@@ -61,10 +62,10 @@ var stories = [
         'den'   : ['Total expenses', 'ExpReported_Total'],
         'story' : 'Story to be written...'
     }),
-    storify({
+    treemap_story({
         'menu'  : 'Physical Progress',
         'title' : '% toilets built below poverty household',
-        'file'  : 'data/tsc.gov.in/districtData_L4.csv',
+        'file'  : 'data.csv',
         'url'   : 'http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home',
         'group' : ['State_Name'],
         'area'  : ['Planned BPL toilets', 'PO_IHHL_BPL'],
@@ -72,10 +73,10 @@ var stories = [
         'den'   : ['Planned BPL toilets', 'PO_IHHL_BPL'],
         'story' : 'Story to be written...'
     }),
-    storify({
+    treemap_story({
         'menu'  : 'Physical Progress',
         'title' : '% toilets built above poverty household',
-        'file'  : 'data/tsc.gov.in/districtData_L4.csv',
+        'file'  : 'data.csv',
         'url'   : 'http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home',
         'group' : ['State_Name'],
         'area'  : ['Planned APL toilets', 'PO_IHHL_APL'],
@@ -83,10 +84,10 @@ var stories = [
         'den'   : ['Planned APL toilets', 'PO_IHHL_APL'],
         'story' : 'Story to be written...'
     }),
-    storify({
+    treemap_story({
         'menu'  : 'Financial Progress',
         'title' : '% SC in Total Release',
-        'file'  : 'data/tsc.gov.in/districtData_L6.csv',
+        'file'  : 'data.csv',
         'url'   : 'http://tsc.gov.in/tsc/Report/Release/RptReleaseDataBetweenDates.aspx?id=Home',
         'group' : ['State_Name'],
         'area'  : ['Total Release', 'ReleaseAmt_Total'],
@@ -94,10 +95,10 @@ var stories = [
         'num'   : ['SC Release', 'ReleaseAmt_ST'],
         'story' : 'Story to be written...'
     }),
-    storify({
+    treemap_story({
         'menu'  : 'Financial Progress',
         'title' : '% ST in Total Release',
-        'file'  : 'data/tsc.gov.in/districtData_L6.csv',
+        'file'  : 'data.csv',
         'url'   : 'http://tsc.gov.in/tsc/Report/Release/RptReleaseDataBetweenDates.aspx?id=Home',
         'group' : ['State_Name'],
         'area'  : ['Total Release', 'ReleaseAmt_Total'],
@@ -105,10 +106,10 @@ var stories = [
         'num'   : ['ST Release', 'ReleaseAmt_SC'],
         'story' : 'Story to be written...'
     }),
-    storify({
+    treemap_story({
         'menu'  : 'Financial Progress',
         'title' : '% General in Total Release',
-        'file'  : 'data/tsc.gov.in/districtData_L6.csv',
+        'file'  : 'data.csv',
         'url'   : 'http://tsc.gov.in/tsc/Report/Release/RptReleaseDataBetweenDates.aspx?id=Home',
         'group' : ['State_Name'],
         'area'  : ['Total Release', 'ReleaseAmt_Total'],
@@ -116,10 +117,10 @@ var stories = [
         'num'   : ['General Release', 'ReleaseAmt_General'],
         'story' : 'Story to be written...'
     }),
-    storify({
+    treemap_story({
         'menu'  : 'Financial Progress',
         'title' : '% (SC + ST) in Total Release',
-        'file'  : 'data/tsc.gov.in/districtData_L6.csv',
+        'file'  : 'data.csv',
         'url'   : 'http://tsc.gov.in/tsc/Report/Release/RptReleaseDataBetweenDates.aspx?id=Home',
         'group' : ['State_Name'],
         'area'  : ['Total Release', 'ReleaseAmt_Total'],
