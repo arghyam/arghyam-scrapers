@@ -9,9 +9,9 @@ var N = d3.format(',.0f'); // Number == int
 var P = d3.format('.1%');  // Percent
 
 function sum(d, metric) {
-    return d.depth == 2 ? d[metric] || d3.sum(metric, function(s) { return d[s] }) :
-           d.depth == 1 ? d3.sum(d.values, function(v) { return v[metric] || d3.sum(metric, function(s) { return v[s] }) })
-                        : 0
+  return d.depth == 2 ? d[metric] || d3.sum(metric, function(s) { return d[s] }) :
+         d.depth == 1 ? d3.sum(d.values, function(v) { return v[metric] || d3.sum(metric, function(s) { return v[s] }) })
+                      : 0
 }
 
 function hover_text(story) {
@@ -135,6 +135,17 @@ var stories = [
         'area'  : ['Total Release', 'ReleaseAmt_Total'],
         'den'   : ['Total Release', 'ReleaseAmt_Total'],
         'num'   : ['% (SC + ST) in Total Release', ['ReleaseAmt_SC', 'ReleaseAmt_ST']],
+        'story' : 'Story to be written...'
+    }),
+    treemap_story({
+        'menu'  : 'Physical Progress',
+        'title' : '75% coverage of BPL Toilets',
+        'file'  : './data/tsc.gov.in/districtData_L32.csv',
+        'url'   : 'http://tsc.gov.in/tsc/Report/PanchayatReport/RptStateWiseBaseLineServeyData_net.aspx?id=Home',
+        'group' : ['State_Name'],
+        'area'  : ['BPL Family' , ['BPL_WT', 'BPL_WOT'] ],
+        'den'   : ['BPL Family' , ['BPL_WT', 'BPL_WOT'] ],
+        'num'   : ['BPL Toilets', ['SAN_WT', 'SAN_WOT'] ],
         'story' : 'Story to be written...'
     }),
     scatter_story({
