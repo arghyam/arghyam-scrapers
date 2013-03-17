@@ -134,7 +134,7 @@ var stories = [
         'group' : ['State_Name'],
         'area'  : ['Total Release', 'ReleaseAmt_Total'],
         'den'   : ['Total Release', 'ReleaseAmt_Total'],
-        'num'   : ['% (SC + ST) in Total Release', ['ReleaseAmt_SC', 'ReleaseAmt_ST']],
+        'num'   : ['SC + ST', ['ReleaseAmt_SC', 'ReleaseAmt_ST']],
         'story' : 'Story to be written...'
     }),
     treemap_story({
