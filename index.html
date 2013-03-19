@@ -188,6 +188,7 @@ function draw_treemap(story) {
   // Filter the data
   d3.csv(story.file, function(data) {
     var subset = initchart(story, data);
+    window.subset = subset;
 
     var treemap = d3.layout.treemap()
       .size([parseInt(svg.style('width')), svg.attr('height')])
@@ -200,6 +201,7 @@ function draw_treemap(story) {
     story.group.forEach(function(group) {
       nodes = nodes.key(function(d) { return d[group]})
     });
+    window.nodes = nodes.entries(subset);
 
     treemap.nodes({
       'key': 'India',

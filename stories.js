@@ -35,9 +35,9 @@ function gen_color(value) {
 
 function treemap_story(story) {
     story.type = 'treemap';
-    story.size = function(d) { return d[story.area[1]]; };
+    story.size = function(d) { return sum(d, story.area[1]); };
     story.filter = function(d) { return !d.District_Name.match(/^Total/); };
-    story.color = function(d) { return color(sum(d, story.num[1]) / sum(d, story.den[1])); };
+    story.color = function(d) { return color((story.factor || 1) * sum(d, story.num[1]) / sum(d, story.den[1])); };
     story.hover = function(d) {
       var prefix = d.depth == 2 ? d['State_Name'] + ' - ' + d['District_Name'] + ': ' :
                    d.depth == 1 ? d['key'] + ': '
@@ -163,12 +163,13 @@ var stories = [
     treemap_story({
         'menu'  : 'Physical Progress',
         'title' : '75% coverage of BPL Toilets',
-        'file'  : './data/tsc.gov.in/districtData_L32.csv',
+        'file'  : 'data/tsc.gov.in/districtData_L32.csv',
         'url'   : 'http://tsc.gov.in/tsc/Report/PanchayatReport/RptStateWiseBaseLineServeyData_net.aspx?id=Home',
         'group' : ['State_Name'],
-        'area'  : ['BPL Family' , ['BPL_WT', 'BPL_WOT'] ],
-        'den'   : ['BPL Family' , ['BPL_WT', 'BPL_WOT'] ],
-        'num'   : ['BPL Toilets', ['SAN_WT', 'SAN_WOT'] ],
+        'area'  : ['BPL Family' , ['BPL_WT', 'BPL_WOT']],
+        'den'   : ['BPL Family' , ['BPL_WT', 'BPL_WOT']],
+        'num'   : ['BPL Toilets', ['SAN_WT', 'SAN_WOT']],
+        'factor': 1000,
         'story' : 'Story to be written...'
     }),
     scatter_story({
