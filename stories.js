@@ -14,8 +14,23 @@ function sum(d, metric) {
                       : 0
 }
 
-function hover_text(story) {
-  return ;
+// Colours taken from MS Office themes
+var gen_color_vals = [
+    '#4f81bd', '#c0504d', '#9bbb59', '#8064a2', '#4bacc6', '#f79646',
+    '#A9A57C', '#9CBEBD', '#D2CB6C', '#95A39D', '#C89F5D', '#B1A089',
+    '#ceb966', '#9cb084', '#6bb1c9', '#6585cf', '#7e6bc9', '#a379bb',
+    '#93A299', '#CF543F', '#B5AE53', '#848058', '#E8B54D', '#786C71',
+    '#f07f09', '#9f2936', '#1b587c', '#4e8542', '#604878', '#c19859',
+    '#94C600', '#71685A', '#FF6700', '#909465', '#956B43', '#FEA022',
+    '#ccc'
+];
+var gen_color_keys = {};
+
+function gen_color(value) {
+    if (!gen_color_keys[value]) {
+        gen_color_keys[value] = gen_color_vals[d3.keys(gen_color_keys).length];
+    }
+    return gen_color_keys[value];
 }
 
 function treemap_story(story) {
@@ -42,9 +57,13 @@ function treemap_story(story) {
 function scatter_story(story) {
     story.type = 'scatter';
     story.filter = function(d) { return !d.District_Name.match(/^Total/); };
-    story.color = function(d) { return '#ccf'; };
+    story.color = function(d) { return gen_color(d[story.group[0]]); };
     story.cx = story.x[1];
     story.cy = story.y[1];
+    story.hover = function(d) {
+      var prefix = d['State_Name'] + ' - ' + d['District_Name'];
+      return prefix;
+    };
     return story;
 }
 

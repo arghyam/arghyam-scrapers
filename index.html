@@ -24,6 +24,14 @@
       opacity: 1;
       pointer-events: auto;
     }
+    .axis path, .axis line {
+        fill: none;
+        stroke: black;
+        shape-rendering: crispEdges;
+    }
+    .axis text {
+      font-size: 11px;
+    }
   </style>
   <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
 </head><body>
@@ -204,20 +212,52 @@ function draw_scatter(story) {
     var rmax = +_.max(subset, function(d) { return +d[story.area[1]]; })[story.area[1]];
 
     var R = story.R;
+    var xscale = d3.scale.linear().range([R, width - R]);
+    var yscale = d3.scale.linear().range([height - R, R]);
     node.enter().append('circle')
-      .attr('cx', function(d) { return R + (width  - 2*R) * story.cx(d); })
-      .attr('cy', function(d) { return R + (height - 2*R) * (1 - story.cy(d)); })
+      .attr('cx', function(d) { return xscale(story.cx(d)); })
+      .attr('cy', function(d) { return yscale(story.cy(d)); })
       .attr('r', function(d) { return R * d[story.area[1]] / rmax; })
       .attr('fill', story.color)
       .attr('stroke', '#aaf')
       .attr('opacity', .5)
+      .append('title')
+        .text(story.hover)
+
+    var xaxis = svg.append('g')
+      .classed('axis', true)
+      .attr('transform', 'translate(0,' + (height - R) + ')')
+      .call(d3.svg.axis()
+              .scale(xscale)
+              .orient('bottom')
+              .tickFormat(d3.format('.0%')))
+      .append('text')
+        .text(story.x[0])
+        .attr('transform', 'translate(0, -5)')
+        .attr('x', width - R)
+        .attr('text-anchor', 'end');
+
+    var yaxis = svg.append('g')
+      .attr('class', 'axis')
+      .attr('transform', 'translate(' + R + ',0)')
+      .call(d3.svg.axis()
+              .scale(yscale)
+              .orient('left')
+              .tickFormat(d3.format('.0%')))
+      .append('text')
+        .text(story.y[0])
+        .attr('x', R)
+        .attr('transform', 'translate(5,0) rotate(-90,' + R + ',' + R + ')')
+        .attr('text-anchor', 'end')
+        .attr('dominant-baseline', 'hanging');
+
   });
 }
 
 function initchart(story, data) {
   // No transitions work for other chart types, so just empty it
-  if (svg.attr('data-type') != story.type) {
-    svg.empty();
+  if (svg.attr('data-type') !== story.type) {
+    svg.selectAll('*').remove();
     svg.attr('data-type', story.type);
   }
 
