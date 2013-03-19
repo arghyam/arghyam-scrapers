@@ -32,6 +32,16 @@
     .axis text {
       font-size: 11px;
     }
+    .scatter circle {
+      opacity: .5;
+    }
+    .scatter .show {
+      opacity: 1;
+      stroke: #000;
+    }
+    .scatter .hide {
+      opacity: 0;
+    }
   </style>
   <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
 </head><body>
@@ -220,7 +230,27 @@ function draw_scatter(story) {
       .attr('r', function(d) { return R * d[story.area[1]] / rmax; })
       .attr('fill', story.color)
       .attr('stroke', '#aaf')
-      .attr('opacity', .5)
+      .attr('data-q', function(d) { return d[story.group[0]]; })
+      .on('mouseover', function() {
+        var q = d3.select(this).attr('data-q');
+        svg.selectAll('.show').classed('show', false);
+        svg.selectAll('circle[data-q="' + q + '"]').classed('show', true);
+      })
+      .on('mouseout', function() {
+        svg.selectAll('.show').classed('show', false);
+      })
+      .on('click', function() {
+        var hidden = svg.selectAll('.hide');
+        if (hidden[0].length) {
+          hidden.classed('hide', false);
+        } else {
+          var q = d3.select(this).attr('data-q');
+          svg.selectAll('circle').classed('hide', true);
+          svg.selectAll('circle[data-q="' + q + '"]')
+            .classed('show', true)
+            .classed('hide', false);
+        }
+      })
       .append('title')
         .text(story.hover)
 
@@ -258,7 +288,11 @@ function initchart(story, data) {
   // No transitions work for other chart types, so just empty it
   if (svg.attr('data-type') !== story.type) {
     svg.selectAll('*').remove();
-    svg.attr('data-type', story.type);
+    if (svg.attr('data-type')) {
+      svg.classed(svg.attr('data-type'), false);
+    }
+    svg.classed(story.type, true)
+      .attr('data-type', story.type);
   }
 
   return _.filter(data, story.filter)

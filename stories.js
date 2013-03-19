@@ -62,7 +62,11 @@ function scatter_story(story) {
     story.cy = story.y[1];
     story.hover = function(d) {
       var prefix = d['State_Name'] + ' - ' + d['District_Name'];
-      return prefix;
+      return (prefix +
+        story.area[0] + ' = ' + N(d[story.area[1]]) + '. ' +
+        story.x[0]    + ' = ' + P(story.x[1](d)) + '. ' +
+        story.y[0]    + ' = ' + P(story.y[1](d)) + '.'
+      );
     };
     return story;
 }
