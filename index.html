@@ -16,6 +16,7 @@
            -o-transition: all 0.3s ease-out;  /* Opera 10.50–12.00 */
               transition: all 0.3s ease-out;  /* Chrome 26, Firefox 16+, IE 10+, Opera 12.50+ */
     }
+    .legend { display: none; }
     .drilldown #chart .l1 {
       stroke: none;
       fill: #fff;
@@ -33,14 +34,22 @@
       font-size: 11px;
     }
     .scatter circle {
-      opacity: .5;
+      opacity: .7;
+      -webkit-transition: all 0.3s ease-out;  /* Chrome 1-25, Safari 3.2+ */
+         -moz-transition: all 0.3s ease-out;  /* Firefox 4-15 */
+           -o-transition: all 0.3s ease-out;  /* Opera 10.50–12.00 */
+              transition: all 0.3s ease-out;  /* Chrome 26, Firefox 16+, IE 10+, Opera 12.50+ */
+      -webkit-transition: all 0.3s ease-in;  /* Chrome 1-25, Safari 3.2+ */
+         -moz-transition: all 0.3s ease-in;  /* Firefox 4-15 */
+           -o-transition: all 0.3s ease-in;  /* Opera 10.50–12.00 */
+              transition: all 0.3s ease-in;  /* Chrome 26, Firefox 16+, IE 10+, Opera 12.50+ */
     }
     .scatter .show {
       opacity: 1;
       stroke: #000;
     }
-    .scatter .hide {
-      opacity: 0;
+    .scatter .fade {
+      opacity: .02;
     }
   </style>
   <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
@@ -61,7 +70,7 @@
   <h2 id="menu"></h2>
   <h1 id="title"></h1>
 
-  <svg id="legend" width="100%" height="30">
+  <svg class="legend treemap" data-story="treemap" width="100%" height="30">
     <rect width="100%" height="30" fill="url(#gradient_legend)"/>
     <text x="5%"  y="15" fill="#fff" text-anchor="middle" dominant-baseline="middle">0%</text>
     <text x="35%" y="15" fill="#000" text-anchor="middle" dominant-baseline="middle">50%</text>
@@ -76,6 +85,9 @@
       </linearGradient>
     </defs>
   </svg>
+
+  <div class="legend scatter" data-story="scatter" width="100%" height="30">
+  </div>
 
   <svg id="chart" width="100%" height="500"></svg>
   <p id="story"></p>
@@ -221,6 +233,23 @@ function draw_scatter(story) {
       .data(subset);
     var rmax = +_.max(subset, function(d) { return +d[story.area[1]]; })[story.area[1]];
 
+    // Set up the legend
+    var legend = d3.select('.legend.scatter');
+    legend.selectAll('*').remove();
+    var select = legend.append('select');
+    var groups = _.uniq(_.pluck(data, story.group[0]));
+    groups.unshift('')
+    select.selectAll('option')
+        .data(groups)
+      .enter()
+        .append('option')
+        .text(function(d) { return d; });
+    select.on('change', function() {
+      var group = d3.select(this).property('value');
+      svg.selectAll('circle').classed('fade', true);
+      svg.selectAll('circle[data-q="' + group + '"]').classed('fade', false).classed('show', true);
+    });
+
     var R = story.R;
     var xscale = d3.scale.linear().range([R, width - R]);
     var yscale = d3.scale.linear().range([height - R, R]);
@@ -240,15 +269,17 @@ function draw_scatter(story) {
         svg.selectAll('.show').classed('show', false);
       })
       .on('click', function() {
-        var hidden = svg.selectAll('.hide');
+        var hidden = svg.selectAll('.fade');
         if (hidden[0].length) {
-          hidden.classed('hide', false);
+          hidden.classed('fade', false);
+          select.property('value', '');
         } else {
           var q = d3.select(this).attr('data-q');
-          svg.selectAll('circle').classed('hide', true);
+          svg.selectAll('circle').classed('fade', true);
           svg.selectAll('circle[data-q="' + q + '"]')
-            .classed('show', true)
-            .classed('hide', false);
+            .classed('fade', false)
+            .classed('show', true);
+          select.property('value', q);
         }
       })
       .append('title')
@@ -286,11 +317,14 @@ function draw_scatter(story) {
 
 function initchart(story, data) {
   // No transitions work for other chart types, so just empty it
-  if (svg.attr('data-type') !== story.type) {
+  var svgtype = svg.attr('data-type');
+  if (svgtype !== story.type) {
     svg.selectAll('*').remove();
     if (svg.attr('data-type')) {
-      svg.classed(svg.attr('data-type'), false);
+      svg.classed(svgtype, false);
+      d3.selectAll('[data-story="' + svgtype + '"]').style('display', null);
     }
+    d3.selectAll('[data-story="' + story.type + '"]').style('display', 'block');
     svg.classed(story.type, true)
       .attr('data-type', story.type);
   }
