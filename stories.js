@@ -63,7 +63,7 @@ function scatter_story(story) {
     story.hover = function(d) {
       var prefix = d['State_Name'] + ' - ' + d['District_Name'];
       return (prefix +
-        story.area[0] + ' = ' + N(d[story.area[1]]) + '. ' +
+        story.area[0] + ' = ' + N(story.area[1](d)) + '. ' +
         story.x[0]    + ' = ' + P(story.x[1](d)) + '. ' +
         story.y[0]    + ' = ' + P(story.y[1](d)) + '.'
       );
@@ -118,39 +118,6 @@ var stories = [
     }),
     treemap_story({
         'menu'  : 'Financial Progress',
-        'title' : '% SC in Total Release',
-        'file'  : 'data.csv',
-        'url'   : 'http://tsc.gov.in/tsc/Report/Release/RptReleaseDataBetweenDates.aspx?id=Home',
-        'group' : ['State_Name'],
-        'area'  : ['Total Release', 'ReleaseAmt_Total'],
-        'den'   : ['Total Release', 'ReleaseAmt_Total'],
-        'num'   : ['SC Release', 'ReleaseAmt_ST'],
-        'story' : 'Story to be written...'
-    }),
-    treemap_story({
-        'menu'  : 'Financial Progress',
-        'title' : '% ST in Total Release',
-        'file'  : 'data.csv',
-        'url'   : 'http://tsc.gov.in/tsc/Report/Release/RptReleaseDataBetweenDates.aspx?id=Home',
-        'group' : ['State_Name'],
-        'area'  : ['Total Release', 'ReleaseAmt_Total'],
-        'den'   : ['Total Release', 'ReleaseAmt_Total'],
-        'num'   : ['ST Release', 'ReleaseAmt_SC'],
-        'story' : 'Story to be written...'
-    }),
-    treemap_story({
-        'menu'  : 'Financial Progress',
-        'title' : '% General in Total Release',
-        'file'  : 'data.csv',
-        'url'   : 'http://tsc.gov.in/tsc/Report/Release/RptReleaseDataBetweenDates.aspx?id=Home',
-        'group' : ['State_Name'],
-        'area'  : ['Total Release', 'ReleaseAmt_Total'],
-        'den'   : ['Total Release', 'ReleaseAmt_Total'],
-        'num'   : ['General Release', 'ReleaseAmt_General'],
-        'story' : 'Story to be written...'
-    }),
-    treemap_story({
-        'menu'  : 'Financial Progress',
         'title' : '% (SC + ST) in Total Release',
         'file'  : 'data.csv',
         'url'   : 'http://tsc.gov.in/tsc/Report/Release/RptReleaseDataBetweenDates.aspx?id=Home',
@@ -166,8 +133,8 @@ var stories = [
         'file'  : 'data/tsc.gov.in/districtData_L32.csv',
         'url'   : 'http://tsc.gov.in/tsc/Report/PanchayatReport/RptStateWiseBaseLineServeyData_net.aspx?id=Home',
         'group' : ['State_Name'],
-        'area'  : ['BPL Family' , ['BPL_WT', 'BPL_WOT']],
-        'den'   : ['BPL Family' , ['BPL_WT', 'BPL_WOT']],
+        'area'  : ['BPL Households' , ['BPL_WT', 'BPL_WOT']],
+        'den'   : ['BPL Households' , ['BPL_WT', 'BPL_WOT']],
         'num'   : ['BPL Toilets', 'BPL_WT'],
         'story' : 'Story to be written...'
     }),
@@ -177,19 +144,19 @@ var stories = [
         'file'  : 'data/tsc.gov.in/districtData_L32.csv',
         'url'   : 'http://tsc.gov.in/tsc/Report/PanchayatReport/RptStateWiseBaseLineServeyData_net.aspx?id=Home',
         'group' : ['State_Name'],
-        'area'  : ['APL Family' , ['APL_WT', 'APL_WOT']],
-        'den'   : ['APL Family' , ['APL_WT', 'APL_WOT']],
+        'area'  : ['APL Households' , ['APL_WT', 'APL_WOT']],
+        'den'   : ['APL Households' , ['APL_WT', 'APL_WOT']],
         'num'   : ['APL Toilets', 'APL_WT'],
         'story' : 'Story to be written...'
     }),
     treemap_story({
         'menu'  : 'Physical Progress',
-        'title' : '75% coverage of BPL Toilets',
+        'title' : 'Coverage of Sanitary Complex Toilets',
         'file'  : 'data/tsc.gov.in/districtData_L32.csv',
         'url'   : 'http://tsc.gov.in/tsc/Report/PanchayatReport/RptStateWiseBaseLineServeyData_net.aspx?id=Home',
         'group' : ['State_Name'],
-        'area'  : ['BPL Family' , ['BPL_WT', 'BPL_WOT']],
-        'den'   : ['BPL Family' , ['BPL_WT', 'BPL_WOT']],
+        'area'  : ['BPL Households' , ['BPL_WT', 'BPL_WOT']],
+        'den'   : ['BPL Households' , ['BPL_WT', 'BPL_WOT']],
         'num'   : ['BPL Toilets', ['SAN_WT', 'SAN_WOT']],
         'factor': 1000,
         'story' : 'Story to be written...'
@@ -200,10 +167,22 @@ var stories = [
         'file'  : 'data.csv',
         'url'   : 'http://tsc.gov.in/tsc/Report/Release/RptReleaseDataBetweenDates.aspx?id=Home',
         'group' : ['State_Name'],
-        'area'  : ['# BPL toilets required', 'PO_IHHL_BPL'],
+        'area'  : ['# BPL toilets required', function(d) { return +d['PO_IHHL_BPL']; }],
         'x'     : ['Expenses / Outlay', function(d) { return d['ExpReported_Total'] / d['Total_Projects_Outlay']; }],
         'y'     : ['% BPL toilets constructed', function(d) { return d['PP_IHHL_BPL'] / d['PO_IHHL_BPL']; }],
         'R'     : 40,
+        'story' : 'Story to be written...'
+    }),
+    scatter_story({
+        'menu'  : 'Performance',
+        'title' : 'Effective fund utilisation',
+        'file'  : 'data.csv',
+        'url'   : 'http://tsc.gov.in/tsc/Report/Release/RptReleaseDataBetweenDates.aspx?id=Home',
+        'group' : ['State_Name'],
+        'area'  : ['# BPL toilets required', function(d) { return +d['BPL_WT'] + d['BPL_WOT']; }],
+        'x'     : ['Expenses / Outlay', function(d) { return d['ExpReported_Total'] / d['Total_Projects_Outlay']; }],
+        'y'     : ['% BPL Households with toilet', function(d) { return d['BPL_WT'] / (d['BPL_WT'] + d['BPL_WOT']); }],
+        'R'     : 2,
         'story' : 'Story to be written...'
     })
 ];

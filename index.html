@@ -13,7 +13,7 @@
       pointer-events: none;
       -webkit-transition: all 0.3s ease-out;  /* Chrome 1-25, Safari 3.2+ */
          -moz-transition: all 0.3s ease-out;  /* Firefox 4-15 */
-           -o-transition: all 0.3s ease-out;  /* Opera 10.50–12.00 */
+           -o-transition: all 0.3s ease-out;  /* Opera 10.50-12.00 */
               transition: all 0.3s ease-out;  /* Chrome 26, Firefox 16+, IE 10+, Opera 12.50+ */
     }
     .legend { display: none; }
@@ -35,21 +35,13 @@
     }
     .scatter circle {
       opacity: .7;
-      -webkit-transition: all 0.3s ease-out;  /* Chrome 1-25, Safari 3.2+ */
-         -moz-transition: all 0.3s ease-out;  /* Firefox 4-15 */
-           -o-transition: all 0.3s ease-out;  /* Opera 10.50–12.00 */
-              transition: all 0.3s ease-out;  /* Chrome 26, Firefox 16+, IE 10+, Opera 12.50+ */
-      -webkit-transition: all 0.3s ease-in;  /* Chrome 1-25, Safari 3.2+ */
-         -moz-transition: all 0.3s ease-in;  /* Firefox 4-15 */
-           -o-transition: all 0.3s ease-in;  /* Opera 10.50–12.00 */
-              transition: all 0.3s ease-in;  /* Chrome 26, Firefox 16+, IE 10+, Opera 12.50+ */
     }
     .scatter .show {
       opacity: 1;
       stroke: #000;
     }
     .scatter .fade {
-      opacity: .02;
+      display: none;
     }
   </style>
   <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
@@ -97,12 +89,17 @@
 <div id="about" class="container">
   <h2>Ministry of Water &amp; Sanitation</h2>
   <h1>Nirmal Bharat Abhiyan: Trends</h1>
-  <p>Open defecation in rural india remains a problem that perplexes policy makers. The first, government level initiative to tackle it came in the form of the Central Rural Sanitation Programme in 1986. A subsidy driven approach was adopted. This programme morphed to take into account the necessity to educate and empower people to adopt and use toilets - the Total Sanitation Campaign in 1999  and to adopt a panchayat based approach rather than a household based one – the Nirmal Bharat Abhiyan in 2012. The scheme was allotted Rs. 3500 crores in 2012-13 budget (before revision) and around 27 lakh toilets were constructed last year.
-  <p>The Ministry of Drinking Water and Sanitation, Government of India, under which this scheme is housed puts out detailed financial and physical progress data. This is supposed to provide anyone who is interested a snapshot of the rural sanitation situation in the country. This was also a large scale attempt to decentralise data collection as districts enter data into the IMIS on the government website directly. What has resulted is a vast collection of cumulative data from 2001 on the status of sanitation, available up to the habitation level.
-  <p>This effort by the government to put data proactively on the website must provide much reason to rejoice. However, several concerns remain about the quality of the data that is available. The latest numbers that challenge the MDWS data come from the census, according to which around 3.5 crore toilets are missing.
-  <p>Arghyam is a public charitable foundation set up by Rohini Nilekani in 2005 – Safe, sustainable water for all.  One of our key focus areas is looking at government spends on sanitation – from both the qualitative aspects of data that is present on the website and also the implementation of  the government’s scheme.
-  <p>To answer questions about data, Arghyam is collaborating with Gramener. The aim of this collaboration is to understand the sanitation data better & help open up the data actually.
-  <p>As a first step we are taking data off of the website and analysing it to understand it better. These analyses – as stories accompanied by visualisations will be uploaded periodically here.
+  <div class="row-fluid">
+    <div class="span6">
+      <p>Open defecation in rural india remains a problem that perplexes policy makers. The first, government level initiative to tackle it came in the form of the Central Rural Sanitation Programme in 1986. A subsidy driven approach was adopted. This programme morphed to take into account the necessity to educate and empower people to adopt and use toilets - the Total Sanitation Campaign in 1999  and to adopt a panchayat based approach rather than a household based one - the Nirmal Bharat Abhiyan in 2012. The scheme was allotted Rs. 3500 crores in 2012-13 budget (before revision) and around 27 lakh toilets were constructed last year.
+      <p>The Ministry of Drinking Water and Sanitation, Government of India, under which this scheme is housed puts out detailed financial and physical progress data. This is supposed to provide anyone who is interested a snapshot of the rural sanitation situation in the country. This was also a large scale attempt to decentralise data collection as districts enter data into the IMIS on the government website directly. What has resulted is a vast collection of cumulative data from 2001 on the status of sanitation, available up to the habitation level.
+      <p>This effort by the government to put data proactively on the website must provide much reason to rejoice. However, several concerns remain about the quality of the data that is available. The latest numbers that challenge the MDWS data come from the census, according to which around 3.5 crore toilets are missing.
+      <p>Arghyam is a public charitable foundation set up by Rohini Nilekani in 2005 - Safe, sustainable water for all.  One of our key focus areas is looking at government spends on sanitation - from both the qualitative aspects of data that is present on the website and also the implementation of  the government's scheme.
+      <p>To answer questions about data, Arghyam is collaborating with Gramener. The aim of this collaboration is to understand the sanitation data better & help open up the data actually.
+      <p>As a first step we are taking data off of the website and analysing it to understand it better. These analyses - as stories accompanied by visualisations will be uploaded periodically here.
+    </div>
+    <div class="span6" id="about-entry"></div>
+  </div>
 </div>
 
 <script src="js/jquery.min.js"></script>
@@ -150,7 +147,7 @@ parentmenu
         .on('click', draw)
 
 // Create the menu on #about as well
-d3.select('#about').append('ul')
+d3.select('#about-entry').append('ul')
   .selectAll('li')
     .data(menu)
   .enter()
@@ -238,7 +235,8 @@ function draw_scatter(story) {
     var height = svg.attr('height');
     var node = svg.selectAll('circle')
       .data(subset);
-    var rmax = +_.max(subset, function(d) { return +d[story.area[1]]; })[story.area[1]];
+    var rmax = _.max(_.map(subset, story.area[1]));
+    console.log(rmax);
 
     // Set up the legend
     var legend = d3.select('.legend.scatter');
@@ -263,7 +261,7 @@ function draw_scatter(story) {
     node.enter().append('circle')
       .attr('cx', function(d) { return xscale(story.cx(d)); })
       .attr('cy', function(d) { return yscale(story.cy(d)); })
-      .attr('r', function(d) { return R * d[story.area[1]] / rmax; })
+      .attr('r', function(d) { return R * story.area[1](d) / rmax; })
       .attr('fill', story.color)
       .attr('stroke', '#aaf')
       .attr('data-q', function(d) { return d[story.group[0]]; })
