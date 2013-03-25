@@ -43,6 +43,9 @@
     .scatter .fade {
       display: none;
     }
+    .scatter .glow {
+      fill: #ff0000;
+    }
   </style>
   <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
 </head><body>
@@ -244,6 +247,7 @@ function draw_scatter(story) {
     var legend = d3.select('.legend.scatter');
     legend.selectAll('*').remove();
     var select = legend.append('select');
+    var subselect = legend.append('select');
     var groups = _.uniq(_.pluck(data, story.group[0]));
     groups.unshift('')
     select.selectAll('option')
@@ -251,12 +255,29 @@ function draw_scatter(story) {
       .enter()
         .append('option')
         .text(function(d) { return d; });
+    var result;
+    var group;
     select.on('change', function() {
-      var group = d3.select(this).property('value');
+      group = d3.select(this).property('value');
       svg.selectAll('circle').classed('fade', true);
       svg.selectAll('circle[data-q="' + group + '"]').classed('fade', false).classed('show', true);
+      result = _.filter(data, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); })
+      subselect.selectAll('option').remove();
+      subselect.append('option').text('');
+      subselect.selectAll('option')
+          .data(result)
+        .enter()
+          .append('option')
+          .text(function(d){ return d.District_Name; })
     });
-
+    subselect.on('change', function() {
+      var subgroup = d3.select(this).property('value');
+      svg.selectAll('circle').classed('glow', false);
+      svg.selectAll('circle[data-q="' + group + '"]')
+        .data(result)
+        .classed('glow', function(d){
+          return d.District_Name == subgroup ? true : false; });
+    });
     var R = story.R;
     var xscale = d3.scale.linear().range([R, width - R]);
     var yscale = d3.scale.linear().range([height - R, R]);
