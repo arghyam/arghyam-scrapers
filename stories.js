@@ -61,7 +61,7 @@ function scatter_story(story) {
     story.cx = story.x[1];
     story.cy = story.y[1];
     story.hover = function(d) {
-      var prefix = d['State_Name'] + ' - ' + d['District_Name'];
+      var prefix = d['State_Name'] + ' - ' + d['District_Name'] + ': ';
       return (prefix +
         story.area[0] + ' = ' + N(story.area[1](d)) + '. ' +
         story.x[0]    + ' = ' + P(story.x[1](d)) + '. ' +
@@ -177,12 +177,12 @@ var stories = [
         'menu'  : 'Performance',
         'title' : 'Effective fund utilisation',
         'file'  : 'data.csv',
-        'url'   : 'http://tsc.gov.in/tsc/Report/Release/RptReleaseDataBetweenDates.aspx?id=Home',
+        'url'   : 'TBD',
         'group' : ['State_Name'],
-        'area'  : ['# BPL toilets required', function(d) { return +d['BPL_WT'] + d['BPL_WOT']; }],
+        'area'  : ['# BPL toilets required', function(d) { return +d['BPL_WT'] + +d['BPL_WOT']; }],
         'x'     : ['Expenses / Outlay', function(d) { return d['ExpReported_Total'] / d['Total_Projects_Outlay']; }],
-        'y'     : ['% BPL Households with toilet', function(d) { return d['BPL_WT'] / (d['BPL_WT'] + d['BPL_WOT']); }],
-        'R'     : 2,
+        'y'     : ['% BPL Households with toilet', function(d) { return +d['BPL_WT'] / (+d['BPL_WT'] + +d['BPL_WOT']); }],
+        'R'     : 40,
         'story' : 'Story to be written...'
     })
 ];

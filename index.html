@@ -231,12 +231,14 @@ function draw_scatter(story) {
   d3.csv(story.file, function(data) {
     var subset = initchart(story, data);
 
+    // TODO: Make these move
+    svg.selectAll('*').remove();
+
     var width = parseInt(svg.style('width'));
     var height = svg.attr('height');
     var node = svg.selectAll('circle')
       .data(subset);
     var rmax = _.max(_.map(subset, story.area[1]));
-    console.log(rmax);
 
     // Set up the legend
     var legend = d3.select('.legend.scatter');
