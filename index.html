@@ -195,6 +195,7 @@ function draw(story) {
 
 function draw_treemap(story) {
   // Filter the data
+  d3.selectAll('.tooltip').remove();
   d3.csv(story.file, function(data) {
     var subset = initchart(story, data);
     window.subset = subset;
