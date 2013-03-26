@@ -130,7 +130,7 @@ var stories = [
     treemap_story({
         'menu'  : 'Physical Progress',
         'title' : 'Coverage of BPL Toilets: households',
-        'file'  : 'data/tsc.gov.in/districtData_L32.csv',
+        'file'  : 'data.csv',
         'url'   : 'http://tsc.gov.in/tsc/Report/PanchayatReport/RptStateWiseBaseLineServeyData_net.aspx?id=Home',
         'group' : ['State_Name'],
         'area'  : ['BPL Households' , ['BPL_WT', 'BPL_WOT']],
@@ -141,7 +141,7 @@ var stories = [
     treemap_story({
         'menu'  : 'Physical Progress',
         'title' : 'Coverage of APL Toilets: households',
-        'file'  : 'data/tsc.gov.in/districtData_L32.csv',
+        'file'  : 'data.csv',
         'url'   : 'http://tsc.gov.in/tsc/Report/PanchayatReport/RptStateWiseBaseLineServeyData_net.aspx?id=Home',
         'group' : ['State_Name'],
         'area'  : ['APL Households' , ['APL_WT', 'APL_WOT']],
@@ -152,7 +152,7 @@ var stories = [
     treemap_story({
         'menu'  : 'Physical Progress',
         'title' : 'Coverage of Sanitary Complex Toilets',
-        'file'  : 'data/tsc.gov.in/districtData_L32.csv',
+        'file'  : 'data.csv',
         'url'   : 'http://tsc.gov.in/tsc/Report/PanchayatReport/RptStateWiseBaseLineServeyData_net.aspx?id=Home',
         'group' : ['State_Name'],
         'area'  : ['BPL Households' , ['BPL_WT', 'BPL_WOT']],
