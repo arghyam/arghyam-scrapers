@@ -46,6 +46,9 @@
     .scatter .glow {
       fill: #ff0000;
     }
+    .treemap .mark {
+      fill: #0000ff;
+    }
   </style>
   <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
 </head><body>
@@ -65,6 +68,7 @@
   <h2 id="menu"></h2>
   <h1 id="title"></h1>
 
+  <div class="legend-treemap"></div>
   <svg class="legend treemap" data-story="treemap" width="100%" height="30">
     <rect width="100%" height="30" fill="url(#gradient_legend)"/>
     <text x="5%"  y="15" fill="#fff" text-anchor="middle" dominant-baseline="middle">0%</text>
@@ -219,18 +223,51 @@ function draw_treemap(story) {
       .attr('fill', story.color)
     node.select('title')
       .text(story.hover);
+
     node.enter().append('rect')
       .call(position)
       .attr('fill', story.color)
       .append('title')
         .text(story.hover);
     node.exit().remove();
+
+    // Set up the legend
+    var legend = d3.select('.legend-treemap');
+    legend.selectAll('*').remove();
+    var select = legend.append('select');
+    var subselect = legend.append('select');
+    var groups = _.uniq(_.pluck(data, story.group[0]));
+    groups.unshift('')
+    select.selectAll('option')
+        .data(groups)
+      .enter()
+        .append('option')
+        .text(function(d) { return d; });
+    select.on('change', function() {
+      var group = d3.select(this).property('value');
+      svg.selectAll('rect').classed('mark', false)
+      svg.selectAll('rect[data-q="' + group + '"]').classed('mark', true)
+      result = _.filter(data, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); })
+      subselect.selectAll('option').remove();
+      subselect.append('option').text('');
+      subselect.selectAll('option')
+          .data(result)
+        .enter()
+          .append('option')
+          .text(function(d){ return d.District_Name; })
+    });
+    subselect.on('change', function() {
+      var subgroup = d3.select(this).property('value');
+      svg.selectAll('rect').classed('mark', false);
+      svg.selectAll('rect[data-q="' + subgroup + '"]').classed('mark', true);
+    });
   });
 }
 
 
 function draw_scatter(story) {
   // Filter the data
+  d3.selectAll('.legend-treemap').remove();
   d3.csv(story.file, function(data) {
     var subset = initchart(story, data);
 
@@ -369,6 +406,7 @@ function position() {
     .attr('height', function(d) { return d.dy; })
     .attr('stroke', '#fff')
     .attr('class', function(d) { return "l" + d.depth; })
+    .attr('data-q', function(d) { return d.depth == 1 ? d.key : d.District_Name; })
 }
 
 </script>
