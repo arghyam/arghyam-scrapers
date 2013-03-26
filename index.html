@@ -234,8 +234,8 @@ function draw_treemap(story) {
     // Set up the legend
     var legend = d3.select('.legend-treemap');
     legend.selectAll('*').remove();
-    var select = legend.append('select');
-    var subselect = legend.append('select');
+    var select = legend.append('select').attr('class', 'states');
+    var subselect = legend.append('select').attr('class', 'districts');
     var groups = _.uniq(_.pluck(data, story.group[0]));
     groups.unshift('')
     select.selectAll('option')
@@ -283,8 +283,8 @@ function draw_scatter(story) {
     // Set up the legend
     var legend = d3.select('.legend.scatter');
     legend.selectAll('*').remove();
-    var select = legend.append('select');
-    var subselect = legend.append('select');
+    var select = legend.append('select').attr('class', 'states');
+    var subselect = legend.append('select').attr('class', 'districts');
     var groups = _.uniq(_.pluck(data, story.group[0]));
     groups.unshift('')
     select.selectAll('option')
@@ -296,20 +296,30 @@ function draw_scatter(story) {
     var group;
     select.on('change', function() {
       group = d3.select(this).property('value');
-      svg.selectAll('circle').classed('fade', true);
-      svg.selectAll('circle[data-q="' + group + '"]').classed('fade', false).classed('show', true);
-      result = _.filter(data, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); })
-      subselect.selectAll('option').remove();
-      subselect.append('option').text('');
-      subselect.selectAll('option')
-          .data(result)
-        .enter()
-          .append('option')
-          .text(function(d){ return d.District_Name; })
+      if(group == '')
+      {
+        svg.selectAll('circle').classed('fade', false).classed('show', false).classed('glow', false);
+        subselect.selectAll('option').remove();
+      }
+      else
+      {
+        svg.selectAll('circle').classed('fade', true);
+        svg.selectAll('circle[data-q="' + group + '"]').classed('fade', false).classed('show', true);
+        result = _.filter(data, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); })
+        subselect.selectAll('option').remove();
+        subselect.append('option').text('');
+        subselect.selectAll('option')
+            .data(result)
+          .enter()
+            .append('option')
+            .text(function(d){ return d.District_Name; })
+      }
     });
     subselect.on('change', function() {
       var subgroup = d3.select(this).property('value');
       svg.selectAll('circle').classed('glow', false);
+      group = d3.selectAll('.states').property('value');
+      result = _.filter(data, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); })
       svg.selectAll('circle[data-q="' + group + '"]')
         .data(result)
         .classed('glow', function(d){
@@ -334,18 +344,27 @@ function draw_scatter(story) {
         svg.selectAll('.show').classed('show', false);
       })
       .on('click', function() {
+        var q;
+        svg.selectAll('circle').classed('glow', false);
+        d3.selectAll('.districts option').remove();
         var hidden = svg.selectAll('.fade');
         if (hidden[0].length) {
           hidden.classed('fade', false);
           select.property('value', '');
         } else {
-          var q = d3.select(this).attr('data-q');
+          q = d3.select(this).attr('data-q');
           svg.selectAll('circle').classed('fade', true);
           svg.selectAll('circle[data-q="' + q + '"]')
             .classed('fade', false)
             .classed('show', true);
           select.property('value', q);
         }
+        d3.selectAll('.districts').append('option').text('');
+        d3.select('.districts').selectAll('option')
+          .data(_.filter(data, function(d){ return d.State_Name == q && !d.District_Name.match(/^Total/); }))
+          .enter()
+          .append('option')
+          .text(function(d){ return d.District_Name; });
       })
       .append('title')
         .text(story.hover)
