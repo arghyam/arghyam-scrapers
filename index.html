@@ -257,6 +257,7 @@ function draw_treemap(story) {
           .text(function(d){ return d.District_Name; })
     });
     subselect.on('change', function() {
+
       var subgroup = d3.select(this).property('value');
       svg.selectAll('rect').classed('mark', false);
       svg.selectAll('rect[data-q="' + subgroup + '"]').classed('mark', true);
@@ -295,6 +296,7 @@ function draw_scatter(story) {
     var result;
     var group;
     select.on('change', function() {
+      d3.selectAll('.tooltip').remove();
       group = d3.select(this).property('value');
       if(group == '')
       {
@@ -324,6 +326,8 @@ function draw_scatter(story) {
         .data(result)
         .classed('glow', function(d){
           return d.District_Name == subgroup ? true : false; });
+      d3.selectAll('.tooltip').remove();
+      $('.glow').tooltip({ title:function(){ return $('.glow title').text(); }, trigger:'focus', container:'body' }).tooltip('show');
     });
     var R = story.R;
     var xscale = d3.scale.linear().range([R, width - R]);
