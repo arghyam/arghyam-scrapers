@@ -181,6 +181,7 @@ var svg = d3.select('#chart')
 function draw(story) {
   d3.event.preventDefault();
 
+  d3.selectAll('.tooltip').remove();
   d3.select('#about').style('display', 'none')
   d3.select('#visual').style('display', 'block');
 
@@ -349,6 +350,7 @@ function draw_scatter(story) {
         svg.selectAll('.show').classed('show', false);
       })
       .on('click', function() {
+        d3.selectAll('.tooltip').remove();
         var q;
         svg.selectAll('circle').classed('glow', false);
         d3.selectAll('.districts option').remove();
