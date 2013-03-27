@@ -69,6 +69,8 @@ function scatter_story(story) {
     story.color = function(d) { return gen_color(d[story.group[0]]); };
     story.cx = story.x[1];
     story.cy = story.y[1];
+    story.xdom = story.xdom || [0, 1];
+    story.ydom = story.ydom || [0, 1];
     story.hover = function(d) {
       var prefix = d['State_Name'] + ' - ' + d['District_Name'] + ': ';
       return (prefix +
@@ -220,6 +222,8 @@ var stories = [
         'x'     : ['Expenses / Outlay', function(d) { return d['ExpReported_Total'] / d['Total_Projects_Outlay']; }],
         'y'     : ['% BPL toilets constructed', function(d) { return d['PP_IHHL_BPL'] / d['PO_IHHL_BPL']; }],
         'R'     : 40,
+        'xdom'  : [0, 1.5],
+        'ydom'  : [0, 1.5],
         'story' : 'Story to be written...'
     }),
     scatter_story({
@@ -232,6 +236,7 @@ var stories = [
         'x'     : ['Expenses / Outlay', function(d) { return d['ExpReported_Total'] / d['Total_Projects_Outlay']; }],
         'y'     : ['% BPL Households with toilet', function(d) { return +d['BPL_WT'] / (+d['BPL_WT'] + +d['BPL_WOT']); }],
         'R'     : 40,
+        'xdom'  : [0, 1.5],
         'story' : 'Story to be written...'
     })
 ];

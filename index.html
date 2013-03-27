@@ -329,8 +329,8 @@ function draw_scatter(story) {
       $('.mark').tooltip({ title:function(){ return $('.mark title').text(); }, trigger:'focus', container:'body' }).tooltip('show');
     });
     var R = story.R;
-    var xscale = d3.scale.linear().range([R, width - R]);
-    var yscale = d3.scale.linear().range([height - R, R]);
+    var xscale = d3.scale.linear().domain(story.xdom).range([R, width - R]);
+    var yscale = d3.scale.linear().domain(story.ydom).range([height - R, R]);
     node.enter().append('circle')
       .attr('cx', function(d) { return xscale(story.cx(d)); })
       .attr('cy', function(d) { return yscale(story.cy(d)); })
