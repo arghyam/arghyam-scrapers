@@ -46,7 +46,7 @@ function treemap_story(story) {
     story.type = 'treemap';
     story.size = function(d) { return sum(d, story.area[1]); };
     story.filter = function(d) { return !d.District_Name.match(/^Total/); };
-    story.color = function(d) { return color((story.factor || 1) * sum(d, story.num[1]) / sum(d, story.den[1])); };
+    story.color = function(d) { return color((story.factor || 1) * sum(d, story.num[1]) / sum(d, story.den[1])).replace(/NaNNaNNaN/i, 'eee'); };
     story.hover = function(d) {
       var prefix = d.depth == 2 ? d['State_Name'] + ' - ' + d['District_Name'] + ': ' :
                    d.depth == 1 ? d['key'] + ': '
