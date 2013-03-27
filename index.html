@@ -27,9 +27,9 @@
       pointer-events: auto;
     }
     .axis path, .axis line {
-        fill: none;
-        stroke: black;
-        shape-rendering: crispEdges;
+      fill: none;
+      stroke: black;
+      shape-rendering: crispEdges;
     }
     .axis text {
       font-size: 11px;
@@ -39,7 +39,7 @@
     }
     .scatter .show {
       opacity: 1;
-      stroke: #000;
+      stroke: rgba(0,0,0,.5);
     }
     .scatter .fade {
       display: none;
@@ -73,8 +73,8 @@
   <h2 id="menu"></h2>
   <h1 id="title"></h1>
 
-  <div class="legend-treemap"></div>
-  <svg class="legend treemap" data-story="treemap" width="100%" height="30">
+  <div class="legend treemap" data-story="treemap"></div>
+  <svg class="legend treemap" width="100%" height="30">
     <rect width="100%" height="30" fill="url(#gradient_legend)"/>
     <text x="5%"  y="15" fill="#fff" text-anchor="middle" dominant-baseline="middle">0%</text>
     <text x="35%" y="15" fill="#000" text-anchor="middle" dominant-baseline="middle">50%</text>
@@ -201,7 +201,6 @@ function draw(story) {
 
 function draw_treemap(story) {
   // Filter the data
-  d3.selectAll('.tooltip').remove();
   d3.csv(story.file, function(data) {
     var subset = initchart(story, data);
 
@@ -237,7 +236,7 @@ function draw_treemap(story) {
     node.exit().remove();
 
     // Set up the legend
-    var legend = d3.select('.legend-treemap');
+    var legend = d3.select('.legend.treemap');
     legend.selectAll('*').remove();
     var select = legend.append('select').attr('class', 'states');
     var subselect = legend.append('select').attr('class', 'districts');
@@ -262,7 +261,6 @@ function draw_treemap(story) {
           .text(function(d){ return d.District_Name; })
     });
     subselect.on('change', function() {
-
       var subgroup = d3.select(this).property('value');
       svg.selectAll('rect').classed('mark', false);
       svg.selectAll('rect[data-q="' + subgroup + '"]').classed('mark', true);
@@ -273,7 +271,6 @@ function draw_treemap(story) {
 
 function draw_scatter(story) {
   // Filter the data
-  d3.selectAll('.legend-treemap').remove();
   d3.csv(story.file, function(data) {
     var subset = initchart(story, data);
 
@@ -317,7 +314,7 @@ function draw_scatter(story) {
           .data(result)
         .enter()
           .append('option')
-          .text(function(d){ console.log(d.District_Name); return d.District_Name; })
+          .text(function(d){ return d.District_Name; })
     });
     subselect.on('change', function() {
       var subgroup = d3.select(this).property('value');
