@@ -250,10 +250,11 @@ function draw_treemap(story) {
       svg.selectAll('rect').classed('mark', false)
       svg.selectAll('rect[data-q="' + group + '"]').classed('mark', true)
       result = _.filter(data, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); })
+      var localresult =  result;
       subselect.selectAll('option').remove();
-      subselect.append('option').text('');
+      localresult.unshift('')
       subselect.selectAll('option')
-          .data(result)
+          .data(localresult)
         .enter()
           .append('option')
           .text(function(d){ return d.District_Name; })
@@ -310,10 +311,11 @@ function draw_scatter(story) {
         svg.selectAll('circle').classed('fade', true);
         svg.selectAll('circle[data-q="' + group + '"]').classed('fade', false).classed('show', true);
         result = _.filter(data, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); })
+        var localresult = result;
         subselect.selectAll('option').remove();
-        subselect.append('option').text('');
+        localresult.unshift('');
         subselect.selectAll('option')
-            .data(result)
+            .data(localresult)
           .enter()
             .append('option')
             .text(function(d){ return d.District_Name; })
