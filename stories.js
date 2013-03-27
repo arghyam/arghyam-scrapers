@@ -113,6 +113,21 @@ var stories = [
         'den'   : ['Total expenses', 'ExpReported_Total'],
         'story' : 'Story to be written...'
     }),
+    stack_story({
+        'menu'  : 'Financial Progress',
+        'title' : 'Source of funding',
+        'file'  : 'data.csv',
+        'url'   : 'http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home',
+        'group' : ['State_Name', 'District_Name'],
+        'stack' : function(d) { return cumsum([
+            +d['ApprShare_Center']      / (+d['ApprShare_Center'] + +d['ApprShare_State'] + +d['ApprShare_Beneficiary']),
+            +d['ApprShare_State']       / (+d['ApprShare_Center'] + +d['ApprShare_State'] + +d['ApprShare_Beneficiary']),
+            +d['ApprShare_Beneficiary'] / (+d['ApprShare_Center'] + +d['ApprShare_State'] + +d['ApprShare_Beneficiary'])
+        ]); },
+        'names' : ['Centre', 'State', 'Beneficiary'],
+        'colors': ['#4f81bd', '#c0504d', '#9bbb59'],
+        'story' : 'Story to be written...'
+    }),
     treemap_story({
         'menu'  : 'Physical Progress',
         'title' : '% toilets built below poverty household',
@@ -148,7 +163,7 @@ var stories = [
     }),
     stack_story({
         'menu'  : 'Financial Progress',
-        'title' : 'SC/ST Distribution',
+        'title' : 'SC/ST/GEN Release Amounts',
         'file'  : 'data.csv',
         'url'   : 'http://tsc.gov.in/tsc/Report/Release/RptReleaseDataBetweenDates.aspx?id=Home',
         'group' : ['State_Name', 'District_Name'],
