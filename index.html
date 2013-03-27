@@ -44,14 +44,14 @@
     .scatter .fade {
       display: none;
     }
-    .scatter .glow {
-      fill: #ff0000;
+    .scatter .mark {
+      fill: #4f81bd;
     }
     .treemap .mark {
-      fill: #0000ff;
+      fill: #4f81bd;
     }
-    .stack .glow {
-      fill: #ff0000;
+    .stack .mark {
+      fill: #c0504d;
       font-weight: bold;
     }
   </style>
@@ -252,12 +252,11 @@ function draw_treemap(story) {
       var group = d3.select(this).property('value');
       svg.selectAll('rect').classed('mark', false)
       svg.selectAll('rect[data-q="' + group + '"]').classed('mark', true)
-      result = _.filter(data, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); })
-      var localresult =  result;
+      var result = _.filter(data, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); })
+      result.unshift('')
       subselect.selectAll('option').remove();
-      localresult.unshift('')
       subselect.selectAll('option')
-          .data(localresult)
+          .data(result)
         .enter()
           .append('option')
           .text(function(d){ return d.District_Name; })
@@ -299,11 +298,9 @@ function draw_scatter(story) {
       .enter()
         .append('option')
         .text(function(d) { return d; });
-    var result;
-    var group;
     select.on('change', function() {
       d3.selectAll('.tooltip').remove();
-      group = d3.select(this).property('value');
+      var group = d3.select(this).property('value');
       if (group) {
         svg.selectAll('circle').classed('fade', true);
         svg.selectAll('circle[data-q="' + group + '"]')
@@ -311,28 +308,28 @@ function draw_scatter(story) {
           .classed('show', true);
       } else {
         svg.selectAll('circle.fade').classed('fade', false);
-        svg.selectAll('circle.glow').classed('glow', false);
+        svg.selectAll('circle.mark').classed('mark', false);
       }
-      result = _.filter(data, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); })
+      var result = _.filter(data, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); })
+      result.unshift('');
       subselect.selectAll('option').remove();
-      subselect.append('option').text('');
       subselect.selectAll('option')
           .data(result)
         .enter()
           .append('option')
-          .text(function(d){ return d.District_Name; })
+          .text(function(d){ console.log(d.District_Name); return d.District_Name; })
     });
     subselect.on('change', function() {
       var subgroup = d3.select(this).property('value');
-      svg.selectAll('circle').classed('glow', false);
-      group = d3.selectAll('.states').property('value');
-      result = _.filter(data, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); })
+      svg.selectAll('circle').classed('mark', false);
+      var group = d3.selectAll('.states').property('value');
+      var result = _.filter(data, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); })
       svg.selectAll('circle[data-q="' + group + '"]')
         .data(result)
-        .classed('glow', function(d){
+        .classed('mark', function(d){
           return d.District_Name == subgroup ? true : false; });
       d3.selectAll('.tooltip').remove();
-      $('.glow').tooltip({ title:function(){ return $('.glow title').text(); }, trigger:'focus', container:'body' }).tooltip('show');
+      $('.mark').tooltip({ title:function(){ return $('.mark title').text(); }, trigger:'focus', container:'body' }).tooltip('show');
     });
     var R = story.R;
     var xscale = d3.scale.linear().range([R, width - R]);
@@ -386,7 +383,6 @@ function draw_scatter(story) {
         .attr('transform', 'translate(5,0) rotate(-90,' + R + ',' + R + ')')
         .attr('text-anchor', 'end')
         .attr('dominant-baseline', 'hanging');
-
   });
 }
 
@@ -447,9 +443,9 @@ function draw_stack(story) {
 
     var v0 = showstack('v0', nodes.entries(subset), 150, 16, 200);
     v0.on('click', function() {
-      svg.selectAll('.glow').classed('glow', false);
+      svg.selectAll('.mark').classed('mark', false);
       var filter = d3.select(this)
-        .classed('glow', true)
+        .classed('mark', true)
         .attr('data-q');
       var subdata = _.filter(subset, function(d) { return d[story.group[0]] == filter; });
       showstack('v1', leaves.entries(subdata), 550, 12, 200);
