@@ -14,6 +14,15 @@ function sum(d, metric) {
                       : 0
 }
 
+function cumsum(series) {
+    var result = [], running = 0;
+    for (var i=0, l=series.length; i<l; i++) {
+        result.push([running, series[i]]);
+        running += series[i];
+    }
+    return result;
+}
+
 // Colours taken from MS Office themes
 var gen_color_vals = [
     '#4f81bd', '#c0504d', '#9bbb59', '#8064a2', '#4bacc6', '#f79646',
@@ -67,6 +76,16 @@ function scatter_story(story) {
         story.x[0]    + ' = ' + P(story.x[1](d)) + '. ' +
         story.y[0]    + ' = ' + P(story.y[1](d)) + '.'
       );
+    };
+    return story;
+}
+
+function stack_story(story) {
+    story.type = 'stack';
+    story.filter = function(d) { return !d.District_Name.match(/^Total/); };
+    story.color = function(d) { return gen_color(d[story.group[0]]); };
+    story.hover = function(d, i) {
+      return story.names[i] + ': ' + P(d[1]);
     };
     return story;
 }
@@ -125,6 +144,21 @@ var stories = [
         'area'  : ['Total Release', 'ReleaseAmt_Total'],
         'den'   : ['Total Release', 'ReleaseAmt_Total'],
         'num'   : ['SC + ST', ['ReleaseAmt_SC', 'ReleaseAmt_ST']],
+        'story' : 'Story to be written...'
+    }),
+    stack_story({
+        'menu'  : 'Financial Progress',
+        'title' : 'SC/ST Distribution',
+        'file'  : 'data.csv',
+        'url'   : 'http://tsc.gov.in/tsc/Report/Release/RptReleaseDataBetweenDates.aspx?id=Home',
+        'group' : ['State_Name', 'District_Name'],
+        'stack' : function(d) { return cumsum([
+            +d['ReleaseAmt_SC'] / +d['ReleaseAmt_Total'],
+            +d['ReleaseAmt_ST'] / +d['ReleaseAmt_Total'],
+            1 - (+d['ReleaseAmt_SC'] + +d['ReleaseAmt_ST']) / +d['ReleaseAmt_Total']
+        ]); },
+        'names' : ['SC', 'ST', 'GEN'],
+        'colors': ['#4f81bd', '#c0504d', '#9bbb59'],
         'story' : 'Story to be written...'
     }),
     treemap_story({

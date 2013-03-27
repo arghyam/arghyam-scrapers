@@ -17,6 +17,7 @@
               transition: all 0.3s ease-out;  /* Chrome 26, Firefox 16+, IE 10+, Opera 12.50+ */
     }
     .legend { display: none; }
+    .legend select { margin-right: 1em; }
     .drilldown #chart .l1 {
       stroke: none;
       fill: #fff;
@@ -48,6 +49,10 @@
     }
     .treemap .mark {
       fill: #0000ff;
+    }
+    .stack .glow {
+      fill: #ff0000;
+      font-weight: bold;
     }
   </style>
   <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
@@ -199,7 +204,6 @@ function draw_treemap(story) {
   d3.selectAll('.tooltip').remove();
   d3.csv(story.file, function(data) {
     var subset = initchart(story, data);
-    window.subset = subset;
 
     var treemap = d3.layout.treemap()
       .size([parseInt(svg.style('width')), svg.attr('height')])
@@ -212,7 +216,6 @@ function draw_treemap(story) {
     story.group.forEach(function(group) {
       nodes = nodes.key(function(d) { return d[group]})
     });
-    window.nodes = nodes.entries(subset);
 
     treemap.nodes({
       'key': 'India',
@@ -301,25 +304,23 @@ function draw_scatter(story) {
     select.on('change', function() {
       d3.selectAll('.tooltip').remove();
       group = d3.select(this).property('value');
-      if(group == '')
-      {
-        svg.selectAll('circle').classed('fade', false).classed('show', false).classed('glow', false);
-        subselect.selectAll('option').remove();
-      }
-      else
-      {
+      if (group) {
         svg.selectAll('circle').classed('fade', true);
-        svg.selectAll('circle[data-q="' + group + '"]').classed('fade', false).classed('show', true);
-        result = _.filter(data, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); })
-        var localresult = result;
-        subselect.selectAll('option').remove();
-        localresult.unshift('');
-        subselect.selectAll('option')
-            .data(localresult)
-          .enter()
-            .append('option')
-            .text(function(d){ return d.District_Name; })
+        svg.selectAll('circle[data-q="' + group + '"]')
+          .classed('fade', false)
+          .classed('show', true);
+      } else {
+        svg.selectAll('circle.fade').classed('fade', false);
+        svg.selectAll('circle.glow').classed('glow', false);
       }
+      result = _.filter(data, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); })
+      subselect.selectAll('option').remove();
+      subselect.append('option').text('');
+      subselect.selectAll('option')
+          .data(result)
+        .enter()
+          .append('option')
+          .text(function(d){ return d.District_Name; })
     });
     subselect.on('change', function() {
       var subgroup = d3.select(this).property('value');
@@ -352,28 +353,9 @@ function draw_scatter(story) {
         svg.selectAll('.show').classed('show', false);
       })
       .on('click', function() {
-        d3.selectAll('.tooltip').remove();
-        var q;
-        svg.selectAll('circle').classed('glow', false);
-        d3.selectAll('.districts option').remove();
-        var hidden = svg.selectAll('.fade');
-        if (hidden[0].length) {
-          hidden.classed('fade', false);
-          select.property('value', '');
-        } else {
-          q = d3.select(this).attr('data-q');
-          svg.selectAll('circle').classed('fade', true);
-          svg.selectAll('circle[data-q="' + q + '"]')
-            .classed('fade', false)
-            .classed('show', true);
-          select.property('value', q);
-        }
-        d3.selectAll('.districts').append('option').text('');
-        d3.select('.districts').selectAll('option')
-          .data(_.filter(data, function(d){ return d.State_Name == q && !d.District_Name.match(/^Total/); }))
-          .enter()
-          .append('option')
-          .text(function(d){ return d.District_Name; });
+        // Set the main selection to blank if anything is faded; else set to selected circle
+        var val = svg.selectAll('.fade')[0].length ? '' : d3.select(this).attr('data-q');
+        select.property('value', val).on('change').call(select.node());
       })
       .append('title')
         .text(story.hover)
@@ -407,6 +389,74 @@ function draw_scatter(story) {
 
   });
 }
+
+
+function draw_stack(story) {
+  d3.csv(story.file, function(data) {
+    var subset = initchart(story, data);
+
+    var grouper = function(group) {
+      return d3.nest()
+        .rollup(function(leaves) {
+          var result = {};
+          if (leaves.length == 0) { return result; }
+          for (var metric in leaves[0]) {
+            result[metric] = d3.sum(leaves, function(d) { return +d[metric]; });
+          }
+          return result;
+        })
+        .key(function(d) { return d[group]; })
+    };
+
+    var nodes = grouper(story.group[0]);
+    var leaves = grouper(story.group[1]);
+    var ypad = 1;
+
+    function showstack(cls, data, x0, H, W) {
+      svg.selectAll('g.' + cls).remove();
+      var update = svg.selectAll('g.' + cls)
+          .data(data)
+      var enter = update.enter()
+          .append('g')
+          .classed(cls, true)
+          .attr('data-q', function(d) { return d.key; })
+          .attr('transform', function(d, i) { return 'translate(0, ' + (H + i * H) + ')'; });
+
+      enter.append('text')
+          .text(function(d) { return d.key; })
+          .attr('x', x0 - 10)
+          .attr('y', H/2)
+          .attr('text-anchor', 'end')
+          .attr('dominant-baseline', 'middle')
+          .attr('font-size', H * 0.75)
+
+      enter.selectAll('rect')
+          .data(function(d, i) { return story.stack(d.values); })
+        .enter()
+          .append('rect')
+          .attr('x', function(d) { return x0 + W * d[0]; })
+          .attr('width', function(d) { return W * d[1]; })
+          .attr('y', ypad)
+          .attr('height', H - ypad*2)
+          .attr('fill', function(d, i) { return story.colors[i]; })
+          .append('title')
+            .text(story.hover);
+
+      return update;
+    }
+
+    var v0 = showstack('v0', nodes.entries(subset), 150, 16, 200);
+    v0.on('click', function() {
+      svg.selectAll('.glow').classed('glow', false);
+      var filter = d3.select(this)
+        .classed('glow', true)
+        .attr('data-q');
+      var subdata = _.filter(subset, function(d) { return d[story.group[0]] == filter; });
+      showstack('v1', leaves.entries(subdata), 550, 12, 200);
+    });
+  });
+}
+
 
 function initchart(story, data) {
   // No transitions work for other chart types, so just empty it
