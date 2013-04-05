@@ -62,6 +62,12 @@ var svg = d3.select('#chart')
       d3.select('#visual').classed('drilldown', !drilldown);
     });
 
+var legends = {
+  'treemap': 'Each large box represents one State. Click on it to reveal smaller boxes that represent a District. The size is based on %Size%. The colour is based on the ratio of %Colour%. Red indicates a low value, yellow indicates an average value, and green indicates a high value.',
+  'stack'  : 'Each row represents one State. Click on it to reveal more boxes on the right representing each District. Blue = %Blue%, Red = %Red%, Green = %Green%.',
+  'scatter': 'Each circle represents one %Circle%. Hover over it to reveal all districts in the same State. The size of the circle represents %CircleSize%. The x-axis is based on %AxisX%. The y-axis is based on %AxisY%. The colour is based on the State. (Each district in a given state has the same colour).'
+};
+
 
 // When any menu option is clicked, draw it.
 function draw(story) {
@@ -75,7 +81,8 @@ function draw(story) {
   d3.select('#menu').text(story.menu);
   d3.select('#title').text(story.title);
   d3.select('#story').text(story.story);
-  d3.select('#legend').call(stage_legend, story.legend);
+  d3.selectAll('#legend p').remove();
+  d3.select('#legend').append('p').text(legends[story.type].replace(/%\w+%/g, function(all){ return story.legend[all] || all; }));
   d3.select('#source').attr('href', story.url).text(story.url);
 
   window['draw_' + story.type](story);
@@ -362,12 +369,10 @@ function position() {
     .attr('data-q', function(d) { return d.depth == 1 ? d.key : d.District_Name; });
 }
 
+
+
 function stage_legend (selection, story) {
-  selection.selectAll('small').remove();
-  selection.selectAll('small')
-      .data(story)
-    .enter().append('small')
-      .classed('go-bold', true)
-      .text(function(d){ return ''+d.key+': '+d.value+' '; })
-      .append('br');
+  selection
+    .append('p')
+    
 }

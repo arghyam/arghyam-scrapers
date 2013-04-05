@@ -3,6 +3,7 @@ var color = d3.scale.linear()
     .domain([0, 0.5, 1, 2])
     .range(['#D73027', '#FFFFBF', '#1A9850', '#000']);
 
+
 // Display formats
 var F = d3.format(',.0f'); // Float
 var N = d3.format(',.0f'); // Number == int
@@ -103,7 +104,7 @@ var stories = [
         'num'   : ['Total expenses', 'ExpReported_Total'],
         'den'   : ['Total outlay', 'Total_Projects_Outlay'],
         'story' : 'Story to be written...',
-        'legend': [ { 'key': 'Size', 'value': 'Total outlay' }, { 'key': 'Colour', 'value': 'Total expenses / Total outlay' } ]
+        'legend': { '%Size%':'Total outlay', '%Colour%':'Total expenses / Total outlay'  }
     }),
     treemap_story({
         'menu'  : 'Financial Progress',
@@ -115,7 +116,7 @@ var stories = [
         'num'   : ['Centre expenses', 'ExpReported_Center'],
         'den'   : ['Total expenses', 'ExpReported_Total'],
         'story' : 'Story to be written...',
-        'legend': [ { 'key': 'Size', 'value': 'Total outlay' }, { 'key': 'Colour', 'value': 'Centre expenses / Total expenses' } ]
+        'legend': { '%Size%': 'Total outlay', '%Colour%': 'Centre expenses / Total expenses' }
     }),
     stack_story({
         'menu'  : 'Financial Progress',
@@ -131,7 +132,7 @@ var stories = [
         'names' : ['Centre', 'State', 'Beneficiary'],
         'colors': ['#4f81bd', '#c0504d', '#9bbb59'],
         'story' : 'Story to be written...',
-        'legend': [ { 'key': 'Blue', 'value': 'Centre' }, { 'key': 'Red', 'value': 'State' }, { 'key': 'Green', 'value': 'Beneficiary' } ]
+        'legend': { '%Blue%': 'Centre', '%Red%': 'State', '%Green%': 'Beneficiary' }
     }),
     treemap_story({
         'menu'  : 'Physical Progress',
@@ -143,7 +144,7 @@ var stories = [
         'num'   : ['Built BPL toilets', 'PP_IHHL_BPL'],
         'den'   : ['Planned BPL toilets', 'PO_IHHL_BPL'],
         'story' : 'Story to be written...',
-        'legend': [ { 'key': 'Size', 'value': 'Planned BPL toilets' }, { 'key': 'Colour', 'value': 'Built BPL toilets / Planned BPL toilets' } ]
+        'legend': { '%Size%': 'Planned BPL toilets', '%Colour%': 'Built BPL toilets / Planned BPL toilets' }
     }),
     treemap_story({
         'menu'  : 'Physical Progress',
@@ -155,7 +156,7 @@ var stories = [
         'num'   : ['Built APL toilets', 'PP_IHHL_APL'],
         'den'   : ['Planned APL toilets', 'PO_IHHL_APL'],
         'story' : 'Story to be written...',
-        'legend': [ { 'key': 'Size', 'value': 'Planned APL toilets' }, { 'key': 'Colour', 'value': 'Built APL toilets / Planned APL toilets' } ]
+        'legend': { '%Size%': 'Planned APL toilets', '%Colour%': 'Built APL toilets / Planned APL toilets' }
     }),
     treemap_story({
         'menu'  : 'Financial Progress',
@@ -167,7 +168,7 @@ var stories = [
         'den'   : ['Total Release', 'ReleaseAmt_Total'],
         'num'   : ['SC + ST', ['ReleaseAmt_SC', 'ReleaseAmt_ST']],
         'story' : 'Story to be written...',
-        'legend': [ { 'key': 'Size', 'value': 'Total Release' }, { 'key': 'Colour', 'value': '(SC + ST) / Total Release' } ]
+        'legend': { '%Size%': 'Total Release', '%Colour%': '(SC + ST) / Total Release' }
     }),
     stack_story({
         'menu'  : 'Financial Progress',
@@ -183,7 +184,7 @@ var stories = [
         'names' : ['SC', 'ST', 'GEN'],
         'colors': ['#4f81bd', '#c0504d', '#9bbb59'],
         'story' : 'Story to be written...',
-        'legend': [ { 'key': 'Blue', 'value': 'SC' }, { 'key': 'Red', 'value': 'ST' }, { 'key': 'Green', 'value': 'Gen' } ]
+        'legend': { '%Blue%': 'SC', '%Red%': 'ST', '%Green%': 'Gen' }
     }),
     treemap_story({
         'menu'  : 'Physical Progress',
@@ -195,7 +196,7 @@ var stories = [
         'den'   : ['BPL Households' , ['BPL_WT', 'BPL_WOT']],
         'num'   : ['BPL Toilets', 'BPL_WT'],
         'story' : 'Story to be written...',
-        'legend': [ { 'key': 'Size', 'value': 'BPL Households' }, { 'key': 'Colour', 'value': 'BPL Toilets / BPL Households' } ]
+        'legend': { '%Size%': 'BPL Households', '%Colour%': 'BPL Toilets / BPL Households' }
     }),
     treemap_story({
         'menu'  : 'Physical Progress',
@@ -207,7 +208,7 @@ var stories = [
         'den'   : ['APL Households' , ['APL_WT', 'APL_WOT']],
         'num'   : ['APL Toilets', 'APL_WT'],
         'story' : 'Story to be written...',
-        'legend': [ { 'key': 'Size', 'value': 'APL Households' }, { 'key': 'Colour', 'value': 'APL Toilets / APL Households' } ]
+        'legend': { '%Size%': 'APL Households', '%Colour%': 'APL Toilets / APL Households' }
     }),
     treemap_story({
         'menu'  : 'Physical Progress',
@@ -220,7 +221,7 @@ var stories = [
         'num'   : ['BPL Toilets', ['SAN_WT', 'SAN_WOT']],
         'factor': 1000,
         'story' : 'Story to be written...',
-        'legend': [ { 'key': 'Size', 'value': 'BPL Households' }, { 'key': 'Colour', 'value': 'BPL Toilets / BPL Households' } ]
+        'legend': { '%Size%': 'BPL Households', '%Colour%': 'BPL Toilets / BPL Households' }
     }),
     scatter_story({
         'menu'  : 'Performance',
@@ -235,11 +236,11 @@ var stories = [
         'xdom'  : [0, 1.5],
         'ydom'  : [0, 1.5],
         'story' : 'Story to be written...',
-        'legend': [ { 'key': 'Circle',              'value': 'Districts'                    },
-                    { 'key': 'Circle Size',         'value': 'BPL toilets required'         },
-                    { 'key': 'Axis X',              'value': 'Expenses / Outlay'            },
-                    { 'key': 'Axis Y',              'value': '% BPL toilets constructed'    }
-                  ]
+        'legend': { '%Circle%'              : 'District'                    ,
+                    '%CircleSize%'         : 'BPL toilets required'         ,
+                    '%AxisX%'              : 'Expenses / Outlay'            ,
+                    '%AxisY%'              : '% BPL toilets constructed'
+                  }
     }),
     scatter_story({
         'menu'  : 'Performance',
@@ -253,10 +254,10 @@ var stories = [
         'R'     : 40,
         'xdom'  : [0, 1.5],
         'story' : 'Story to be written...',
-        'legend': [ { 'key': 'Circle',              'value': 'Districts'                    },
-                    { 'key': 'Circle Size',         'value': 'BPL toilets required'         },
-                    { 'key': 'Axis X',              'value': 'Expenses / Outlay'            },
-                    { 'key': 'Axis Y',              'value': '% BPL Households with toilet' }
-                  ]
+        'legend': { '%Circle%'              : 'District'                    ,
+                    '%CircleSize%'         : 'BPL toilets required'         ,
+                    '%AxisX%'              : 'Expenses / Outlay'            ,
+                    '%AxisY%'              : '% BPL Households with toilet'
+                  }
     })
 ];
