@@ -75,6 +75,7 @@ function draw(story) {
   d3.select('#menu').text(story.menu);
   d3.select('#title').text(story.title);
   d3.select('#story').text(story.story);
+  d3.select('#legend').call(stage_legend, story.legend);
   d3.select('#source').attr('href', story.url).text(story.url);
 
   window['draw_' + story.type](story);
@@ -359,4 +360,14 @@ function position() {
     .attr('stroke', '#fff')
     .attr('class', function(d) { return "l" + d.depth; })
     .attr('data-q', function(d) { return d.depth == 1 ? d.key : d.District_Name; });
+}
+
+function stage_legend (selection, story) {
+  selection.selectAll('small').remove();
+  selection.selectAll('small')
+      .data(story)
+    .enter().append('small')
+      .classed('go-bold', true)
+      .text(function(d){ return ''+d.key+': '+d.value+' '; })
+      .append('br');
 }
