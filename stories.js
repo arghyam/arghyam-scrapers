@@ -108,7 +108,7 @@ var stories = [
     }),
     treemap_story({
         'menu'  : 'Financial Progress',
-        'title' : 'Share of centre',
+        'title' : 'Total share of centre',
         'file'  : 'data.csv',
         'url'   : 'http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home',
         'group' : ['State_Name'],
@@ -116,11 +116,35 @@ var stories = [
         'num'   : ['Centre expenses', 'ExpReported_Center'],
         'den'   : ['Total expenses', 'ExpReported_Total'],
         'story' : 'Story to be written...',
-        'legend': { '%Size%': 'Total outlay', '%Colour%': 'Centre expenses / Total expenses' }
+        'legend': { '%Size%': 'Total outlay', '%Colour%': 'Total centre expenses / Total expenses' }
+    }),
+    treemap_story({
+        'menu'  : 'Financial Progress',
+        'title' : 'Approved share of centre',
+        'file'  : 'data.csv',
+        'url'   : 'http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home',
+        'group' : ['State_Name'],
+        'area'  : ['Total outlay', 'Total_Projects_Outlay'],
+        'num'   : ['Centre expenses', 'ApprShare_Center'],
+        'den'   : ['Total expenses', ['ApprShare_Center', 'ApprShare_State', 'ApprShare_Beneficiary']],
+        'story' : 'Story to be written...',
+        'legend': { '%Size%': 'Total outlay', '%Colour%': 'Approved centre expenses / Total expenses' }
+    }),
+    treemap_story({
+        'menu'  : 'Financial Progress',
+        'title' : 'Released share of centre',
+        'file'  : 'data.csv',
+        'url'   : 'http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home',
+        'group' : ['State_Name'],
+        'area'  : ['Total outlay', 'Total_Projects_Outlay'],
+        'num'   : ['Centre expenses', 'Rof_Center'],
+        'den'   : ['Total expenses', 'Rof_Total'],
+        'story' : 'Story to be written...',
+        'legend': { '%Size%': 'Total outlay', '%Colour%': 'Released centre expenses / Total expenses' }
     }),
     stack_story({
         'menu'  : 'Financial Progress',
-        'title' : 'Source of funding',
+        'title' : 'Source of funding - Approved',
         'file'  : 'data.csv',
         'url'   : 'http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home',
         'group' : ['State_Name', 'District_Name'],
@@ -128,6 +152,38 @@ var stories = [
             +d['ApprShare_Center']      / (+d['ApprShare_Center'] + +d['ApprShare_State'] + +d['ApprShare_Beneficiary']),
             +d['ApprShare_State']       / (+d['ApprShare_Center'] + +d['ApprShare_State'] + +d['ApprShare_Beneficiary']),
             +d['ApprShare_Beneficiary'] / (+d['ApprShare_Center'] + +d['ApprShare_State'] + +d['ApprShare_Beneficiary'])
+        ]); },
+        'names' : ['Centre', 'State', 'Beneficiary'],
+        'colors': ['#4f81bd', '#c0504d', '#9bbb59'],
+        'story' : 'Story to be written...',
+        'legend': { '%Blue%': 'Centre', '%Red%': 'State', '%Green%': 'Beneficiary' }
+    }),
+    stack_story({
+        'menu'  : 'Financial Progress',
+        'title' : 'Source of funding - Released',
+        'file'  : 'data.csv',
+        'url'   : 'http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home',
+        'group' : ['State_Name', 'District_Name'],
+        'stack' : function(d) { return cumsum([
+            +d['Rof_Center']      / +d['Rof_Total'],
+            +d['Rof_State']       / +d['Rof_Total'],
+            +d['Rof_Beneficiary'] / +d['Rof_Total']
+        ]); },
+        'names' : ['Centre', 'State', 'Beneficiary'],
+        'colors': ['#4f81bd', '#c0504d', '#9bbb59'],
+        'story' : 'Story to be written...',
+        'legend': { '%Blue%': 'Centre', '%Red%': 'State', '%Green%': 'Beneficiary' }
+    }),
+    stack_story({
+        'menu'  : 'Financial Progress',
+        'title' : 'Source of funding - Expenditure',
+        'file'  : 'data.csv',
+        'url'   : 'http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home',
+        'group' : ['State_Name', 'District_Name'],
+        'stack' : function(d) { return cumsum([
+            +d['ExpReported_Center']      / (+d['ExpReported_Center'] + +d['ExpReported_State'] + +d['ExpReported_Beneficiary']),
+            +d['ExpReported_State']       / (+d['ExpReported_Center'] + +d['ExpReported_State'] + +d['ExpReported_Beneficiary']),
+            +d['ExpReported_Beneficiary'] / (+d['ExpReported_Center'] + +d['ExpReported_State'] + +d['ExpReported_Beneficiary'])
         ]); },
         'names' : ['Centre', 'State', 'Beneficiary'],
         'colors': ['#4f81bd', '#c0504d', '#9bbb59'],
