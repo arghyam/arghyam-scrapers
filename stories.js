@@ -108,6 +108,54 @@ var stories = [
     }),
     treemap_story({
         'menu'  : 'Financial Progress',
+        'title' : 'Project outlay used - BPL',
+        'file'  : 'data.csv',
+        'url'   : 'http://tsc.gov.in/tsc/Report/Financial/RptPercentageFinComponentStatewiseDistrictwise_net.aspx?id=FIN',
+        'group' : ['State_Name'],
+        'area'  : ['Total outlay', 'Total_Projects_Outlay'],
+        'num'   : ['Total expenses', 'Exp_BPL'],
+        'den'   : ['Total outlay', 'Appr_BPL'],
+        'story' : 'Story to be written...',
+        'legend': { '%Size%':'Total outlay', '%Colour%':'Total expenses / Total outlay'  }
+    }),
+    treemap_story({
+        'menu'  : 'Financial Progress',
+        'title' : 'Project outlay used - Schools',
+        'file'  : 'data.csv',
+        'url'   : 'http://tsc.gov.in/tsc/Report/Financial/RptPercentageFinComponentStatewiseDistrictwise_net.aspx?id=FIN',
+        'group' : ['State_Name'],
+        'area'  : ['Total outlay', 'Total_Projects_Outlay'],
+        'num'   : ['Total expenses', 'Exp_School'],
+        'den'   : ['Total outlay', 'Appr_School'],
+        'story' : 'Story to be written...',
+        'legend': { '%Size%':'Total outlay', '%Colour%':'Total expenses / Total outlay'  }
+    }),
+    treemap_story({
+        'menu'  : 'Financial Progress',
+        'title' : 'Project outlay used - Sanitary Complexes',
+        'file'  : 'data.csv',
+        'url'   : 'http://tsc.gov.in/tsc/Report/Financial/RptPercentageFinComponentStatewiseDistrictwise_net.aspx?id=FIN',
+        'group' : ['State_Name'],
+        'area'  : ['Total outlay', 'Total_Projects_Outlay'],
+        'num'   : ['Total expenses', 'Exp_San'],
+        'den'   : ['Total outlay', 'Appr_San'],
+        'story' : 'Story to be written...',
+        'legend': { '%Size%':'Total outlay', '%Colour%':'Total expenses / Total outlay'  }
+    }),
+    treemap_story({
+        'menu'  : 'Financial Progress',
+        'title' : 'Project outlay used - Anganwadi',
+        'file'  : 'data.csv',
+        'url'   : 'http://tsc.gov.in/tsc/Report/Financial/RptPercentageFinComponentStatewiseDistrictwise_net.aspx?id=FIN',
+        'group' : ['State_Name'],
+        'area'  : ['Total outlay', 'Total_Projects_Outlay'],
+        'num'   : ['Total expenses', 'Exp_Angan'],
+        'den'   : ['Total outlay', 'Appr_Angan'],
+        'story' : 'Story to be written...',
+        'legend': { '%Size%':'Total outlay', '%Colour%':'Total expenses / Total outlay'  }
+    }),
+    treemap_story({
+        'menu'  : 'Financial Progress',
         'title' : 'Total share of centre',
         'file'  : 'data.csv',
         'url'   : 'http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home',
@@ -216,31 +264,31 @@ var stories = [
     }),
     treemap_story({
         'menu'  : 'Financial Progress',
-        'title' : '% (SC + ST) in Total Release',
+        'title' : '% (SC + ST) of APL and BPL in Total IHHL',
         'file'  : 'data.csv',
-        'url'   : 'http://tsc.gov.in/tsc/Report/Release/RptReleaseDataBetweenDates.aspx?id=Home',
+        'url'   : 'http://tsc.gov.in/tsc/Report/Physical/RptCategoriesIHHLStatewiseDistrictwise_net.aspx?id=PHY',
         'group' : ['State_Name'],
-        'area'  : ['Total Release', 'ReleaseAmt_Total'],
-        'den'   : ['Total Release', 'ReleaseAmt_Total'],
-        'num'   : ['SC + ST', ['ReleaseAmt_SC', 'ReleaseAmt_ST']],
+        'area'  : ['Total IHHL', 'IHHL_Total'],
+        'den'   : ['Total IHHL', 'IHHL_Total'],
+        'num'   : ['SC + ST', ['APL_Ach_SC', 'APL_Ach_ST', 'BPL_Ach_IHHL_SC', 'BPL_Ach_IHHL_ST']],
         'story' : 'Story to be written...',
-        'legend': { '%Size%': 'Total Release', '%Colour%': '(SC + ST) / Total Release' }
+        'legend': { '%Size%': 'Total ', '%Colour%': '(SC + ST) / Total IHHL' }
     }),
     stack_story({
         'menu'  : 'Financial Progress',
-        'title' : 'SC/ST/GEN Release Amounts',
+        'title' : 'SC + ST of APL & BPL in  Total IHHL',
         'file'  : 'data.csv',
-        'url'   : 'http://tsc.gov.in/tsc/Report/Release/RptReleaseDataBetweenDates.aspx?id=Home',
+        'url'   : 'http://tsc.gov.in/tsc/Report/Physical/RptCategoriesIHHLStatewiseDistrictwise_net.aspx?id=PHY',
         'group' : ['State_Name', 'District_Name'],
         'stack' : function(d) { return cumsum([
-            +d['ReleaseAmt_SC'] / +d['ReleaseAmt_Total'],
-            +d['ReleaseAmt_ST'] / +d['ReleaseAmt_Total'],
-            1 - (+d['ReleaseAmt_SC'] + +d['ReleaseAmt_ST']) / +d['ReleaseAmt_Total']
+            (+d['APL_Ach_SC']      + +d['APL_Ach_ST'])      / +d['IHHL_Total'],
+            (+d['BPL_Ach_IHHL_SC'] + +d['BPL_Ach_IHHL_ST']) / +d['IHHL_Total'],
+            1 - (+d['BPL_Ach_IHHL_SC'] + +d['BPL_Ach_IHHL_ST'] + +d['APL_Ach_SC'] + +d['APL_Ach_ST']) / +d['IHHL_Total']
         ]); },
-        'names' : ['SC', 'ST', 'GEN'],
+        'names' : ['APL', 'BPL', 'Others'],
         'colors': ['#4f81bd', '#c0504d', '#9bbb59'],
         'story' : 'Story to be written...',
-        'legend': { '%Blue%': 'SC', '%Red%': 'ST', '%Green%': 'Gen' }
+        'legend': { '%Blue%': 'APL SC + ST', '%Red%': 'BPL SC + ST', '%Green%': 'Others' }
     }),
     treemap_story({
         'menu'  : 'Physical Progress',
@@ -250,7 +298,7 @@ var stories = [
         'group' : ['State_Name'],
         'area'  : ['BPL Households' , ['BPL_WT', 'BPL_WOT']],
         'den'   : ['BPL Households' , ['BPL_WT', 'BPL_WOT']],
-        'num'   : ['BPL Toilets', 'BPL_WT'],
+        'num'   : ['BPL Toilets', 'PP_IHHL_BPL'],
         'story' : 'Story to be written...',
         'legend': { '%Size%': 'BPL Households', '%Colour%': 'BPL Toilets / BPL Households' }
     }),
@@ -262,7 +310,7 @@ var stories = [
         'group' : ['State_Name'],
         'area'  : ['APL Households' , ['APL_WT', 'APL_WOT']],
         'den'   : ['APL Households' , ['APL_WT', 'APL_WOT']],
-        'num'   : ['APL Toilets', 'APL_WT'],
+        'num'   : ['APL Toilets', 'PP_IHHL_APL'],
         'story' : 'Story to be written...',
         'legend': { '%Size%': 'APL Households', '%Colour%': 'APL Toilets / APL Households' }
     }),
