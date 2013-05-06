@@ -331,7 +331,7 @@ var stories = [
         'group' : ['State_Name'],
         'area'  : ['# BPL toilets required', function(d) { return +d['BPL_WT'] + +d['BPL_WOT']; }],
         'x'     : ['Expenses / Outlay', function(d) { return d['ExpReported_Total'] / d['Total_Projects_Outlay']; }],
-        'y'     : ['% BPL Households with toilet', function(d) { return +d['BPL_WT'] / (+d['BPL_WT'] + +d['BPL_WOT']); }],
+        'y'     : ['% BPL Households with toilet', function(d) { return +d['PP_IHHL_BPL'] / (+d['BPL_WT'] + +d['BPL_WOT']); }],
         'R'     : 40,
         'xdom'  : [0, 1.5],
         'story' : 'Story to be written...',
