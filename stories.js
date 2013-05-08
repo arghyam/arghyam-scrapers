@@ -112,7 +112,7 @@ var stories = [
         'file'  : 'data.csv',
         'url'   : 'http://tsc.gov.in/tsc/Report/Financial/RptPercentageFinComponentStatewiseDistrictwise_net.aspx?id=FIN',
         'group' : ['State_Name'],
-        'area'  : ['Total outlay', 'Total_Projects_Outlay'],
+        'area'  : ['Total approved - BPL', ['Appr_BPL']],
         'num'   : ['Total expenses - BPL', 'Exp_BPL'],
         'den'   : ['Total approved - BPL', 'Appr_BPL'],
         'story' : 'Story to be written...',
@@ -124,7 +124,7 @@ var stories = [
         'file'  : 'data.csv',
         'url'   : 'http://tsc.gov.in/tsc/Report/Financial/RptPercentageFinComponentStatewiseDistrictwise_net.aspx?id=FIN',
         'group' : ['State_Name'],
-        'area'  : ['Total outlay', 'Total_Projects_Outlay'],
+        'area'  : ['Total approved - School', ['Appr_School']],
         'num'   : ['Total expenses - School', 'Exp_School'],
         'den'   : ['Total approved - School', 'Appr_School'],
         'story' : 'Story to be written...',
@@ -136,10 +136,10 @@ var stories = [
         'file'  : 'data.csv',
         'url'   : 'http://tsc.gov.in/tsc/Report/Financial/RptPercentageFinComponentStatewiseDistrictwise_net.aspx?id=FIN',
         'group' : ['State_Name'],
-        'area'  : ['Total outlay', 'Total_Projects_Outlay'],
+        'area'  : ['Total approved', ['Appr_San']],
         // TODO: ['Exp_San'] - known bug - Pravin will fix this soon.
-        'num'   : ['Total expenses - SC', ['Exp_San']],
-        'den'   : ['Total approved - SC', 'Appr_San'],
+        'num'   : ['Total expenses', ['Exp_San']],
+        'den'   : ['Total approved', 'Appr_San'],
         'story' : 'Story to be written...',
         'legend': { '%Size%':'Total outlay', '%Colour%':'Total expenses - SC / Total approved - SC'  }
     }),
@@ -149,7 +149,7 @@ var stories = [
         'file'  : 'data.csv',
         'url'   : 'http://tsc.gov.in/tsc/Report/Financial/RptPercentageFinComponentStatewiseDistrictwise_net.aspx?id=FIN',
         'group' : ['State_Name'],
-        'area'  : ['Total outlay', 'Total_Projects_Outlay'],
+        'area'  : ['Total approved - Anganwadi', ['Appr_Angan']],
         'num'   : ['Total expenses - Anganwadi', ['Exp_Angan']],
         'den'   : ['Total approved - Anganwadi', 'Appr_Angan'],
         'story' : 'Story to be written...',
@@ -175,8 +175,8 @@ var stories = [
         'group' : ['State_Name'],
         'area'  : ['Total outlay', 'Total_Projects_Outlay'],
         'num'   : ['Approved centre share', 'ApprShare_Center'],
-        // Total outlay <=> ApprShare_Center + ApprShare_State + ApprShare_Beneficiary - According to data
-        'den'   : ['Total outlay', ['ApprShare_Center', 'ApprShare_State', 'ApprShare_Beneficiary']],
+        // Total approved <=> ApprShare_Center + ApprShare_State + ApprShare_Beneficiary - According to data
+        'den'   : ['Total approved', ['ApprShare_Center', 'ApprShare_State', 'ApprShare_Beneficiary']],
         'story' : 'Story to be written...',
         'legend': { '%Size%': 'Total outlay', '%Colour%': 'Approved centre share / Total approved' }
     }),
