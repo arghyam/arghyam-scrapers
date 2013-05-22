@@ -14,9 +14,12 @@ the Rpt.
 # Renamed scrapers
 
     scrape_link_1.js        FinancialProgressStatewiseDistrictwise.js
+    scrape_link_9.js        PercentageFinComponentStatewiseDistrictwise_net.js
 
 
 # Renamed data files
 
     districtData_L1.csv     FinancialProgressStatewiseDistrictwise.district.csv
     stateData_L1.csv        FinancialProgressStatewiseDistrictwise.state.csv
+    districtData_L9.csv     PercentageFinComponentStatewiseDistrictwise_net.district.csv
+    stateData_L9.csv        PercentageFinComponentStatewiseDistrictwise_net.state.csv
