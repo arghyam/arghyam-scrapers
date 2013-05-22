@@ -8,7 +8,7 @@ exports.csv = (function(delimiter) {
 
     // Return each row as a comma-separated list of (possibly quoted) values
     function formatRow(row) {
-        return formatValue(today) + '' + delimiter + '' + row.map(formatValue).join(delimiter);
+        return formatValue(today) + delimiter + row.map(formatValue).join(delimiter);
     }
 
     // If a cell has quotes or commas in it, return it "quoted", else return as-is
