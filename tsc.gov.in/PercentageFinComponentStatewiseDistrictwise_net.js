@@ -39,7 +39,7 @@ casper.start('http://tsc.gov.in/tsc/Report/Financial/RptPercentageFinComponentSt
     write('PercentageFinComponentStatewiseDistrictwise_net.state.csv', stateData);
   });
 
-  this.each(stateTbIds.slice(0, 4), function(casper, stateID, index) {
+  this.each(stateTbIds, function(casper, stateID, index) {
     this.then(function() {
       this.click(x('//*[@id="' + stateID[0] + '"]'));
     });
