@@ -63,7 +63,10 @@ var svg = d3.select('#chart')
     });
 
 var legends = {
-  'treemap': 'Each large box represents one State. Click on it to reveal smaller boxes that represent a District. The size is based on %Size%. The colour is based on the ratio of %Colour%. Red indicates a low value, yellow indicates an average value, and green indicates a high value. The unit of currency is in lakhs.',
+  'treemap': 'Each large box represents one State. Click on it to reveal smaller boxes that represent a District.' +
+             '<br>Size = <strong>%Size%</strong>.' +
+             '<br>Colour = <strong>%Colour%</strong>. Red is low, green is high.' +
+             '<br>All figures are in <strong>Rs lakhs</strong>.',
   'stack'  : 'Each row represents one State. Click on it to reveal more boxes on the right representing each District. Blue = %Blue%, Red = %Red%, Green = %Green%.',
   'scatter': 'Each circle represents one %Circle%. Hover over it to reveal all districts in the same State. The size of the circle represents %CircleSize%. The x-axis is based on %AxisX%. The y-axis is based on %AxisY%. The colour is based on the State. (Each district in a given state has the same colour).'
 };
@@ -82,7 +85,7 @@ function draw(story) {
   d3.select('#title').text(story.title);
   d3.select('#story').text(story.story);
   d3.selectAll('#legend p').remove();
-  d3.select('#legend').append('p').text(legends[story.type].replace(/%\w+%/g, function(all){ return story.legend[all] || all; }));
+  d3.select('#legend').append('p').html(legends[story.type].replace(/%\w+%/g, function(all){ return story.legend[all] || all; }));
   d3.select('#source').attr('href', story.url).text(story.url);
 
   window['draw_' + story.type](story);
@@ -367,12 +370,4 @@ function position() {
     .attr('stroke', '#fff')
     .attr('class', function(d) { return "l" + d.depth; })
     .attr('data-q', function(d) { return d.depth == 1 ? d.key : d.District_Name; });
-}
-
-
-
-function stage_legend (selection, story) {
-  selection
-    .append('p')
-    
 }
