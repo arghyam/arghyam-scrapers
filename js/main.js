@@ -71,10 +71,24 @@ var legends = {
   'scatter': 'Each circle represents one %Circle%. Hover over it to reveal all districts in the same State. The size of the circle represents %CircleSize%. The x-axis is based on %AxisX%. The y-axis is based on %AxisY%. The colour is based on the State. (Each district in a given state has the same colour).'
 };
 
+// When the URL hash changes, draw the appropriate story.
+window.addEventListener('hashchange', function(e) {
+  var hash = window.location.hash.replace(/^#/, '').split('|');
+  for (var i=0, l=stories.length; i<l; i++) {
+    var story = stories[i];
+    if ((story.menu == hash[0]) && (story.title == hash[1])) {
+      return draw(story);
+    }
+  }
+  d3.select('#about').style('display', 'block');
+  d3.select('#visual').style('display', 'none');
+});
 
 // When any menu option is clicked, draw it.
 function draw(story) {
-  d3.event.preventDefault();
+  if (d3.event) {
+    d3.event.preventDefault();
+  }
 
   d3.selectAll('.tooltip').remove();
   d3.select('#about').style('display', 'none');
@@ -88,6 +102,7 @@ function draw(story) {
   d3.select('#legend').append('p').html(legends[story.type].replace(/%\w+%/g, function(all){ return story.legend[all] || all; }));
   d3.select('#source').attr('href', story.url).text(story.url);
 
+  window.location.hash = story.menu + '|' + story.title;
   window['draw_' + story.type](story);
 }
 
