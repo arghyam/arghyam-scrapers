@@ -46,7 +46,7 @@ function gen_color(value) {
 function treemap_story(story) {
     story.type = 'treemap';
     story.size = function(d) { return sum(d, story.area[1]); };
-    story.filter = function(d) { return !d.District_Name.match(/^Total/); };
+    story.filter = function(d) { return d.District_Name.match(/^[A-Z]/); };
     story.color = function(d) { return color((story.factor || 1) * sum(d, story.num[1]) / sum(d, story.den[1])).replace(/NaNNaNNaN/i, 'eee'); };
     story.hover = function(d) {
       var prefix = d.depth == 2 ? d['State_Name'] + ' - ' + d['District_Name'] + ': ' :
@@ -66,7 +66,7 @@ function treemap_story(story) {
 
 function scatter_story(story) {
     story.type = 'scatter';
-    story.filter = function(d) { return !d.District_Name.match(/^Total/); };
+    story.filter = function(d) { return d.District_Name.match(/^[A-Z]/); };
     story.color = function(d) { return gen_color(d[story.group[0]]); };
     story.cx = story.x[1];
     story.cy = story.y[1];
@@ -85,7 +85,7 @@ function scatter_story(story) {
 
 function stack_story(story) {
     story.type = 'stack';
-    story.filter = function(d) { return !d.District_Name.match(/^Total/); };
+    story.filter = function(d) { return d.District_Name.match(/^[A-Z]/); };
     story.color = function(d) { return gen_color(d[story.group[0]]); };
     story.hover = function(d, i) {
       return story.names[i] + ': ' + P(d[1]);
