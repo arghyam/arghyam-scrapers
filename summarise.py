@@ -39,4 +39,6 @@ for column in csv.DictReader(open('summarise.csv')):
 out = csv.writer(open('data.csv', 'w'), lineterminator='\n')
 out.writerow(fields)
 for index in sorted(result):
-    out.writerow([result[index].get(f, '').strip() for f in fields])
+    row = result[index]
+    if all(row.get(key, None) for key in keys):
+        out.writerow([row.get(f, '').strip() for f in fields])
