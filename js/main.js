@@ -91,10 +91,16 @@ function draw(story) {
   window['draw_' + story.type](story);
 }
 
+function draw_date(daterow, story) {
+    var dates = _.uniq(_.map(story.cols, function(col) { return daterow[col]; }));
+    d3.select('#date').text(dates.join(', '));
+}
+
 function draw_treemap(story) {
   // Filter the data
   d3.csv(story.file, function(data) {
     var subset = initchart(story, data);
+    draw_date(data[data.length-1], story);
 
     var treemap = d3.layout.treemap()
       .size([parseInt(svg.style('width'), 10), svg.attr('height')])
@@ -165,6 +171,7 @@ function draw_scatter(story) {
   // Filter the data
   d3.csv(story.file, function(data) {
     var subset = initchart(story, data);
+    draw_date(data[data.length-1], story);
 
     // TODO: Make these move
     svg.selectAll('*').remove();
@@ -279,6 +286,7 @@ function draw_scatter(story) {
 function draw_stack(story) {
   d3.csv(story.file, function(data) {
     var subset = initchart(story, data);
+    draw_date(data[data.length-1], story);
 
     var grouper = function(group) {
       return d3.nest()

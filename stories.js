@@ -43,8 +43,22 @@ function gen_color(value) {
     return gen_color_keys[value];
 }
 
+// Concatenates strings / arrays
+function join() {
+    var result = []
+    for (var i=0, l=arguments.length; i<l; i++) {
+        if (Array.isArray(arguments[i])) {
+            result.push.apply(result, arguments[i]);
+        } else {
+            result.push(arguments[i]);
+        }
+    }
+    return result;
+}
+
 function treemap_story(story) {
     story.type = 'treemap';
+    story.cols = join(story.area[1], story.num[1], story.den[1]);
     story.size = function(d) { return sum(d, story.area[1]); };
     story.filter = function(d) { return d.District_Name.match(/^[A-Z]/); };
     story.color = function(d) { return color((story.factor || 1) * sum(d, story.num[1]) / sum(d, story.den[1])).replace(/NaNNaNNaN/i, 'eee'); };
@@ -66,6 +80,7 @@ function treemap_story(story) {
 
 function scatter_story(story) {
     story.type = 'scatter';
+    story.cols = story.cols || [];
     story.filter = function(d) { return d.District_Name.match(/^[A-Z]/); };
     story.color = function(d) { return gen_color(d[story.group[0]]); };
     story.cx = story.x[1];
@@ -85,6 +100,8 @@ function scatter_story(story) {
 
 function stack_story(story) {
     story.type = 'stack';
+    // Needs to be specified explicitly.
+    story.cols = story.cols || [];
     story.filter = function(d) { return d.District_Name.match(/^[A-Z]/); };
     story.color = function(d) { return gen_color(d[story.group[0]]); };
     story.hover = function(d, i) {
@@ -196,6 +213,7 @@ var stories = [
         'title' : 'Source of funding - Approved',
         'file'  : 'data.csv',
         'url'   : 'http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home',
+        'cols'  : ['ApprShare_Center', 'ApprShare_State', 'ApprShare_Beneficiary'],
         'group' : ['State_Name', 'District_Name'],
         'stack' : function(d) { return cumsum([
             +d['ApprShare_Center']      / (+d['ApprShare_Center'] + +d['ApprShare_State'] + +d['ApprShare_Beneficiary']),
@@ -212,6 +230,7 @@ var stories = [
         'title' : 'Source of funding - Released',
         'file'  : 'data.csv',
         'url'   : 'http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home',
+        'cols'  : ['Rof_Center', 'Rof_State', 'Rof_Beneficiary'],
         'group' : ['State_Name', 'District_Name'],
         'stack' : function(d) { return cumsum([
             +d['Rof_Center']      / +d['Rof_Total'],
@@ -228,6 +247,7 @@ var stories = [
         'title' : 'Source of funding - Expenditure',
         'file'  : 'data.csv',
         'url'   : 'http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home',
+        'cols'  : ['ExpReported_Center', 'ExpReported_State', 'ExpReported_Beneficiary'],
         'group' : ['State_Name', 'District_Name'],
         'stack' : function(d) { return cumsum([
             +d['ExpReported_Center']      / (+d['ExpReported_Center'] + +d['ExpReported_State'] + +d['ExpReported_Beneficiary']),
@@ -244,6 +264,7 @@ var stories = [
         'title' : 'SC + ST of APL & BPL in  Total IHHL',
         'file'  : 'data.csv',
         'url'   : 'http://tsc.gov.in/tsc/Report/Physical/RptCategoriesIHHLStatewiseDistrictwise_net.aspx?id=PHY',
+        'cols'  : ['IHHL_APL_Ach_SC', 'IHHL_APL_Ach_ST', 'IHHL_BPL_Ach_SC', 'IHHL_BPL_Ach_ST', 'IHHL_Objective_Total'],
         'group' : ['State_Name', 'District_Name'],
         'stack' : function(d) { return cumsum([
             (+d['IHHL_APL_Ach_SC'] + +d['IHHL_APL_Ach_ST']) / +d['IHHL_Objective_Total'],
@@ -309,6 +330,7 @@ var stories = [
         'title' : 'Financial vs Physical progress',
         'file'  : 'data.csv',
         'url'   : 'http://tsc.gov.in/tsc/Report/Release/RptReleaseDataBetweenDates.aspx?id=Home',
+        'cols'  : ['PO_IHHL_BPL', 'ExpReported_Total', 'Total_Projects_Outlay', 'PP_IHHL_BPL', 'PO_IHHL_BPL'],
         'group' : ['State_Name'],
         'area'  : ['# BPL toilets required', function(d) { return +d['PO_IHHL_BPL']; }],
         'x'     : ['Expenses / Outlay', function(d) { return d['ExpReported_Total'] / d['Total_Projects_Outlay']; }],
@@ -328,6 +350,7 @@ var stories = [
         'title' : 'Effective fund utilisation',
         'file'  : 'data.csv',
         'url'   : 'TBD',
+        'cols'  : ['BPL_WT', 'BPL_WOT', 'ExpReported_Total', 'Total_Projects_Outlay', 'PP_IHHL_BPL', 'BPL_WT', 'BPL_WOT'],
         'group' : ['State_Name'],
         'area'  : ['# BPL toilets required', function(d) { return +d['BPL_WT'] + +d['BPL_WOT']; }],
         'x'     : ['Expenses / Outlay', function(d) { return d['ExpReported_Total'] / d['Total_Projects_Outlay']; }],
