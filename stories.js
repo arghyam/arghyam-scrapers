@@ -112,11 +112,11 @@ var stories = [
         'file'  : 'data.csv',
         'url'   : 'http://tsc.gov.in/tsc/Report/Financial/RptPercentageFinComponentStatewiseDistrictwise_net.aspx?id=FIN',
         'group' : ['State_Name'],
-        'area'  : ['Total approved - BPL', ['Appr_BPL']],
-        'num'   : ['Total expenses - BPL', 'Exp_BPL'],
-        'den'   : ['Total approved - BPL', 'Appr_BPL'],
+        'area'  : ['Total approved - BPL', 'BPL_Appr.(C+S+B)'],
+        'num'   : ['Total expenses - BPL', 'BPL_Exp.(C+S+B)'],
+        'den'   : ['Total approved - BPL', 'BPL_Appr.(C+S+B)'],
         'story' : 'Story to be written...',
-        'legend': { '%Size%':'Total outlay', '%Colour%':'Total expenses - BPL / Total outlay - BPL'  }
+        'legend': { '%Size%':'Total approved - BPL', '%Colour%':'Total expenses - BPL / Total outlay - BPL'  }
     }),
     treemap_story({
         'menu'  : 'Financial Progress',
@@ -124,11 +124,11 @@ var stories = [
         'file'  : 'data.csv',
         'url'   : 'http://tsc.gov.in/tsc/Report/Financial/RptPercentageFinComponentStatewiseDistrictwise_net.aspx?id=FIN',
         'group' : ['State_Name'],
-        'area'  : ['Total approved - School', ['Appr_School']],
-        'num'   : ['Total expenses - School', 'Exp_School'],
-        'den'   : ['Total approved - School', 'Appr_School'],
+        'area'  : ['Total approved - School', 'School_Appr.(C+S+B)'],
+        'num'   : ['Total expenses - School', 'School_Exp.(C+S+B)'],
+        'den'   : ['Total approved - School', 'School_Appr.(C+S+B)'],
         'story' : 'Story to be written...',
-        'legend': { '%Size%':'Total outlay', '%Colour%':'Total expenses - School / Total outlay - School'  }
+        'legend': { '%Size%':'Total approved - School', '%Colour%':'Total expenses - School / Total outlay - School'  }
     }),
     treemap_story({
         'menu'  : 'Financial Progress',
@@ -136,12 +136,11 @@ var stories = [
         'file'  : 'data.csv',
         'url'   : 'http://tsc.gov.in/tsc/Report/Financial/RptPercentageFinComponentStatewiseDistrictwise_net.aspx?id=FIN',
         'group' : ['State_Name'],
-        'area'  : ['Total approved', ['Appr_San']],
-        // TODO: ['Exp_San'] - known bug - Pravin will fix this soon.
-        'num'   : ['Total expenses', ['Exp_San']],
-        'den'   : ['Total approved', 'Appr_San'],
+        'area'  : ['Total approved - Sanitary Complexes', 'Sanitary_Complex_Appr.(C+S+B)'],
+        'num'   : ['Total expenses - Sanitary Complexes', 'Sanitary_Complex_Exp.(C+S+B)'],
+        'den'   : ['Total approved - Sanitary Complexes', 'Sanitary_Complex_Appr.(C+S+B)'],
         'story' : 'Story to be written...',
-        'legend': { '%Size%':'Total outlay', '%Colour%':'Total expenses - SC / Total approved - SC'  }
+        'legend': { '%Size%':'Total approved - Sanitary Complexes', '%Colour%':'Total expenses - SC / Total approved - SC'  }
     }),
     treemap_story({
         'menu'  : 'Financial Progress',
@@ -149,27 +148,15 @@ var stories = [
         'file'  : 'data.csv',
         'url'   : 'http://tsc.gov.in/tsc/Report/Financial/RptPercentageFinComponentStatewiseDistrictwise_net.aspx?id=FIN',
         'group' : ['State_Name'],
-        'area'  : ['Total approved - Anganwadi', ['Appr_Angan']],
-        'num'   : ['Total expenses - Anganwadi', ['Exp_Angan']],
-        'den'   : ['Total approved - Anganwadi', 'Appr_Angan'],
+        'area'  : ['Total approved - Anganwadi', 'Anganwadi_Appr.(C+S+B)'],
+        'num'   : ['Total expenses - Anganwadi', 'Anganwadi_Exp.(C+S+B)'],
+        'den'   : ['Total approved - Anganwadi', 'Anganwadi_Appr.(C+S+B)'],
         'story' : 'Story to be written...',
-        'legend': { '%Size%':'Total outlay', '%Colour%':'Total expenses - Anganwadi / Total approved - Anganwadi'  }
+        'legend': { '%Size%':'Total approved - Anganwadi', '%Colour%':'Total expenses - Anganwadi / Total approved - Anganwadi'  }
     }),
     treemap_story({
         'menu'  : 'Financial Progress',
-        'title' : 'Total share of centre',
-        'file'  : 'data.csv',
-        'url'   : 'http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home',
-        'group' : ['State_Name'],
-        'area'  : ['Total outlay', 'Total_Projects_Outlay'],
-        'num'   : ['Centre expenses', 'ExpReported_Center'],
-        'den'   : ['Total expenses', 'ExpReported_Total'],
-        'story' : 'Story to be written...',
-        'legend': { '%Size%': 'Total outlay', '%Colour%': 'Centre expenses / Total expenses' }
-    }),
-    treemap_story({
-        'menu'  : 'Financial Progress',
-        'title' : 'Approved share of centre',
+        'title' : 'Share of centre - Approved',
         'file'  : 'data.csv',
         'url'   : 'http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home',
         'group' : ['State_Name'],
@@ -182,7 +169,7 @@ var stories = [
     }),
     treemap_story({
         'menu'  : 'Financial Progress',
-        'title' : 'Released share of centre',
+        'title' : 'Share of centre - Released',
         'file'  : 'data.csv',
         'url'   : 'http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home',
         'group' : ['State_Name'],
@@ -191,6 +178,18 @@ var stories = [
         'den'   : ['Total released', 'Rof_Total'],
         'story' : 'Story to be written...',
         'legend': { '%Size%': 'Total outlay', '%Colour%': 'Released centre share / Total released' }
+    }),
+    treemap_story({
+        'menu'  : 'Financial Progress',
+        'title' : 'Share of centre - Expenditure',
+        'file'  : 'data.csv',
+        'url'   : 'http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home',
+        'group' : ['State_Name'],
+        'area'  : ['Total outlay', 'Total_Projects_Outlay'],
+        'num'   : ['Centre expenses', 'ExpReported_Center'],
+        'den'   : ['Total expenses', 'ExpReported_Total'],
+        'story' : 'Story to be written...',
+        'legend': { '%Size%': 'Total outlay', '%Colour%': 'Centre expenses / Total expenses' }
     }),
     stack_story({
         'menu'  : 'Financial Progress',
@@ -240,6 +239,23 @@ var stories = [
         'story' : 'Story to be written...',
         'legend': { '%Blue%': 'Centre', '%Red%': 'State', '%Green%': 'Beneficiary' }
     }),
+    stack_story({
+        'menu'  : 'Financial Progress',
+        'title' : 'SC + ST of APL & BPL in  Total IHHL',
+        'file'  : 'data.csv',
+        'url'   : 'http://tsc.gov.in/tsc/Report/Physical/RptCategoriesIHHLStatewiseDistrictwise_net.aspx?id=PHY',
+        'group' : ['State_Name', 'District_Name'],
+        'stack' : function(d) { return cumsum([
+            (+d['IHHL_APL_Ach_SC'] + +d['IHHL_APL_Ach_ST']) / +d['IHHL_Objective_Total'],
+            (+d['IHHL_BPL_Ach_SC'] + +d['IHHL_BPL_Ach_ST']) / +d['IHHL_Objective_Total'],
+            1 - (+d['IHHL_BPL_Ach_SC'] + +d['IHHL_BPL_Ach_ST'] + +d['IHHL_APL_Ach_SC'] + +d['IHHL_APL_Ach_ST']) / +d['IHHL_Objective_Total']
+        ]); },
+        'names' : ['APL', 'BPL', 'Others'],
+        'colors': ['#4f81bd', '#c0504d', '#9bbb59'],
+        'story' : 'Story to be written...',
+        'legend': { '%Blue%': 'APL SC + ST', '%Red%': 'BPL SC + ST', '%Green%': 'Others' }
+    }),
+
     treemap_story({
         'menu'  : 'Physical Progress',
         'title' : '% toilets built below poverty household',
@@ -263,22 +279,6 @@ var stories = [
         'den'   : ['Planned APL toilets', 'PO_IHHL_APL'],
         'story' : 'Story to be written...',
         'legend': { '%Size%': 'Planned APL toilets', '%Colour%': 'Built APL toilets / Planned APL toilets' }
-    }),
-    stack_story({
-        'menu'  : 'Financial Progress',
-        'title' : 'SC + ST of APL & BPL in  Total IHHL',
-        'file'  : 'data.csv',
-        'url'   : 'http://tsc.gov.in/tsc/Report/Physical/RptCategoriesIHHLStatewiseDistrictwise_net.aspx?id=PHY',
-        'group' : ['State_Name', 'District_Name'],
-        'stack' : function(d) { return cumsum([
-            (+d['APL_Ach_SC']      + +d['APL_Ach_ST'])      / +d['IHHL_Total'],
-            (+d['BPL_Ach_IHHL_SC'] + +d['BPL_Ach_IHHL_ST']) / +d['IHHL_Total'],
-            1 - (+d['BPL_Ach_IHHL_SC'] + +d['BPL_Ach_IHHL_ST'] + +d['APL_Ach_SC'] + +d['APL_Ach_ST']) / +d['IHHL_Total']
-        ]); },
-        'names' : ['APL', 'BPL', 'Others'],
-        'colors': ['#4f81bd', '#c0504d', '#9bbb59'],
-        'story' : 'Story to be written...',
-        'legend': { '%Blue%': 'APL SC + ST', '%Red%': 'BPL SC + ST', '%Green%': 'Others' }
     }),
     treemap_story({
         'menu'  : 'Physical Progress',
