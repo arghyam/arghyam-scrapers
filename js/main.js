@@ -82,9 +82,15 @@ function hashchange(e) {
   }
   d3.select('#about').style('display', 'block');
   d3.select('#visual').style('display', 'none');
-};
+}
 window.addEventListener('hashchange', hashchange);
 hashchange();
+
+// Allow download of SVG
+d3.select('#downloadsvg').on('click', function() {
+  d3.event.preventDefault();
+  svgcrowbar();
+});
 
 // When any menu option is clicked, draw it.
 function draw(story) {
