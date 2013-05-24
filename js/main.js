@@ -73,7 +73,7 @@ var legends = {
 
 // When the URL hash changes, draw the appropriate story.
 function hashchange(e) {
-  var hash = window.location.hash.replace(/^#/, '').replace(/_/g, ' ').split('|');
+  var hash = decodeURIComponent(window.location.hash.replace(/^#/, '')).split('|');
   for (var i=0, l=stories.length; i<l; i++) {
     var story = stories[i];
     if ((story.menu == hash[0]) && (story.title == hash[1])) {
@@ -110,7 +110,7 @@ function draw(story) {
   d3.select('#legend').append('p').html(legends[story.type].replace(/%\w+%/g, function(all){ return story.legend[all] || all; }));
   d3.select('#source').attr('href', story.url).text(story.url);
 
-  window.location.hash = (story.menu + '|' + story.title).replace(/ /g, '_');
+  window.location.hash = encodeURIComponent(story.menu + '|' + story.title);
   window['draw_' + story.type](story);
 }
 
