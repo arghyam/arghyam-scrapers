@@ -72,8 +72,8 @@ var legends = {
 };
 
 // When the URL hash changes, draw the appropriate story.
-window.addEventListener('hashchange', function(e) {
-  var hash = window.location.hash.replace(/^#/, '').split('|');
+function hashchange(e) {
+  var hash = window.location.hash.replace(/^#/, '').replace(/_/g, ' ').split('|');
   for (var i=0, l=stories.length; i<l; i++) {
     var story = stories[i];
     if ((story.menu == hash[0]) && (story.title == hash[1])) {
@@ -82,7 +82,9 @@ window.addEventListener('hashchange', function(e) {
   }
   d3.select('#about').style('display', 'block');
   d3.select('#visual').style('display', 'none');
-});
+};
+window.addEventListener('hashchange', hashchange);
+hashchange();
 
 // When any menu option is clicked, draw it.
 function draw(story) {
@@ -102,7 +104,7 @@ function draw(story) {
   d3.select('#legend').append('p').html(legends[story.type].replace(/%\w+%/g, function(all){ return story.legend[all] || all; }));
   d3.select('#source').attr('href', story.url).text(story.url);
 
-  window.location.hash = story.menu + '|' + story.title;
+  window.location.hash = (story.menu + '|' + story.title).replace(/ /g, '_');
   window['draw_' + story.type](story);
 }
 
