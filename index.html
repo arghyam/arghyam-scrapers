@@ -57,6 +57,11 @@
     .go-bold {
       font-weight: bolder;
     }
+    #datafiles {
+      padding: 0;
+      margin: auto;
+      height: auto;
+    }
   </style>
   <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
 </head><body>
@@ -102,10 +107,10 @@
   <p>
     <strong>Source</strong>: <a target="_blank" href="http://tsc.gov.in/" id="source"></a>
     <br>
-    <strong>Date</strong>: <span id="date"></span>
+    <strong>Date</strong>: <span id="date"></span> <strong>Change</strong>: <select id="datafiles" class="input-medium"></select>
     <br>
     <strong>Download</strong>:
-      <a href="data.csv" id="data">full dataset</a> |
+      <a href="#" id="data">full dataset</a> |
       <a href="#" id="downloadsvg">chart as svg</a>
   </p>
 </div>

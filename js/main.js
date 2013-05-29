@@ -56,6 +56,18 @@ d3.select('#about-entry').append('ul')
         .text(function(d) { return d.title; })
         .on('click', draw);
 
+// Create the dates menu
+d3.select('#datafiles')
+  .on('change', function() {
+    hashchange();
+  })
+  .selectAll('option')
+    .data(datafiles)
+  .enter()
+    .append('option')
+    .attr('value', String)
+    .text(function(d) { return d.replace(/^data\-/, '').replace(/\.csv/, ''); })
+
 var svg = d3.select('#chart')
     .on('click', function() {
       var drilldown = d3.select('#visual').classed('drilldown');
@@ -70,6 +82,13 @@ var legends = {
   'stack'  : 'Each row represents one State. Click on it to reveal more boxes on the right representing each District. Blue = %Blue%, Red = %Red%, Green = %Green%.',
   'scatter': 'Each circle represents one %Circle%. Hover over it to reveal all districts in the same State. The size of the circle represents %CircleSize%. The x-axis is based on %AxisX%. The y-axis is based on %AxisY%. The colour is based on the State. (Each district in a given state has the same colour).'
 };
+
+// Returns the name of the data file for the currently selected date.
+function datafile() {
+  var file = d3.select('#datafiles').property('value');
+  d3.select('#data').attr('href', file);
+  return file;
+}
 
 // When the URL hash changes, draw the appropriate story.
 function hashchange(e) {
@@ -121,7 +140,7 @@ function draw_date(daterow, story) {
 
 function draw_treemap(story) {
   // Filter the data
-  d3.csv(story.file, function(data) {
+  d3.csv(datafile(), function(data) {
     var subset = initchart(story, data);
     draw_date(data[data.length-1], story);
 
@@ -192,7 +211,7 @@ function draw_treemap(story) {
 
 function draw_scatter(story) {
   // Filter the data
-  d3.csv(story.file, function(data) {
+  d3.csv(datafile(), function(data) {
     var subset = initchart(story, data);
     draw_date(data[data.length-1], story);
 
@@ -307,7 +326,7 @@ function draw_scatter(story) {
 
 
 function draw_stack(story) {
-  d3.csv(story.file, function(data) {
+  d3.csv(datafile(), function(data) {
     var subset = initchart(story, data);
     draw_date(data[data.length-1], story);
 
