@@ -127,7 +127,14 @@ function draw(story) {
   d3.select('#story').text(story.story);
   d3.selectAll('#legend p').remove();
   d3.select('#legend').append('p').html(legends[story.type].replace(/%\w+%/g, function(all){ return story.legend[all] || all; }));
-  d3.select('#source').selectAll('div').data(story.url).enter().append('div').attr('id', 'url').attr('target', '_blank').html(function(d){ return "<a target='_blank' href='"+ d +"'>" + d+ "</a>"; }); 
+  d3.selectAll('#source a').remove();
+  d3.select('#source').selectAll('a')
+      .data(story.url)
+    .enter()
+      .append('a')
+      .attr('target', '_blank')
+      .attr('href', String)
+      .text(String);
 
   window.location.hash = encodeURIComponent(story.menu + '|' + story.title);
   window['draw_' + story.type](story);

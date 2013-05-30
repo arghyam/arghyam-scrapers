@@ -62,12 +62,8 @@
       margin: auto;
       height: auto;
     }
-    #source{
-      margin-top:-30px;
-      margin-bottom:-20px;      
-    }  
-    #url{
-      padding-left:60px;
+    #source a {
+      display: block;
     }
   </style>
   <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
@@ -112,14 +108,15 @@
   <div id="legend"></div>
   <p id="story"></p>
   <p>
-    <strong>Source</strong>: <div id="source"></div> 
-    <br>
     <strong>Date</strong>: <span id="date"></span> <strong>Change</strong>: <select id="datafiles" class="input-medium"></select>
     <br>
     <strong>Download</strong>:
       <a href="#" id="data">full dataset</a> |
       <a href="#" id="downloadsvg">chart as svg</a>
+    <br>
   </p>
+  <div><strong>Source</strong>:</div>
+  <div id="source"></div>
 </div>
 
 <div id="about" class="container">
