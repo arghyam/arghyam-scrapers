@@ -114,7 +114,7 @@ var stories = [
     treemap_story({
         'menu'  : 'Financial Progress',
         'title' : 'Project outlay used',
-        'url'   : 'http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home',
+        'url'   : ['http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home'],
         'group' : ['State_Name'],
         'area'  : ['Total outlay', 'Total_Projects_Outlay'],
         'num'   : ['Total expenses', 'ExpReported_Total'],
@@ -125,7 +125,7 @@ var stories = [
     treemap_story({
         'menu'  : 'Financial Progress',
         'title' : 'Project outlay used - BPL',
-        'url'   : 'http://tsc.gov.in/tsc/Report/Financial/RptPercentageFinComponentStatewiseDistrictwise_net.aspx?id=FIN',
+        'url'   : ['http://tsc.gov.in/tsc/Report/Financial/RptPercentageFinComponentStatewiseDistrictwise_net.aspx?id=FIN'],
         'group' : ['State_Name'],
         'area'  : ['Total approved - BPL', 'BPL_Appr.(C+S+B)'],
         'num'   : ['Total expenses - BPL', 'BPL_Exp.(C+S+B)'],
@@ -136,7 +136,7 @@ var stories = [
     treemap_story({
         'menu'  : 'Financial Progress',
         'title' : 'Project outlay used - Schools',
-        'url'   : 'http://tsc.gov.in/tsc/Report/Financial/RptPercentageFinComponentStatewiseDistrictwise_net.aspx?id=FIN',
+        'url'   : ['http://tsc.gov.in/tsc/Report/Financial/RptPercentageFinComponentStatewiseDistrictwise_net.aspx?id=FIN'],
         'group' : ['State_Name'],
         'area'  : ['Total approved - School', 'School_Appr.(C+S+B)'],
         'num'   : ['Total expenses - School', 'School_Exp.(C+S+B)'],
@@ -147,7 +147,7 @@ var stories = [
     treemap_story({
         'menu'  : 'Financial Progress',
         'title' : 'Project outlay used - Sanitary Complexes',
-        'url'   : 'http://tsc.gov.in/tsc/Report/Financial/RptPercentageFinComponentStatewiseDistrictwise_net.aspx?id=FIN',
+        'url'   : ['http://tsc.gov.in/tsc/Report/Financial/RptPercentageFinComponentStatewiseDistrictwise_net.aspx?id=FIN'],
         'group' : ['State_Name'],
         'area'  : ['Total approved - Sanitary Complexes', 'Sanitary_Complex_Appr.(C+S+B)'],
         'num'   : ['Total expenses - Sanitary Complexes', 'Sanitary_Complex_Exp.(C+S+B)'],
@@ -158,7 +158,7 @@ var stories = [
     treemap_story({
         'menu'  : 'Financial Progress',
         'title' : 'Project outlay used - Anganwadi',
-        'url'   : 'http://tsc.gov.in/tsc/Report/Financial/RptPercentageFinComponentStatewiseDistrictwise_net.aspx?id=FIN',
+        'url'   : ['http://tsc.gov.in/tsc/Report/Financial/RptPercentageFinComponentStatewiseDistrictwise_net.aspx?id=FIN'],
         'group' : ['State_Name'],
         'area'  : ['Total approved - Anganwadi', 'Anganwadi_Appr.(C+S+B)'],
         'num'   : ['Total expenses - Anganwadi', 'Anganwadi_Exp.(C+S+B)'],
@@ -169,7 +169,7 @@ var stories = [
     treemap_story({
         'menu'  : 'Financial Progress',
         'title' : 'Share of centre - Approved',
-        'url'   : 'http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home',
+        'url'   : ['http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home'],
         'group' : ['State_Name'],
         'area'  : ['Total outlay', 'Total_Projects_Outlay'],
         'num'   : ['Approved centre share', 'ApprShare_Center'],
@@ -181,7 +181,7 @@ var stories = [
     treemap_story({
         'menu'  : 'Financial Progress',
         'title' : 'Share of centre - Released',
-        'url'   : 'http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home',
+        'url'   : ['http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home'],
         'group' : ['State_Name'],
         'area'  : ['Total outlay', 'Total_Projects_Outlay'],
         'num'   : ['Released centre share', 'Rof_Center'],
@@ -192,7 +192,7 @@ var stories = [
     treemap_story({
         'menu'  : 'Financial Progress',
         'title' : 'Share of centre - Expenditure',
-        'url'   : 'http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home',
+        'url'   : ['http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home'],
         'group' : ['State_Name'],
         'area'  : ['Total outlay', 'Total_Projects_Outlay'],
         'num'   : ['Centre expenses', 'ExpReported_Center'],
@@ -203,7 +203,7 @@ var stories = [
     stack_story({
         'menu'  : 'Financial Progress',
         'title' : 'Source of funding - Approved',
-        'url'   : 'http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home',
+        'url'   : ['http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home'],
         'cols'  : ['ApprShare_Center', 'ApprShare_State', 'ApprShare_Beneficiary'],
         'group' : ['State_Name', 'District_Name'],
         'stack' : function(d) { return cumsum([
@@ -219,7 +219,7 @@ var stories = [
     stack_story({
         'menu'  : 'Financial Progress',
         'title' : 'Source of funding - Released',
-        'url'   : 'http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home',
+        'url'   : ['http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home'],
         'cols'  : ['Rof_Center', 'Rof_State', 'Rof_Beneficiary'],
         'group' : ['State_Name', 'District_Name'],
         'stack' : function(d) { return cumsum([
@@ -235,7 +235,7 @@ var stories = [
     stack_story({
         'menu'  : 'Financial Progress',
         'title' : 'Source of funding - Expenditure',
-        'url'   : 'http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home',
+        'url'   : ['http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home'],
         'cols'  : ['ExpReported_Center', 'ExpReported_State', 'ExpReported_Beneficiary'],
         'group' : ['State_Name', 'District_Name'],
         'stack' : function(d) { return cumsum([
@@ -251,7 +251,7 @@ var stories = [
     stack_story({
         'menu'  : 'Financial Progress',
         'title' : 'SC + ST of APL & BPL in  Total IHHL',
-        'url'   : 'http://tsc.gov.in/tsc/Report/Physical/RptCategoriesIHHLStatewiseDistrictwise_net.aspx?id=PHY',
+        'url'   : ['http://tsc.gov.in/tsc/Report/Physical/RptCategoriesIHHLStatewiseDistrictwise_net.aspx?id=PHY'],
         'cols'  : ['IHHL_APL_Ach_SC', 'IHHL_APL_Ach_ST', 'IHHL_BPL_Ach_SC', 'IHHL_BPL_Ach_ST', 'IHHL_Objective_Total'],
         'group' : ['State_Name', 'District_Name'],
         'stack' : function(d) { return cumsum([
@@ -268,7 +268,7 @@ var stories = [
     treemap_story({
         'menu'  : 'Physical Progress',
         'title' : '% toilets built below poverty household',
-        'url'   : 'http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home',
+        'url'   : ['http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home'],
         'group' : ['State_Name'],
         'area'  : ['Planned BPL toilets', 'PO_IHHL_BPL'],
         'num'   : ['Built BPL toilets', 'PP_IHHL_BPL'],
@@ -279,7 +279,7 @@ var stories = [
     treemap_story({
         'menu'  : 'Physical Progress',
         'title' : '% toilets built above poverty household',
-        'url'   : 'http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home',
+        'url'   : ['http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home'],
         'group' : ['State_Name'],
         'area'  : ['Planned APL toilets', 'PO_IHHL_APL'],
         'num'   : ['Built APL toilets', 'PP_IHHL_APL'],
@@ -290,7 +290,7 @@ var stories = [
     treemap_story({
         'menu'  : 'Physical Progress',
         'title' : 'Coverage of BPL Toilets: households',
-        'url'   : 'http://tsc.gov.in/tsc/Report/PanchayatReport/RptStateWiseBaseLineServeyData_net.aspx?id=Home',
+        'url'   : ['http://tsc.gov.in/tsc/Report/PanchayatReport/RptStateWiseBaseLineServeyData_net.aspx?id=Home'],
         'group' : ['State_Name'],
         'area'  : ['BPL Households' , ['BPL_WT', 'BPL_WOT']],
         'num'   : ['BPL Households (WT)', ['BPL_WT']],
@@ -301,7 +301,7 @@ var stories = [
     treemap_story({
         'menu'  : 'Physical Progress',
         'title' : 'Coverage of APL Toilets: households',
-        'url'   : 'http://tsc.gov.in/tsc/Report/PanchayatReport/RptStateWiseBaseLineServeyData_net.aspx?id=Home',
+        'url'   : ['http://tsc.gov.in/tsc/Report/PanchayatReport/RptStateWiseBaseLineServeyData_net.aspx?id=Home'],
         'group' : ['State_Name'],
         'area'  : ['APL Households' , ['APL_WT', 'APL_WOT']],
         'num'   : ['APL Households (WT)' , ['APL_WT']],
@@ -312,7 +312,8 @@ var stories = [
     scatter_story({
         'menu'  : 'Performance',
         'title' : 'Financial vs Physical progress',
-        'url'   : 'http://tsc.gov.in/tsc/Report/Release/RptReleaseDataBetweenDates.aspx?id=Home',
+        'url'   : ['http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home', 
+                   'http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home'], 
         'cols'  : ['ExpReported_Total', 'Total_Projects_Outlay', 'PP_IHHL_BPL', 'PO_IHHL_BPL'],
         'group' : ['State_Name'],
         'area'  : ['# BPL toilets required', function(d) { return +d['PO_IHHL_BPL']; }],
@@ -331,7 +332,7 @@ var stories = [
     scatter_story({
         'menu'  : 'Performance',
         'title' : 'Effective fund utilisation',
-        'url'   : 'TBD',
+        'url'   : ['TBD'],
         'cols'  : ['BPL_WT', 'BPL_WOT', 'ExpReported_Total', 'Total_Projects_Outlay', 'PP_IHHL_BPL', 'BPL_WT', 'BPL_WOT'],
         'group' : ['State_Name'],
         'area'  : ['# BPL toilets required', function(d) { return +d['BPL_WT'] + +d['BPL_WOT']; }],
