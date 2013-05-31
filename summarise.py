@@ -1,6 +1,6 @@
 import os
 import csv
-import sys
+import datetime
 
 keys = ('State_Name', 'District_Name')
 
@@ -41,7 +41,8 @@ for column in csv.DictReader(open('summarise.csv')):
 
     result.setdefault(('_Updated', ''), {})[col] = dates[column['File']]
 
-out = csv.writer(open('data.csv', 'w'), lineterminator='\n')
+filename = datetime.date.today().strftime('data-%Y-%m-%d.csv')
+out = csv.writer(open(filename, 'w'), lineterminator='\n')
 out.writerow(fields)
 for index in sorted(result):
     row = result[index]

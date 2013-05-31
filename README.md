@@ -9,16 +9,24 @@ Running on Windows
 Running on Linux
 ----------------
 
-    # Setup
+    # One-time setup
+    # --------------
     wget http://phantomjs.googlecode.com/files/phantomjs-1.8.0-linux-x86_64.tar.bz2
     tar -xvjf phantomjs-1.8.0-linux-x86_64.tar.bz2
     wget https://github.com/n1k0/casperjs/tarball/1.0.0 -O casperjs-1.0.0.tar.gz
     tar -xvzf casperjs-1.0.0.tar.gz
     git clone git://github.com/arghyam/arghyam-scrapers.git
 
-    # Add bin/ to PATH
+    # Add this line to .bashrc
     export PATH=$PATH:`readlink -e *-casperjs-*`/bin:`readlink -e phantomjs*64`/bin
 
     # Run every time
+    # --------------
     cd arghyam-scrapers/tsc.gov.in
     nohup find . -name 'scrape*.js' | xargs -n 1 -P 4 casperjs 2>&1 > log &
+
+    cd ..
+    python summarise.py
+
+    # Now you have a data-yyyy-mm-dd.csv in the arghyam-scrapers/ folder.
+    # Copy this into the gh-pages branch
