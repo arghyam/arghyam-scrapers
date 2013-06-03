@@ -312,8 +312,8 @@ var stories = [
     scatter_story({
         'menu'  : 'Performance',
         'title' : 'Financial vs Physical progress',
-        'url'   : ['http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home', 
-                   'http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home'], 
+        'url'   : ['http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home',
+                   'http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home'],
         'cols'  : ['ExpReported_Total', 'Total_Projects_Outlay', 'PP_IHHL_BPL', 'PO_IHHL_BPL'],
         'group' : ['State_Name'],
         'area'  : ['# BPL toilets required', function(d) { return +d['PO_IHHL_BPL']; }],
@@ -351,9 +351,7 @@ var stories = [
 
 // List of the historical data files, latest on top
 var datafiles = [
+    'data-2013-06-02.csv',
     'data-2013-05-29.csv',
-    'data-2013-05-23.csv',
-    'data-2013-04-30.csv',
-    'data-2013-03-15.csv',
-    'data-2013-02-18.csv'
+    'data-2013-05-23.csv'
 ];
