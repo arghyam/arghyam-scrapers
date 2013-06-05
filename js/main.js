@@ -146,6 +146,9 @@ function draw_date(daterow, story) {
 }
 
 function draw_treemap(story) {
+  //to remove scatterplot info container
+  d3.select('#right_container').style('display','none');
+
   // Filter the data
   d3.csv(datafile(), function(data) {
     var subset = initchart(story, data);
@@ -217,6 +220,11 @@ function draw_treemap(story) {
 
 
 function draw_scatter(story) {
+  var beyond = [];
+  //to add scatterplot info container
+  d3.select('#right_container').style('display','block');    
+
+  
   // Filter the data
   d3.csv(datafile(), function(data) {
     var subset = initchart(story, data);
@@ -281,7 +289,7 @@ function draw_scatter(story) {
     var yscale = d3.scale.linear().domain(story.ydom).range([height - R, R]);
     node.enter().append('circle')
       .attr('cx', function(d) { return xscale(story.cx(d)); })
-      .attr('cy', function(d) { return yscale(story.cy(d)); })
+      .attr('cy', function(d) { if(story.cy(d) > story.ydom[1]){ beyond.push(d)}; return yscale(story.cy(d)); })
       .attr('r', function(d) { return R * story.area[1](d) / rmax; })
       .attr('fill', story.color)
       .attr('stroke', '#aaf')
@@ -328,11 +336,26 @@ function draw_scatter(story) {
         .attr('transform', 'translate(5,0) rotate(-90,' + R + ',' + R + ')')
         .attr('text-anchor', 'end')
         .attr('dominant-baseline', 'hanging');
+
+    //sorted the values in descending order 
+     beyond.sort(function(a, b){ return story.cy(b) - story.cy(a);});   
+   
+     //remove the content - details of the bubbles out of the bound
+     d3.selectAll('#details table').remove();
+
+     d3.select('#header').text('Districts above ' + story.ydom[1] * 100 + '%');
+
+     //display values that are above 150%, in table 
+     d3.select('#details').append('table').attr('class', 'table table-condensed').selectAll('tr').data(beyond).enter().append('tr').selectAll('td').data(function(d){ return [d.District_Name, d.State_Name, d3.round(story.cy(d) * 100) + '%']; }).enter().append('td').text(function(d){ return d;});
+     d3.select('#info').text('These districts have achieved over '+ story.ydom[1] * 100 + '% , so these are not on the graph. For more information please see another visual.');    
   });
 }
 
 
 function draw_stack(story) {
+  //to remove scatterplot info container
+  d3.select('#right_container').style('display','none');
+
   d3.csv(datafile(), function(data) {
     var subset = initchart(story, data);
     draw_date(data[data.length-1], story);

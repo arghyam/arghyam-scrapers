@@ -65,6 +65,33 @@
     #source a {
       display: block;
     }
+    #right_container{
+      float:right;
+      width:210px;
+      position:relative;
+      padding:5px;
+      bottom:475px;
+      font-size:0.7em;      
+    }    
+    #header{
+      font-size: 1.2em;
+      padding:5px;
+      background-color: black;
+      color:white;
+      font-weight: bold;
+    }
+    #details{
+      border:1px solid gray;
+      padding:5px;      
+    }
+    #details tr td{ 
+      vertical-align: top;      
+    }
+    #info{
+      font-size: 1.1em;
+      padding-top: 5px;
+      line-height: 1.5em;
+    }
   </style>
   <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
 </head><body>
@@ -105,6 +132,8 @@
   </div>
 
   <svg id="chart" width="960" height="500"></svg>
+  <div id="right_container"><div id="header"></div><div id="details"></div><div id="info"></div></div>
+
   <div id="legend"></div>
   <p id="story"></p>
   <p>
