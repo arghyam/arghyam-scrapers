@@ -104,9 +104,10 @@ function stack_story(story) {
     story.cols = story.cols || [];
     story.filter = function(d) { return d.District_Name.match(/^[A-Z]/); };
     story.color = function(d) { return gen_color(d[story.group[0]]); };
-    story.hover = function(d, i, j) {
+    story.hover = function(d, i) {
       return story.cells[i] + ': ' + P(d[1]);
     };
+    story.legend['%Rows%'] = story.rows.join(', ');
     return story;
 }
 
@@ -245,7 +246,8 @@ var stories = [
                 1 - (+d['IHHL_BPL_Ach_SC'] + +d['IHHL_BPL_Ach_ST'] + +d['IHHL_APL_Ach_SC'] + +d['IHHL_APL_Ach_ST']) / +d['IHHL_Objective_Total']
             ]); }
         ],
-        'names' : ['APL', 'BPL', 'Others'],
+        'rows'  : ['% SC/ST'],
+        'cells' : ['APL', 'BPL', 'Others'],
         'colors': ['#4f81bd', '#c0504d', '#9bbb59'],
         'story' : 'Story to be written...',
         'legend': { '%Blue%': 'APL SC + ST', '%Red%': 'BPL SC + ST', '%Green%': 'Others' }

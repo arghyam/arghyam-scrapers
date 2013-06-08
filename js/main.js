@@ -79,7 +79,8 @@ var legends = {
              '<br>Size = <strong>%Size%</strong>.' +
              '<br>Colour = <strong>%Colour%</strong>. Red is low, green is high.' +
              '<br>All figures are in <strong>Rs lakhs</strong>.',
-  'stack'  : 'Each row represents one State. Click on it to reveal more boxes on the right representing each District. Blue = %Blue%, Red = %Red%, Green = %Green%.',
+  'stack'  : 'Each row represents one State, showing the break-up of <strong>%Rows%</strong>.' +
+             'Click on it to reveal more boxes on the right representing each District. Blue = %Blue%, Red = %Red%, Green = %Green%.',
   'scatter': 'Each circle represents one %Circle%. Hover over it to reveal all districts in the same State. The size of the circle represents %CircleSize%. The x-axis is based on %AxisX%. The y-axis is based on %AxisY%. The colour is based on the State. (Each district in a given state has the same colour).'
 };
 
@@ -420,7 +421,8 @@ function draw_stack(story) {
           .append('g')
           .classed('row', true)
           // Vertically position each row
-          .attr('transform', function(d, i) { return 'translate(0,' + i * (H - ypad*3)/story.stack.length + ')'; });
+          .attr('transform', function(d, i) { return 'translate(0,' + i * (H - ypad*3)/story.stack.length + ')'; })
+          .attr('data-row', function(d, i) { return story.rows[i]; });
 
       // Within each row, draw the cells
       rows.selectAll('rect')
@@ -432,7 +434,10 @@ function draw_stack(story) {
           .attr('height', (H - ypad*3)/story.stack.length - ypad)
           .attr('fill', function(d, i) { return story.colors[i]; })
           .append('title')
-            .text(story.hover);
+            .text(function(d, i) {
+              var g = this.parentNode.parentNode;
+              return d3.select(g).attr('data-row') + ' ' + story.hover(d, i);
+            });
 
       return update;
     }
