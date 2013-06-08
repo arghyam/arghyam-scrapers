@@ -411,14 +411,25 @@ function draw_stack(story) {
           .attr('dominant-baseline', 'middle')
           .attr('font-size', H * 0.75);
 
-      enter.selectAll('rect')
-          .data(function(d, i) { return story.stack(d.values); })
+      // For each state
+      var rows = enter.selectAll('g.row')
+          // Create an array of arrays of [row, row, row], where row = [cell, cell, cell]
+          .data(function(d, i) { return story.stack.map(function(fn) { return fn(d.values); }); })
+        .enter()
+          // Each row is a g.row
+          .append('g')
+          .classed('row', true)
+          // Vertically position each row
+          .attr('transform', function(d, i) { return 'translate(0,' + i * (H - ypad*3)/story.stack.length + ')'; });
+
+      // Within each row, draw the cells
+      rows.selectAll('rect')
+          .data(function(d) { return d; })
         .enter()
           .append('rect')
           .attr('x', function(d) { return x0 + W * d[0]; })
           .attr('width', function(d) { return W * d[1]; })
-          .attr('y', ypad)
-          .attr('height', H - ypad*2)
+          .attr('height', (H - ypad*3)/story.stack.length - ypad)
           .attr('fill', function(d, i) { return story.colors[i]; })
           .append('title')
             .text(story.hover);

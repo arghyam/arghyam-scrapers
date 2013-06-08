@@ -104,8 +104,8 @@ function stack_story(story) {
     story.cols = story.cols || [];
     story.filter = function(d) { return d.District_Name.match(/^[A-Z]/); };
     story.color = function(d) { return gen_color(d[story.group[0]]); };
-    story.hover = function(d, i) {
-      return story.names[i] + ': ' + P(d[1]);
+    story.hover = function(d, i, j) {
+      return story.cells[i] + ': ' + P(d[1]);
     };
     return story;
 }
@@ -202,48 +202,32 @@ var stories = [
     }),
     stack_story({
         'menu'  : 'Financial Progress',
-        'title' : 'Source of funding - Approved',
+        'title' : 'Source of funding',
         'url'   : ['http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home'],
         'cols'  : ['ApprShare_Center', 'ApprShare_State', 'ApprShare_Beneficiary'],
         'group' : ['State_Name', 'District_Name'],
-        'stack' : function(d) { return cumsum([
-            +d['ApprShare_Center']      / (+d['ApprShare_Center'] + +d['ApprShare_State'] + +d['ApprShare_Beneficiary']),
-            +d['ApprShare_State']       / (+d['ApprShare_Center'] + +d['ApprShare_State'] + +d['ApprShare_Beneficiary']),
-            +d['ApprShare_Beneficiary'] / (+d['ApprShare_Center'] + +d['ApprShare_State'] + +d['ApprShare_Beneficiary'])
-        ]); },
-        'names' : ['Centre', 'State', 'Beneficiary'],
-        'colors': ['#4f81bd', '#c0504d', '#9bbb59'],
-        'story' : 'Story to be written...',
-        'legend': { '%Blue%': 'Centre', '%Red%': 'State', '%Green%': 'Beneficiary' }
-    }),
-    stack_story({
-        'menu'  : 'Financial Progress',
-        'title' : 'Source of funding - Released',
-        'url'   : ['http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home'],
-        'cols'  : ['Rof_Center', 'Rof_State', 'Rof_Beneficiary'],
-        'group' : ['State_Name', 'District_Name'],
-        'stack' : function(d) { return cumsum([
-            +d['Rof_Center']      / +d['Rof_Total'],
-            +d['Rof_State']       / +d['Rof_Total'],
-            +d['Rof_Beneficiary'] / +d['Rof_Total']
-        ]); },
-        'names' : ['Centre', 'State', 'Beneficiary'],
-        'colors': ['#4f81bd', '#c0504d', '#9bbb59'],
-        'story' : 'Story to be written...',
-        'legend': { '%Blue%': 'Centre', '%Red%': 'State', '%Green%': 'Beneficiary' }
-    }),
-    stack_story({
-        'menu'  : 'Financial Progress',
-        'title' : 'Source of funding - Expenditure',
-        'url'   : ['http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home'],
-        'cols'  : ['ExpReported_Center', 'ExpReported_State', 'ExpReported_Beneficiary'],
-        'group' : ['State_Name', 'District_Name'],
-        'stack' : function(d) { return cumsum([
-            +d['ExpReported_Center']      / (+d['ExpReported_Center'] + +d['ExpReported_State'] + +d['ExpReported_Beneficiary']),
-            +d['ExpReported_State']       / (+d['ExpReported_Center'] + +d['ExpReported_State'] + +d['ExpReported_Beneficiary']),
-            +d['ExpReported_Beneficiary'] / (+d['ExpReported_Center'] + +d['ExpReported_State'] + +d['ExpReported_Beneficiary'])
-        ]); },
-        'names' : ['Centre', 'State', 'Beneficiary'],
+        'stack' : [
+            // Approved
+            function(d) { return cumsum([
+                +d['ApprShare_Center']      / (+d['ApprShare_Center'] + +d['ApprShare_State'] + +d['ApprShare_Beneficiary']),
+                +d['ApprShare_State']       / (+d['ApprShare_Center'] + +d['ApprShare_State'] + +d['ApprShare_Beneficiary']),
+                +d['ApprShare_Beneficiary'] / (+d['ApprShare_Center'] + +d['ApprShare_State'] + +d['ApprShare_Beneficiary'])
+            ]); },
+            // Released
+            function(d) { return cumsum([
+                +d['Rof_Center']      / +d['Rof_Total'],
+                +d['Rof_State']       / +d['Rof_Total'],
+                +d['Rof_Beneficiary'] / +d['Rof_Total']
+            ]); },
+            // Expenditure
+            function(d) { return cumsum([
+                +d['ExpReported_Center']      / (+d['ExpReported_Center'] + +d['ExpReported_State'] + +d['ExpReported_Beneficiary']),
+                +d['ExpReported_State']       / (+d['ExpReported_Center'] + +d['ExpReported_State'] + +d['ExpReported_Beneficiary']),
+                +d['ExpReported_Beneficiary'] / (+d['ExpReported_Center'] + +d['ExpReported_State'] + +d['ExpReported_Beneficiary'])
+            ]); }
+        ],
+        'rows'  : ['Approved', 'Released', 'Expenditure'],
+        'cells' : ['Centre', 'State', 'Beneficiary'],
         'colors': ['#4f81bd', '#c0504d', '#9bbb59'],
         'story' : 'Story to be written...',
         'legend': { '%Blue%': 'Centre', '%Red%': 'State', '%Green%': 'Beneficiary' }
@@ -254,11 +238,13 @@ var stories = [
         'url'   : ['http://tsc.gov.in/tsc/Report/Physical/RptCategoriesIHHLStatewiseDistrictwise_net.aspx?id=PHY'],
         'cols'  : ['IHHL_APL_Ach_SC', 'IHHL_APL_Ach_ST', 'IHHL_BPL_Ach_SC', 'IHHL_BPL_Ach_ST', 'IHHL_Objective_Total'],
         'group' : ['State_Name', 'District_Name'],
-        'stack' : function(d) { return cumsum([
-            (+d['IHHL_APL_Ach_SC'] + +d['IHHL_APL_Ach_ST']) / +d['IHHL_Objective_Total'],
-            (+d['IHHL_BPL_Ach_SC'] + +d['IHHL_BPL_Ach_ST']) / +d['IHHL_Objective_Total'],
-            1 - (+d['IHHL_BPL_Ach_SC'] + +d['IHHL_BPL_Ach_ST'] + +d['IHHL_APL_Ach_SC'] + +d['IHHL_APL_Ach_ST']) / +d['IHHL_Objective_Total']
-        ]); },
+        'stack' : [
+            function(d) { return cumsum([
+                (+d['IHHL_APL_Ach_SC'] + +d['IHHL_APL_Ach_ST']) / +d['IHHL_Objective_Total'],
+                (+d['IHHL_BPL_Ach_SC'] + +d['IHHL_BPL_Ach_ST']) / +d['IHHL_Objective_Total'],
+                1 - (+d['IHHL_BPL_Ach_SC'] + +d['IHHL_BPL_Ach_ST'] + +d['IHHL_APL_Ach_SC'] + +d['IHHL_APL_Ach_ST']) / +d['IHHL_Objective_Total']
+            ]); }
+        ],
         'names' : ['APL', 'BPL', 'Others'],
         'colors': ['#4f81bd', '#c0504d', '#9bbb59'],
         'story' : 'Story to be written...',
