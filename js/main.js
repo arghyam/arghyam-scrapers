@@ -128,6 +128,9 @@ function draw(story) {
   d3.select('#story').text(story.story);
   d3.selectAll('#legend p').remove();
   d3.select('#legend').append('p').html(legends[story.type].replace(/%\w+%/g, function(all){ return story.legend[all] || all; }));
+  d3.selectAll('#columns text').remove();
+  d3.select('#columns').text(story.cols.join(", "));
+
   d3.selectAll('#source a').remove();
   d3.select('#source').selectAll('a')
       .data(story.url)
