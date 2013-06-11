@@ -287,27 +287,15 @@ var stories = [
     }),
     treemap_story({
         'menu'  : 'Physical Progress',
-        'title' : 'Coverage of BPL Toilets: households',
-        'url'   : ['http://tsc.gov.in/tsc/Report/PanchayatReport/RptStateWiseBaseLineServeyData_net.aspx?id=Home'],
-        'cols'  : ['BPL_WT', 'BPL_WOT'],
+        'title' : 'Coverage of Toilets - Rural Households',
+        'url'   : ['http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home'],
+        'cols'  : ['IHHL_Total', 'Rural_Households'],
         'group' : ['State_Name'],
-        'area'  : ['BPL Households' , ['BPL_WT', 'BPL_WOT']],
-        'num'   : ['BPL Households (WT)', ['BPL_WT']],
-        'den'   : ['Total BPL Households', ['BPL_WT', 'BPL_WOT']],
+        'area'  : ['Total Rural Households' , ['Rural_Households']],
+        'num'   : ['Rural Households (WT)', ['IHHL_Total']],
+        'den'   : ['Total Rural Households', ['Rural_Households']],
         'story' : 'Story to be written...',
-        'legend': { '%Size%': 'BPL Households', '%Colour%': 'BPL Households (WT) / Total BPL Households' }
-    }),
-    treemap_story({
-        'menu'  : 'Physical Progress',
-        'title' : 'Coverage of APL Toilets: households',
-        'url'   : ['http://tsc.gov.in/tsc/Report/PanchayatReport/RptStateWiseBaseLineServeyData_net.aspx?id=Home'],
-        'cols'  : ['APL_WT', 'APL_WOT'], 
-        'group' : ['State_Name'],
-        'area'  : ['APL Households' , ['APL_WT', 'APL_WOT']],
-        'num'   : ['APL Households (WT)' , ['APL_WT']],
-        'den'   : ['Total APL Households', ['APL_WT', 'APL_WOT']],
-        'story' : 'Story to be written...',
-        'legend': { '%Size%': 'APL Households', '%Colour%': 'APL Households (WT) / Total APL Households' }
+        'legend': { '%Size%': 'Tota Rural Households', '%Colour%': 'Rural Households (WT) / Total Rural Households' }
     }),
     scatter_story({
         'menu'  : 'Performance',
