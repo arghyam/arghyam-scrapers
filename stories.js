@@ -295,7 +295,7 @@ var stories = [
         'num'   : ['Rural Households (WT)', ['IHHL_Total']],
         'den'   : ['Total Rural Households', ['Rural_Households']],
         'story' : 'Story to be written...',
-        'legend': { '%Size%': 'Tota Rural Households', '%Colour%': 'Rural Households (WT) / Total Rural Households' }
+        'legend': { '%Size%': 'Total Rural Households', '%Colour%': 'Rural Households (WT) / Total Rural Households' }
     }),
     scatter_story({
         'menu'  : 'Performance',
