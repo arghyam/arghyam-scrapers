@@ -1,6 +1,5 @@
 // Display the main chart. It's hidden by default.
 d3.select('.chart').style('display', 'block');
-
 // Clicking on the home button...
 d3.select('#visual').style('display', 'none');
 d3.select('#home').on('click', function() {
@@ -8,7 +7,6 @@ d3.select('#home').on('click', function() {
   d3.select('#visual').style('display', 'none');
   d3.select('#about').style('display', 'block');
 });
-
 // Display the menus
 var menu = d3.nest().key(function(d) { return d.menu; }).entries(stories);
 var parentmenu = d3.select('ul.nav')
@@ -17,7 +15,6 @@ var parentmenu = d3.select('ul.nav')
   .enter()
     .append('li')
     .classed('dropdown', true);
-
 parentmenu
   .append('a')
   .attr('href', '#')
@@ -26,7 +23,6 @@ parentmenu
   .text(function(d) { return d.key + ' '; })
       .append('b')
       .classed('caret', true);
-
 parentmenu
   .append('ul')
   .classed('dropdown-menu', true)
@@ -38,7 +34,6 @@ parentmenu
         .attr('href', '#')
         .text(function(d) { return d.title; })
         .on('click', draw);
-
 // Create the menu on #about as well
 d3.select('#about-entry').append('ul')
   .selectAll('li')
@@ -55,7 +50,6 @@ d3.select('#about-entry').append('ul')
         .attr('href', '#')
         .text(function(d) { return d.title; })
         .on('click', draw);
-
 // Create the dates menu
 d3.select('#datafiles')
   .on('change', function() {
@@ -67,13 +61,11 @@ d3.select('#datafiles')
     .append('option')
     .attr('value', String)
     .text(function(d) { return d.replace(/^data\-/, '').replace(/\.csv/, ''); });
-
 var svg = d3.select('#chart')
     .on('click', function() {
       var drilldown = d3.select('#visual').classed('drilldown');
       d3.select('#visual').classed('drilldown', !drilldown);
     });
-
 var legends = {
   'treemap': 'Each large box represents one State. Click on it to reveal smaller boxes that represent a District.' +
              '<br>Size = <strong>%Size%</strong>.' +
@@ -83,14 +75,12 @@ var legends = {
              'Click on it to reveal more boxes on the right representing each District. Blue = %Blue%, Red = %Red%, Green = %Green%.',
   'scatter': 'Each circle represents one %Circle%. Hover over it to reveal all districts in the same State. The size of the circle represents %CircleSize%. The x-axis is based on %AxisX%. The y-axis is based on %AxisY%. The colour is based on the State. (Each district in a given state has the same colour).'
 };
-
 // Returns the name of the data file for the currently selected date.
 function datafile() {
   var file = d3.select('#datafiles').property('value');
   d3.select('#data').attr('href', file);
   return file;
 }
-
 // When the URL hash changes, draw the appropriate story.
 function hashchange(e) {
   var hash = decodeURIComponent(window.location.hash.replace(/^#/, '')).split('|');
@@ -105,23 +95,24 @@ function hashchange(e) {
 }
 window.addEventListener('hashchange', hashchange);
 hashchange();
-
 // Allow download of SVG
 d3.select('#downloadsvg').on('click', function() {
   d3.event.preventDefault();
   svgcrowbar();
 });
-
 // When any menu option is clicked, draw it.
 function draw(story) {
   if (d3.event) {
     d3.event.preventDefault();
   }
-
   d3.selectAll('.tooltip').remove();
   d3.select('#about').style('display', 'none');
   d3.select('#visual').style('display', 'block');
-
+  d3.selectAll('text').remove();
+  // Remove treemap gradient container 
+  d3.select('#gradient_cont').style('display', 'none');
+  // Remove scatterplot info container
+  d3.select('#right_container').style('display','none');
   // Set the title and story
   d3.select('#menu').text(story.menu);
   d3.select('#title').text(story.title);
@@ -130,7 +121,6 @@ function draw(story) {
   d3.select('#legend').append('p').html(legends[story.type].replace(/%\w+%/g, function(all){ return story.legend[all] || all; }));
   d3.selectAll('#columns text').remove();
   d3.select('#columns').text(story.cols.join(", "));
-
   d3.selectAll('#source a').remove();
   d3.select('#source').selectAll('a')
       .data(story.url)
@@ -139,56 +129,59 @@ function draw(story) {
       .attr('target', '_blank')
       .attr('href', String)
       .text(String);
-
   window.location.hash = encodeURIComponent(story.menu + '|' + story.title);
   window['draw_' + story.type](story);
 }
-
 function draw_date(daterow, story) {
     var dates = _.uniq(_.map(story.cols, function(col) { return daterow[col]; }));
     d3.select('#date').text(dates.join(', '));
 }
-
 function draw_treemap(story) {
-  // Remove scatterplot info container
-  d3.select('#right_container').style('display','none');
-
+  // Add gradient legend for treemap
+  d3.select('#gradient_cont').style('display', 'block');
+  // Creates gradient legend for treemap
+  var gradient = d3.select('#gradient');
+  gradient.append('rect').attr('x', 0).attr('y', 0)
+    .attr('width', 958).attr('height', 30)
+    .attr('fill', 'url(#gradient_legend)');
+  gradient.selectAll('text')
+    .data([5, 37, 70, 95]) // gradient percentage from svg defs
+   .enter().append('text')
+    .attr('x', function(d){ return d + '%';})
+    .attr('y', 20)
+    .data([0, 50, 100, 200]) // color domain
+    .text(function(d){ return d + '%'; })
+    .style('fill', function(d, i){ return i == 1 ? 'black' : 'white';});
   // Filter the data
   d3.csv(datafile(), function(data) {
     var subset = initchart(story, data);
     draw_date(data[data.length-1], story);
-
     var treemap = d3.layout.treemap()
       .size([parseInt(svg.style('width'), 10), svg.attr('height')])
       .sticky(true)
       .children(function(d) { return d.values; })
       .padding(1.5)
       .value(story.size);
-
     var nodes = d3.nest();
     story.group.forEach(function(group) {
       nodes = nodes.key(function(d) { return d[group]; });
     });
-
     treemap.nodes({
       'key': 'India',
       'values': nodes.entries(subset)
     });
-
     var node = svg.selectAll('rect')
       .data(treemap.nodes)
       .call(position)
       .attr('fill', story.color);
     node.select('title')
       .text(story.hover);
-
     node.enter().append('rect')
       .call(position)
       .attr('fill', story.color)
       .append('title')
         .text(story.hover);
     node.exit().remove();
-
     // Set up the legend
     var legend = d3.select('.legend.treemap');
     legend.selectAll('*').remove();
@@ -221,27 +214,21 @@ function draw_treemap(story) {
     });
   });
 }
-
-
 function draw_scatter(story) {
   var beyond = [];
   // Add scatterplot info container
   d3.select('#right_container').style('display','block');
-
   // Filter the data
   d3.csv(datafile(), function(data) {
     var subset = initchart(story, data);
     draw_date(data[data.length-1], story);
-
     // TODO: Make these move
     svg.selectAll('*').remove();
-
     var width = parseInt(svg.style('width'), 10);
     var height = svg.attr('height');
     var node = svg.selectAll('circle')
       .data(subset);
     var rmax = _.max(_.map(subset, story.area[1]));
-
     // Set up the legend
     var legend = d3.select('.legend.scatter');
     legend.selectAll('*').remove();
@@ -317,7 +304,6 @@ function draw_scatter(story) {
       })
       .append('title')
         .text(story.hover);
-
     var xaxis = svg.append('g')
       .classed('axis', true)
       .attr('transform', 'translate(0,' + (height - R) + ')')
@@ -330,7 +316,6 @@ function draw_scatter(story) {
         .attr('transform', 'translate(0, -5)')
         .attr('x', width - R)
         .attr('text-anchor', 'end');
-
     var yaxis = svg.append('g')
       .attr('class', 'axis')
       .attr('transform', 'translate(' + R + ',0)')
@@ -344,15 +329,11 @@ function draw_scatter(story) {
         .attr('transform', 'translate(5,0) rotate(-90,' + R + ',' + R + ')')
         .attr('text-anchor', 'end')
         .attr('dominant-baseline', 'hanging');
-
     // Sorted the values in descending order
     beyond.sort(function(a, b){ return story.cy(b) - story.cy(a); });
-
     // Remove the content - details of the bubbles out of the bound
     d3.selectAll('#details table').remove();
-
     d3.select('#header').text('Districts above ' + story.ydom[1] * 100 + '%');
-
     // Display values that are above 150%, in table
     d3.select('#details')
         .append('table').
@@ -370,16 +351,10 @@ function draw_scatter(story) {
         .text('These districts have achieved over '+ story.ydom[1] * 100 + '% , and are outside the graph.');
   });
 }
-
-
 function draw_stack(story) {
-  // Remove scatterplot info container
-  d3.select('#right_container').style('display','none');
-
   d3.csv(datafile(), function(data) {
     var subset = initchart(story, data);
     draw_date(data[data.length-1], story);
-
     var grouper = function(group) {
       return d3.nest()
         .rollup(function(leaves) {
@@ -392,11 +367,9 @@ function draw_stack(story) {
         })
         .key(function(d) { return d[group]; });
     };
-
     var nodes = grouper(story.group[0]);
     var leaves = grouper(story.group[1]);
     var ypad = 1;
-
     function showstack(cls, data, x0, H, W) {
       svg.selectAll('g.' + cls).remove();
       var update = svg.selectAll('g.' + cls)
@@ -406,7 +379,6 @@ function draw_stack(story) {
           .classed(cls, true)
           .attr('data-q', function(d) { return d.key; })
           .attr('transform', function(d, i) { return 'translate(0, ' + (H + i * H) + ')'; });
-
       enter.append('text')
           .text(function(d) { return d.key; })
           .attr('x', x0 - 10)
@@ -414,7 +386,6 @@ function draw_stack(story) {
           .attr('text-anchor', 'end')
           .attr('dominant-baseline', 'middle')
           .attr('font-size', H * 0.75);
-
       // For each state
       var rows = enter.selectAll('g.row')
           // Create an array of arrays of [row, row, row], where row = [cell, cell, cell]
@@ -426,7 +397,6 @@ function draw_stack(story) {
           // Vertically position each row
           .attr('transform', function(d, i) { return 'translate(0,' + i * (H - ypad*3)/story.stack.length + ')'; })
           .attr('data-row', function(d, i) { return story.rows[i]; });
-
       // Within each row, draw the cells
       rows.selectAll('rect')
           .data(function(d) { return d; })
@@ -441,10 +411,8 @@ function draw_stack(story) {
               var g = this.parentNode.parentNode;
               return d3.select(g).attr('data-row') + ' ' + story.hover(d, i);
             });
-
       return update;
     }
-
     var v0 = showstack('v0', nodes.entries(subset), 150, 16, 200);
     v0.on('click', function() {
       svg.selectAll('.mark').classed('mark', false);
@@ -456,8 +424,6 @@ function draw_stack(story) {
     });
   });
 }
-
-
 function initchart(story, data) {
   // No transitions work for other chart types, so just empty it
   var svgtype = svg.attr('data-type');
@@ -471,10 +437,8 @@ function initchart(story, data) {
     svg.classed(story.type, true)
       .attr('data-type', story.type);
   }
-
   return _.filter(data, story.filter);
 }
-
 function position() {
   this.transition()
     .duration(400)
