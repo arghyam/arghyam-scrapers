@@ -472,7 +472,6 @@ function position() {
     .attr('y', function(d) { return d.y; })
     .attr('width', function(d) { return d.dx; })
     .attr('height', function(d) { return d.dy; })
-    .attr('stroke', '#fff')
     .attr('class', function(d) { return "l" + d.depth; })
     .attr('data-q', function(d) { return d.depth == 1 ? d.key : d.District_Name; });
 }
