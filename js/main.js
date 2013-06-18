@@ -109,6 +109,7 @@ function draw(story) {
   d3.select('#about').style('display', 'none');
   d3.select('#visual').style('display', 'block');
   d3.selectAll('text').remove();
+	d3.selectAll('rect').remove('text');
   // Remove treemap gradient container 
   d3.select('#gradient_cont').style('display', 'none');
   // Remove scatterplot info container
@@ -179,9 +180,19 @@ function draw_treemap(story) {
     node.enter().append('rect')
       .call(position)
       .attr('fill', story.color)
+			.attr('stroke', '#fff')
       .append('title')
         .text(story.hover);
     node.exit().remove();
+		node.enter().append('text')
+      .call(position)
+      .attr('dx', function(d){ return d.dx / 2; })
+      .attr('dy', function(d){ return d.dy / 2; })
+      .attr('text-anchor', 'middle')
+	    .attr('dominant-baseline', 'middle')
+      .style('pointer-events', 'none')
+      .text(function(d){ return d.dx > 80 && d.key != 'India' ? d.key : '' ; })
+      .style('font-size', function(d){ return d.dx / 11 + 'px'; });
     // Set up the legend
     var legend = d3.select('.legend.treemap');
     legend.selectAll('*').remove();
