@@ -261,7 +261,7 @@ var stories = [
 
     treemap_story({
         'menu'  : 'Toilets built',
-        'title' : '% toilets built below poverty household',
+        'title' : 'Evaluation of toilets built for the rural poor',
         'url'   : ['http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home'],
         'cols'  : ['PO_IHHL_BPL', 'PP_IHHL_BPL'],
         'group' : ['State_Name'],
@@ -297,7 +297,7 @@ var stories = [
     }),
     scatter_story({
         'menu'  : 'Performance',
-        'title' : 'Financial vs Physical progress',
+        'title' : 'Comparing spending to toilet construction',
         'url'   : ['http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home',
                    'http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home'],
         'cols'  : ['PO_IHHL_BPL', 'PP_IHHL_BPL', 'ExpReported_Total', 'Total_Projects_Outlay'],
