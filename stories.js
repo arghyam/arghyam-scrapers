@@ -3,7 +3,6 @@ var color = d3.scale.linear()
     .domain([0, 0.5, 1, 2])
     .range(['#D73027', '#FFFFBF', '#1A9850', '#000']);
 
-
 // Display formats
 var F = d3.format(',.0f'); // Float
 var N = d3.format(',.0f'); // Number == int
@@ -23,7 +22,6 @@ function cumsum(series) {
     }
     return result;
 }
-
 // Colours taken from MS Office themes
 var gen_color_vals = [
     '#4f81bd', '#c0504d', '#9bbb59', '#8064a2', '#4bacc6', '#f79646',
@@ -113,7 +111,7 @@ function stack_story(story) {
 
 var stories = [
     treemap_story({
-        'menu'  : 'Financial Progress',
+        'menu'  : 'Money spent',
         'title' : 'Project outlay used',
         'url'   : ['http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home'],
         'cols'  : ['Total_Projects_Outlay', 'ExpReported_Total'],
@@ -125,7 +123,7 @@ var stories = [
         'legend': { '%Size%':'Total outlay', '%Colour%':'Total expenses / Total outlay'  }
     }),
     treemap_story({
-        'menu'  : 'Financial Progress',
+        'menu'  : 'Money spent',
         'title' : 'Project outlay used - BPL',
         'url'   : ['http://tsc.gov.in/tsc/Report/Financial/RptPercentageFinComponentStatewiseDistrictwise_net.aspx?id=FIN'],
         'cols'  : ['BPL_Appr.(C+S+B)', 'BPL_Exp.(C+S+B)'],
@@ -137,7 +135,7 @@ var stories = [
         'legend': { '%Size%':'Total approved - BPL', '%Colour%':'Total expenses - BPL / Total outlay - BPL'  }
     }),
     treemap_story({
-        'menu'  : 'Financial Progress',
+        'menu'  : 'Money spent',
         'title' : 'Project outlay used - Schools',
         'url'   : ['http://tsc.gov.in/tsc/Report/Financial/RptPercentageFinComponentStatewiseDistrictwise_net.aspx?id=FIN'],
         'cols'  : ['School_Appr.(C+S+B)', 'School_Exp.(C+S+B)'],
@@ -149,7 +147,7 @@ var stories = [
         'legend': { '%Size%':'Total approved - School', '%Colour%':'Total expenses - School / Total outlay - School'  }
     }),
     treemap_story({
-        'menu'  : 'Financial Progress',
+        'menu'  : 'Money spent',
         'title' : 'Project outlay used - Sanitary Complexes',
         'url'   : ['http://tsc.gov.in/tsc/Report/Financial/RptPercentageFinComponentStatewiseDistrictwise_net.aspx?id=FIN'],
         'cols'  : ['Sanitary_Complex_Appr.(C+S+B)', 'Sanitary_Complex_Exp.(C+S+B)'], 
@@ -161,7 +159,7 @@ var stories = [
         'legend': { '%Size%':'Total approved - Sanitary Complexes', '%Colour%':'Total expenses - SC / Total approved - SC'  }
     }),
     treemap_story({
-        'menu'  : 'Financial Progress',
+        'menu'  : 'Money spent',
         'title' : 'Project outlay used - Anganwadi',
         'url'   : ['http://tsc.gov.in/tsc/Report/Financial/RptPercentageFinComponentStatewiseDistrictwise_net.aspx?id=FIN'],
         'cols'  : ['Anganwadi_Appr.(C+S+B)', 'Anganwadi_Exp.(C+S+B)'],
@@ -173,7 +171,7 @@ var stories = [
         'legend': { '%Size%':'Total approved - Anganwadi', '%Colour%':'Total expenses - Anganwadi / Total approved - Anganwadi'  }
     }),
     treemap_story({
-        'menu'  : 'Financial Progress',
+        'menu'  : 'Money spent',
         'title' : 'Share of centre - Approved',
         'url'   : ['http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home'],
         'cols'  : ['Total_Projects_Outlay', 'ApprShare_Center', 'ApprShare_State', 'ApprShare_Beneficiary'],
@@ -186,7 +184,7 @@ var stories = [
         'legend': { '%Size%': 'Total outlay', '%Colour%': 'Approved centre share / Total approved' }
     }),
     treemap_story({
-        'menu'  : 'Financial Progress',
+        'menu'  : 'Money spent',
         'title' : 'Share of centre - Released',
         'cols'  : ['Total_Projects_Outlay', 'Rof_Center', 'Rof_Total'],
         'url'   : ['http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home'],
@@ -198,7 +196,7 @@ var stories = [
         'legend': { '%Size%': 'Total outlay', '%Colour%': 'Released centre share / Total released' }
     }),
     treemap_story({
-        'menu'  : 'Financial Progress',
+        'menu'  : 'Money spent',
         'title' : 'Share of centre - Expenditure',
         'url'   : ['http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home'],
         'cols'  : ['Total_Projects_Outlay', 'ExpReported_Center', 'ExpReported_Total'],
@@ -210,7 +208,7 @@ var stories = [
         'legend': { '%Size%': 'Total outlay', '%Colour%': 'Centre expenses / Total expenses' }
     }),
     stack_story({
-        'menu'  : 'Financial Progress',
+        'menu'  : 'Money spent',
         'title' : 'Source of funding',
         'url'   : ['http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home'],
         'cols'  : ['ApprShare_Center', 'ApprShare_State', 'ApprShare_Beneficiary', 'Rof_Center', 'Rof_State', 'Rof_Beneficiary', 'Rof_Total', 'ExpReported_Center', 'ExpReported_State', 'ExpReported_Beneficiary'],
@@ -242,7 +240,7 @@ var stories = [
         'legend': { '%Blue%': 'Centre', '%Red%': 'State', '%Green%': 'Beneficiary' }
     }),
     stack_story({
-        'menu'  : 'Financial Progress',
+        'menu'  : 'Money spent',
         'title' : 'SC + ST of APL & BPL in  Total IHHL',
         'url'   : ['http://tsc.gov.in/tsc/Report/Physical/RptCategoriesIHHLStatewiseDistrictwise_net.aspx?id=PHY'],
         'cols'  : ['IHHL_APL_Ach_SC', 'IHHL_APL_Ach_ST', 'IHHL_BPL_Ach_SC', 'IHHL_BPL_Ach_ST', 'IHHL_Objective_Total'],
@@ -262,7 +260,7 @@ var stories = [
     }),
 
     treemap_story({
-        'menu'  : 'Physical Progress',
+        'menu'  : 'Toilets built',
         'title' : '% toilets built below poverty household',
         'url'   : ['http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home'],
         'cols'  : ['PO_IHHL_BPL', 'PP_IHHL_BPL'],
@@ -274,7 +272,7 @@ var stories = [
         'legend': { '%Size%': 'Planned BPL toilets', '%Colour%': 'Built BPL toilets / Planned BPL toilets' }
     }),
     treemap_story({
-        'menu'  : 'Physical Progress',
+        'menu'  : 'Toilets built',
         'title' : '% toilets built above poverty household',
         'url'   : ['http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home'],
         'cols'  : ['PO_IHHL_APL', 'PP_IHHL_APL'], 
@@ -286,7 +284,7 @@ var stories = [
         'legend': { '%Size%': 'Planned APL toilets', '%Colour%': 'Built APL toilets / Planned APL toilets' }
     }),
     treemap_story({
-        'menu'  : 'Physical Progress',
+        'menu'  : 'Toilets built',
         'title' : 'Coverage of Toilets - Rural Households',
         'url'   : ['http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home'],
         'cols'  : ['IHHL_Total', 'Rural_Households'],
