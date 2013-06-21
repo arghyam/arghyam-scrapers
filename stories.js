@@ -112,7 +112,7 @@ function stack_story(story) {
 var stories = [
     treemap_story({
         'menu'  : 'Money spent',
-        'title' : 'Project outlay used',
+        'title' : 'Spending on rural sanitation',
         'url'   : ['http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home'],
         'cols'  : ['Total_Projects_Outlay', 'ExpReported_Total'],
         'group' : ['State_Name'],
@@ -124,7 +124,7 @@ var stories = [
     }),
     treemap_story({
         'menu'  : 'Money spent',
-        'title' : 'Project outlay used - BPL',
+        'title' : 'Money spent on building toilets for the rural poor',
         'url'   : ['http://tsc.gov.in/tsc/Report/Financial/RptPercentageFinComponentStatewiseDistrictwise_net.aspx?id=FIN'],
         'cols'  : ['BPL_Appr.(C+S+B)', 'BPL_Exp.(C+S+B)'],
         'group' : ['State_Name'],
