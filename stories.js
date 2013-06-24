@@ -209,7 +209,8 @@ var stories = [
     }),
     stack_story({
         'menu'  : 'Money spent',
-        'title' : 'Source of funding',
+        'title' : 'Money given vs. Money spent',
+				'subtitle' : 'Share of centre, State and People (Beneficiaries)',
         'url'   : ['http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home'],
         'cols'  : ['ApprShare_Center', 'ApprShare_State', 'ApprShare_Beneficiary', 'Rof_Center', 'Rof_State', 'Rof_Beneficiary', 'Rof_Total', 'ExpReported_Center', 'ExpReported_State', 'ExpReported_Beneficiary'],
         'group' : ['State_Name', 'District_Name'],

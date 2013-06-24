@@ -117,6 +117,7 @@ function draw(story) {
   // Set the title and story
   d3.select('#menu').text(story.menu);
   d3.select('#title').text(story.title);
+  d3.select('#subtitle').text(story.subtitle);
   d3.select('#story').text(story.story);
   d3.selectAll('#legend p').remove();
   d3.select('#legend').append('p').html(legends[story.type].replace(/%\w+%/g, function(all){ return story.legend[all] || all; }));
