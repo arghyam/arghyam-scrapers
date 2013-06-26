@@ -184,6 +184,10 @@ function draw_treemap(story) {
 			.attr('stroke', '#fff')
       .append('title')
         .text(story.hover);
+		node.on('mouseover', function(d){ 
+			var details = d3.select(this).text(); 
+			$('#copy_title').val(details).select();							
+		});	
     node.exit().remove();
 		node.enter().append('text')
       .call(position)
@@ -205,7 +209,7 @@ function draw_treemap(story) {
         .data(groups)
       .enter()
         .append('option')
-        .text(function(d) { return d; });
+        .text(String);
     select.on('change', function() {
       var group = d3.select(this).property('value');
       svg.selectAll('rect').classed('mark', false);
@@ -317,6 +321,8 @@ function draw_scatter(story) {
         var q = d3.select(this).attr('data-q');
         svg.selectAll('.show').classed('show', false);
         svg.selectAll('circle[data-q="' + q + '"]').classed('show', true);
+				var details = d3.select(this).text(); 
+				$('#copy_title').val(details).select();	
       })
       .on('mouseout', function() {
         svg.selectAll('.show').classed('show', false);

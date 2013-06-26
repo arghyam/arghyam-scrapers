@@ -116,9 +116,9 @@ var stories = [
         'url'   : ['http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home'],
         'cols'  : ['Total_Projects_Outlay', 'ExpReported_Total'],
         'group' : ['State_Name'],
-        'area'  : ['Total outlay', 'Total_Projects_Outlay'],
-        'num'   : ['Total expenses', 'ExpReported_Total'],
-        'den'   : ['Total outlay', 'Total_Projects_Outlay'],
+        'area'  : ['Total plan', 'Total_Projects_Outlay'],
+        'num'   : ['Total spent', 'ExpReported_Total'],
+        'den'   : ['Total plan', 'Total_Projects_Outlay'],
         'story' : 'Story to be written...',
         'legend': { '%Size%':'Total plan', '%Colour%':'Total spent / Total plan'  }
     }),
@@ -128,9 +128,9 @@ var stories = [
         'url'   : ['http://tsc.gov.in/tsc/Report/Financial/RptPercentageFinComponentStatewiseDistrictwise_net.aspx?id=FIN'],
         'cols'  : ['BPL_Appr.(C+S+B)', 'BPL_Exp.(C+S+B)'],
         'group' : ['State_Name'],
-        'area'  : ['Total approved - BPL', 'BPL_Appr.(C+S+B)'],
-        'num'   : ['Total expenses - BPL', 'BPL_Exp.(C+S+B)'],
-        'den'   : ['Total approved - BPL', 'BPL_Appr.(C+S+B)'],
+        'area'  : ['Total plan - BPL', 'BPL_Appr.(C+S+B)'],
+        'num'   : ['Total spent - BPL', 'BPL_Exp.(C+S+B)'],
+        'den'   : ['Total plan - BPL', 'BPL_Appr.(C+S+B)'],
         'story' : 'Story to be written...',
         'legend': { '%Size%':'Total plan - BPL', '%Colour%':'Total spent - BPL / Total plan - BPL'  }
     }),
@@ -140,9 +140,9 @@ var stories = [
         'url'   : ['http://tsc.gov.in/tsc/Report/Financial/RptPercentageFinComponentStatewiseDistrictwise_net.aspx?id=FIN'],
         'cols'  : ['School_Appr.(C+S+B)', 'School_Exp.(C+S+B)'],
         'group' : ['State_Name'],
-        'area'  : ['Total approved - School', 'School_Appr.(C+S+B)'],
-        'num'   : ['Total expenses - School', 'School_Exp.(C+S+B)'],
-        'den'   : ['Total approved - School', 'School_Appr.(C+S+B)'],
+        'area'  : ['Total plan - School', 'School_Appr.(C+S+B)'],
+        'num'   : ['Total spent - School', 'School_Exp.(C+S+B)'],
+        'den'   : ['Total plan - School', 'School_Appr.(C+S+B)'],
         'story' : 'Story to be written...',
         'legend': { '%Size%':'Total plan - School', '%Colour%':'Total spent - School / Total plan - School'  }
     }),
@@ -152,9 +152,9 @@ var stories = [
         'url'   : ['http://tsc.gov.in/tsc/Report/Financial/RptPercentageFinComponentStatewiseDistrictwise_net.aspx?id=FIN'],
         'cols'  : ['Sanitary_Complex_Appr.(C+S+B)', 'Sanitary_Complex_Exp.(C+S+B)'], 
         'group' : ['State_Name'],
-        'area'  : ['Total approved - Sanitary Complexes', 'Sanitary_Complex_Appr.(C+S+B)'],
-        'num'   : ['Total expenses - Sanitary Complexes', 'Sanitary_Complex_Exp.(C+S+B)'],
-        'den'   : ['Total approved - Sanitary Complexes', 'Sanitary_Complex_Appr.(C+S+B)'],
+        'area'  : ['Total plan - Sanitary Complexes', 'Sanitary_Complex_Appr.(C+S+B)'],
+        'num'   : ['Total spent - Sanitary Complexes', 'Sanitary_Complex_Exp.(C+S+B)'],
+        'den'   : ['Total plan - Sanitary Complexes', 'Sanitary_Complex_Appr.(C+S+B)'],
         'story' : 'Story to be written...',
         'legend': { '%Size%':'Total plan - Sanitary Complexes', '%Colour%':'Total spent - SC / Total plan - SC'  }
     }),
@@ -164,9 +164,9 @@ var stories = [
         'url'   : ['http://tsc.gov.in/tsc/Report/Financial/RptPercentageFinComponentStatewiseDistrictwise_net.aspx?id=FIN'],
         'cols'  : ['Anganwadi_Appr.(C+S+B)', 'Anganwadi_Exp.(C+S+B)'],
         'group' : ['State_Name'],
-        'area'  : ['Total approved - Anganwadi', 'Anganwadi_Appr.(C+S+B)'],
-        'num'   : ['Total expenses - Anganwadi', 'Anganwadi_Exp.(C+S+B)'],
-        'den'   : ['Total approved - Anganwadi', 'Anganwadi_Appr.(C+S+B)'],
+        'area'  : ['Total plan - Anganwadi', 'Anganwadi_Appr.(C+S+B)'],
+        'num'   : ['Total spent - Anganwadi', 'Anganwadi_Exp.(C+S+B)'],
+        'den'   : ['Total plan - Anganwadi', 'Anganwadi_Appr.(C+S+B)'],
         'story' : 'Story to be written...',
         'legend': { '%Size%':'Total plan - Anganwadi', '%Colour%':'Total spent - Anganwadi / Total plan - Anganwadi'  }
     }),
@@ -176,10 +176,10 @@ var stories = [
         'url'   : ['http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home'],
         'cols'  : ['Total_Projects_Outlay', 'ApprShare_Center', 'ApprShare_State', 'ApprShare_Beneficiary'],
         'group' : ['State_Name'],
-        'area'  : ['Total outlay', 'Total_Projects_Outlay'],
-        'num'   : ['Approved centre share', 'ApprShare_Center'],
-        // Total approved <=> ApprShare_Center + ApprShare_State + ApprShare_Beneficiary - According to data
-        'den'   : ['Total approved', ['ApprShare_Center', 'ApprShare_State', 'ApprShare_Beneficiary']],
+        'area'  : ['Total plan', 'Total_Projects_Outlay'],
+        'num'   : ['Plan centre share', 'ApprShare_Center'],
+        // Total plan <=> ApprShare_Center + ApprShare_State + ApprShare_Beneficiary - According to data
+        'den'   : ['Total plan', ['ApprShare_Center', 'ApprShare_State', 'ApprShare_Beneficiary']],
         'story' : 'Story to be written...',
         'legend': { '%Size%': 'Total plan', '%Colour%': 'Plan centre share / Total plan' }
     }),
@@ -189,7 +189,7 @@ var stories = [
         'cols'  : ['Total_Projects_Outlay', 'Rof_Center', 'Rof_Total'],
         'url'   : ['http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home'],
         'group' : ['State_Name'],
-        'area'  : ['Total outlay', 'Total_Projects_Outlay'],
+        'area'  : ['Total plan', 'Total_Projects_Outlay'],
         'num'   : ['Released centre share', 'Rof_Center'],
         'den'   : ['Total released', 'Rof_Total'],
         'story' : 'Story to be written...',
@@ -201,9 +201,9 @@ var stories = [
         'url'   : ['http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home'],
         'cols'  : ['Total_Projects_Outlay', 'ExpReported_Center', 'ExpReported_Total'],
         'group' : ['State_Name'],
-        'area'  : ['Total outlay', 'Total_Projects_Outlay'],
-        'num'   : ['Centre expenses', 'ExpReported_Center'],
-        'den'   : ['Total expenses', 'ExpReported_Total'],
+        'area'  : ['Total plan', 'Total_Projects_Outlay'],
+        'num'   : ['Centre spent', 'ExpReported_Center'],
+        'den'   : ['Total spent', 'ExpReported_Total'],
         'story' : 'Story to be written...',
         'legend': { '%Size%': 'Total plan', '%Colour%': 'Centre spent / Total spent' }
     }),
@@ -215,7 +215,7 @@ var stories = [
         'cols'  : ['ApprShare_Center', 'ApprShare_State', 'ApprShare_Beneficiary', 'Rof_Center', 'Rof_State', 'Rof_Beneficiary', 'Rof_Total', 'ExpReported_Center', 'ExpReported_State', 'ExpReported_Beneficiary'],
         'group' : ['State_Name', 'District_Name'],
         'stack' : [
-            // Approved
+            // Plan
             function(d) { return cumsum([
                 +d['ApprShare_Center']      / (+d['ApprShare_Center'] + +d['ApprShare_State'] + +d['ApprShare_Beneficiary']),
                 +d['ApprShare_State']       / (+d['ApprShare_Center'] + +d['ApprShare_State'] + +d['ApprShare_Beneficiary']),
@@ -227,7 +227,7 @@ var stories = [
                 +d['Rof_State']       / +d['Rof_Total'],
                 +d['Rof_Beneficiary'] / +d['Rof_Total']
             ]); },
-            // Expenditure
+            // Spending
             function(d) { return cumsum([
                 +d['ExpReported_Center']      / (+d['ExpReported_Center'] + +d['ExpReported_State'] + +d['ExpReported_Beneficiary']),
                 +d['ExpReported_State']       / (+d['ExpReported_Center'] + +d['ExpReported_State'] + +d['ExpReported_Beneficiary']),
@@ -304,7 +304,7 @@ var stories = [
         'cols'  : ['PO_IHHL_BPL', 'PP_IHHL_BPL', 'ExpReported_Total', 'Total_Projects_Outlay'],
         'group' : ['State_Name'],
         'area'  : ['# BPL toilets required', function(d) { return +d['PO_IHHL_BPL']; }],
-        'x'     : ['Expenses / Outlay', function(d) { return d['ExpReported_Total'] / d['Total_Projects_Outlay']; }],
+        'x'     : ['Spent / Plan', function(d) { return d['ExpReported_Total'] / d['Total_Projects_Outlay']; }],
         'y'     : ['% BPL toilets constructed', function(d) { return d['PP_IHHL_BPL'] / d['PO_IHHL_BPL']; }],
         'R'     : 40,
         'xdom'  : [0, 1.5],
@@ -323,7 +323,7 @@ var stories = [
         'cols'  : ['BPL_WT', 'BPL_WOT', 'ExpReported_Total', 'Total_Projects_Outlay', 'PP_IHHL_BPL', 'BPL_WT', 'BPL_WOT'],
         'group' : ['State_Name'],
         'area'  : ['# BPL toilets required', function(d) { return +d['BPL_WT'] + +d['BPL_WOT']; }],
-        'x'     : ['Expenses / Outlay', function(d) { return d['ExpReported_Total'] / d['Total_Projects_Outlay']; }],
+        'x'     : ['Spent / Plan', function(d) { return d['ExpReported_Total'] / d['Total_Projects_Outlay']; }],
         'y'     : ['% BPL Households with toilet', function(d) { return +d['PP_IHHL_BPL'] / (+d['BPL_WT'] + +d['BPL_WOT']); }],
         'R'     : 40,
         'xdom'  : [0, 1.5],
