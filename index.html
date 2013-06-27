@@ -113,10 +113,6 @@
       font-size:1em;
       font-family:arial;
     }
-		#hover_container{
-			position:relative;
-			bottom:1000px;			
-		}
   </style>
   <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
 </head><body>
@@ -127,6 +123,14 @@
       <ul class="nav">
         <!-- li><a href="#">About</a></li -->
       </ul>
+			<ul style="padding:5px;" class="nav pull-right">
+				<li>
+					<div class="form-inline">
+						<label for="copy_title">Ctrl+c to Copy text </label>
+						<input type="text" id="copy_title">
+					</div>
+				</li>	
+			</ul>
     </div>
   </div>
 </div>
@@ -163,7 +167,6 @@
   </p>
   <div><strong>Source</strong>:</div>
   <div id="source"></div>
-	<div id="hover_container"><input id="copy_title"></div>
 </div>
 <div id="about" class="container">
   <h2>Ministry of Water &amp; Sanitation</h2>

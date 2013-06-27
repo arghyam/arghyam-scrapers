@@ -205,6 +205,7 @@ function draw_treemap(story) {
     var subselect = legend.append('select').attr('class', 'districts');
     var groups = _.uniq(_.pluck(data, story.group[0]));
     groups.unshift('');
+		groups.pop();
     select.selectAll('option')
         .data(groups)
       .enter()
@@ -252,7 +253,7 @@ function draw_scatter(story) {
     var subselect = legend.append('select').attr('class', 'districts');
     var groups = _.uniq(_.pluck(data, story.group[0]));
     groups.unshift('');
-	groups.pop();
+		groups.pop();
     select.selectAll('option')
         .data(groups)
       .enter()
