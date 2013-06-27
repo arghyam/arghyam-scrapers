@@ -150,7 +150,7 @@ var stories = [
         'menu'  : 'Money spent',
         'title' : 'Project plan used - Sanitary Complexes',
         'url'   : ['http://tsc.gov.in/tsc/Report/Financial/RptPercentageFinComponentStatewiseDistrictwise_net.aspx?id=FIN'],
-        'cols'  : ['Sanitary_Complex_Appr.(C+S+B)', 'Sanitary_Complex_Exp.(C+S+B)'], 
+        'cols'  : ['Sanitary_Complex_Appr.(C+S+B)', 'Sanitary_Complex_Exp.(C+S+B)'],
         'group' : ['State_Name'],
         'area'  : ['Total plan - Sanitary Complexes', 'Sanitary_Complex_Appr.(C+S+B)'],
         'num'   : ['Total spent - Sanitary Complexes', 'Sanitary_Complex_Exp.(C+S+B)'],
@@ -276,7 +276,7 @@ var stories = [
         'menu'  : 'Toilets built',
         'title' : '% toilets built above poverty household',
         'url'   : ['http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home'],
-        'cols'  : ['PO_IHHL_APL', 'PP_IHHL_APL'], 
+        'cols'  : ['PO_IHHL_APL', 'PP_IHHL_APL'],
         'group' : ['State_Name'],
         'area'  : ['Planned APL toilets', 'PO_IHHL_APL'],
         'num'   : ['Built APL toilets', 'PP_IHHL_APL'],
@@ -338,6 +338,8 @@ var stories = [
 
 // List of the historical data files, latest on top
 var datafiles = [
+    'data-2013-06-25.csv'
+    'data-2013-06-16.csv'
     'data-2013-06-09.csv',
     'data-2013-06-02.csv',
     'data-2013-05-29.csv',
