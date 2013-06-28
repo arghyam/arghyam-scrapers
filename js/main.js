@@ -386,6 +386,7 @@ function draw_scatter(story) {
   });
 }
 function draw_stack(story) {
+	d3.selectAll('.y1').remove();
   d3.csv(datafile(), function(data) {
     var subset = initchart(story, data);
     draw_date(data[data.length-1], story);
@@ -447,14 +448,47 @@ function draw_stack(story) {
             });
       return update;
     }
+		var x0 = d3.scale.linear().domain([0, 100]).range([150, 350]);
+		var x1 = d3.scale.linear().domain([0, 100]).range([550, 750]);
     var v0 = showstack('v0', nodes.entries(subset), 150, 16, 200);
+		v0.append('g').selectAll('.vert0')
+			.data(d3.range(20, 100, 20))
+     .enter().append('line')
+			.attr('class','vert0')
+			.attr('x1', x0)
+			.attr('y1', 0)
+			.attr('x2', x0)
+			.attr('y2', svg.style('height'));			
+		svg.append('g').selectAll('.y1')
+      .data(d3.range(20, 100, 20))
+     .enter().append('text')
+			.attr('class', 'y1')
+			.attr('x', x0)
+			.attr('y', 10)
+			.text(function(d){ return d + '%';});
     v0.on('click', function() {
+			d3.selectAll('.y2').remove();
       svg.selectAll('.mark').classed('mark', false);
       var filter = d3.select(this)
         .classed('mark', true)
         .attr('data-q');
       var subdata = _.filter(subset, function(d) { return d[story.group[0]] == filter; });
-      showstack('v1', leaves.entries(subdata), 550, 12, 200);
+      var v1 = showstack('v1', leaves.entries(subdata), 550, 12, 200);
+			v1.append('g').selectAll('.vert1')
+				.data(d3.range(20, 100, 20))
+       .enter().append('line')
+				.attr('class','vert1')
+				.attr('x1', x1)
+				.attr('y1', 0)
+				.attr('x2', x1)
+				.attr('y2', svg.style('height'));	
+			svg.append('g').selectAll('.y2')
+				.data(d3.range(20, 100, 20))
+			 .enter().append('text')
+				.attr('class', 'y2')
+				.attr('x', x1)
+				.attr('y', 8)
+				.text(function(d){ return d + '%';});
     });
   });
 }
