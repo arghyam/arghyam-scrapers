@@ -145,15 +145,15 @@ function draw_treemap(story) {
   var gradient = d3.select('#gradient');
   gradient.append('rect').attr('x', 0).attr('y', 0)
     .attr('width', 958).attr('height', 30)
-    .attr('fill', 'url(#gradient_legend)');
+    .attr('fill', 'url(#'+ story.grad +')');
   gradient.selectAll('text')
-    .data([5, 37, 70, 95]) // gradient percentage from svg defs
+    .data(story.percent) // gradient percentage from svg defs
    .enter().append('text')
     .attr('x', function(d){ return d + '%';})
     .attr('y', 20)
-    .data([0, 50, 100, 200]) // color domain
+    .data(story.pertext) // color domain
     .text(function(d){ return d + '%'; })
-    .style('fill', function(d, i){ return i == 1 ? 'black' : 'white';});
+    .style('fill', function(d, i){ return i == 3 ? 'white' : 'black';});
   // Filter the data
   d3.csv(datafile(), function(data) {
     var subset = initchart(story, data);
