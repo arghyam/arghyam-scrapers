@@ -124,7 +124,7 @@ var stories = [
         'den'    : ['Total plan', 'Total_Projects_Outlay'],
         'story'  : 'Story to be written...',
         'legend' : { '%Size%':'Total plan', '%Colour%':'Total spent / Total plan' },
-				'grad'   : 'gradient_legend',
+				'grad'   : 'gradient_legend_SocP',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200]
     }),
