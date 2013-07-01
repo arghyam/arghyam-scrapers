@@ -118,8 +118,7 @@
 
   function getSources(doc, styles) {
     var svgInfo = [],
-        svgs = d3.select(doc).select("#chart");
-
+    svgs = d3.select(doc).select("#chart"),
     styles = (styles === undefined) ? "" : styles;
 
     svgs.each(function () {
@@ -162,12 +161,12 @@
   function download(source) {
     var filename = "untitled";
 
-    if (source.id) {
+    if (window.document.getElementById('title')) {	
+			filename = window.document.getElementById('title').innerHTML.replace(/[^a-z0-9%]/gi, '_');
+    }else if (source.id) {
       filename = source.id;
-    } else if (source.class) {
+    }else if (source.class) {
       filename = source.class;
-    } else if (window.document.title) {
-      filename = window.document.title.replace(/[^a-z0-9]/gi, '-').toLowerCase();
     }
 
     var url = window.URL.createObjectURL(new Blob(source.source, { "type" : "text\/xml" }));
