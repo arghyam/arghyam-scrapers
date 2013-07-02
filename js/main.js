@@ -124,6 +124,7 @@ function draw(story) {
   d3.selectAll('#columns text').remove();
   d3.select('#columns').text(story.cols.join(", "));
   d3.selectAll('#source a').remove();
+	d3.select('#chart').attr('height', 500);
   d3.select('#source').selectAll('a')
       .data(story.url)
     .enter()
@@ -268,7 +269,7 @@ function draw_scatter(story) {
           .classed('fade', false)
           .classed('show', true);
       } else {
-		draw_scatter(story);
+				draw_scatter(story);
         svg.selectAll('circle.fade').classed('fade', false);
         svg.selectAll('circle.mark').classed('mark', false);
       }
@@ -404,8 +405,9 @@ function draw_stack(story) {
     };
     var nodes = grouper(story.group[0]);
     var leaves = grouper(story.group[1]);
-    var ypad = 1;
-    function showstack(cls, data, x0, H, W) {
+    var ypad = 0.5;
+    function showstack(cls, data, x0, H, W, h) {
+			svg.attr('height', function(d){ return d3.max([story.barheight*h, story.height]);});
       svg.selectAll('g.' + cls).remove();
       var update = svg.selectAll('g.' + cls)
           .data(data);
@@ -450,7 +452,7 @@ function draw_stack(story) {
     }
 		var x0 = d3.scale.linear().domain([0, 100]).range([150, 350]);
 		var x1 = d3.scale.linear().domain([0, 100]).range([550, 750]);
-    var v0 = showstack('v0', nodes.entries(subset), 150, 16, 200);
+    var v0 = showstack('v0', nodes.entries(subset), 150, 16, 200, 30);
 		v0.append('g').selectAll('.vert0')
 			.data(d3.range(20, 100, 20))
      .enter().append('line')
@@ -467,13 +469,15 @@ function draw_stack(story) {
 			.attr('y', 10)
 			.text(function(d){ return d + '%';});
     v0.on('click', function() {
+			d3.select('#chart').attr('height', story.height);
 			d3.selectAll('.y2').remove();
       svg.selectAll('.mark').classed('mark', false);
       var filter = d3.select(this)
         .classed('mark', true)
         .attr('data-q');
       var subdata = _.filter(subset, function(d) { return d[story.group[0]] == filter; });
-      var v1 = showstack('v1', leaves.entries(subdata), 550, 12, 200);
+			var	tempheight = subdata.length;
+      var v1 = showstack('v1', leaves.entries(subdata), 550, 16, 200, tempheight);
 			v1.append('g').selectAll('.vert1')
 				.data(d3.range(20, 100, 20))
        .enter().append('line')
@@ -487,7 +491,7 @@ function draw_stack(story) {
 			 .enter().append('text')
 				.attr('class', 'y2')
 				.attr('x', x1)
-				.attr('y', 8)
+				.attr('y', 10)
 				.text(function(d){ return d + '%';});
     });
   });

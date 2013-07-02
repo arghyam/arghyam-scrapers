@@ -2,10 +2,12 @@ var color = d3.scale.linear()
     .clamp(true)
     .domain([0, 0.5, 1, 2])
     .range(['#D73027', '#FFFFBF', '#1A9850', '#000']);
+		
 var	colorsSocP = d3.scale.linear()
 		.clamp(true)
 		.domain([0, 0.6, 0.6, 0.7, 0.7, 2])
 		.range(['#D73027', '#D73027', '#90EE90', '#90EE90', '#1A9850', '#000']);		
+		
 // Display formats
 var F = d3.format(',.0f'); // Float
 var N = d3.format(',.0f'); // Number == int
@@ -267,6 +269,8 @@ var stories = [
         'rows'   : ['Plan', 'Released', 'Spending'],
         'cells'  : ['Centre', 'State', 'Beneficiary'],
         'colors' : ['#4f81bd', '#c0504d', '#9bbb59'],
+				'height' : '500',
+				'barheight' : '16.4',
         'story'  : 'Story to be written...',
         'legend' : { '%Blue%': 'Centre', '%Red%': 'State', '%Green%': 'Beneficiary' }
     }),
@@ -285,6 +289,8 @@ var stories = [
         'rows'   : ['% SC/ST'],
         'cells'  : ['APL', 'BPL', 'Others'],
         'colors' : ['#4f81bd', '#c0504d', '#9bbb59'],
+				'height' : '500',
+				'barheight' : '16.4',
         'story'  : 'Story to be written...',
         'legend' : { '%Blue%': 'APL SC + ST', '%Red%': 'BPL SC + ST', '%Green%': 'Others' }
     }),
