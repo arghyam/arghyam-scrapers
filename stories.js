@@ -327,7 +327,8 @@ var stories = [
     treemap_story({
         'menu'   : 'Toilets built',
         'title'  : 'Coverage of Toilets - Rural Households',
-        'url'    : ['http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home'],
+        'url'    : ['http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home',
+										'http://www.indiawaterportal.org/data/2011-census-household-tables-0'],
         'cols'   : ['IHHL_Total', 'Rural_Households'],
         'group'  : ['State_Name'],
         'area'   : ['Total Rural Households' , ['Rural_Households']],
