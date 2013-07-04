@@ -269,8 +269,8 @@ var stories = [
         'rows'   : ['Plan', 'Released', 'Spending'],
         'cells'  : ['Centre', 'State', 'Beneficiary'],
         'colors' : ['#4f81bd', '#c0504d', '#9bbb59'],
-				'height' : '500',
-				'barheight' : '16.4',
+				'height' : '1370',
+				'ydom'   : '45',
         'story'  : 'Story to be written...',
         'legend' : { '%Blue%': 'Centre', '%Red%': 'State', '%Green%': 'Beneficiary' }
     }),
@@ -290,7 +290,7 @@ var stories = [
         'cells'  : ['APL', 'BPL', 'Others'],
         'colors' : ['#4f81bd', '#c0504d', '#9bbb59'],
 				'height' : '500',
-				'barheight' : '16.4',
+				'ydom'   : '15',
         'story'  : 'Story to be written...',
         'legend' : { '%Blue%': 'APL SC + ST', '%Red%': 'BPL SC + ST', '%Green%': 'Others' }
     }),

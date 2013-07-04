@@ -405,9 +405,9 @@ function draw_stack(story) {
     };
     var nodes = grouper(story.group[0]);
     var leaves = grouper(story.group[1]);
-    var ypad = 0.5;
+    var ypad = 2;
     function showstack(cls, data, x0, H, W, h) {
-			svg.attr('height', function(d){ return d3.max([story.barheight*h, story.height]);});
+			svg.attr('height', d3.max([(story.ydom * h + H), story.height]));
       svg.selectAll('g.' + cls).remove();
       var update = svg.selectAll('g.' + cls)
           .data(data);
@@ -415,14 +415,14 @@ function draw_stack(story) {
           .append('g')
           .classed(cls, true)
           .attr('data-q', function(d) { return d.key; })
-          .attr('transform', function(d, i) { return 'translate(0, ' + (H + i * H) + ')'; });
+          .attr('transform', function(d, i) { return 'translate(0, ' + (H + i * parseInt(story.ydom)) + ')'; });
       enter.append('text')
           .text(function(d) { return d.key; })
           .attr('x', x0 - 10)
           .attr('y', H/2)
           .attr('text-anchor', 'end')
           .attr('dominant-baseline', 'middle')
-          .attr('font-size', H * 0.75);
+          .attr('font-size', H * 0.8);
       // For each state
       var rows = enter.selectAll('g.row')
           // Create an array of arrays of [row, row, row], where row = [cell, cell, cell]
@@ -432,7 +432,7 @@ function draw_stack(story) {
           .append('g')
           .classed('row', true)
           // Vertically position each row
-          .attr('transform', function(d, i) { return 'translate(0,' + i * (H - ypad*3)/story.stack.length + ')'; })
+          .attr('transform', function(d, i) { return 'translate(0,' + i * H + ')'; })
           .attr('data-row', function(d, i) { return story.rows[i]; });
       // Within each row, draw the cells
       rows.selectAll('rect')
@@ -441,7 +441,7 @@ function draw_stack(story) {
           .append('rect')
           .attr('x', function(d) { return x0 + W * d[0]; })
           .attr('width', function(d) { return W * d[1]; })
-          .attr('height', (H - ypad*3)/story.stack.length - ypad)
+          .attr('height', (H - ypad))
           .attr('fill', function(d, i) { return story.colors[i]; })
           .append('title')
             .text(function(d, i) {
@@ -452,7 +452,7 @@ function draw_stack(story) {
     }
 		var x0 = d3.scale.linear().domain([0, 100]).range([150, 350]);
 		var x1 = d3.scale.linear().domain([0, 100]).range([550, 750]);
-    var v0 = showstack('v0', nodes.entries(subset), 150, 16, 200, 30);
+    var v0 = showstack('v0', nodes.entries(subset), 150, 15, 200, 1);
 		v0.append('g').selectAll('.vert0')
 			.data(d3.range(20, 100, 20))
      .enter().append('line')
@@ -476,8 +476,8 @@ function draw_stack(story) {
         .classed('mark', true)
         .attr('data-q');
       var subdata = _.filter(subset, function(d) { return d[story.group[0]] == filter; });
-			var	tempheight = subdata.length;
-      var v1 = showstack('v1', leaves.entries(subdata), 550, 16, 200, tempheight);
+			var	datalength = subdata.length;
+      var v1 = showstack('v1', leaves.entries(subdata), 550, 15, 200, datalength);
 			v1.append('g').selectAll('.vert1')
 				.data(d3.range(20, 100, 20))
        .enter().append('line')
