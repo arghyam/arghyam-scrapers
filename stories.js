@@ -269,8 +269,9 @@ var stories = [
         'rows'   : ['Plan', 'Released', 'Spending'],
         'cells'  : ['Centre', 'State', 'Beneficiary'],
         'colors' : ['#4f81bd', '#c0504d', '#9bbb59'],
-				'height' : '1370',
+				'height' : '1430',
 				'ydom'   : '45',
+				'lines'  : 'true', 
         'story'  : 'Story to be written...',
         'legend' : { '%Blue%': 'Centre', '%Red%': 'State', '%Green%': 'Beneficiary' }
     }),
@@ -289,8 +290,9 @@ var stories = [
         'rows'   : ['% SC/ST'],
         'cells'  : ['APL', 'BPL', 'Others'],
         'colors' : ['#4f81bd', '#c0504d', '#9bbb59'],
-				'height' : '500',
+				'height' : '530',
 				'ydom'   : '15',
+				'lines'  : 'false',
         'story'  : 'Story to be written...',
         'legend' : { '%Blue%': 'APL SC + ST', '%Red%': 'BPL SC + ST', '%Green%': 'Others' }
     }),
@@ -382,6 +384,7 @@ var stories = [
 
 // List of the historical data files, latest on top
 var datafiles = [
+    'data-2013-06-30.csv',
     'data-2013-06-25.csv',
     'data-2013-06-16.csv',
     'data-2013-06-09.csv',

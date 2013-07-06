@@ -125,6 +125,7 @@ function draw(story) {
   d3.select('#columns').text(story.cols.join(", "));
   d3.selectAll('#source a').remove();
 	d3.select('#chart').attr('height', 500);
+	d3.selectAll('.horiz0, .horiz1').remove();
   d3.select('#source').selectAll('a')
       .data(story.url)
     .enter()
@@ -407,19 +408,19 @@ function draw_stack(story) {
     var leaves = grouper(story.group[1]);
     var ypad = 2;
     function showstack(cls, data, x0, H, W, h) {
-			svg.attr('height', d3.max([(story.ydom * h + H), story.height]));
-      svg.selectAll('g.' + cls).remove();
+			svg.attr('height', d3.max([(story.ydom * h + h * ypad + H), story.height]));
+			svg.selectAll('g.' + cls).remove();
       var update = svg.selectAll('g.' + cls)
           .data(data);
       var enter = update.enter()
           .append('g')
           .classed(cls, true)
           .attr('data-q', function(d) { return d.key; })
-          .attr('transform', function(d, i) { return 'translate(0, ' + (H + i * parseInt(story.ydom)) + ')'; });
-      enter.append('text')
+          .attr('transform', function(d, i) { return 'translate(0, ' + (H + i * (parseInt(story.ydom) + ypad )) + ')'; });
+			enter.append('text')
           .text(function(d) { return d.key; })
           .attr('x', x0 - 10)
-          .attr('y', H/2)
+          .attr('y', story.ydom/2)
           .attr('text-anchor', 'end')
           .attr('dominant-baseline', 'middle')
           .attr('font-size', H * 0.8);
@@ -448,11 +449,21 @@ function draw_stack(story) {
               var g = this.parentNode.parentNode;
               return d3.select(g).attr('data-row') + ' ' + story.hover(d, i);
             });
+			if(story.lines == 'true'){
+				svg.append('g').selectAll('.horiz0')
+					.data(d3.range(30))
+					.enter().append('line')
+					.attr('class', 'horiz0')
+					.attr('x1', 0)
+					.attr('y1', function(d, i){ return (H + i * (parseInt(story.ydom)) + i * ypad + (parseInt(story.ydom)) ); })
+					.attr('x2', 430)
+					.attr('y2', function(d, i){ return (H + i * (parseInt(story.ydom)) + i * ypad + (parseInt(story.ydom)) ); });
+			}	
       return update;
     }
 		var x0 = d3.scale.linear().domain([0, 100]).range([150, 350]);
 		var x1 = d3.scale.linear().domain([0, 100]).range([550, 750]);
-    var v0 = showstack('v0', nodes.entries(subset), 150, 15, 200, 1);
+    var v0 = showstack('v0', nodes.entries(subset), 150, 15, 200, 30);
 		v0.append('g').selectAll('.vert0')
 			.data(d3.range(20, 100, 20))
      .enter().append('line')
@@ -471,6 +482,7 @@ function draw_stack(story) {
     v0.on('click', function() {
 			d3.select('#chart').attr('height', story.height);
 			d3.selectAll('.y2').remove();
+			d3.selectAll('.horiz1').remove();
       svg.selectAll('.mark').classed('mark', false);
       var filter = d3.select(this)
         .classed('mark', true)
@@ -493,6 +505,16 @@ function draw_stack(story) {
 				.attr('x', x1)
 				.attr('y', 10)
 				.text(function(d){ return d + '%';});
+			if(story.lines == 'true'){	
+				svg.append('g').selectAll('.horiz1')
+					.data(subdata)
+					.enter().append('line')
+					.attr('class', 'horiz1')
+					.attr('x1', 440)
+					.attr('y1', function(d, i){ return (15 + i * (parseInt(story.ydom)) + i * ypad + (parseInt(story.ydom)) ); })
+					.attr('x2', 830)
+					.attr('y2', function(d, i){ return (15 + i * (parseInt(story.ydom)) + i * ypad + (parseInt(story.ydom)) ); });	
+			}	
     });
   });
 }
