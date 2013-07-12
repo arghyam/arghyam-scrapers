@@ -444,10 +444,15 @@ function draw_stack(story) {
           .attr('width', function(d) { return W * d[1]; })
           .attr('height', (H - ypad))
           .attr('fill', function(d, i) { return story.colors[i]; })
+          .on('mouseover', function(){
+						var details = d3.select(this).text(); 
+						$('#copy_title').val(details).select();
+					})
           .append('title')
-            .text(function(d, i) {
-              var g = this.parentNode.parentNode;
-              return d3.select(g).attr('data-row') + ' ' + story.hover(d, i);
+            .text(function(d, i) { 
+              var s = this.parentNode.parentNode.parentNode;
+							var g = this.parentNode.parentNode;
+              return d3.select(s).attr('data-q') +': '+ d3.select(g).attr('data-row') + ', ' + story.hover(d, i);
             });
 			if(story.lines == 'true'){
 				svg.append('g').selectAll('.horiz0')
