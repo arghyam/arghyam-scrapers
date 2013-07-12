@@ -114,6 +114,7 @@ function stack_story(story) {
     return story;
 }
 
+var lakhs = 'All figures are in <strong>Rs lakhs</strong>.';
 var stories = [
     treemap_story({
         'menu'   : 'Money spent',
@@ -125,7 +126,7 @@ var stories = [
         'num'    : ['Total spent', 'ExpReported_Total'],
         'den'    : ['Total plan', 'Total_Projects_Outlay'],
         'story'  : 'Story to be written...',
-        'legend' : { '%Size%':'Total plan', '%Colour%':'Total spent / Total plan' },
+        'legend' : { '%Size%':'Total plan', '%Colour%':'Total spent / Total plan', '%rs%':'<br>'+lakhs },
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200]
@@ -140,7 +141,7 @@ var stories = [
         'num'    : ['Total spent - Rural poor', 'BPL_Exp.(C+S+B)'],
         'den'    : ['Total plan - Rural poor', 'BPL_Appr.(C+S+B)'],
         'story'  : 'Story to be written...',
-        'legend' : { '%Size%':'Total plan - Rural poor', '%Colour%':'Total spent - Rural poor / Total plan - Rural poor' },
+        'legend' : { '%Size%':'Total plan - Rural poor', '%Colour%':'Total spent - Rural poor / Total plan - Rural poor', '%rs%':'<br>'+lakhs },
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200]
@@ -155,7 +156,7 @@ var stories = [
         'num'    : ['Total spent - School', 'School_Exp.(C+S+B)'],
         'den'    : ['Total plan - School', 'School_Appr.(C+S+B)'],
         'story'  : 'Story to be written...',
-        'legend' : { '%Size%':'Total plan - School', '%Colour%':'Total spent - School / Total plan - School' },
+        'legend' : { '%Size%':'Total plan - School', '%Colour%':'Total spent - School / Total plan - School', '%rs%':'<br>'+lakhs },
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200]
@@ -170,7 +171,7 @@ var stories = [
         'num'    : ['Total spent - Sanitary Complexes', 'Sanitary_Complex_Exp.(C+S+B)'],
         'den'    : ['Total plan - Sanitary Complexes', 'Sanitary_Complex_Appr.(C+S+B)'],
         'story'  : 'Story to be written...',
-        'legend' : { '%Size%':'Total plan - Sanitary Complexes', '%Colour%':'Total spent - SC / Total plan - SC' },
+        'legend' : { '%Size%':'Total plan - Sanitary Complexes', '%Colour%':'Total spent - SC / Total plan - SC', '%rs%':'<br>'+lakhs },
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200]
@@ -185,7 +186,7 @@ var stories = [
         'num'    : ['Total spent - Anganwadi', 'Anganwadi_Exp.(C+S+B)'],
         'den'    : ['Total plan - Anganwadi', 'Anganwadi_Appr.(C+S+B)'],
         'story'  : 'Story to be written...',
-        'legend' : { '%Size%':'Total plan - Anganwadi', '%Colour%':'Total spent - Anganwadi / Total plan - Anganwadi' },
+        'legend' : { '%Size%':'Total plan - Anganwadi', '%Colour%':'Total spent - Anganwadi / Total plan - Anganwadi', '%rs%':'<br>'+lakhs },
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200]
@@ -205,7 +206,7 @@ var stories = [
 											sum(d, ['ApprShare_Center', 'ApprShare_State', 'ApprShare_Beneficiary'])).replace(/NaNNaNNaN/i, 'eee'); 
 								   },
         'story'  : 'Story to be written...',
-        'legend' : { '%Size%': 'Total plan', '%Colour%': 'Plan centre share / Total plan' },
+        'legend' : { '%Size%': 'Total plan', '%Colour%': 'Plan centre share / Total plan', '%rs%':'<br>'+lakhs },
 				'grad'   : 'gradient_legend_SocP',
 				'percent': [1, 30, 57, 95],
 				'pertext': [0, 60, 70, 200]
@@ -220,7 +221,7 @@ var stories = [
         'num'    : ['Released centre share', 'Rof_Center'],
         'den'    : ['Total released', 'Rof_Total'],
         'story'  : 'Story to be written...',
-        'legend' : { '%Size%': 'Total plan', '%Colour%': 'Released centre share / Total released' },
+        'legend' : { '%Size%': 'Total plan', '%Colour%': 'Released centre share / Total released', '%rs%':'<br>'+lakhs },
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200]	
@@ -235,7 +236,7 @@ var stories = [
         'num'    : ['Centre spent', 'ExpReported_Center'],
         'den'    : ['Total spent', 'ExpReported_Total'],
         'story'  : 'Story to be written...',
-        'legend' : { '%Size%': 'Total plan', '%Colour%': 'Centre spent / Total spent' },
+        'legend' : { '%Size%': 'Total plan', '%Colour%': 'Centre spent / Total spent', '%rs%':'<br>'+lakhs },
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200]	
@@ -306,7 +307,7 @@ var stories = [
         'num'    : ['Built Rural poor toilets', 'PP_IHHL_BPL'],
         'den'    : ['Planned Rural poor toilets', 'PO_IHHL_BPL'],
         'story'  : 'Story to be written...',
-        'legend' : { '%Size%': 'Planned Rural poor toilets', '%Colour%': 'Built Rural poor toilets / Planned Rural poor toilets' },
+        'legend' : { '%Size%': 'Planned Rural poor toilets', '%Colour%': 'Built Rural poor toilets / Planned Rural poor toilets', '%rs%':' ' },
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200]
@@ -321,7 +322,7 @@ var stories = [
         'num'    : ['Built APL toilets', 'PP_IHHL_APL'],
         'den'    : ['Planned APL toilets', 'PO_IHHL_APL'],
         'story'  : 'Story to be written...',
-        'legend' : { '%Size%': 'Planned APL toilets', '%Colour%': 'Built APL toilets / Planned APL toilets' },
+        'legend' : { '%Size%': 'Planned APL toilets', '%Colour%': 'Built APL toilets / Planned APL toilets', '%rs%':' ' },
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200]
@@ -337,7 +338,7 @@ var stories = [
         'num'    : ['Rural Households (WT)', ['IHHL_Total']],
         'den'    : ['Total Rural Households', ['Rural_Households']],
         'story'  : 'Story to be written...',
-        'legend' : { '%Size%': 'Total Rural Households', '%Colour%': 'Rural Households (WT) / Total Rural Households' },
+        'legend' : { '%Size%': 'Total Rural Households', '%Colour%': 'Rural Households (WT) / Total Rural Households', '%rs%':' ' },
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200]
