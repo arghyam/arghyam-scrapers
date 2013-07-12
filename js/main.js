@@ -72,7 +72,7 @@ var legends = {
              '<br>Colour = <strong>%Colour%</strong>. Red is low, green is high.' +
              '<br>All figures are in <strong>Rs lakhs</strong>.',
   'stack'  : 'Each row represents one State, showing the break-up of <strong>%Rows%</strong>.' +
-             'Click on it to reveal more boxes on the right representing each District.' + '<br> Blue = %Blue%, Red = %Red%, Green = %Green%.',
+             'Click on it to reveal more boxes on the right representing each District.' + '<br> Blue = <strong>%Blue%</strong>, Red = <strong>%Red%</strong>, Green = <strong>%Green%</strong>.',
   'scatter': 'Each circle represents one %Circle%. Hover over it to reveal all districts in the same State. The size of the circle represents %CircleSize%. The x-axis is based on %AxisX%. The y-axis is based on %AxisY%. The colour is based on the State. (Each district in a given state has the same colour).'
 };
 // Returns the name of the data file for the currently selected date.

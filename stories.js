@@ -136,11 +136,11 @@ var stories = [
         'url'    : ['http://tsc.gov.in/tsc/Report/Financial/RptPercentageFinComponentStatewiseDistrictwise_net.aspx?id=FIN'],
         'cols'   : ['BPL_Appr.(C+S+B)', 'BPL_Exp.(C+S+B)'],
         'group'  : ['State_Name'],
-        'area'   : ['Total plan - BPL', 'BPL_Appr.(C+S+B)'],
-        'num'    : ['Total spent - BPL', 'BPL_Exp.(C+S+B)'],
-        'den'    : ['Total plan - BPL', 'BPL_Appr.(C+S+B)'],
+        'area'   : ['Total plan - Rural poor', 'BPL_Appr.(C+S+B)'],
+        'num'    : ['Total spent - Rural poor', 'BPL_Exp.(C+S+B)'],
+        'den'    : ['Total plan - Rural poor', 'BPL_Appr.(C+S+B)'],
         'story'  : 'Story to be written...',
-        'legend' : { '%Size%':'Total plan - BPL', '%Colour%':'Total spent - BPL / Total plan - BPL' },
+        'legend' : { '%Size%':'Total plan - Rural poor', '%Colour%':'Total spent - Rural poor / Total plan - Rural poor' },
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200]
@@ -277,7 +277,7 @@ var stories = [
     }),
     stack_story({
         'menu'   : 'Money spent',
-        'title'  : 'SC + ST of APL & BPL in  Total IHHL',
+        'title'  : 'SC + ST of APL & Rural Poor in  Total IHHL',
         'url'    : ['http://tsc.gov.in/tsc/Report/Physical/RptCategoriesIHHLStatewiseDistrictwise_net.aspx?id=PHY'],
         'cols'   : ['IHHL_APL_Ach_SC', 'IHHL_APL_Ach_ST', 'IHHL_BPL_Ach_SC', 'IHHL_BPL_Ach_ST', 'IHHL_Objective_Total'],
         'group'  : ['State_Name', 'District_Name'],
@@ -288,13 +288,13 @@ var stories = [
 										]); }
 									 ],
         'rows'   : ['% SC/ST'],
-        'cells'  : ['APL', 'BPL', 'Others'],
+        'cells'  : ['APL', 'Rural poor', 'Others'],
         'colors' : ['#4f81bd', '#c0504d', '#9bbb59'],
 				'height' : '530',
 				'ydom'   : '15',
 				'lines'  : 'false',
         'story'  : 'Story to be written...',
-        'legend' : { '%Blue%': 'APL SC + ST', '%Red%': 'BPL SC + ST', '%Green%': 'Others' }
+        'legend' : { '%Blue%': 'APL SC + ST', '%Red%': 'Rural poor SC + ST', '%Green%': 'Others' }
     }),
     treemap_story({
         'menu'   : 'Toilets built',
@@ -302,11 +302,11 @@ var stories = [
         'url'    : ['http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home'],
         'cols'   : ['PO_IHHL_BPL', 'PP_IHHL_BPL'],
         'group'  : ['State_Name'],
-        'area'   : ['Planned BPL toilets', 'PO_IHHL_BPL'],
-        'num'    : ['Built BPL toilets', 'PP_IHHL_BPL'],
-        'den'    : ['Planned BPL toilets', 'PO_IHHL_BPL'],
+        'area'   : ['Planned Rural poor toilets', 'PO_IHHL_BPL'],
+        'num'    : ['Built Rural poor toilets', 'PP_IHHL_BPL'],
+        'den'    : ['Planned Rural poor toilets', 'PO_IHHL_BPL'],
         'story'  : 'Story to be written...',
-        'legend' : { '%Size%': 'Planned BPL toilets', '%Colour%': 'Built BPL toilets / Planned BPL toilets' },
+        'legend' : { '%Size%': 'Planned Rural poor toilets', '%Colour%': 'Built Rural poor toilets / Planned Rural poor toilets' },
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200]
@@ -349,17 +349,17 @@ var stories = [
                     'http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home'],
         'cols'   : ['PO_IHHL_BPL', 'PP_IHHL_BPL', 'ExpReported_Total', 'Total_Projects_Outlay'],
         'group'  : ['State_Name'],
-        'area'   : ['# BPL toilets required', function(d) { return +d['PO_IHHL_BPL']; }],
+        'area'   : ['# Rural poor toilets required', function(d) { return +d['PO_IHHL_BPL']; }],
         'x'      : ['Spent / Plan', function(d) { return d['ExpReported_Total'] / d['Total_Projects_Outlay']; }],
-        'y'      : ['% BPL toilets constructed', function(d) { return d['PP_IHHL_BPL'] / d['PO_IHHL_BPL']; }],
+        'y'      : ['% Rural poor toilets constructed', function(d) { return d['PP_IHHL_BPL'] / d['PO_IHHL_BPL']; }],
         'R'      : 40,
         'xdom'   : [0, 1.5],
         'ydom'   : [0, 1.5],
         'story'  : 'Story to be written...',
-        'legend' : { '%Circle%'              : 'District'                     ,
-                     '%CircleSize%'          : 'BPL toilets required'         ,
-                     '%AxisX%'               : 'Spent / Plan'                 ,
-                     '%AxisY%'               : '% BPL toilets constructed'
+        'legend' : { '%Circle%'              : 'District'                           ,
+                     '%CircleSize%'          : 'Rural poor toilets required'        ,
+                     '%AxisX%'               : 'Spent / Plan'                       ,
+                     '%AxisY%'               : '% Rural poor toilets constructed'
                    }
     }),
     scatter_story({
@@ -368,16 +368,16 @@ var stories = [
         'url'    : ['TBD'],
         'cols'   : ['BPL_WT', 'BPL_WOT', 'ExpReported_Total', 'Total_Projects_Outlay', 'PP_IHHL_BPL', 'BPL_WT', 'BPL_WOT'],
         'group'  : ['State_Name'],
-        'area'   : ['# BPL toilets required', function(d) { return +d['BPL_WT'] + +d['BPL_WOT']; }],
+        'area'   : ['# Rural poor toilets required', function(d) { return +d['BPL_WT'] + +d['BPL_WOT']; }],
         'x'      : ['Spent / Plan', function(d) { return d['ExpReported_Total'] / d['Total_Projects_Outlay']; }],
-        'y'      : ['% BPL Households with toilet', function(d) { return +d['PP_IHHL_BPL'] / (+d['BPL_WT'] + +d['BPL_WOT']); }],
+        'y'      : ['% Rural poor Households with toilet', function(d) { return +d['PP_IHHL_BPL'] / (+d['BPL_WT'] + +d['BPL_WOT']); }],
         'R'      : 40,
         'xdom'   : [0, 1.5],
         'story'  : 'Story to be written...',
-        'legend' : { '%Circle%'             : 'District'                     ,
-                    '%CircleSize%'          : 'BPL toilets required'         ,
-                    '%AxisX%'               : 'Spent / Plan'                 ,
-                    '%AxisY%'               : '% BPL Households with toilet'
+        'legend' : { '%Circle%'             : 'District'                            ,
+                    '%CircleSize%'          : 'Rural poor toilets required'         ,
+                    '%AxisX%'               : 'Spent / Plan'                        ,
+                    '%AxisY%'               : '% Rural poor Households with toilet'
                    }
     })
 ];
