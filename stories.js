@@ -61,7 +61,7 @@ function join() {
 
 function treemap_story(story) {
     story.type = 'treemap';
-    story.cols = join(story.area[1], story.num[1], story.den[1]);
+    story.cols = story.cols || join(story.area[1], story.num[1], story.den[1]);
     story.size = function(d) { return sum(d, story.area[1]); };
     story.filter = function(d) { return d.District_Name.match(/^[A-Z]/); };
     story.color = story.colors || function(d) { return color((story.factor || 1) * sum(d, story.num[1]) / sum(d, story.den[1])).replace(/NaNNaNNaN/i, 'eee'); };
@@ -367,7 +367,7 @@ var stories = [
         'menu'   : 'Performance',
         'title'  : 'Effective fund utilisation',
         'url'    : ['TBD'],
-        'cols'   : ['BPL_WT', 'BPL_WOT', 'ExpReported_Total', 'Total_Projects_Outlay', 'PP_IHHL_BPL', 'BPL_WT', 'BPL_WOT'],
+        'cols'   : ['BPL_WT', 'BPL_WOT', 'ExpReported_Total', 'Total_Projects_Outlay', 'PP_IHHL_BPL'],
         'group'  : ['State_Name'],
         'area'   : ['# Rural poor toilets required', function(d) { return +d['BPL_WT'] + +d['BPL_WOT']; }],
         'x'      : ['Spent / Plan', function(d) { return d['ExpReported_Total'] / d['Total_Projects_Outlay']; }],
