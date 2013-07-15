@@ -280,12 +280,12 @@ var stories = [
         'menu'   : 'Money spent',
         'title'  : 'SC + ST of APL & Rural Poor in  Total IHHL',
         'url'    : ['http://tsc.gov.in/tsc/Report/Physical/RptCategoriesIHHLStatewiseDistrictwise_net.aspx?id=PHY'],
-        'cols'   : ['IHHL_APL_Ach_SC', 'IHHL_APL_Ach_ST', 'IHHL_BPL_Ach_SC', 'IHHL_BPL_Ach_ST', 'IHHL_Objective_Total'],
+        'cols'   : ['IHHL_APL_Ach_SC', 'IHHL_APL_Ach_ST', 'IHHL_BPL_Ach_SC', 'IHHL_BPL_Ach_ST', 'PO_IHHL_TOTAL'],
         'group'  : ['State_Name', 'District_Name'],
         'stack'  : [function(d) { return cumsum([
-													(+d['IHHL_APL_Ach_SC'] + +d['IHHL_APL_Ach_ST']) / +d['IHHL_Objective_Total'],
-													(+d['IHHL_BPL_Ach_SC'] + +d['IHHL_BPL_Ach_ST']) / +d['IHHL_Objective_Total'],
-											1 - (+d['IHHL_BPL_Ach_SC'] + +d['IHHL_BPL_Ach_ST'] + +d['IHHL_APL_Ach_SC'] + +d['IHHL_APL_Ach_ST']) / +d['IHHL_Objective_Total']
+													(+d['IHHL_APL_Ach_SC'] + +d['IHHL_APL_Ach_ST']) / +d['PO_IHHL_TOTAL'],
+													(+d['IHHL_BPL_Ach_SC'] + +d['IHHL_BPL_Ach_ST']) / +d['PO_IHHL_TOTAL'],
+											1 - (+d['IHHL_BPL_Ach_SC'] + +d['IHHL_BPL_Ach_ST'] + +d['IHHL_APL_Ach_SC'] + +d['IHHL_APL_Ach_ST']) / +d['PO_IHHL_TOTAL']
 										]); }
 									 ],
         'rows'   : ['% SC/ST'],
@@ -332,10 +332,10 @@ var stories = [
         'title'  : 'Coverage of Toilets - Rural Households',
         'url'    : ['http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home',
 										'http://www.indiawaterportal.org/data/2011-census-household-tables-0'],
-        'cols'   : ['IHHL_Total', 'Rural_Households'],
+        'cols'   : ['PP_IHHL_TOTAL', 'Rural_Households'],
         'group'  : ['State_Name'],
         'area'   : ['Total Rural Households' , ['Rural_Households']],
-        'num'    : ['Rural Households (WT)', ['IHHL_Total']],
+        'num'    : ['Rural Households (WT)', ['PP_IHHL_TOTAL']],
         'den'    : ['Total Rural Households', ['Rural_Households']],
         'story'  : 'Story to be written...',
         'legend' : { '%Size%': 'Total Rural Households', '%Colour%': 'Rural Households (WT) / Total Rural Households', '%rs%':' ' },
