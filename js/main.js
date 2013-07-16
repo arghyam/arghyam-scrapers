@@ -241,103 +241,172 @@ function draw_scatter(story) {
   // Filter the data
   d3.csv(datafile(), function(data) {
     var subset = initchart(story, data);
-    draw_date(data[data.length-1], story);
-    // TODO: Make these move
+		draw_date(data[data.length-1], story);
+		// TODO: Make these move
     svg.selectAll('*').remove();
     var width = parseInt(svg.style('width'), 10);
-    var height = svg.attr('height');
-    var node = svg.selectAll('circle');    
+    var height = svg.attr('height');		
+		//set matrix
+		svg.append('path')
+      .attr("d",'M 40 460 L 920 40 L 40 40')            
+			.style('fill', '#B8E62E').style('fill-opacity', 1).attr('stroke', '#000').attr('stroke-width',1);
+		svg.append('path')
+      .attr("d",'M 40 460 L 920 40 L 920 460')            
+			.style('fill', '#D73027').style('fill-opacity', 1).attr('stroke', '#000').attr('stroke-width',1);	
+    //var node = svg.selectAll('.district');    
     var rmax = _.max(_.map(subset, story.area[1]));
-    // Set up the legend
+		// Set up the legend
     var legend = d3.select('.legend.scatter');
     legend.selectAll('*').remove();
     var select = legend.append('select').attr('class', 'states');
     var subselect = legend.append('select').attr('class', 'districts');
     var groups = _.uniq(_.pluck(data, story.group[0]));
-    groups.unshift('');
-		groups.pop();
-    select.selectAll('option')
+    groups.unshift('select State');
+		groups.pop();	
+		select.selectAll('option')
         .data(groups)
       .enter()
         .append('option')
         .text(String);
-    select.on('change', function() {
+		select.on('change', function() {
       d3.selectAll('.tooltip').remove();
       var group = d3.select(this).property('value');
-      if (group) {
-        svg.selectAll('circle').classed('fade', true);
+			if (group) {
+				tempGroup = group;	
+				svg.selectAll('circle').classed('fade', true);
         svg.selectAll('circle[data-q="' + group + '"]')
           .classed('fade', false)
+					.classed('hide', false)
+					.classed('mark', false)
           .classed('show', true);
-      } else {
+				svg.select('.state[data-q="' + group + '"]').classed('hide', true);	
+			} else {
 				draw_scatter(story);
         svg.selectAll('circle.fade').classed('fade', false);
         svg.selectAll('circle.mark').classed('mark', false);
-      }
-	  tempGroup = group;
-      var result = _.filter(data, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); });
-      result.unshift('');
+			}
+			var result = _.filter(data, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); });
+			tempResult = result;
+			result.unshift({"District_Name":"select District"});
       subselect.selectAll('option').remove();
       subselect.selectAll('option')
           .data(result)
         .enter()
           .append('option')
           .text(function(d){ return d.District_Name; });
-    });
-    subselect.on('change', function() {
+		});
+		subselect.on('change', function() {
       var subgroup = d3.select(this).property('value');
-      svg.selectAll('circle').classed('mark', false);
+			svg.selectAll('circle').classed('mark', false);
       var group = d3.selectAll('.states').property('value');
-      var result = _.filter(data, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); });
-	  tempSubgroup = subgroup;
-	  svg.selectAll('circle[data-q="' + group + '"]')
+			var result = _.filter(data, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); });
+			tempSubgroup = subgroup;
+			svg.selectAll('circle[data-q="' + group + '"]')
         .data(result)
         .classed('mark', function(d){
-          return d.District_Name == subgroup ? true : false; });
-      d3.selectAll('.tooltip').remove();
-      $('.mark').tooltip({ title:function(){ return $('.mark title').text(); }, trigger:'focus', container:'body' }).tooltip('show');
-    });
-    var R = story.R;
+          return d.District_Name == subgroup ? true : false; 
+				})
+				.classed('show', function(d){ 
+						return d.District_Name == subgroup ? true : false;
+			  });
+			d3.selectAll('.tooltip').remove();
+      $('.mark').tooltip({ title:function(){ return $('.mark title').text(); }, trigger:'focus', container:'body' }).tooltip('show');			
+		});	
+		var R = story.R;
     var xscale = d3.scale.linear().domain(story.xdom).range([R, width - R]);
     var yscale = d3.scale.linear().domain(story.ydom).range([height - R, R]);
-	var tempResult = _.filter(data, function(d){ return d.State_Name == tempGroup && !d.District_Name.match(/^Total/); });
-	if(tempGroup){
-      svg.select('circle').classed('mark', true);
-	  tempData = tempResult;	
-	  $('.states').val(tempGroup);
-      subselect.selectAll('option')
-        .data(tempResult)
-       .enter()
-        .append('option')
-        .text(function(d){ return d.District_Name; });
-		$('.districts').val(tempSubgroup); 
-    }else { tempData = subset; };
-	node.data(tempData)
-	 .enter().append('circle')
-      .attr('cx', function(d) { return xscale(story.cx(d)); })
-      .attr('cy', function(d) { return yscale(story.cy(d)); })
-      .attr('r', function(d) { return R * story.area[1](d) / rmax; })
-      .attr('fill', story.color)
-      .attr('stroke', '#aaf')
-      .attr('data-q', function(d) { return d[story.group[0]]; })
-      .on('mouseover', function() {
-        var q = d3.select(this).attr('data-q');
-        svg.selectAll('.show').classed('show', false);
-        svg.selectAll('circle[data-q="' + q + '"]').classed('show', true);
-				var details = d3.select(this).text(); 
+		// Accumulated values of states
+		var states = d3.nest()
+				.key(function(d){ return d[story.group]; })
+				.rollup(function(rows){ return {'cx'  : d3.mean(rows, function(d){ return story.cx(d);}),
+							                          'cy'  : d3.mean(rows, function(d){ return story.cy(d);}),
+																			  'rad' : d3.mean(rows, function(d){ return story.area[1](d);}),
+																				'rads': d3.sum(rows, function(d){ return story.area[1](d);})};
+				})
+				.entries(data); 
+		states.pop();		
+		states.sort(function(a,b){ return b.values.rad - a.values.rad;});		
+		// District level bubbles
+		svg.selectAll('.district')    
+			.data(subset)
+			.enter().append('circle')
+			.attr('class', 'district') 
+			.attr('cx', function(d) { return xscale(story.cx(d)); })
+			.attr('cy', function(d) { return yscale(story.cy(d)); })
+			.attr('r', function(d) { return R * story.area[1](d) / rmax; })
+			.attr('fill', story.color)
+			.attr('stroke', '#aaf')
+			.classed('hide', true)
+			.attr('data-q', function(d) { return d[story.group[0]]; })
+			.on('mouseover', function() {
+        d3.select(this).style('stroke', '#fff'); 
+        var details = d3.select(this).text(); 
 				$('#copy_title').val(details).select();	
       })
       .on('mouseout', function() {
-        svg.selectAll('.show').classed('show', false);
+        d3.select(this).style('stroke', '#000').style('stroke-opacity', 0.5);
       })
       .on('click', function() {
         // Set the main selection to blank if anything is faded; else set to selected circle
-        var val = svg.selectAll('.fade')[0].length ? '' : d3.select(this).attr('data-q');
+        var val = svg.selectAll('.show')[0].length ? '' : d3.select(this).attr('data-q');
         select.property('value', val).on('change').call(select.node());
-      })
+				svg.selectAll('.district')
+						.classed('show', false)
+						.classed('hide', true);
+				svg.selectAll('.state')
+						.classed('hide', false)
+						.classed('show', true);
+			})
       .append('title')
-      .text(story.hover);	  
-    var xaxis = svg.append('g')
+      .text(story.hover);
+		// State level bubbles		
+		svg.selectAll('.state')
+			.data(states)
+			.enter().append('circle')
+			.attr('class', 'state')
+			.attr('cx', function(d) { return xscale(d.values['cx']); })  
+      .attr('cy', function(d) { return yscale(d.values['cy']); })  
+      .attr('r', function(d) { return d.values['rad'] / (R * 200);}) 
+      .attr('fill', function(d){ return gen_color(d.key);}) 
+      .attr('stroke', '#fff')  
+      .attr('data-q', function(d) { return d.key; })
+			.on('mouseover', function(){ 
+				d3.select(this).classed('show', true);
+				var details = d3.select(this).text(); 
+				$('#copy_title').val(details).select();	
+			})
+			.on('mouseout', function(){ 
+				d3.select(this).classed('show', false);
+			})
+			.on('click', function(){
+				var val = svg.selectAll('.fade')[0].length ? '' : d3.select(this).attr('data-q');
+        select.property('value', val).on('change').call(select.node());
+				var q = d3.select(this).attr('data-q');
+        svg.selectAll('.district[data-q="' + q + '"]').classed('hide', false);
+				svg.selectAll('.state').classed('hide', true);
+			})
+			.append('title')
+			.text(function(d){ return d.key + ' - ' + story.area[0] + ' = ' + N(d.values['rads']) +'. '+ story.x[0] + ' = ' + P(d.values['cx'])
+				+'. '+ story.y[0] + ' = ' + P(d.values['cy']); });	
+		if(tempSubgroup){
+			svg.selectAll('circle[data-q="' + tempGroup + '"]')
+          .classed('fade', false)
+					.classed('hide', false)
+					.classed('mark', false)
+          .classed('show', true);					
+			svg.select('.state[data-q="' + tempGroup + '"]').classed('hide', true);
+			svg.selectAll('.state').classed('hide', true);
+			svg.selectAll('circle[data-q="' + tempGroup + '"]')
+				.on('click', function(){
+						svg.selectAll('.district')
+							.classed('show', false)
+							.classed('hide', true);
+						svg.selectAll('.state')
+							.classed('hide', false)
+							.classed('show', false);
+					});
+		}		
+		var xaxis = svg.append('g')
       .classed('axis', true)
       .attr('transform', 'translate(0,' + (height - R) + ')')
       .call(d3.svg.axis()
@@ -362,6 +431,23 @@ function draw_scatter(story) {
       .attr('transform', 'translate(5,0) rotate(-90,' + R + ',' + R + ')')
       .attr('text-anchor', 'end')
       .attr('dominant-baseline', 'hanging');	  
+		// Lines joining x-axis and y-axis
+		svg.append('g').selectAll('.h')
+			.data(d3.range(0.2, story.ydom[1] , 0.2))
+			.enter().append('line')
+			.attr('class', 'h')
+			.attr('x1', R)
+			.attr('y1', function(d){ return yscale(d);})
+			.attr('x2', function(d){ return xscale(d);})
+			.attr('y2', function(d){ return yscale(d);});		
+		svg.append('g').selectAll('.v')
+			.data(d3.range(0.2, story.xdom[1] , 0.2))
+			.enter().append('line')
+			.attr('class', 'v')
+			.attr('x1', function(d){ return xscale(d);})
+			.attr('y1', function(d){ return yscale(d);})
+			.attr('x2', function(d){ return xscale(d);})
+			.attr('y2', height - R);	
 	// Filter subgroups having values greater than 150%  
 	var beyond = _.filter(subset, function(d){ return story.cy(d) > story.ydom[1] ? d : '' ;});  
     // Sorted the values in descending order
