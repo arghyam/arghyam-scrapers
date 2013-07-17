@@ -248,11 +248,11 @@ function draw_scatter(story) {
     var height = svg.attr('height');		
 		//set matrix
 		svg.append('path')
-      .attr("d",'M 40 460 L 920 40 L 40 40')            
-			.style('fill', '#B8E62E').style('fill-opacity', 1).attr('stroke', '#000').attr('stroke-width',1);
+      .attr("d",'M 40 461 L 922 40 L 40 40')           
+			.style('fill', '#B8E62E').style('fill-opacity', 0.5).attr('stroke', '#000').attr('stroke-width',1);
 		svg.append('path')
-      .attr("d",'M 40 460 L 920 40 L 920 460')            
-			.style('fill', '#D73027').style('fill-opacity', 1).attr('stroke', '#000').attr('stroke-width',1);	
+      .attr("d",'M 40 461 L 922 40 L 922 461')           
+			.style('fill', '#D73027').style('fill-opacity', 0.7).attr('stroke', '#000').attr('stroke-width',1);	
     //var node = svg.selectAll('.district');    
     var rmax = _.max(_.map(subset, story.area[1]));
 		// Set up the legend
