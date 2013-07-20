@@ -381,6 +381,7 @@ var stories = [
                     '%AxisX%'               : 'Spent / Plan'                        ,
                     '%AxisY%'               : '% Rural poor Households with toilet'
                    }
+   })										
 ];
 
 // List of the historical data files, latest on top
