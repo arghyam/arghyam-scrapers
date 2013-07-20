@@ -213,15 +213,15 @@ var stories = [
     }),
     treemap_story({
         'menu'   : 'Money spent',
-        'title'  : 'Share of centre - Released',
+        'title'  : 'Share of centre - Money given',
         'cols'   : ['Total_Projects_Outlay', 'Rof_Center', 'Rof_Total'],
         'url'    : ['http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home'],
         'group'  : ['State_Name'],
         'area'   : ['Total plan', 'Total_Projects_Outlay'],
-        'num'    : ['Released centre share', 'Rof_Center'],
-        'den'    : ['Total released', 'Rof_Total'],
+        'num'    : ['Money given by centre', 'Rof_Center'],
+        'den'    : ['Total Money given', 'Rof_Total'],
         'story'  : 'Story to be written...',
-        'legend' : { '%Size%': 'Total plan', '%Colour%': 'Released centre share / Total released', '%rs%':'<br>'+lakhs },
+        'legend' : { '%Size%': 'Total plan', '%Colour%': 'Money given by centre / Total Money given', '%rs%':'<br>'+lakhs },
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200]	
@@ -254,7 +254,7 @@ var stories = [
                       +d['ApprShare_State']       / (+d['ApprShare_Center'] + +d['ApprShare_State'] + +d['ApprShare_Beneficiary']),
                       +d['ApprShare_Beneficiary'] / (+d['ApprShare_Center'] + +d['ApprShare_State'] + +d['ApprShare_Beneficiary'])
                     ]); },
-                    // Released
+                    // Money given
                     function(d) { return cumsum([
                       +d['Rof_Center']      / +d['Rof_Total'],
                       +d['Rof_State']       / +d['Rof_Total'],
@@ -267,7 +267,7 @@ var stories = [
                       +d['ExpReported_Beneficiary'] / (+d['ExpReported_Center'] + +d['ExpReported_State'] + +d['ExpReported_Beneficiary'])
                     ]); }
                    ],
-        'rows'   : ['Plan', 'Released', 'Spending'],
+        'rows'   : ['Plan', 'Money given', 'Spending'],
         'cells'  : ['Centre', 'State', 'Beneficiary'],
         'colors' : ['#4f81bd', '#c0504d', '#9bbb59'],
 				'height' : '1430',
@@ -303,11 +303,11 @@ var stories = [
         'url'    : ['http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home'],
         'cols'   : ['PO_IHHL_BPL', 'PP_IHHL_BPL'],
         'group'  : ['State_Name'],
-        'area'   : ['Planned Rural poor toilets', 'PO_IHHL_BPL'],
-        'num'    : ['Built Rural poor toilets', 'PP_IHHL_BPL'],
-        'den'    : ['Planned Rural poor toilets', 'PO_IHHL_BPL'],
+        'area'   : ['Toilets planned for rural poor', 'PO_IHHL_BPL'],
+        'num'    : ['Toilets built for rural poor', 'PP_IHHL_BPL'],
+        'den'    : ['Toilets planned for rural poor', 'PO_IHHL_BPL'],
         'story'  : 'Story to be written...',
-        'legend' : { '%Size%': 'Planned Rural poor toilets', '%Colour%': 'Built Rural poor toilets / Planned Rural poor toilets', '%rs%':' ' },
+        'legend' : { '%Size%': 'Toilets planned for rural poor', '%Colour%': 'Toilets built for rural poor / Toilets planned for rural poor', '%rs%':' ' },
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200]
@@ -361,8 +361,8 @@ var stories = [
                      '%CircleSize%'          : 'Rural poor toilets required'        ,
                      '%AxisX%'               : 'Spent / Plan'                       ,
                      '%AxisY%'               : '% Rural poor toilets constructed'
-                   }
-    }),
+                   }  
+		}),
     scatter_story({
         'menu'   : 'Performance',
         'title'  : 'Effective fund utilisation',
@@ -374,13 +374,13 @@ var stories = [
         'y'      : ['% Rural poor Households with toilet', function(d) { return +d['PP_IHHL_BPL'] / (+d['BPL_WT'] + +d['BPL_WOT']); }],
         'R'      : 40,
         'xdom'   : [0, 1.5],
-        'story'  : 'Story to be written...',
+        'ydom'   : [0, 1.5],
+				'story'  : 'Story to be written...',
         'legend' : { '%Circle%'             : 'District'                            ,
                     '%CircleSize%'          : 'Rural poor toilets required'         ,
                     '%AxisX%'               : 'Spent / Plan'                        ,
                     '%AxisY%'               : '% Rural poor Households with toilet'
                    }
-    })
 ];
 
 // List of the historical data files, latest on top
