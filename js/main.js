@@ -73,7 +73,8 @@ var legends = {
              '%rs%',
   'stack'  : 'Each row represents one State, showing the break-up of <strong>%Rows%</strong>.' +
              'Click on it to reveal more boxes on the right representing each District.' + '<br> Blue = <strong>%Blue%</strong>, Red = <strong>%Red%</strong>, Green = <strong>%Green%</strong>.',
-  'scatter': 'Each circle represents one %Circle%. Hover over it to reveal all districts in the same State. The size of the circle represents %CircleSize%. The x-axis is based on %AxisX%. The y-axis is based on %AxisY%. The colour is based on the State. (Each district in a given state has the same colour).'
+  'scatter': 'Each circle represents one %Circlev0%. Click on a %Circlev0% or choose from the drop down for the %Circlev0% and %Circlev1%' + 
+						 ' that you want to see. The size of the circle represents %CircleSize%. The x-axis is based on %AxisX%. The y-axis is based on %AxisY%.'
 };
 // Returns the name of the data file for the currently selected date.
 function datafile() {
@@ -205,20 +206,21 @@ function draw_treemap(story) {
     legend.selectAll('*').remove();
     var select = legend.append('select').attr('class', 'states');
     var subselect = legend.append('select').attr('class', 'districts');
-    var groups = _.uniq(_.pluck(data, story.group[0]));
-    groups.unshift('');
-		groups.pop();
-    select.selectAll('option')
+    var groups = _.uniq(_.pluck(subset, story.group[0]));
+    groups.unshift('select State');
+		select.selectAll('option')
         .data(groups)
       .enter()
         .append('option')
         .text(String);
     select.on('change', function() {
-      var group = d3.select(this).property('value');
+			var drilldown = d3.select('#visual').classed('drilldown', false);
+      d3.select('#visual').classed('drilldown', !drilldown);
+			var group = d3.select(this).property('value');
       svg.selectAll('rect').classed('mark', false);
       svg.selectAll('rect[data-q="' + group + '"]').classed('mark', true);
-      var result = _.filter(data, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); });
-      result.unshift('');
+      var result = _.filter(subset, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); });
+      result.unshift({"District_Name":"select District"});
       subselect.selectAll('option').remove();
       subselect.selectAll('option')
           .data(result)
@@ -227,7 +229,9 @@ function draw_treemap(story) {
           .text(function(d){ return d.District_Name; });
     });
     subselect.on('change', function() {
-      var subgroup = d3.select(this).property('value');
+			var drilldown = d3.select('#visual').classed('drilldown');
+      d3.select('#visual').classed('drilldown', !drilldown);
+			var subgroup = d3.select(this).property('value');
       svg.selectAll('rect').classed('mark', false);
       svg.selectAll('rect[data-q="' + subgroup + '"]').classed('mark', true);
     });
@@ -253,16 +257,14 @@ function draw_scatter(story) {
 		svg.append('path')
       .attr("d",'M 40 461 L 922 40 L 922 461')           
 			.style('fill', '#D73027').style('fill-opacity', 0.7).attr('stroke', '#000').attr('stroke-width',1);	
-    //var node = svg.selectAll('.district');    
     var rmax = _.max(_.map(subset, story.area[1]));
 		// Set up the legend
     var legend = d3.select('.legend.scatter');
     legend.selectAll('*').remove();
     var select = legend.append('select').attr('class', 'states');
     var subselect = legend.append('select').attr('class', 'districts');
-    var groups = _.uniq(_.pluck(data, story.group[0]));
+    var groups = _.uniq(_.pluck(subset, story.group[0]));
     groups.unshift('select State');
-		groups.pop();	
 		select.selectAll('option')
         .data(groups)
       .enter()
@@ -285,7 +287,7 @@ function draw_scatter(story) {
         svg.selectAll('circle.fade').classed('fade', false);
         svg.selectAll('circle.mark').classed('mark', false);
 			}
-			var result = _.filter(data, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); });
+			var result = _.filter(subset, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); });
 			tempResult = result;
 			result.unshift({"District_Name":"select District"});
       subselect.selectAll('option').remove();
@@ -299,7 +301,7 @@ function draw_scatter(story) {
       var subgroup = d3.select(this).property('value');
 			svg.selectAll('circle').classed('mark', false);
       var group = d3.selectAll('.states').property('value');
-			var result = _.filter(data, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); });
+			var result = _.filter(subset, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); });
 			tempSubgroup = subgroup;
 			svg.selectAll('circle[data-q="' + group + '"]')
         .data(result)
@@ -323,8 +325,7 @@ function draw_scatter(story) {
 																			  'rad' : d3.mean(rows, function(d){ return story.area[1](d);}),
 																				'rads': d3.sum(rows, function(d){ return story.area[1](d);})};
 				})
-				.entries(data); 
-		states.pop();		
+				.entries(subset); 
 		states.sort(function(a,b){ return b.values.rad - a.values.rad;});		
 		// District level bubbles
 		svg.selectAll('.district')    
@@ -386,7 +387,7 @@ function draw_scatter(story) {
 				svg.selectAll('.state').classed('hide', true);
 			})
 			.append('title')
-			.text(function(d){ return d.key + ' - ' + story.area[0] + ' = ' + N(d.values['rads']) +'. '+ story.x[0] + ' = ' + P(d.values['cx'])
+			.text(function(d){ return d.key + ': ' + story.area[0] + ' = ' + N(d.values['rads']) +'. '+ story.x[0] + ' = ' + P(d.values['cx'])
 				+'. '+ story.y[0] + ' = ' + P(d.values['cy']); });	
 		if(tempSubgroup){
 			svg.selectAll('circle[data-q="' + tempGroup + '"]')
@@ -448,13 +449,13 @@ function draw_scatter(story) {
 			.attr('y1', function(d){ return yscale(d);})
 			.attr('x2', function(d){ return xscale(d);})
 			.attr('y2', height - R);	
-	// Filter subgroups having values greater than 150%  
-	var beyond = _.filter(subset, function(d){ return story.cy(d) > story.ydom[1] ? d : '' ;});  
+	  // Filter subgroups having values greater than 150%  
+	  beyond = _.filter(subset, function(d){ return story.cy(d) > story.ydom[1] ? d : '' ;});  
     // Sorted the values in descending order
     beyond.sort(function(a, b){ return story.cy(b) - story.cy(a); });
     // Remove the content - details of the bubbles out of the bound
     d3.selectAll('#details table').remove();
-    d3.select('#header').text('Districts above ' + story.ydom[1] * 100 + '%');
+    d3.select('#header').text('Districts : toilets built - above ' + story.ydom[1] * 100 + '%');
     // Display values that are above 150%, in table
     d3.select('#details')
         .append('table')

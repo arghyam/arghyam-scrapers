@@ -357,10 +357,11 @@ var stories = [
         'xdom'   : [0, 1.5],
         'ydom'   : [0, 1.5],
         'story'  : 'Story to be written...',
-        'legend' : { '%Circle%'              : 'District'                           ,
-                     '%CircleSize%'          : 'Rural poor toilets required'        ,
-                     '%AxisX%'               : 'Spent / Plan'                       ,
-                     '%AxisY%'               : '% Rural poor toilets constructed'
+        'legend' : { '%Circlev0%'            : 'State'                              ,
+                     '%Circlev1%'            : 'District'                           ,
+										 '%CircleSize%'          : 'Rural poor toilets required'        ,
+                     '%AxisX%'               : 'overall spending on rural sanitation (since toilet construction for the rural poor and allied activities is the biggest spend in the whole allotted sum)' ,
+                     '%AxisY%'               : '% Rural poor toilets constructed'										 
                    }  
 		}),
     scatter_story({
@@ -376,10 +377,11 @@ var stories = [
         'xdom'   : [0, 1.5],
         'ydom'   : [0, 1.5],
 				'story'  : 'Story to be written...',
-        'legend' : { '%Circle%'             : 'District'                            ,
-                    '%CircleSize%'          : 'Rural poor toilets required'         ,
-                    '%AxisX%'               : 'Spent / Plan'                        ,
-                    '%AxisY%'               : '% Rural poor Households with toilet'
+        'legend' : { '%Circlev0%'            : 'State'                               ,
+										 '%Circlev1%'            : 'District'                            ,
+                     '%CircleSize%'          : 'Rural poor toilets required'         ,
+                     '%AxisX%'               : 'Spent / Plan'                        ,
+                     '%AxisY%'               : '% Rural poor Households with toilet'
                    }
    })										
 ];
