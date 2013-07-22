@@ -109,8 +109,7 @@ function draw(story) {
   d3.selectAll('.tooltip').remove();
   d3.select('#about').style('display', 'none');
   d3.select('#visual').style('display', 'block');
-  d3.selectAll('text').remove();
-	d3.selectAll('rect').remove('text');
+	d3.selectAll('.treemap text').remove();
   // Remove treemap gradient container 
   d3.select('#gradient_cont').style('display', 'none');
   // Remove scatterplot info container
@@ -144,7 +143,8 @@ function draw_date(daterow, story) {
 function draw_treemap(story) {
   // Add gradient legend for treemap
   d3.select('#gradient_cont').style('display', 'block');
-  // Creates gradient legend for treemap
+	d3.selectAll('#gradient text').remove();	
+	// Creates gradient legend for treemap
   var gradient = d3.select('#gradient');
   gradient.append('rect').attr('x', 0).attr('y', 0)
     .attr('width', 958).attr('height', 30)
@@ -192,15 +192,14 @@ function draw_treemap(story) {
 			$('#copy_title').val(details).select();							
 		});	
     node.exit().remove();
-		node.enter().append('text')
-      .call(position)
-      .attr('dx', function(d){ return d.dx / 2; })
+		svg.selectAll('text')
+			.data(treemap.nodes)
+			.enter().append('text')
+      .call(positionText)
+			.attr('dx', function(d){ return d.dx / 2; })
       .attr('dy', function(d){ return d.dy / 2; })
-      .attr('text-anchor', 'middle')
-	    .attr('dominant-baseline', 'middle')
-      .style('pointer-events', 'none')
-      .text(function(d){ return d.dx > 80 && d.key != 'India' ? d.key : '' ; })
-      .style('font-size', function(d){ return d.dx / 11 + 'px'; });
+			.text(function(d){ return d.dx > 80 && d.key != 'India' ? d.key : '' ; })
+			.style('font-size', function(d){ return d.dx / 11 + 'px'; }); 
     // Set up the legend
     var legend = d3.select('.legend.treemap');
     legend.selectAll('*').remove();
@@ -635,3 +634,13 @@ function position() {
     .attr('class', function(d) { return "l" + d.depth; })
     .attr('data-q', function(d) { return d.depth == 1 ? d.key : d.District_Name; });
 }
+function positionText() { 
+  this.transition()
+		.duration(-2000)
+    .attr('x', function(d) { return d.x; })
+    .attr('y', function(d) { return d.y; })
+		.attr('text-anchor', 'middle')
+		.attr('dominant-baseline', 'middle')
+		.style('pointer-events', 'none')
+    .attr('class', function(d) { return "l" + d.depth; });    
+}       
