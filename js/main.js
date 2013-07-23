@@ -114,6 +114,7 @@ function draw(story) {
   d3.select('#gradient_cont').style('display', 'none');
   // Remove scatterplot info container
   d3.select('#right_container').style('display','none');
+	d3.select('#hide_text').style('display', 'none');
   // Set the title and story
   d3.select('#menu').text(story.menu);
   d3.select('#title').text(story.title);
@@ -241,6 +242,7 @@ function draw_scatter(story) {
   var beyond = [];
   // Add scatterplot info container
   d3.select('#right_container').style('display','block');
+	d3.select('#hide_text').style('display', 'block');
   // Filter the data
   d3.csv(datafile(), function(data) {
     var subset = initchart(story, data);
@@ -271,6 +273,7 @@ function draw_scatter(story) {
         .text(String);
 		select.on('change', function() {
       d3.selectAll('.tooltip').remove();
+			d3.selectAll('.tags').style('display', 'none');
       var group = d3.select(this).property('value');
 			if (group) {
 				tempGroup = group;	
@@ -326,10 +329,11 @@ function draw_scatter(story) {
 				})
 				.entries(subset); 
 		states.sort(function(a,b){ return b.values.rad - a.values.rad;});		
+		var smax = states[0].values['rad'];
 		// District level bubbles
-		svg.selectAll('.district')    
-			.data(subset)
-			.enter().append('circle')
+		var districts = svg.selectAll('.district')    
+			.data(subset).enter();			
+		districts.append('circle')
 			.attr('class', 'district') 
 			.attr('cx', function(d) { return xscale(story.cx(d)); })
 			.attr('cy', function(d) { return yscale(story.cy(d)); })
@@ -356,17 +360,19 @@ function draw_scatter(story) {
 				svg.selectAll('.state')
 						.classed('hide', false)
 						.classed('show', true);
+				svg.selectAll('.tags').style('display', 'block');		
 			})
       .append('title')
       .text(story.hover);
+		
 		// State level bubbles		
-		svg.selectAll('.state')
-			.data(states)
-			.enter().append('circle')
+		var states = svg.selectAll('.state')
+			.data(states).enter();
+		states.append('circle')
 			.attr('class', 'state')
 			.attr('cx', function(d) { return xscale(d.values['cx']); })  
       .attr('cy', function(d) { return yscale(d.values['cy']); })  
-      .attr('r', function(d) { return d.values['rad'] / (R * 200);}) 
+      .attr('r', function(d) { return R * d.values['rad'] / smax; }) 
       .attr('fill', function(d){ return gen_color(d.key);}) 
       .attr('stroke', '#fff')  
       .attr('data-q', function(d) { return d.key; })
@@ -384,10 +390,26 @@ function draw_scatter(story) {
 				var q = d3.select(this).attr('data-q');
         svg.selectAll('.district[data-q="' + q + '"]').classed('hide', false);
 				svg.selectAll('.state').classed('hide', true);
+				svg.selectAll('.tags').style('display', 'none');
 			})
 			.append('title')
 			.text(function(d){ return d.key + ': ' + story.area[0] + ' = ' + N(d.values['rads']) +'. '+ story.x[0] + ' = ' + P(d.values['cx'])
 				+'. '+ story.y[0] + ' = ' + P(d.values['cy']); });	
+		 		
+	states.append('text')
+			.attr('class', 'tags')
+			.attr('x', function(d) { return xscale(d.values['cx']); })  
+      .attr('y', function(d, i) { return yscale(d.values['cy']); })  
+			.text(function(d){ return d.key;})
+			.classed('hide', true)
+			.attr('font-size', 10);	
+		
+	d3.select('#hide_text').on('click', function(){ 
+		if(!d3.select('.state').classed('hide')){ 
+			var hide = d3.selectAll('.tags').classed('hide');
+				d3.selectAll('.tags').classed('hide', !hide);
+		}		
+	});	
 		if(tempSubgroup){
 			svg.selectAll('circle[data-q="' + tempGroup + '"]')
           .classed('fade', false)
