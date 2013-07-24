@@ -55,6 +55,9 @@
       fill: #c0504d;
       font-weight: bold;
     }
+		.stack .fade {
+      display: none;
+    }
     .stack .l0 {
       fill: #fff;
     }
@@ -170,7 +173,8 @@
 	<h3 id="subtitle"></h3>
   <div class="legend treemap" data-story="treemap"></div>
 	<div id="btn"><button id="hide_text" class="btn pull-right">Show / Hide States</button></div>
-  <div class="legend scatter" data-story="scatter" width="100%" height="30"></div>
+  <div class="legend stack" data-story="stack"></div>
+	<div class="legend scatter" data-story="scatter"></div>
   <div><svg id="chart" width="960" height="500"></svg></div>
    <div id="gradient_cont">
 		<svg id="gradient" width="956" height="30">
