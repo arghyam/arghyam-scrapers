@@ -214,8 +214,7 @@ function draw_treemap(story) {
         .append('option')
         .text(String);
     select.on('change', function() {
-			var drilldown = d3.select('#visual').classed('drilldown', false);
-      d3.select('#visual').classed('drilldown', !drilldown);
+			d3.select('#visual').classed('drilldown', false);
       var group = d3.select(this).property('value');
       svg.selectAll('rect').classed('mark', false);
       svg.selectAll('rect[data-q="' + group + '"]').classed('mark', true);
@@ -229,8 +228,7 @@ function draw_treemap(story) {
           .text(function(d){ return d.District_Name; });
     });
     subselect.on('change', function() {
-			var drilldown = d3.select('#visual').classed('drilldown');
-      d3.select('#visual').classed('drilldown', !drilldown);
+			d3.select('#visual').classed('drilldown', true);
       var subgroup = d3.select(this).property('value');
       svg.selectAll('rect').classed('mark', false);
       svg.selectAll('rect[data-q="' + subgroup + '"]').classed('mark', true);
@@ -325,11 +323,11 @@ function draw_scatter(story) {
 																				'rads': d3.sum(rows, function(d){ return story.area[1](d);})};
 				})
 				.entries(subset); 
-		states.sort(function(a, b){ return b.values.rad - a.values.rad;});			
+		states.sort(function(a, b){ return b.values.rads - a.values.rads;});			
 		var R = story.R;
     var xscale = d3.scale.linear().domain(story.xdom).range([R, width - R]);
     var yscale = d3.scale.linear().domain(story.ydom).range([height - R, R])
-		var rState = d3.scale.linear().domain(d3.extent(states.map(function(d) { return d.values['rad'];}))).range([4, 40]);
+		var rState = d3.scale.linear().domain(d3.extent(states.map(function(d) { return d.values['rads'];}))).range([4, 40]);
 		var rDistrict = d3.scale.linear().domain(d3.extent(subset.map(function(d) { return story.area[1](d);}))).range([4, 40]);
 		// District level bubbles
 		var districts = svg.selectAll('.district')    
@@ -374,8 +372,7 @@ function draw_scatter(story) {
 			.attr('class', 'state')
 			.attr('cx', function(d) { return xscale(d.values['cx']); })  
       .attr('cy', function(d) { return yscale(d.values['cy']); })  
-      //.attr('r', function(d) { return d.values['rad'] / (R * 200);}) 
-			.attr('r', function(d) { return rState(d.values['rad']); }) 
+      .attr('r', function(d) { return rState(d.values['rads']); }) 
 			.attr('fill', function(d){ return gen_color(d.key);}) 
       .attr('stroke', '#000')  
 			.attr('stroke-opacity', .5)  
