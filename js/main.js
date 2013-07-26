@@ -1,14 +1,25 @@
-// Display the main chart. It's hidden by default.
-d3.select('.chart').style('display', 'block');
+var host = window.location.host;
+//var iwp = 'www.indiawaterportal.org';
+var iwp = 'arghyam.github.io';
+console.log(host);
 // Clicking on the home button...
-d3.select('#visual').style('display', 'none');
 d3.select('#home').on('click', function() {
-  d3.event.preventDefault();
-  d3.select('#visual').style('display', 'none');
-  d3.select('#about').style('display', 'block');
+  d3.select('#visual').style('display', 'none');	
+	if(host == iwp){	
+		d3.select('#demo').style('display', 'block');
+		d3.select('#about').style('display', 'none');
+	}else{
+		d3.select('#demo').style('display', 'none');
+		d3.select('#about').style('display', 'block');
+	}	
 });
+if(host == iwp){
+	var iwpStories = _.filter(stories, function(d){ return d.IWP == 'true'; });
+	var menu = d3.nest().key(function(d) { return d.menu; }).entries(iwpStories);
+}else{
+	var menu = d3.nest().key(function(d) { return d.menu; }).entries(stories);
+}
 // Display the menus
-var menu = d3.nest().key(function(d) { return d.menu; }).entries(stories);
 var parentmenu = d3.select('ul.nav')
   .selectAll('li.dropdown')
     .data(menu)
@@ -32,7 +43,7 @@ parentmenu
       .append('li')
         .append('a')
         .attr('href', '#')
-        .text(function(d) { return d.title; })
+        .text(function(d) { return d.title;	}) 
         .on('click', draw);
 // Create the menu on #about as well
 d3.select('#about-entry').append('ul')
@@ -76,6 +87,13 @@ var legends = {
   'scatter': 'Each circle represents one %Circlev0%. Click on a %Circlev0% or choose from the drop down for the %Circlev0% and %Circlev1%' + 
 						 ' that you want to see. The size of the circle represents %CircleSize%. The x-axis is based on %AxisX%. The y-axis is based on %AxisY%.'
 };
+if(host == iwp){
+		d3.selectAll('#demo').style('display', 'block');
+		d3.selectAll('#about').style('display', 'none');			
+}else{
+		d3.select('#demo').style('display', 'none');	
+		d3.select('#about').style('display', 'block');		
+}
 // Returns the name of the data file for the currently selected date.
 function datafile() {
   var file = d3.select('#datafiles').property('value');
@@ -91,23 +109,32 @@ function hashchange(e) {
 			return draw(story);
     }
   }
-  d3.select('#about').style('display', 'block');
+  d3.select('#about').style('display', 'none');
   d3.select('#visual').style('display', 'none');
+	if(host == iwp){
+		d3.select('#demo').style('display', 'block');
+		d3.select('#about').style('display', 'none');
+		
+	}else{
+		d3.select('#demo').style('display', 'none');
+		d3.select('#about').style('display', 'block');
+	}	
 }
 window.addEventListener('hashchange', hashchange);
 hashchange();
 // Allow download of SVG
-d3.select('#downloadsvg').on('click', function() {
-  d3.event.preventDefault();
-  svgcrowbar();
-});
+//d3.select('#downloadsvg').on('click', function() {
+//  d3.event.preventDefault();
+//  svgcrowbar();
+//});
 // When any menu option is clicked, draw it.
 function draw(story) {
 	if (d3.event) {
     d3.event.preventDefault();		
   }
-  d3.selectAll('.tooltip').remove();
+	d3.selectAll('.tooltip').remove();
   d3.select('#about').style('display', 'none');
+	d3.selectAll('#demo').style('display', 'none');
   d3.select('#visual').style('display', 'block');
   d3.selectAll('.treemap text').remove();
 	// Remove treemap gradient container 
@@ -398,16 +425,14 @@ function draw_scatter(story) {
 			})
 			.append('title')
 			.text(function(d){ return d.key + ': ' + story.area[0] + ' = ' + N(d.values['rads']) +'. '+ story.x[0] + ' = ' + P(d.values['cx'])
-				+'. '+ story.y[0] + ' = ' + P(d.values['cy']); });	
-		
+				+'. '+ story.y[0] + ' = ' + P(d.values['cy']); });			
 		states.append('text')
 			.attr('class', 'tags')
 			.attr('x', function(d) { return xscale(d.values['cx']); })  
-      .attr('y', function(d, i) { return yscale(d.values['cy']); })  
+      .attr('y', function(d) { return yscale(d.values['cy']) - rState(d.values['rad']); })  
 			.text(function(d){ return d.key;})
 			.classed('hide', true)
-			.attr('font-size', 10);		
-		
+			.attr('font-size', 10);				
 			d3.select('#hide_text').on('click', function(){ 
 				if(!d3.select('.state').classed('hide')){ 
 					var hide = d3.selectAll('.tags').classed('hide');
@@ -476,7 +501,7 @@ function draw_scatter(story) {
 			.attr('y2', height - R);	
 		// Filter subgroups having values greater than 150%  
 		beyond = _.filter(subset, function(d){ return story.cy(d) > story.ydom[1] ? d : '' ;});  
-    // Sorted the values in descending order
+		// Sorted the values in descending order
     beyond.sort(function(a, b){ return story.cy(b) - story.cy(a); });
     // Remove the content - details of the bubbles out of the bound
     d3.selectAll('#details table').remove();
@@ -751,6 +776,5 @@ function positionText() {
     .attr('y', function(d) { return d.y; })
 		.attr('text-anchor', 'middle')
 		.attr('dominant-baseline', 'middle')
-		.style('pointer-events', 'none')
-    .attr('class', function(d) { return "l" + d.depth; });    
+		.style('pointer-events', 'none');
 }       

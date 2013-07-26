@@ -144,9 +144,9 @@
 			stroke-width:1;
 			stroke-opacity:0.6;
 			shape-rendering:crispEdges; 
-		}
-		#btn{margin-right:556px;}	
-  </style>
+		}	
+		#btn{margin-right:556px;}			
+		</style>
   <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
 </head><body>
 <div class="navbar navbar-fixed-top">
@@ -173,8 +173,8 @@
 	<h3 id="subtitle"></h3>
   <div class="legend treemap" data-story="treemap"></div>
 	<div id="btn"><button id="hide_text" class="btn pull-right">Show / Hide States</button></div>
-  <div class="legend stack" data-story="stack"></div>
-	<div class="legend scatter" data-story="scatter"></div>
+	<div class="legend stack" data-story="stack"></div>
+  <div class="legend scatter" data-story="scatter"></div>
   <div><svg id="chart" width="960" height="500"></svg></div>
    <div id="gradient_cont">
 		<svg id="gradient" width="956" height="30">
@@ -206,8 +206,8 @@
     <br>
     <strong>Download</strong>:
       <a href="#" id="data">full dataset</a> |
-      <a href="#" id="downloadsvg">Visual Report(svg)</a>
-			<span style="padding-left:5px;"><a href="http://www.w3.org/TR/SVG/" target="_blank" ><img src="img/question_mark.png" title="What is SVG?" alt="quest_mark"></a></span>  |
+      <!--<a href="#" id="downloadsvg">Visual Report(svg)</a>
+			<span style="padding-left:5px;"><a href="http://www.w3.org/TR/SVG/" target="_blank" ><img src="img/question_mark.png" title="What is SVG?" alt="quest_mark"></a></span>  |-->
 			<a href="glossary/glossary_of_terms.xlsx">Glossary of terms</a>
     <br>
 		<strong>Recommended Browser</strong>:<span style="padding-left:5px;">Google Chrome v26 & above supports SVG | Mozilla Firefox v20 & above supports SVG</span>
@@ -230,7 +230,75 @@
     </div>
     <div class="span6" id="about-entry"></div>
   </div>
+</div>	
+	
+<div id="demo" class="container-fluid container">
+	<h2>Ministry of Water &amp; Sanitation</h2>
+  <h1>Nirmal Bharat Abhiyan: Trends</h1>
+	<div class="row-fluid">
+		<div class="span12">
+				<a class="demo thumbnail pull-left" href="#Money%20spent%7CSpending%20on%20rural%20sanitation">
+					<img src="img/spending_on_rural_sanitation.png?v=1"  onclick="draw()">
+					<h3>Spending on Rural Sanitation</h3>
+					<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt.</p>
+				</a>				
+				<a class="demo thumbnail pull-left" href="#Money%20spent%7CMoney%20spent%20on%20building%20toilets%20for%20the%20rural%20poor">
+					<img src="img/money_spent_on_building_toilets_for_the_rural_poor.png?v=1">
+					<h3>Money Spent on building toilets for the Rural Poor</h3>
+					<p> Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod.</p>
+				</a>
+				<a class="demo thumbnail pull-left" href="#Money%20spent%7CMoney%20given%20vs.%20Money%20spent">
+					<img src="img/money_given_vs_money_spent.png?v=1">
+					<h3>Money Given vs Money Spent</h3>
+					<p>Typi non habent claritatem insitam; est usus legentis in iis qui facit eorum claritatem.</p>
+				</a>				
+				<a class="demo thumbnail pull-left" href="#Toilets%20built%7CEvaluation%20of%20toilets%20built%20for%20the%20rural%20poor">
+					<img src="img/evaluation_of_toilets_built_for_the_rural_poor.png?v=1">
+					<h3>Evaluation of toilets built for the rural poor</h3>
+					<p>Claritas est etiam processus dynamicus, qui sequitur mutationem consuetudium lectorum.</p>
+				</a>				
+				<a class="demo thumbnail pull-left" href="#Toilets%20built%7CCoverage%20of%20Toilets%20-%20Rural%20Households">
+					<img src="img/coverage_of_toilets-rural_households.png?v=1">
+					<h3>Coverage of toilets Rural households</h3>
+					<p>Quam nunc putamus parum claram, anteposuerit litterarum formas.</p>
+				</a>				
+				<a class="demo thumbnail pull-left" href="#Performance%7CComparing%20spending%20to%20toilet%20construction">
+					<img src="img/comparing_spending_to_toilet_construction.png?v=1">
+					<h3>Comparing spending to toilet construction</h3>
+					<p>Humanitatis per seacula quarta decima et quinta decima fiant sollemnes in futurum.</p>
+				</a>				
+		</div>			
+	</div>
+	<div class="container-fluid" style="margin-top:25px;">
+		<p> For queries, email <code>contact@arghyam.org</code></p>
+		<p><a href="http://arghyam.org">Arghyam.org</a></p>
+	</div>
 </div>
+<script>
+	$(window).on('load resize', function() {
+	$('.row').each(function() {
+	var cells = $('.thumbnail', this);
+	cells.css('min-height', 0);
+	var height = Math.max.apply(0, cells.map(function() { return $(this).outerHeight(); }));
+	cells.css('min-height', height);
+	});
+	});
+	$('.menu').on('click', 'input[type=checkbox]', function() {
+	for (var re=[], vals=$('form').serializeArray(), i=0, row; row=vals[i]; i++) {
+	re.push('\\b' + row.name + '\\b');
+	}
+	re = new RegExp(re.join('|'), 'i');
+	$('a.thumbnail').each(function() {
+	var $this = $(this);
+	var match = !!$this.attr('class').match(re);
+	var visible = $this.is(':visible');
+	if (match != visible) {
+	if (match) { $this.show(); }
+	else { $this.hide(); }
+	}
+	});
+	}); 
+</script>
 <script src="js/jquery.min.js"></script>
 <script src="js/underscore-min.js"></script>
 <script src="js/d3.v2.min.js"></script>

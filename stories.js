@@ -129,7 +129,8 @@ var stories = [
         'legend' : { '%Size%':'Total plan', '%Colour%':'Total spent / Total plan', '%rs%':'<br>'+lakhs },
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
-				'pertext': [0, 50, 100, 200]
+				'pertext': [0, 50, 100, 200],
+				'IWP'    : 'true'
     }),
     treemap_story({
         'menu'   : 'Money spent',
@@ -144,7 +145,8 @@ var stories = [
         'legend' : { '%Size%':'Total plan - Rural poor', '%Colour%':'Total spent - Rural poor / Total plan - Rural poor', '%rs%':'<br>'+lakhs },
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
-				'pertext': [0, 50, 100, 200]
+				'pertext': [0, 50, 100, 200],
+				'IWP'    : 'true'
     }),
     treemap_story({
         'menu'   : 'Money spent',
@@ -159,7 +161,8 @@ var stories = [
         'legend' : { '%Size%':'Total plan - School', '%Colour%':'Total spent - School / Total plan - School', '%rs%':'<br>'+lakhs },
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
-				'pertext': [0, 50, 100, 200]
+				'pertext': [0, 50, 100, 200],
+				'IWP'    : 'false'
     }),
     treemap_story({
         'menu'   : 'Money spent',
@@ -174,7 +177,8 @@ var stories = [
         'legend' : { '%Size%':'Total plan - Sanitary Complexes', '%Colour%':'Total spent - SC / Total plan - SC', '%rs%':'<br>'+lakhs },
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
-				'pertext': [0, 50, 100, 200]
+				'pertext': [0, 50, 100, 200],
+				'IWP'    : 'false'
     }),
     treemap_story({
         'menu'   : 'Money spent',
@@ -189,7 +193,8 @@ var stories = [
         'legend' : { '%Size%':'Total plan - Anganwadi', '%Colour%':'Total spent - Anganwadi / Total plan - Anganwadi', '%rs%':'<br>'+lakhs },
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
-				'pertext': [0, 50, 100, 200]
+				'pertext': [0, 50, 100, 200],
+				'IWP'    : 'false'
     }),
     treemap_story({
         'menu'   : 'Money spent',
@@ -209,7 +214,8 @@ var stories = [
         'legend' : { '%Size%': 'Total plan', '%Colour%': 'Plan centre share / Total plan', '%rs%':'<br>'+lakhs },
 				'grad'   : 'gradient_legend_SocP',
 				'percent': [1, 30, 57, 95],
-				'pertext': [0, 60, 70, 200]
+				'pertext': [0, 60, 70, 200],
+				'IWP'    : 'false'
     }),
     treemap_story({
         'menu'   : 'Money spent',
@@ -224,7 +230,8 @@ var stories = [
         'legend' : { '%Size%': 'Total plan', '%Colour%': 'Money given by centre / Total Money given', '%rs%':'<br>'+lakhs },
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
-				'pertext': [0, 50, 100, 200]	
+				'pertext': [0, 50, 100, 200],
+				'IWP'    : 'false'
     }),
     treemap_story({
         'menu'   : 'Money spent',
@@ -239,7 +246,8 @@ var stories = [
         'legend' : { '%Size%': 'Total plan', '%Colour%': 'Centre spent / Total spent', '%rs%':'<br>'+lakhs },
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
-				'pertext': [0, 50, 100, 200]	
+				'pertext': [0, 50, 100, 200],
+				'IWP'    : 'false'
     }),
     stack_story({
         'menu'   : 'Money spent',
@@ -274,7 +282,8 @@ var stories = [
 				'ydom'   : '45',
 				'lines'  : 'true', 
         'story'  : 'Story to be written...',
-        'legend' : { '%Blue%': 'Centre', '%Red%': 'State', '%Green%': 'Beneficiary' }
+        'legend' : { '%Blue%': 'Centre', '%Red%': 'State', '%Green%': 'Beneficiary' },
+				'IWP'    : 'true'
     }),
     stack_story({
         'menu'   : 'Money spent',
@@ -295,7 +304,8 @@ var stories = [
 				'ydom'   : '15',
 				'lines'  : 'false',
         'story'  : 'Story to be written...',
-        'legend' : { '%Blue%': 'APL SC + ST', '%Red%': 'Rural poor SC + ST', '%Green%': 'Others' }
+        'legend' : { '%Blue%': 'APL SC + ST', '%Red%': 'Rural poor SC + ST', '%Green%': 'Others' },
+				'IWP'    : 'false'
     }),
     treemap_story({
         'menu'   : 'Toilets built',
@@ -310,7 +320,8 @@ var stories = [
         'legend' : { '%Size%': 'Toilets planned for rural poor', '%Colour%': 'Toilets built for rural poor / Toilets planned for rural poor', '%rs%':' ' },
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
-				'pertext': [0, 50, 100, 200]
+				'pertext': [0, 50, 100, 200],
+				'IWP'    : 'true'
     }),
     treemap_story({
         'menu'   : 'Toilets built',
@@ -325,7 +336,8 @@ var stories = [
         'legend' : { '%Size%': 'Planned APL toilets', '%Colour%': 'Built APL toilets / Planned APL toilets', '%rs%':' ' },
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
-				'pertext': [0, 50, 100, 200]
+				'pertext': [0, 50, 100, 200],
+				'IWP'    : 'false'
     }),
     treemap_story({
         'menu'   : 'Toilets built',
@@ -341,7 +353,8 @@ var stories = [
         'legend' : { '%Size%': 'Total Rural Households', '%Colour%': 'Rural Households (WT) / Total Rural Households', '%rs%':' ' },
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
-				'pertext': [0, 50, 100, 200]
+				'pertext': [0, 50, 100, 200],
+				'IWP'    : 'true'
     }),
     scatter_story({
         'menu'   : 'Performance',
@@ -352,7 +365,7 @@ var stories = [
         'group'  : ['State_Name'],
         'area'   : ['# Rural poor toilets required', function(d) { return +d['PO_IHHL_BPL']; }],
         'x'      : ['Spent / Plan', function(d) { return d['ExpReported_Total'] / d['Total_Projects_Outlay']; }],
-        'y'      : ['% Rural poor toilets constructed', function(d) { return d['PP_IHHL_BPL'] / d['PO_IHHL_BPL']; }],
+        'y'      : ['% Toilets constructed for rural poor', function(d) { return d['PP_IHHL_BPL'] / d['PO_IHHL_BPL']; }],
         'R'      : 40,
         'xdom'   : [0, 1.5],
         'ydom'   : [0, 1.5],
@@ -362,7 +375,8 @@ var stories = [
 										 '%CircleSize%'          : 'Rural poor toilets required'        ,
                      '%AxisX%'               : 'overall spending on rural sanitation (since toilet construction for the rural poor and allied activities is the biggest spend in the whole allotted sum)' ,
                      '%AxisY%'               : '% Rural poor toilets constructed'										 
-                   }  
+                   },
+				'IWP'    : 'true'						
 		}),
     scatter_story({
         'menu'   : 'Performance',
@@ -382,7 +396,8 @@ var stories = [
                      '%CircleSize%'          : 'Rural poor toilets required'         ,
                      '%AxisX%'               : 'Spent / Plan'                        ,
                      '%AxisY%'               : '% Rural poor Households with toilet'
-                   }
+                   },
+				'IWP'    : 'false'						
    })										
 ];
 
