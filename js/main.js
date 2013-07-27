@@ -1,6 +1,5 @@
 var host = window.location.host;
-//var iwp = 'www.indiawaterportal.org';
-var iwp = 'arghyam.github.io';
+var iwp = 'www.indiawaterportal.org';
 console.log(host);
 // Clicking on the home button...
 d3.select('#home').on('click', function() {
