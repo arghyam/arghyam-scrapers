@@ -1,10 +1,13 @@
 var host = window.location.host;
 var iwp = 'www.indiawaterportal.org';
 console.log(host);
+d3.selectAll('.tooltip').remove();
 // Clicking on the home button...
 d3.select('#home').on('click', function() {
+	d3.selectAll('.tooltip').remove();
+  //d3.event.preventDefault();
   d3.select('#visual').style('display', 'none');	
-	if(host == iwp){	
+	if(host == iwp){
 		d3.select('#demo').style('display', 'block');
 		d3.select('#about').style('display', 'none');
 	}else{
@@ -79,12 +82,14 @@ var svg = d3.select('#chart')
 var legends = {
   'treemap': 'Each large box represents one State. Click on it to reveal smaller boxes that represent a District.' +
              '<br>Size = <strong>%Size%</strong>.' +
-             '<br>Colour = <strong>%Colour%</strong>. Red is low, green is high.' +
+             '<br>Colour = <strong>%Colour%</strong>. Red is low, Green is high.' +
              '%rs%',
   'stack'  : 'Each row represents one State, showing the break-up of <strong>%Rows%</strong>.' +
              'Click on it to reveal more boxes on the right representing each District.' + '<br> Blue = <strong>%Blue%</strong>, Red = <strong>%Red%</strong>, Green = <strong>%Green%</strong>.',
   'scatter': 'Each circle represents one %Circlev0%. Click on a %Circlev0% or choose from the drop down for the %Circlev0% and %Circlev1%' + 
-						 ' that you want to see. The size of the circle represents %CircleSize%. The x-axis is based on %AxisX%. The y-axis is based on %AxisY%.'
+						 ' that you want to see. The size of the circle represents <strong>%CircleSize%</strong>. The x-axis is based on %AxisX%. The y-axis is based on <strong>%AxisY%</strong>.',
+	'cartogram': 'Each circle represents one %Circlev0%. The size of the circle represents <strong>%CircleSize%</strong>.' +
+							'<br> The colour of the circles represents <strong>%Colour%</strong>. Red is low, Green is high.'
 };
 if(host == iwp){
 		d3.selectAll('#demo').style('display', 'block');
@@ -113,7 +118,6 @@ function hashchange(e) {
 	if(host == iwp){
 		d3.select('#demo').style('display', 'block');
 		d3.select('#about').style('display', 'none');
-		
 	}else{
 		d3.select('#demo').style('display', 'none');
 		d3.select('#about').style('display', 'block');
@@ -136,6 +140,8 @@ function draw(story) {
 	d3.selectAll('#demo').style('display', 'none');
   d3.select('#visual').style('display', 'block');
   d3.selectAll('.treemap text').remove();
+  d3.select('#chart').style('border', 'none');
+	d3.selectAll('.legend').style('display', 'none');	
 	// Remove treemap gradient container 
   d3.select('#gradient_cont').style('display', 'none');
   // Remove scatterplot info container
@@ -171,6 +177,7 @@ function draw_treemap(story) {
   // Add gradient legend for treemap
   d3.select('#gradient_cont').style('display', 'block');
 	d3.selectAll('#gradient text').remove();	
+	d3.select('.legend.treemap').style('display', 'block');	
 	// Creates gradient legend for treemap
 	var gradient = d3.select('#gradient');
   gradient.append('rect').attr('x', 0).attr('y', 0)
@@ -261,12 +268,104 @@ function draw_treemap(story) {
     });
   });
 }
+function draw_cartogram(story) {
+	// Add gradient legend for cartogram
+  d3.select('#gradient_cont').style('display', 'block');
+	d3.selectAll('#gradient text').remove();
+	d3.selectAll('.legend').style('display', 'none');	
+	d3.selectAll('.feature').remove();
+	d3.selectAll('.state_bubbles').remove();
+	
+	// Creates gradient legend for cartogram
+	var gradient = d3.select('#gradient');
+  gradient.append('rect').attr('x', 0).attr('y', 0)
+    .attr('width', 958).attr('height', 30)
+    .attr('fill', 'url(#'+ story.grad +')');
+  gradient.selectAll('text')
+    .data(story.percent) 
+   .enter().append('text')
+    .attr('x', function(d){ return d + '%';})
+    .attr('y', 20)
+    .data(story.pertext) 
+    .text(function(d){ return d + '%'; })
+    .style('fill', function(d, i){ return i == 3 ? 'white' : 'black';});
+	
+	var svg = d3.select('#chart');
+			svg.selectAll('*').remove();
+			svg.style('border', '1px solid #ddd');
+	var width = parseInt(svg.style('width'));
+  var height = parseInt(svg.style('height'));			
+
+	var projection = d3.geo.mercator()
+			.scale(width*6)
+			.translate([-width+115, height+115]);
+
+	var path = d3.geo.path()
+			.projection(projection);
+			
+	var zoom = d3.behavior.zoom()
+			.on('zoom', function() {
+					g.attr('transform', 'translate('+ 
+							d3.event.translate.join(',')+')scale('+d3.event.scale+')');
+					g.selectAll('path')  
+							.attr('d', path.projection(projection)); 
+	});
+		
+	var maps = svg.append('g')
+							.call(zoom);	
+	var g = maps.append('g');	
+	
+	d3.json('topojson/in-states-topo.json', function(json) {
+			g.selectAll('.feature')
+					.data(topojson.object(json, json.objects.states).geometries)
+				.enter().append('path')
+					.attr('class', 'feature')
+					.attr('d', function(d){ return path(d);})
+					.style('fill', function(d, i){ return gen_color_vals[i]; });
+					
+			d3.csv(datafile(), function(data){ 
+					var subset = _.filter(data, story.filter);
+					    draw_date(data[data.length-1], story);
+					var dataset = d3.nest()
+						.key(function(d){ return d[story.group]; })
+						.rollup(function(rows){ 
+							return { 'rads': d3.sum(rows, function(d){ return d[story.area[1]] ;}),
+											 'num': d3.sum(rows, function(d){ return d[story.num[1]] ;}),
+											 'den': d3.sum(rows, function(d){ return d[story.den[1]] ;}),
+								       'col' : d3.mean(rows, function(d){ return d[story.num[1]] / d[story.den[1]];}) }
+						})
+						.entries(subset); 
+					var states = _.filter(dataset, function(d){ return d.key != 'PUDUCHERRY' ;});
+					var rState = d3.scale.linear().domain(d3.extent(states.map(function(d) { return d.values['rads'];}))).range([5, 30]);
+											
+					g.selectAll('.state_bubbles')
+						.data(topojson.object(json, json.objects.states).geometries)
+					.enter().append('circle')	
+						.attr('class', 'state_bubbles')
+						.attr('cx', function(d){ return path.centroid(d)[0]; })
+						.attr('cy', function(d){ return path.centroid(d)[1]; })
+						.data(states)
+						// Delhi in topojson and D & N Haveli in data file... not displaying D & N Haveli 
+						.attr('r', function(d){ return d.key == 'D & N HAVELI' ? 0 : rState(d.values['rads']); })
+						.style('fill', function(d){ return color(d.values['col']) ;})
+						.on('mouseover', function(){
+							var details = d3.select(this).text(); 
+							$('#copy_title').val(details).select();	
+						})
+						.append('title')
+						.text(function(d){ return d.key +': '+ story.area[0]+ ' = '+ N(d.values['rads']) + '. '
+										+ story.num[0] +' / '+ story.den[0]+' = ' + N(d.values['num']) +' / '+ N(d.values['den']) +' = '+ P(d.values['col']);
+						});
+			});		
+	});
+}
 var tempGroup = '', tempSubgroup = '', tempResult = [];
 function draw_scatter(story) {
   var beyond = [];
   // Add scatterplot info container
   d3.select('#right_container').style('display','block');
 	d3.select('#hide_text').style('display', 'block');
+	d3.select('.legend.scatter').style('display', 'block');	
 	// Filter the data
   d3.csv(datafile(), function(data) {
     var subset = initchart(story, data);
@@ -424,14 +523,16 @@ function draw_scatter(story) {
 			})
 			.append('title')
 			.text(function(d){ return d.key + ': ' + story.area[0] + ' = ' + N(d.values['rads']) +'. '+ story.x[0] + ' = ' + P(d.values['cx'])
-				+'. '+ story.y[0] + ' = ' + P(d.values['cy']); });			
+				+'. '+ story.y[0] + ' = ' + P(d.values['cy']); });	
+		
 		states.append('text')
 			.attr('class', 'tags')
 			.attr('x', function(d) { return xscale(d.values['cx']); })  
       .attr('y', function(d) { return yscale(d.values['cy']) - rState(d.values['rad']); })  
 			.text(function(d){ return d.key;})
 			.classed('hide', true)
-			.attr('font-size', 10);				
+			.attr('font-size', 10);		
+		
 			d3.select('#hide_text').on('click', function(){ 
 				if(!d3.select('.state').classed('hide')){ 
 					var hide = d3.selectAll('.tags').classed('hide');
@@ -527,6 +628,7 @@ function draw_stack(story) {
 	d3.selectAll('.v1').remove();
 	d3.selectAll('.y1').remove();
 	d3.selectAll('text, line, .y2').remove();
+	d3.select('.legend.stack').style('display', 'block');	
   d3.csv(datafile(), function(data) {
     var subset = initchart(story, data);
     draw_date(data[data.length-1], story);
@@ -775,5 +877,5 @@ function positionText() {
     .attr('y', function(d) { return d.y; })
 		.attr('text-anchor', 'middle')
 		.attr('dominant-baseline', 'middle')
-		.style('pointer-events', 'none');
-}       
+		.style('pointer-events', 'none');   
+}    

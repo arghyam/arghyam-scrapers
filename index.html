@@ -15,137 +15,40 @@
     }
     .chart, .legend { display: none; }
     .legend select { margin-right: 1em; }
-    .drilldown #chart .l1 {
-      stroke: none;
-      fill: #fff;
-    }
-    .drilldown #chart .l2 {
-      opacity: 1;
-      pointer-events: auto;
-    }
-    .axis path, .axis line {
-      fill: none;
-      stroke: black;
-      shape-rendering: crispEdges;
-    }
-    .axis text {
-      font-size: 11px;
-    }
-    .scatter circle {
-      fill-opacity: .9;
-    }
-    .scatter .show {
-      opacity: 1;
-      stroke: rgba(0,0,0,.5);
-    }
-    .scatter .fade {
-      display: none;
-    }
-    .scatter .mark {
-      fill: #4f81bd;
-    }
-		.scatter .hide{
-			fill-opacity:0.0;
-			stroke-opacity:0.0;
-		}
-    .treemap .mark {
-      fill: #4f81bd;
-    }
-    .stack .mark {
-      fill: #c0504d;
-      font-weight: bold;
-    }
-		.stack .fade {
-      display: none;
-    }
-    .stack .l0 {
-      fill: #fff;
-    }
-    .go-bold {
-      font-weight: bolder;
-    }
-    #datafiles {
-      padding: 0;
-      margin: auto;
-      height: auto;
-    }
-    #columns{
-      padding-left:5px;
-      font-family: arial;
-      color:#444;
-      font-size: 1em;
-    }
-    #source a {
-      display: block;
-    }
-    #right_container{
-      float:right;
-      width:210px;
-      position:relative;
-      padding:5px;
-      bottom:475px;
-      font-size:0.7em;
-    }
-    #header{
-      font-size: 1.2em;
-      padding:5px;
-      background-color: black;
-      color:white;
-      font-weight: bold;
-    }
-    #details{
-      border:1px solid gray;
-      padding:5px;
-    }
-    #details tr td{
-      vertical-align: top;
-    }
-    #info{
-      font-size: 1.1em;
-      padding-top: 5px;
-      line-height: 1.5em;
-    }
-    .v0 text {
-      fill: #08c;
-      cursor: pointer;
-    }
-	  #gradient_cont{
-      width:956px;
-      height: 30px;
-      padding:1px;
-      border:1px solid #eee;
-    }
-    #gradient text{
-      stroke:none;
-      font-size:1em;
-      font-family:arial;
-    }
-		.vert0, .vert1{ 
-			fill:none; 
-			stroke:#fff; 
-			stroke-width:1; 
-			shape-rendering:crispEdges; 
-		}
-		.y1, .y2{
-			fill:#000;
-			stroke:none;
-			text-anchor:middle;
-			font-size:0.8em;
-		}
-		.horiz0, .horiz1{
-			fill:none;
-			stroke:#999;
-			stroke-width:1;
-			shape-rendering:crispEdges;
-		}
-		.h, .v{
-			fill:none;
-			stroke:#fff;
-			stroke-width:1;
-			stroke-opacity:0.6;
-			shape-rendering:crispEdges; 
-		}	
-		#btn{margin-right:556px;}			
+    .drilldown #chart .l1 { stroke: none; fill: #fff; }
+    .drilldown #chart .l2 { opacity: 1; pointer-events: auto; }
+    .axis path, .axis line { fill: none; stroke: black; shape-rendering: crispEdges; }
+    .axis text { font-size: 11px; }
+    .scatter circle { fill-opacity: .9; }
+    .scatter .show { opacity: 1; stroke: rgba(0,0,0,.5); }
+    .scatter .fade { display: none; }
+    .scatter .mark { fill: #4f81bd; }
+		.scatter .hide{	fill-opacity:0.0;	stroke-opacity:0.0;	}
+    .treemap .mark { fill: #4f81bd; }
+    .stack .mark { fill: #c0504d; font-weight: bold; }
+		.stack .fade { display: none; }
+    .stack .l0 { fill: #fff; }
+    .go-bold { font-weight: bolder; }
+    #datafiles { padding: 0; margin: auto; height: auto; }
+    #columns{ padding-left:5px; font-family: arial; color:#444; font-size: 1em; }
+    #source a { display: block; }
+    #right_container{ float:right; width:210px; position:relative; padding:5px; bottom:475px; font-size:0.7em; }
+    #header{ font-size: 1.2em; padding:5px; background-color: black; color:white; font-weight: bold; }
+    #details{ border:1px solid gray; padding:5px; }
+    #details tr td{ vertical-align: top; }
+    #info{ font-size: 1.1em; padding-top: 5px; line-height: 1.5em; }
+    .v0 text { fill: #08c; cursor: pointer; }
+	  #gradient_cont{ width:956px; height: 30px; padding:1px; border:1px solid #eee; }
+    #gradient text{stroke:none; font-size:1em; font-family:arial; }
+		.vert0, .vert1{ fill:none; stroke:#fff; stroke-width:1; shape-rendering:crispEdges; }
+		.y1, .y2{	fill:#000; stroke:none;	text-anchor:middle;	font-size:0.8em; }
+		.horiz0, .horiz1{	fill:none; stroke:#999;	stroke-width:1;	shape-rendering:crispEdges;	}
+		.h, .v{	fill:none; stroke:#fff;	stroke-width:1;	stroke-opacity:0.6;	shape-rendering:crispEdges; }	
+		#btn{ margin-right:556px; }	
+		.frame { stroke: none; fill: none; pointer-events: all;	}
+		.feature { stroke: #ccc; fill-opacity:0.05; }
+		.state_bubbles{ fill: none; stroke:#ddd; }	
+		.state_bubbles:hover{ stroke:#888; }
 		</style>
   <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
 </head><body>
@@ -173,6 +76,7 @@
 	<h3 id="subtitle"></h3>
   <div class="legend treemap" data-story="treemap"></div>
 	<div id="btn"><button id="hide_text" class="btn pull-right">Show / Hide States</button></div>
+	<!--<div class="legend cartogram" data-story="cartogram"></div>-->
 	<div class="legend stack" data-story="stack"></div>
   <div class="legend scatter" data-story="scatter"></div>
   <div><svg id="chart" width="960" height="500"></svg></div>
@@ -197,7 +101,7 @@
 		</svg>
   </div>
   <div id="right_container"><div id="header"></div><div id="details"></div><div id="info"></div></div>
-  <div id="legend"></div>
+  <div id="legend"><br></div>
   <p id="story"></p>
   <p>
     <strong>Date</strong>: <span id="date"></span> <strong>Change</strong>: <select id="datafiles" class="input-medium"></select>
@@ -210,8 +114,8 @@
 			<span style="padding-left:5px;"><a href="http://www.w3.org/TR/SVG/" target="_blank" ><img src="img/question_mark.png" title="What is SVG?" alt="quest_mark"></a></span>  |-->
 			<a href="glossary/glossary_of_terms.xlsx">Glossary of terms</a>
     <br>
-		<strong>Recommended Browser</strong>:<span style="padding-left:5px;">Google Chrome v26 & above supports SVG | Mozilla Firefox v20 & above supports SVG</span>
-		<br>
+		<!--<strong>Recommended Browser</strong>:<span style="padding-left:5px;">Google Chrome v26 & above supports SVG | Mozilla Firefox v20 & above supports SVG</span>
+		<br>-->
   </p>
   <div><strong>Source</strong>:</div>
   <div id="source"></div>
@@ -275,7 +179,7 @@
 	</div>
 </div>
 <script src="js/jquery.min.js"></script>
-<script type="text/javascript">
+<script>
 	$(window).on('load resize', function() {
 	$('.row').each(function() {
 	var cells = $('.thumbnail', this);
@@ -302,9 +206,10 @@
 </script>
 <script src="js/underscore-min.js"></script>
 <script src="js/d3.v2.min.js"></script>
+<script src="js/topojson.v0.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/svg-crowbar.js"></script>
-<script src="stories.js?v=1"></script>
+<script src="stories.js"></script>
 <script src="js/main.js"></script>
 <script type="text/javascript">
   var _gaq = _gaq || [];

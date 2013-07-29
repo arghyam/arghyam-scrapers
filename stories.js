@@ -6,7 +6,7 @@ var color = d3.scale.linear()
 var	colorsSocP = d3.scale.linear()
 		.clamp(true)
 		.domain([0, 0.6, 0.6, 0.7, 0.7, 2])
-		.range(['#D73027', '#D73027', '#90EE90', '#90EE90', '#1A9850', '#000']);		
+		.range(['#D73027', '#D73027', '#90EE90', '#90EE90', '#1A9850', '#000']);	
 		
 // Display formats
 var F = d3.format(',.0f'); // Float
@@ -59,10 +59,35 @@ function join() {
     return result;
 }
 
+
 function treemap_story(story) {
     story.type = 'treemap';
     story.cols = story.cols || join(story.area[1], story.num[1], story.den[1]);
     story.size = function(d) { return sum(d, story.area[1]); };
+    story.filter = function(d) { return d.District_Name.match(/^[A-Z]/); };
+    story.color = story.colors || function(d) { return color((story.factor || 1) * sum(d, story.num[1]) / sum(d, story.den[1])).replace(/NaNNaNNaN/i, 'eee'); };
+    story.hover = function(d) {
+      var prefix = d.depth == 2 ? d['State_Name'] + ' - ' + d['District_Name'] + ': ' :
+                   d.depth == 1 ? d['key'] + ': '
+                                : '';
+      var num = sum(d, story.num[1]);
+      var den = sum(d, story.den[1]);
+      var size = sum(d, story.area[1]);
+      return (prefix +
+          story.area[0] + ' = ' + N(size) + '. ' +
+          story.num[0] + ' / ' + story.den[0] + ' = ' +
+          N(num) + ' / ' + N(den) + ' = ' + P(num / den)
+      );
+    };
+    return story;
+}
+
+function cartogram_story(story) {
+    story.type = 'cartogram';
+    story.cols = story.cols || join(story.area[1], story.num[1], story.den[1]);
+    story.size = function(d) { return sum(d, story.area[1]); };
+		story.radius = function(d) { return d['Rural_Households']; };
+		story.scolor = function(d) { return d['PP_IHHL_TOTAL']; };
     story.filter = function(d) { return d.District_Name.match(/^[A-Z]/); };
     story.color = story.colors || function(d) { return color((story.factor || 1) * sum(d, story.num[1]) / sum(d, story.den[1])).replace(/NaNNaNNaN/i, 'eee'); };
     story.hover = function(d) {
@@ -339,18 +364,22 @@ var stories = [
 				'pertext': [0, 50, 100, 200],
 				'IWP'    : 'false'
     }),
-    treemap_story({
+    cartogram_story({
         'menu'   : 'Toilets built',
         'title'  : 'Coverage of Toilets - Rural Households',
         'url'    : ['http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home',
 										'http://www.indiawaterportal.org/data/2011-census-household-tables-0'],
         'cols'   : ['PP_IHHL_TOTAL', 'Rural_Households'],
         'group'  : ['State_Name'],
-        'area'   : ['Total Rural Households' , ['Rural_Households']],
-        'num'    : ['Rural Households (WT)', ['PP_IHHL_TOTAL']],
-        'den'    : ['Total Rural Households', ['Rural_Households']],
+        'area'   : ['Total Rural Households' , 'Rural_Households'],
+        'num'    : ['Rural Households (WT)', 'PP_IHHL_TOTAL'],
+        'den'    : ['Total Rural Households', 'Rural_Households'],
         'story'  : 'Story to be written...',
-        'legend' : { '%Size%': 'Total Rural Households', '%Colour%': 'Rural Households (WT) / Total Rural Households', '%rs%':' ' },
+        'legend' : { '%Circlev0%'            : 'State'                                          ,
+										 '%Circlev1%'            : 'District'                                       ,
+                     '%CircleSize%'          : 'Total Rural Households'                         ,
+                     '%Colour%'              : 'Rural Households (WT) / Total Rural Households'
+                   },
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
@@ -372,9 +401,9 @@ var stories = [
         'story'  : 'Story to be written...',
         'legend' : { '%Circlev0%'            : 'State'                              ,
                      '%Circlev1%'            : 'District'                           ,
-										 '%CircleSize%'          : 'Rural poor toilets required'        ,
+										 '%CircleSize%'          : 'Toilets required for Rural poor'    ,
                      '%AxisX%'               : 'overall spending on rural sanitation (since toilet construction for the rural poor and allied activities is the biggest spend in the whole allotted sum)' ,
-                     '%AxisY%'               : '% Rural poor toilets constructed'										 
+                     '%AxisY%'               : '% Toilets constructed for Rural poor'										 
                    },
 				'IWP'    : 'true'						
 		}),
