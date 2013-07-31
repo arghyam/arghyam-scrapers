@@ -1,6 +1,6 @@
 var host = window.location.host;
 //var iwp = 'www.indiawaterportal.org';
-var iwp = 'github.io';
+var iwp = 'arghyam.github.io';
 console.log(host);
 d3.selectAll('.tooltip').remove();
 // Clicking on the home button...
