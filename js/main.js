@@ -1,5 +1,6 @@
 var host = window.location.host;
-var iwp = 'www.indiawaterportal.org';
+//var iwp = 'www.indiawaterportal.org';
+var iwp = 'github.io';
 console.log(host);
 d3.selectAll('.tooltip').remove();
 // Clicking on the home button...
@@ -99,7 +100,7 @@ if(host == iwp){
 		d3.select('#about').style('display', 'block');		
 }
 // Returns the name of the data file for the currently selected date.
-function datafile() {
+function datafile() { 
   var file = d3.select('#datafiles').property('value');
   d3.select('#data').attr('href', file);
   return file;
@@ -137,6 +138,7 @@ function draw(story) {
   }
 	d3.selectAll('.tooltip').remove();
   d3.select('#about').style('display', 'none');
+	d3.select('#exp_text').text(' ');	
 	d3.selectAll('#demo').style('display', 'none');
   d3.select('#visual').style('display', 'block');
   d3.selectAll('.treemap text').remove();
@@ -173,10 +175,20 @@ function draw_date(daterow, story) {
     var dates = _.uniq(_.map(story.cols, function(col) { return daterow[col]; }));
     d3.select('#date').text(dates.join(', '));
 }
-function draw_treemap(story) {
+function draw_treemap(story) { 
+	d3.selectAll('.tooltip').remove();
   // Add gradient legend for treemap
   d3.select('#gradient_cont').style('display', 'block');
-	d3.selectAll('#gradient text').remove();	
+
+	d3.selectAll('#gradient text').remove();
+	d3.select('#exp_text').text(' ');	
+	if(story.exp){
+		var expl = story.exp.split('@');
+		d3.select('#exp_text').selectAll('.expl')
+				.data(expl)
+			.enter().append('p')
+				.html(function(d){ return d.split('$').join('&nbsp &nbsp'); }); 		
+	}
 	d3.select('.legend.treemap').style('display', 'block');	
 	// Creates gradient legend for treemap
 	var gradient = d3.select('#gradient');
@@ -192,8 +204,9 @@ function draw_treemap(story) {
     .text(function(d){ return d + '%'; })
     .style('fill', function(d, i){ return i == 3 ? 'white' : 'black';});
   // Filter the data
-  d3.csv(datafile(), function(data) {
-    var subset = initchart(story, data);
+  d3.csv(story.data || datafile(), function(data) {
+		if(story.data){ $('#data_cont').hide(); d3.select('#data').attr('href', story.data); } else { $('#data_cont').show();}
+		var subset = initchart(story, data);
     draw_date(data[data.length-1], story);
 		var treemap = d3.layout.treemap()
       .size([parseInt(svg.style('width'), 10), svg.attr('height')])
@@ -249,7 +262,10 @@ function draw_treemap(story) {
     select.on('change', function() {
 			d3.select('#visual').classed('drilldown', false);
       var group = d3.select(this).property('value');
-      svg.selectAll('rect').classed('mark', false);
+			var details = svg.select('rect[data-q="' + group + '"]').text();
+			$('#copy_title').val(details);
+			$('#copy_title').on('mouseover', function(){ $(this).select(); });	
+			svg.selectAll('rect').classed('mark', false);
       svg.selectAll('rect[data-q="' + group + '"]').classed('mark', true);
       var result = _.filter(subset, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); });
       result.unshift({"District_Name":"select District"});
@@ -263,19 +279,32 @@ function draw_treemap(story) {
     subselect.on('change', function() {
 			d3.select('#visual').classed('drilldown', true);
       var subgroup = d3.select(this).property('value');
+			var details = svg.select('rect[data-q="' + subgroup + '"]').text();
+			$('#copy_title').val(details);
+			$('#copy_title').on('mouseover', function(){ $(this).select(); });	
       svg.selectAll('rect').classed('mark', false);
       svg.selectAll('rect[data-q="' + subgroup + '"]').classed('mark', true);
     });
   });
 }
 function draw_cartogram(story) {
+	d3.selectAll('.tooltip').remove();
 	// Add gradient legend for cartogram
   d3.select('#gradient_cont').style('display', 'block');
+	d3.select('#exp_text').text(' ');
+	if(story.exp){
+		var expl = story.exp.split('@');
+		d3.select('#exp_text').selectAll('.expl')
+				.data(expl)
+				.enter().append('p')
+				.html(function(d){ return d.split('$').join('&nbsp &nbsp'); }); 
+	}		
 	d3.selectAll('#gradient text').remove();
 	d3.selectAll('.legend').style('display', 'none');	
 	d3.selectAll('.feature').remove();
-	d3.selectAll('.state_bubbles').remove();
-	
+
+
+	d3.selectAll('.state_bubbles').remove();	
 	// Creates gradient legend for cartogram
 	var gradient = d3.select('#gradient');
   gradient.append('rect').attr('x', 0).attr('y', 0)
@@ -288,8 +317,9 @@ function draw_cartogram(story) {
     .attr('y', 20)
     .data(story.pertext) 
     .text(function(d){ return d + '%'; })
-    .style('fill', function(d, i){ return i == 3 ? 'white' : 'black';});
-	
+
+
+    .style('fill', function(d, i){ return i == 3 ? 'white' : 'black';});	
 	var svg = d3.select('#chart');
 			svg.selectAll('*').remove();
 			svg.style('border', '1px solid #ddd');
@@ -301,29 +331,33 @@ function draw_cartogram(story) {
 			.translate([-width+115, height+115]);
 
 	var path = d3.geo.path()
-			.projection(projection);
-			
+
+
+			.projection(projection);			
 	var zoom = d3.behavior.zoom()
 			.on('zoom', function() {
 					g.attr('transform', 'translate('+ 
 							d3.event.translate.join(',')+')scale('+d3.event.scale+')');
 					g.selectAll('path')  
 							.attr('d', path.projection(projection)); 
-	});
-		
-	var maps = svg.append('g')
-							.call(zoom);	
-	var g = maps.append('g');	
-	
+
+
+	});		
+	var maps = svg.append('g').call(zoom);	
+
+	var g = maps.append('g');		
+
 	d3.json('topojson/in-states-topo.json', function(json) {
 			g.selectAll('.feature')
 					.data(topojson.object(json, json.objects.states).geometries)
 				.enter().append('path')
 					.attr('class', 'feature')
 					.attr('d', function(d){ return path(d);})
-					.style('fill', function(d, i){ return gen_color_vals[i]; });
-					
-			d3.csv(datafile(), function(data){ 
+
+
+					.style('fill', function(d, i){ return gen_color_vals[i]; });					
+			d3.csv(story.data || datafile(), function(data){ 
+					if(story.data){ $('#data_cont').hide(); d3.select('#data').attr('href', story.data); } else { $('#data_cont').show();}
 					var subset = _.filter(data, story.filter);
 					    draw_date(data[data.length-1], story);
 					var dataset = d3.nest()
@@ -336,8 +370,9 @@ function draw_cartogram(story) {
 						})
 						.entries(subset); 
 					var states = _.filter(dataset, function(d){ return d.key != 'PUDUCHERRY' ;});
-					var rState = d3.scale.linear().domain(d3.extent(states.map(function(d) { return d.values['rads'];}))).range([5, 30]);
-											
+
+
+					var rState = d3.scale.linear().domain(d3.extent(states.map(function(d) { return d.values['rads'];}))).range([5, 30]);											
 					g.selectAll('.state_bubbles')
 						.data(topojson.object(json, json.objects.states).geometries)
 					.enter().append('circle')	
@@ -362,12 +397,23 @@ function draw_cartogram(story) {
 var tempGroup = '', tempSubgroup = '', tempResult = [];
 function draw_scatter(story) {
   var beyond = [];
+	d3.selectAll('.tooltip').remove();
   // Add scatterplot info container
   d3.select('#right_container').style('display','block');
 	d3.select('#hide_text').style('display', 'block');
-	d3.select('.legend.scatter').style('display', 'block');	
+
+	d3.select('.legend.scatter').style('display', 'block');
+	if(story.exp){
+		d3.select('#exp_text').text(' ');
+		var expl = story.exp.split('@');
+		d3.select('#exp_text').selectAll('.expl')
+				.data(expl)
+				.enter().append('p')
+				.html(function(d){ return d.split('$').join('&nbsp &nbsp'); }); 
+	}
 	// Filter the data
-  d3.csv(datafile(), function(data) {
+  d3.csv(story.data || datafile(), function(data) {
+		if(story.data){ $('#data_cont').hide(); d3.select('#data').attr('href', story.data); } else { $('#data_cont').show();}
     var subset = initchart(story, data);
 		draw_date(data[data.length-1], story);
 		// TODO: Make these move
@@ -395,9 +441,11 @@ function draw_scatter(story) {
         .append('option')
         .text(String);
 		select.on('change', function() {
-      d3.selectAll('.tooltip').remove();
-			d3.selectAll('.tags').style('display', 'none');
-      var group = d3.select(this).property('value');
+			var group = d3.select(this).property('value');			
+		  d3.selectAll('.tooltip').remove();
+
+
+			d3.selectAll('.tags').style('display', 'none');      
 			if (group) {
 				tempGroup = group;	
 				svg.selectAll('circle').classed('fade', true);
@@ -421,6 +469,9 @@ function draw_scatter(story) {
         .enter()
           .append('option')
           .text(function(d){ return d.District_Name; });
+			var details = svg.selectAll('.state[data-q="' + group + '"]').text();
+			$('#copy_title').val(details);
+			$('#copy_title').on('mouseover', function(){ $(this).select(); });			
 		});
 		subselect.on('change', function() {
       var subgroup = d3.select(this).property('value');
@@ -437,11 +488,14 @@ function draw_scatter(story) {
 						return d.District_Name == subgroup ? true : false;
 			  });
 			d3.selectAll('.tooltip').remove();
-      $('.mark').tooltip({ title:function(){ return $('.mark title').text(); }, trigger:'focus', container:'body' }).tooltip('show');			
+			var details = svg.select('.district[data-r="' + subgroup + '"]').text();
+			$('#copy_title').val(details);
+			$('#copy_title').on('mouseover', function(){ $(this).select(); });	
+      $('.mark').tooltip({ title:function(){ return $('.mark title').text(); }, trigger:'focus', container:'body' }).tooltip('show');						
 		});	
 		// Accumulated values of states
 		var states = d3.nest()
-				.key(function(d){ return d[story.group]; })
+				.key(function(d){ return d[story.group[0]]; })
 				.rollup(function(rows){ return {'cx'  : d3.mean(rows, function(d){ return story.cx(d);}),
 							                          'cy'  : d3.mean(rows, function(d){ return story.cy(d);}),
 																			  'rad' : d3.mean(rows, function(d){ return story.area[1](d);}),
@@ -466,6 +520,7 @@ function draw_scatter(story) {
 			.attr('stroke', '#000')
 			.classed('hide', true)
 			.attr('data-q', function(d) { return d[story.group[0]]; })
+			.attr('data-r', function(d) { return d[story.group[1]]; })
 			.on('mouseover', function() {
         d3.select(this).classed('show', true);
 				d3.select(this).style('stroke', '#fff').style('stroke-opacity', 1);
@@ -625,11 +680,21 @@ function draw_scatter(story) {
   });
 }
 function draw_stack(story) {
+	d3.selectAll('.tooltip').remove();
+	d3.select('#exp_text').text(' ');	
+	if(story.exp){
+		var expl = story.exp.split('@');
+		d3.select('#exp_text').selectAll('.expl')
+				.data(expl)
+				.enter().append('p')
+				.html(function(d){ return d.split('$').join('&nbsp &nbsp'); }); 
+	}		
 	d3.selectAll('.v1').remove();
 	d3.selectAll('.y1').remove();
 	d3.selectAll('text, line, .y2').remove();
 	d3.select('.legend.stack').style('display', 'block');	
-  d3.csv(datafile(), function(data) {
+  d3.csv(story.data || datafile(), function(data) {
+		if(story.data){ $('#data_cont').hide(); d3.select('#data').attr('href', story.data); } else { $('#data_cont').show();}
     var subset = initchart(story, data);
     draw_date(data[data.length-1], story);
     var grouper = function(group) {
@@ -845,7 +910,7 @@ function draw_stack(story) {
 			}		
   });
 }
-function initchart(story, data) {
+function initchart(story, data) { 
   // No transitions work for other chart types, so just empty it
   var svgtype = svg.attr('data-type');
 	if (svgtype !== story.type) {

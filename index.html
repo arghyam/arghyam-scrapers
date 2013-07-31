@@ -4,7 +4,10 @@
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <style>
     body { padding-top: 60px; }
-    h2 { font-size: 125%; line-height: 1.25; color: #c0504d; }
+		#home{font-size:1.1em;}
+		#home:hover{color:#000;}
+		.nav li a{font-size:1.1em;}
+		h2 { font-size: 125%; line-height: 1.25; color: #c0504d; }
     #chart .l2 {
       opacity: 0;
       pointer-events: none;
@@ -13,9 +16,9 @@
            -o-transition: all 0.3s ease-out;  /* Opera 10.50-12.00 */
               transition: all 0.3s ease-out;  /* Chrome 26, Firefox 16+, IE 10+, Opera 12.50+ */
     }
-    .chart, .legend { display: none; }
+		.chart, .legend { display: none;}
     .legend select { margin-right: 1em; }
-    .drilldown #chart .l1 { stroke: none; fill: #fff; }
+		.drilldown #chart .l1 { stroke: none; fill: #fff; }
     .drilldown #chart .l2 { opacity: 1; pointer-events: auto; }
     .axis path, .axis line { fill: none; stroke: black; shape-rendering: crispEdges; }
     .axis text { font-size: 11px; }
@@ -44,9 +47,9 @@
 		.y1, .y2{	fill:#000; stroke:none;	text-anchor:middle;	font-size:0.8em; }
 		.horiz0, .horiz1{	fill:none; stroke:#999;	stroke-width:1;	shape-rendering:crispEdges;	}
 		.h, .v{	fill:none; stroke:#fff;	stroke-width:1;	stroke-opacity:0.6;	shape-rendering:crispEdges; }	
-		#btn{ margin-right:556px; }	
+		#btn{ position:relative; top:80px;margin-right:250px; }	
 		.frame { stroke: none; fill: none; pointer-events: all;	}
-		.feature { stroke: #ccc; fill-opacity:0.05; }
+		.feature { stroke: #aaa; fill-opacity:0.05; }
 		.state_bubbles{ fill: none; stroke:#ddd; }	
 		.state_bubbles:hover{ stroke:#888; }
 		</style>
@@ -55,30 +58,35 @@
 <div class="navbar navbar-fixed-top">
   <div class="navbar-inner">
     <div class="container">
-      <a id="home" class="brand" href="#">TSC</a>
+      <a id="home" class="brand" href="#"><span>Home</span></a>
       <ul class="nav">
         <!-- li><a href="#">About</a></li -->
-      </ul>
-			<ul style="padding:5px;" class="nav pull-right">
-				<li>
-					<div class="form-inline">
-						<label for="copy_title">Ctrl+c to Copy text </label>
-						<input type="text" id="copy_title">
-					</div>
-				</li>
-			</ul>
+      </ul>			
     </div>
   </div>
 </div>
 <div id="visual" class="container">
-  <h2 id="menu"></h2>
+	<h2 id="menu"></h2>
   <h1 id="title"></h1>
 	<h3 id="subtitle"></h3>
-  <div class="legend treemap" data-story="treemap"></div>
+  <p id="exp_text"></p>  
 	<div id="btn"><button id="hide_text" class="btn pull-right">Show / Hide States</button></div>
-	<!--<div class="legend cartogram" data-story="cartogram"></div>-->
-	<div class="legend stack" data-story="stack"></div>
-  <div class="legend scatter" data-story="scatter"></div>
+	<div>
+		<div style="margin-left:-28px; padding-bottom:10px;" class="span12">
+			<div class="legend treemap span5" data-story="treemap"></div>
+			<!--<div class="legend cartogram" data-story="cartogram"></div>-->
+			<div class="legend stack span5" data-story="stack"></div>
+			<div class="legend scatter span5" data-story="scatter"></div>
+			<div id="data_cont" class="span3">
+				<!--<strong>Date</strong>: <span id="date"></span>,-->
+				<strong>Change Date</strong>: <select id="datafiles" class="input-medium" style="padding:5px;"></select>
+			</div>
+			<div style="margin-left:-8px;" class="form-inline span4">
+				<label for="copy_title">Ctrl+c to Copy text </label>
+				<input type="text" id="copy_title" placeholder="Hover text">
+			</div>			
+		</div>	
+	</div>
   <div><svg id="chart" width="960" height="500"></svg></div>
    <div id="gradient_cont">
 		<svg id="gradient" width="956" height="30">
@@ -102,23 +110,19 @@
   </div>
   <div id="right_container"><div id="header"></div><div id="details"></div><div id="info"></div></div>
   <div id="legend"><br></div>
-  <p id="story"></p>
-  <p>
-    <strong>Date</strong>: <span id="date"></span> <strong>Change</strong>: <select id="datafiles" class="input-medium"></select>
-    <br>
-    <strong>Columns used</strong>:<span id="columns"></span>
-    <br>
-    <strong>Download</strong>:
-      <a href="#" id="data">full dataset</a> |
-      <!--<a href="#" id="downloadsvg">Visual Report(svg)</a>
-			<span style="padding-left:5px;"><a href="http://www.w3.org/TR/SVG/" target="_blank" ><img src="img/question_mark.png" title="What is SVG?" alt="quest_mark"></a></span>  |-->
-			<a href="glossary/glossary_of_terms.xlsx">Glossary of terms</a>
-    <br>
-		<!--<strong>Recommended Browser</strong>:<span style="padding-left:5px;">Google Chrome v26 & above supports SVG | Mozilla Firefox v20 & above supports SVG</span>
-		<br>-->
-  </p>
-  <div><strong>Source</strong>:</div>
-  <div id="source"></div>
+  <p id="story"></p>  
+  <!--<div><strong>Date</strong>: <span id="date"></span> <strong>Change</strong>: <select id="datafiles" class="input-medium" style="padding:5px;"></select></div>-->
+	<div>
+		<div style="float:left"id="download_cont"><strong>Download</strong>:
+				<a href="#" id="data">full dataset</a> |      
+				<a href="glossary/glossary_of_terms.xlsx">Glossary of terms</a>
+		</div>
+		<div style="float:left; padding-left:5px;" id="columns_cont"><strong>Columns used</strong>:<span id="columns"></span></div>
+	</div>	
+	<br>
+  <div style="float:left;margin-right:5px;"><strong>Source</strong>:</div>
+  <div style="float:left;" id="source"></div>
+	<br><br><br>
 </div>
 <div id="about" class="container">
   <h2>Ministry of Water &amp; Sanitation</h2>
@@ -134,42 +138,46 @@
     </div>
     <div class="span6" id="about-entry"></div>
   </div>
-</div>	
-	
+</div>		
 <div id="demo" class="container-fluid container">
-	<h2>Ministry of Water &amp; Sanitation</h2>
-  <h1>Nirmal Bharat Abhiyan: Trends</h1>
+	<h1>Rural sanitation scheme - progress & performance</h1>
+	<h4>We can find out how the rural sanitation scheme is doing because of the data that is published on the Ministry's website. This project aims to create simple tools that will demystify the large datasets and compare it to other relevant datasets. The aim is to help and understand the state of sanitation at the state and district level. </h4>
 	<div class="row-fluid">
 		<div class="span12">
 				<a class="demo thumbnail pull-left" href="#Money%20spent%7CSpending%20on%20rural%20sanitation">
 					<img src="img/spending_on_rural_sanitation.png?v=1"  onclick="draw()">
 					<h3>Spending on Rural Sanitation</h3>
-					<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt.</p>
+					<p>What is the spending on the various components of rural sanitation?</p>
 				</a>				
 				<a class="demo thumbnail pull-left" href="#Money%20spent%7CMoney%20spent%20on%20building%20toilets%20for%20the%20rural%20poor">
 					<img src="img/money_spent_on_building_toilets_for_the_rural_poor.png?v=1">
 					<h3>Money Spent on building toilets for the Rural Poor</h3>
-					<p> Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod.</p>
+					<p>How have the incentives been given for toilet construction?</p>
 				</a>
 				<a class="demo thumbnail pull-left" href="#Money%20spent%7CMoney%20given%20vs.%20Money%20spent">
 					<img src="img/money_given_vs_money_spent.png?v=1">
 					<h3>Money Given vs Money Spent</h3>
-					<p>Typi non habent claritatem insitam; est usus legentis in iis qui facit eorum claritatem.</p>
+					<p>What is the contribution of the state, centre and people towards toilet construction?</p>
 				</a>				
 				<a class="demo thumbnail pull-left" href="#Toilets%20built%7CEvaluation%20of%20toilets%20built%20for%20the%20rural%20poor">
 					<img src="img/evaluation_of_toilets_built_for_the_rural_poor.png?v=1">
 					<h3>Evaluation of toilets built for the rural poor</h3>
-					<p>Claritas est etiam processus dynamicus, qui sequitur mutationem consuetudium lectorum.</p>
+					<p>How many toilets were built for rural poor households? Have targets been met?</p>
 				</a>				
 				<a class="demo thumbnail pull-left" href="#Toilets%20built%7CCoverage%20of%20Toilets%20-%20Rural%20Households">
 					<img src="img/coverage_of_toilets-rural_households.png?v=1">
 					<h3>Coverage of toilets Rural households</h3>
-					<p>Quam nunc putamus parum claram, anteposuerit litterarum formas.</p>
-				</a>				
+					<p>How does toilet coverage compare with total rural households as per census 2011?</p>
+				</a>
+				<a class="demo thumbnail pull-left" href="#Toilets%20built%7CCoverage%20of%20Toilets%20-%20Rural%20Households">
+					<img src="img/coverage_of_toilets-rural_households.png?v=1">
+					<h3>Need title</h3>
+					<p>What does the census 2011 say about toilet coverage in the country? See this to check if the census and NBA numbers matching?</p>
+				</a>	
 				<a class="demo thumbnail pull-left" href="#Performance%7CComparing%20spending%20to%20toilet%20construction">
 					<img src="img/comparing_spending_to_toilet_construction.png?v=1">
 					<h3>Comparing spending to toilet construction</h3>
-					<p>Humanitatis per seacula quarta decima et quinta decima fiant sollemnes in futurum.</p>
+					<p>How do toilet construction and spending on toilet construction compare?</p>
 				</a>				
 		</div>			
 	</div>
