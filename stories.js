@@ -165,9 +165,10 @@ var stories = [
     treemap_story({
         'menu'   : 'Money spent',
         'title'  : 'Money spent on building toilets for the rural poor',
-				'context': 'This visualisation looks at the incentive given to rural poor households to build toilets - these incentives also called subsidies have varied over time from Rs. 3200 in 2011 to Rs. 9100 in 2012.',
-				'cont_p' : 'It assesses the performance of the scheme through the lens of amount spent vis a vis amount planned to be spent on incentives to rural poor households.',
-				'viz'    : 'Each large box represents one State. Click on it to reveal smaller boxes that represent a District. All amounts are in Rs. Lakhs.',
+				'context': 'This visualisation looks at the incentive given to rural poor households to build toilets - these incentives also called subsidies have varied over time from Rs. 3200 in 2011 to Rs. 9100 in 2012. ' +
+				           'It assesses the performance of the scheme through the lens of amount spent vis a vis amount planned to be spent on incentives to rural poor households. ',
+				'cont_p' : ' ',
+				'viz'    : 'Each large box represents one State. Click on it to reveal smaller boxes that represent a District. All amounts are in Rs. Lakhs. ',
 				'viz_p'  : '$1) Size of the box: Money planned to be spent on incentives for rural poor household toilets @' +
 									 '$2) Colour of the box: How much has the state/ union territory spent on incentives to the rural poor for building toilets rural sanitation when compared to what was planned @' +
 									 '$3) The larger the size of the box, the greater the amount planned to be spent. Green and shades of green indicate spending according to plan while red and shades of red indicate failure to spend according to plan. @',
@@ -282,10 +283,10 @@ var stories = [
     stack_story({
         'menu'   : 'Money spent',
         'title'  : 'Money given vs. Money spent',
-				'context': 'The Government of India, the State Government and the rural poor households all contribute towards the various components of the sanitation scheme. While an initial share is planned, the money given depends on how much is actually spent. The general break up for the share of Government of India (blue colour): State Government (red colour): Beneficiary (green colour) has been 65:23:14.' +
+				'context': 'The Government of India, the State Government and the rural poor households all contribute towards the various components of the sanitation scheme. While an initial share is planned, the money given depends on how much is actually spent. The general break up for the share of Government of India (blue colour): State Government (red colour): Beneficiary (green colour) has been 65:23:14. ' +
 									 'Major deviations from these numbers indicate contributions in excess of the actual amounts required. ', 
         'cont_p' : ' ',          
-				'viz'    : 'Each row represents one State, showing the break-up of Plan, Money given, Spending.Click on it to reveal more boxes on the right representing each District.',
+				'viz'    : 'Each row represents one State, showing the break-up of Plan, Money given, Spending.Click on it to reveal more boxes on the right representing each District. ',
 				'viz_p'  : ' ',					 
 				'ppt'		 : 'Click on the ppt for more help with using the visualisation.',  
 				'subtitle': 'Share of centre, State and People (Beneficiaries)',
@@ -362,13 +363,13 @@ var stories = [
     treemap_story({
         'menu'   : 'Toilets built',
         'title'  : 'Evaluation of toilets built for the rural poor',
-				'context': 'The states set targets for construction of toilets, especially for rural poor toilets where they also have to provide an incentive. Meeting these targets are what determine performance as per the rural sanitation scheme. This visualisation measures the performance as per targets.',
+				'context': 'The states set targets for construction of toilets, especially for rural poor toilets where they also have to provide an incentive. Meeting these targets are what determine performance as per the rural sanitation scheme. This visualisation measures the performance as per targets. ',
         'cont_p' : ' ',
-				'viz'    : 'Each large box represents one State. Click on it to reveal smaller boxes that represent a District. All amounts are in Rs. Lakhs.',
+				'viz'    : 'Each large box represents one State. Click on it to reveal smaller boxes that represent a District. ',
         'viz_p'  : '$1) Size of the box: Target of toilets planned to be built for rural poor households @' +
                    '$2) Colour of the box: Toilets built for rural poor households when compared to the target @' + 
                    '$3) The larger the size of the box, the greater the target. Green and shades of green indicate building of toilets according to target while red and shades of red indicate failure to meet targets. @',
-        'ppt'    : 'Click on the ppt for more help with using the visualisation.',
+        'ppt'    : 'Click on the ppt for more help with using the visualisation. ',
         'url'    : ['http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home'],
         'cols'   : ['PO_IHHL_BPL', 'PP_IHHL_BPL'],
         'group'  : ['State_Name'],
@@ -447,10 +448,10 @@ var stories = [
     scatter_story({
         'menu'   : 'Performance',
         'title'  : 'Comparing spending to toilet construction',
-				'context': 'This visualisation compares spending on the rural sanitation scheme with spending on incentives given for toilet construction for the rural poor houses. Ideally, all states must fall on the linear trendline meaning that it spent proportionate to construction. Being off that line means that it has either under-spent or overspent to build the same number of toilets.',
+				'context': 'This visualisation compares spending on the rural sanitation scheme with spending on incentives given for toilet construction for the rural poor houses. Ideally, every states must fall on the linear trendline meaning that it spent proportionate to construction. Being off that line means that the state has either under-spent or overspent to build the same number of toilets. ',
 				'cont_p' : ' ',					 
-				'viz'    : 'Each circle represents one State / Union Territory. Click on a State or select from the drop down for the State and District that you want to see. The size of the circle represents rural poor toilets required. The x-axis is based on overall spending on rural sanitation (since toilet construction for the rural poor and allied activities is the biggest spend in the whole allotted sum). The y-axis is based on % toilets constructed for rural poor households.' +
-									 'If the circle lies in the green part of the graph - that means that the respective state or district is doing well, if it lies in the red part then it is not.',
+				'viz'    : 'Each circle represents one State / Union Territory. Click on a State or select from the drop down for the State and District that you want to see. The size of the circle represents rural poor toilets required. The x-axis is based on overall spending on rural sanitation (since toilet construction for the rural poor and allied activities is the biggest spend in the whole allotted sum). The y-axis is based on % toilets constructed for rural poor households. ' +
+									 'If the circle lies in the green part of the graph - that means that the respective state or district is doing well, if it lies in the red part then it is not. ',
 				'viz_p'  : ' ',					 
 				'ppt'    : 'Click on the ppt for more help with using the visualisation.', 
         'url'    : ['http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home', 
