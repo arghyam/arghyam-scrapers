@@ -85,8 +85,6 @@ function cartogram_story(story) {
     story.type = 'cartogram';
     story.cols = story.cols || join(story.area[1], story.num[1], story.den[1]);
     story.size = function(d) { return sum(d, story.area[1]); };
-
-
 		story.filter = function(d) { return d.District_Name.match(/^[A-Z]/); };
     story.color = story.colors || function(d) { return color((story.factor || 1) * sum(d, story.num[1]) / sum(d, story.den[1])).replace(/NaNNaNNaN/i, 'eee'); };
     story.hover = function(d) {
@@ -138,21 +136,20 @@ function stack_story(story) {
     return story;
 }
 
-var lakhs = 'All figures are in <strong>Rs lakhs</strong>.';
 var stories = [
     treemap_story({
         'menu'   : 'Money spent',
         'title'  : 'Spending on rural sanitation',
-				'exp'    : 'Context: The rural sanitation scheme allocates funds different sanitation activities in villages. The main activities supported include @' + 
-										'$1) Construction of toilets - for people in their houses and public toilets and institutions such as schools and creches @' + 
-										'$2) money for improving awareness on need for toilets ; @' + 
-										'$3) creating a supply chain for manufacturing toilet-ware and @' + 
-										'$4) waste management efforts @'+ 
-										'Using the visualisation: Each large box represents one State. Click on it to reveal smaller boxes that represent a District. All amounts are in Rs. Lakhs. @'+
-										'$1) Size of the box: Money planned to be set aside for rural sanitation @'+ 
-										'$2) Colour of the box: How much has the state / union territory spent on rural sanitation when compared to what was planned @'+
-										'$3) The larger the size of the box, the greater the expenditure planned. Green and shades of green indicate spending according to plan while red and shades of red indicate failure to spend according to plan. @'+
-										'Click on the ppt for more help with using the visualisation.',
+				'context': 'The rural sanitation scheme allocates funds different sanitation activities in villages. The main activities supported include ', 
+				'cont_p' : '$1) Construction of toilets - for people in their houses and public toilets and institutions such as schools and creches @' + 
+									 '$2) money for improving awareness on need for toilets  @' + 
+									 '$3) creating a supply chain for manufacturing toilet-ware and @' + 
+									 '$4) waste management efforts @',
+				'viz'		 : 'Each large box represents one State. Click on it to reveal smaller boxes that represent a District. All amounts are in Rs. Lakhs.',
+				'viz_p'  : '$1) Size of the box: Money planned to be set aside for rural sanitation @' + 
+									 '$2) Colour of the box: How much has the state / union territory spent on rural sanitation when compared to what was planned @'+
+									 '$3) The larger the size of the box, the greater the expenditure planned. Green and shades of green indicate spending according to plan while red and shades of red indicate failure to spend according to plan.@',
+				'ppt'		 : 'Click on the ppt for more help with using the visualisation.',
         'url'    : ['http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home'],
         'cols'   : ['Total_Projects_Outlay', 'ExpReported_Total'],
         'group'  : ['State_Name'],
@@ -160,8 +157,7 @@ var stories = [
         'num'    : ['Total spent', 'ExpReported_Total'],
         'den'    : ['Total plan', 'Total_Projects_Outlay'],
         'story'  : 'Story to be written...',
-        'legend' : { '%Size%':'Total plan', '%Colour%':'Total spent / Total plan', '%rs%':'<br>'+lakhs },
-				'grad'   : 'gradient_legend',
+        'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
 				'IWP'    : 'true'
@@ -169,13 +165,13 @@ var stories = [
     treemap_story({
         'menu'   : 'Money spent',
         'title'  : 'Money spent on building toilets for the rural poor',
-				'exp'    : 'Context: This visualisation looks at the incentive given to rural poor households to build toilets – these incentives also called subsidies have varied over time from Rs. 3200 in 2011 to Rs. 9100 in 2012. @' +
-										'It assesses the performance of the scheme through the lens of amount spent vis a vis amount planned to be spent on incentives to rural poor households. @' +
-										'Using the visualisation: Each large box represents one State. Click on it to reveal smaller boxes that represent a District. All amounts are in Rs. Lakhs. @' +
-										'$1) Size of the box: Money planned to be spent on incentives for rural poor household toilets @' +
-										'$2) Colour of the box: How much has the state/ union territory spent on incentives to the rural poor for building toilets rural sanitation when compared to what was planned @' +
-										'$3) The larger the size of the box, the greater the amount planned to be spent. Green and shades of green indicate spending according to plan while red and shades of red indicate failure to spend according to plan. @' +
-										'Click on the ppt for more help with using the visualisation.',
+				'context': 'This visualisation looks at the incentive given to rural poor households to build toilets - these incentives also called subsidies have varied over time from Rs. 3200 in 2011 to Rs. 9100 in 2012.',
+				'cont_p' : 'It assesses the performance of the scheme through the lens of amount spent vis a vis amount planned to be spent on incentives to rural poor households.',
+				'viz'    : 'Each large box represents one State. Click on it to reveal smaller boxes that represent a District. All amounts are in Rs. Lakhs.',
+				'viz_p'  : '$1) Size of the box: Money planned to be spent on incentives for rural poor household toilets @' +
+									 '$2) Colour of the box: How much has the state/ union territory spent on incentives to the rural poor for building toilets rural sanitation when compared to what was planned @' +
+									 '$3) The larger the size of the box, the greater the amount planned to be spent. Green and shades of green indicate spending according to plan while red and shades of red indicate failure to spend according to plan. @',
+				'ppt'    : 'Click on the ppt for more help with using the visualisation.',
         'url'    : ['http://tsc.gov.in/tsc/Report/Financial/RptPercentageFinComponentStatewiseDistrictwise_net.aspx?id=FIN'],
         'cols'   : ['BPL_Appr.(C+S+B)', 'BPL_Exp.(C+S+B)'],
         'group'  : ['State_Name'],
@@ -183,8 +179,7 @@ var stories = [
         'num'    : ['Total spent - Rural poor', 'BPL_Exp.(C+S+B)'],
         'den'    : ['Total plan - Rural poor', 'BPL_Appr.(C+S+B)'],
         'story'  : 'Story to be written...',
-        'legend' : { '%Size%':'Total plan - Rural poor', '%Colour%':'Total spent - Rural poor / Total plan - Rural poor', '%rs%':'<br>'+lakhs },
-				'grad'   : 'gradient_legend',
+        'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
 				'IWP'    : 'true'
@@ -199,8 +194,7 @@ var stories = [
         'num'    : ['Total spent - School', 'School_Exp.(C+S+B)'],
         'den'    : ['Total plan - School', 'School_Appr.(C+S+B)'],
         'story'  : 'Story to be written...',
-        'legend' : { '%Size%':'Total plan - School', '%Colour%':'Total spent - School / Total plan - School', '%rs%':'<br>'+lakhs },
-				'grad'   : 'gradient_legend',
+        'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
 				'IWP'    : 'false'
@@ -215,8 +209,7 @@ var stories = [
         'num'    : ['Total spent - Sanitary Complexes', 'Sanitary_Complex_Exp.(C+S+B)'],
         'den'    : ['Total plan - Sanitary Complexes', 'Sanitary_Complex_Appr.(C+S+B)'],
         'story'  : 'Story to be written...',
-        'legend' : { '%Size%':'Total plan - Sanitary Complexes', '%Colour%':'Total spent - SC / Total plan - SC', '%rs%':'<br>'+lakhs },
-				'grad'   : 'gradient_legend',
+        'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
 				'IWP'    : 'false'
@@ -231,8 +224,7 @@ var stories = [
         'num'    : ['Total spent - Anganwadi', 'Anganwadi_Exp.(C+S+B)'],
         'den'    : ['Total plan - Anganwadi', 'Anganwadi_Appr.(C+S+B)'],
         'story'  : 'Story to be written...',
-        'legend' : { '%Size%':'Total plan - Anganwadi', '%Colour%':'Total spent - Anganwadi / Total plan - Anganwadi', '%rs%':'<br>'+lakhs },
-				'grad'   : 'gradient_legend',
+        'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
 				'IWP'    : 'false'
@@ -252,8 +244,7 @@ var stories = [
 											sum(d, ['ApprShare_Center', 'ApprShare_State', 'ApprShare_Beneficiary'])).replace(/NaNNaNNaN/i, 'eee'); 
 								   },
         'story'  : 'Story to be written...',
-        'legend' : { '%Size%': 'Total plan', '%Colour%': 'Plan centre share / Total plan', '%rs%':'<br>'+lakhs },
-				'grad'   : 'gradient_legend_SocP',
+        'grad'   : 'gradient_legend_SocP',
 				'percent': [1, 30, 57, 95],
 				'pertext': [0, 60, 70, 200],
 				'IWP'    : 'false'
@@ -268,8 +259,7 @@ var stories = [
         'num'    : ['Money given by centre', 'Rof_Center'],
         'den'    : ['Total Money given', 'Rof_Total'],
         'story'  : 'Story to be written...',
-        'legend' : { '%Size%': 'Total plan', '%Colour%': 'Money given by centre / Total Money given', '%rs%':'<br>'+lakhs },
-				'grad'   : 'gradient_legend',
+        'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
 				'IWP'    : 'false'
@@ -284,8 +274,7 @@ var stories = [
         'num'    : ['Centre spent', 'ExpReported_Center'],
         'den'    : ['Total spent', 'ExpReported_Total'],
         'story'  : 'Story to be written...',
-        'legend' : { '%Size%': 'Total plan', '%Colour%': 'Centre spent / Total spent', '%rs%':'<br>'+lakhs },
-				'grad'   : 'gradient_legend',
+        'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
 				'IWP'    : 'false'
@@ -293,10 +282,12 @@ var stories = [
     stack_story({
         'menu'   : 'Money spent',
         'title'  : 'Money given vs. Money spent',
-				'exp'    : 'Context: The Government of India, the State Government and the rural poor households all contribute towards the various components of the sanitation scheme. While an initial share is planned, the money given depends on how much is actually spent. The general break up for the share of Government of India (blue colour): State Government (red colour): Beneficiary (green colour) has been 65:23:14. @' +
-									 'Major deviations from these numbers indicate contributions in excess of the actual amounts required. @' +
-                   'Using the visualisation: Each row represents one State, showing the break-up of Plan, Money given, Spending.Click on it to reveal more boxes on the right representing each District. @' +
-									 'Click on the ppt for more help with using the visualisation.',  
+				'context': 'The Government of India, the State Government and the rural poor households all contribute towards the various components of the sanitation scheme. While an initial share is planned, the money given depends on how much is actually spent. The general break up for the share of Government of India (blue colour): State Government (red colour): Beneficiary (green colour) has been 65:23:14.' +
+									 'Major deviations from these numbers indicate contributions in excess of the actual amounts required. ', 
+        'cont_p' : ' ',          
+				'viz'    : 'Each row represents one State, showing the break-up of Plan, Money given, Spending.Click on it to reveal more boxes on the right representing each District.',
+				'viz_p'  : ' ',					 
+				'ppt'		 : 'Click on the ppt for more help with using the visualisation.',  
 				'subtitle': 'Share of centre, State and People (Beneficiaries)',
         'url'    : ['http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home'],
         'cols'   : ['ApprShare_Center', 'ApprShare_State', 'ApprShare_Beneficiary', 'Rof_Center', 'Rof_State', 'Rof_Beneficiary', 'Rof_Total', 'ExpReported_Center', 'ExpReported_State', 'ExpReported_Beneficiary'],
@@ -359,12 +350,11 @@ var stories = [
         'url'    : ['http://tsc.gov.in/tsc/NDSAP/StatewiseDistrictwiseFinancialProgress.xml'],
         'cols'   : ['Total_Release_of_funds','Total_Expenditure_Reported'],
         'group'  : ['State_Name'],
-        'area'   : ['Total number of toilets to be built', 'Total_Release_of_funds'],
-        'num'    : ['Total number of toilets built', 'Total_Expenditure_Reported'],
-        'den'    : ['Total number of toilets to be built', 'Total_Release_of_funds'],
+        'area'   : ['Funds given', 'Total_Release_of_funds'],
+        'num'    : ['Funds spent', 'Total_Expenditure_Reported'],
+        'den'    : ['Funds given', 'Total_Release_of_funds'],
         'story'  : 'Story to be written...',
-        'legend' : { '%Size%': 'Total_Release_of_funds', '%Colour%': 'Total_Expenditure_Reported / Total_Release_of_funds', '%rs%':' ' },
-				'grad'   : 'gradient_legend',
+        'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
 				'IWP'    : 'true'
@@ -372,12 +362,13 @@ var stories = [
     treemap_story({
         'menu'   : 'Toilets built',
         'title'  : 'Evaluation of toilets built for the rural poor',
-				'exp'    : 'Context: The states set targets for construction of toilets, especially for rural poor toilets where they also have to provide an incentive. Meeting these targets are what determine performance as per the rural sanitation scheme. This visualisation measures the performance as per targets. @' +
-                   'Using the visualisation: Each large box represents one State. Click on it to reveal smaller boxes that represent a District. All amounts are in Rs. Lakhs. @' +
-                   '$1) Size of the box: Target of toilets planned to be built for rural poor households @' +
+				'context': 'The states set targets for construction of toilets, especially for rural poor toilets where they also have to provide an incentive. Meeting these targets are what determine performance as per the rural sanitation scheme. This visualisation measures the performance as per targets.',
+        'cont_p' : ' ',
+				'viz'    : 'Each large box represents one State. Click on it to reveal smaller boxes that represent a District. All amounts are in Rs. Lakhs.',
+        'viz_p'  : '$1) Size of the box: Target of toilets planned to be built for rural poor households @' +
                    '$2) Colour of the box: Toilets built for rural poor households when compared to the target @' + 
-                   '$3) The larger the size of the box, the greater the target. Green and shades of green indicate building of toilets according to target while red and shades of red indicate failure to meet targets. @' +
-                   'Click on the ppt for more help with using the visualisation.',
+                   '$3) The larger the size of the box, the greater the target. Green and shades of green indicate building of toilets according to target while red and shades of red indicate failure to meet targets. @',
+        'ppt'    : 'Click on the ppt for more help with using the visualisation.',
         'url'    : ['http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home'],
         'cols'   : ['PO_IHHL_BPL', 'PP_IHHL_BPL'],
         'group'  : ['State_Name'],
@@ -385,8 +376,7 @@ var stories = [
         'num'    : ['Toilets built for rural poor', 'PP_IHHL_BPL'],
         'den'    : ['Toilets planned for rural poor', 'PO_IHHL_BPL'],
         'story'  : 'Story to be written...',
-        'legend' : { '%Size%': 'Toilets planned for rural poor', '%Colour%': 'Toilets built for rural poor / Toilets planned for rural poor', '%rs%':' ' },
-				'grad'   : 'gradient_legend',
+        'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
 				'IWP'    : 'true'
@@ -401,8 +391,7 @@ var stories = [
         'num'    : ['Built APL toilets', 'PP_IHHL_APL'],
         'den'    : ['Planned APL toilets', 'PO_IHHL_APL'],
         'story'  : 'Story to be written...',
-        'legend' : { '%Size%': 'Planned APL toilets', '%Colour%': 'Built APL toilets / Planned APL toilets', '%rs%':' ' },
-				'grad'   : 'gradient_legend',
+        'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
 				'IWP'    : 'false'
@@ -410,8 +399,7 @@ var stories = [
     cartogram_story({
         'menu'   : 'Toilets built',
         'title'  : 'Coverage of Toilets - Rural Households',
-				'exp'    : 'Explanation text go heres...',
-        'url'    : ['http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home',
+				'url'    : ['http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home',
 										'http://www.indiawaterportal.org/data/2011-census-household-tables-0'],
         'cols'   : ['PP_IHHL_TOTAL', 'Rural_Households'],
         'group'  : ['State_Name'],
@@ -419,12 +407,7 @@ var stories = [
         'num'    : ['Rural Households (WT)', 'PP_IHHL_TOTAL'],
         'den'    : ['Total Rural Households', 'Rural_Households'],
         'story'  : 'Story to be written...',
-        'legend' : { '%Circlev0%'            : 'State'                                          ,
-										 '%Circlev1%'            : 'District'                                       ,
-                     '%CircleSize%'          : 'Total Rural Households'                         ,
-                     '%Colour%'              : 'Rural Households (WT) / Total Rural Households'
-                   },
-				'grad'   : 'gradient_legend',
+        'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
 				'IWP'    : 'true'
@@ -440,8 +423,7 @@ var stories = [
         'num'    : ['Number of toilets built for the Rural poor', 'Project_Performance-IHHL_BPL'],
         'den'    : ['Number of toilets to be built for the Rural poor', 'Project_Objectives_IHHL_BPL'],
         'story'  : 'Story to be written...',
-        'legend' : { '%Size%': 'Number of toilets to be built for the Rural poor', '%Colour%': 'Number of toilets built for the Rural poor / Number of toilets to be built for the Rural poor', '%rs%':' ' },
-				'grad'   : 'gradient_legend',
+        'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
 				'IWP'    : 'true'
@@ -457,8 +439,7 @@ var stories = [
         'num'    : ['Total number of toilets built', 'Project_Performance-IHHL_TOTAL'],
         'den'    : ['Total number of toilets to be built', 'Project_Objectives_IHHL_TOTAL'],
         'story'  : 'Story to be written...',
-        'legend' : { '%Size%': 'Total number of toilets to be built', '%Colour%': 'Total number of toilets built / Total number of toilets to be built', '%rs%':' ' },
-				'grad'   : 'gradient_legend',
+        'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
 				'IWP'    : 'true'
@@ -466,10 +447,12 @@ var stories = [
     scatter_story({
         'menu'   : 'Performance',
         'title'  : 'Comparing spending to toilet construction',
-				'exp'    : 'Context: This visualisation compares spending on the rural sanitation scheme with spending on incentives given for toilet construction for the rural poor houses. Ideally, all states must fall on the linear trendline meaning that it spent proportionate to construction. Being off that line means that it has either under-spent or overspent to build the same number of toilets. @' +
-									 'Using the visualisation: Each circle represents one State / Union Territory. Click on a State or select from the drop down for the State and District that you want to see. The size of the circle represents rural poor toilets required. The x-axis is based on overall spending on rural sanitation (since toilet construction for the rural poor and allied activities is the biggest spend in the whole allotted sum). The y-axis is based on % toilets constructed for rural poor households. @' +
-									 'If the circle lies in the green part of the graph - that means that the respective state or district is doing well, if it lies in the red part then it is not. @' +
-									 'Click on the ppt for more help with using the visualisation.', 
+				'context': 'This visualisation compares spending on the rural sanitation scheme with spending on incentives given for toilet construction for the rural poor houses. Ideally, all states must fall on the linear trendline meaning that it spent proportionate to construction. Being off that line means that it has either under-spent or overspent to build the same number of toilets.',
+				'cont_p' : ' ',					 
+				'viz'    : 'Each circle represents one State / Union Territory. Click on a State or select from the drop down for the State and District that you want to see. The size of the circle represents rural poor toilets required. The x-axis is based on overall spending on rural sanitation (since toilet construction for the rural poor and allied activities is the biggest spend in the whole allotted sum). The y-axis is based on % toilets constructed for rural poor households.' +
+									 'If the circle lies in the green part of the graph - that means that the respective state or district is doing well, if it lies in the red part then it is not.',
+				'viz_p'  : ' ',					 
+				'ppt'    : 'Click on the ppt for more help with using the visualisation.', 
         'url'    : ['http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home', 
                     'http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home'],
         'cols'   : ['PO_IHHL_BPL', 'PP_IHHL_BPL', 'ExpReported_Total', 'Total_Projects_Outlay'],
@@ -481,13 +464,7 @@ var stories = [
         'xdom'   : [0, 1.5],
         'ydom'   : [0, 1.5],
         'story'  : 'Story to be written...',
-        'legend' : { '%Circlev0%'            : 'State'                              ,
-                     '%Circlev1%'            : 'District'                           ,
-										 '%CircleSize%'          : 'Toilets required for Rural poor'    ,
-                     '%AxisX%'               : 'overall spending on rural sanitation (since toilet construction for the rural poor and allied activities is the biggest spend in the whole allotted sum)' ,
-                     '%AxisY%'               : '% Toilets constructed for Rural poor'										 
-                   },
-				'IWP'    : 'true'						
+        'IWP'    : 'true'						
 		}),
     scatter_story({
         'menu'   : 'Performance',
@@ -502,13 +479,7 @@ var stories = [
         'xdom'   : [0, 1.5],
         'ydom'   : [0, 1.5],
 				'story'  : 'Story to be written...',
-        'legend' : { '%Circlev0%'            : 'State'                               ,
-										 '%Circlev1%'            : 'District'                            ,
-                     '%CircleSize%'          : 'Rural poor toilets required'         ,
-                     '%AxisX%'               : 'Spent / Plan'                        ,
-                     '%AxisY%'               : '% Rural poor Households with toilet'
-                   },
-				'IWP'    : 'false'						
+        'IWP'    : 'false'						
    })										
 ];
 

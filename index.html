@@ -74,11 +74,9 @@
 	<div>
 		<div style="margin-left:-28px; padding-bottom:10px;" class="span12">
 			<div class="legend treemap span5" data-story="treemap"></div>
-			<!--<div class="legend cartogram" data-story="cartogram"></div>-->
 			<div class="legend stack span5" data-story="stack"></div>
 			<div class="legend scatter span5" data-story="scatter"></div>
 			<div id="data_cont" class="span3">
-				<!--<strong>Date</strong>: <span id="date"></span>,-->
 				<strong>Change Date</strong>: <select id="datafiles" class="input-medium" style="padding:5px;"></select>
 			</div>
 			<div style="margin-left:-8px;" class="form-inline span4">
@@ -109,10 +107,9 @@
 		</svg>
   </div>
   <div id="right_container"><div id="header"></div><div id="details"></div><div id="info"></div></div>
-  <div id="legend"><br></div>
+  <br>
   <p id="story"></p>  
-  <!--<div><strong>Date</strong>: <span id="date"></span> <strong>Change</strong>: <select id="datafiles" class="input-medium" style="padding:5px;"></select></div>-->
-	<div>
+  <div>
 		<div style="float:left"id="download_cont"><strong>Download</strong>:
 				<a href="#" id="data">full dataset</a> |      
 				<a href="glossary/glossary_of_terms.xlsx">Glossary of terms</a>
@@ -122,6 +119,7 @@
 	<br>
   <div style="float:left;margin-right:5px;"><strong>Source</strong>:</div>
   <div style="float:left;" id="source"></div>
+	<div style="clear:both;"></div>
 	<br><br><br>
 </div>
 <div id="about" class="container">
@@ -141,11 +139,11 @@
 </div>		
 <div id="demo" class="container-fluid container">
 	<h1>Rural sanitation scheme - progress & performance</h1>
-	<h4>We can find out how the rural sanitation scheme is doing because of the data that is published on the Ministry's website. This project aims to create simple tools that will demystify the large datasets and compare it to other relevant datasets. The aim is to help and understand the state of sanitation at the state and district level. </h4>
+	<h4>We can find out how the rural sanitation scheme is doing because of the data that is published on the Ministry's website. This project aims to create simple tools that will demystify the large datasets and compare it to other relevant datasets.</h4>
 	<div class="row-fluid">
 		<div class="span12">
 				<a class="demo thumbnail pull-left" href="#Money%20spent%7CSpending%20on%20rural%20sanitation">
-					<img src="img/spending_on_rural_sanitation.png?v=1"  onclick="draw()">
+					<img src="img/spending_on_rural_sanitation.png?v=1">
 					<h3>Spending on Rural Sanitation</h3>
 					<p>What is the spending on the various components of rural sanitation?</p>
 				</a>				
@@ -159,6 +157,11 @@
 					<h3>Money Given vs Money Spent</h3>
 					<p>What is the contribution of the state, centre and people towards toilet construction?</p>
 				</a>				
+				<a class="demo thumbnail pull-left" href="#Money%20spent%7CXML%20-%202">
+					<img src="img/XML_-_2.png?v=1">
+					<h3>XML - 2</h3>
+					<p>Need short description</p>
+				</a>				
 				<a class="demo thumbnail pull-left" href="#Toilets%20built%7CEvaluation%20of%20toilets%20built%20for%20the%20rural%20poor">
 					<img src="img/evaluation_of_toilets_built_for_the_rural_poor.png?v=1">
 					<h3>Evaluation of toilets built for the rural poor</h3>
@@ -169,11 +172,22 @@
 					<h3>Coverage of toilets Rural households</h3>
 					<p>How does toilet coverage compare with total rural households as per census 2011?</p>
 				</a>
-				<a class="demo thumbnail pull-left" href="#Toilets%20built%7CCoverage%20of%20Toilets%20-%20Rural%20Households">
+				<!-- Cartogram - 2				
+					<a class="demo thumbnail pull-left" href="#">
 					<img src="img/coverage_of_toilets-rural_households.png?v=1">
-					<h3>Need title</h3>
+					<h3>Toilet coverage from census 2011</h3>
 					<p>What does the census 2011 say about toilet coverage in the country? See this to check if the census and NBA numbers matching?</p>
-				</a>	
+				</a>-->					
+				<a class="demo thumbnail pull-left" href="#Toilets%20built%7CXML%20-%201%20-%20first">
+					<img src="img/XML_-_1_-_first.png?v=1">
+					<h3>XML - 1 - First</h3>
+					<p>Need short description</p>
+				</a>				
+				<a class="demo thumbnail pull-left" href="#Toilets%20built%7CXML%20-%201%20-%20second">
+					<img src="img/XML_-_1_-_second.png?v=1">
+					<h3>XML - 1 - Second</h3>
+					<p>Need short description</p>
+				</a>
 				<a class="demo thumbnail pull-left" href="#Performance%7CComparing%20spending%20to%20toilet%20construction">
 					<img src="img/comparing_spending_to_toilet_construction.png?v=1">
 					<h3>Comparing spending to toilet construction</h3>

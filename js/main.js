@@ -75,23 +75,13 @@ d3.select('#datafiles')
     .append('option')
     .attr('value', String)
     .text(function(d) { return d.replace(/^data\-/, '').replace(/\.csv/, ''); });
+		
 var svg = d3.select('#chart')
     .on('click', function() {
       var drilldown = d3.select('#visual').classed('drilldown');
       d3.select('#visual').classed('drilldown', !drilldown);			
     });
-var legends = {
-  'treemap': 'Each large box represents one State. Click on it to reveal smaller boxes that represent a District.' +
-             '<br>Size = <strong>%Size%</strong>.' +
-             '<br>Colour = <strong>%Colour%</strong>. Red is low, Green is high.' +
-             '%rs%',
-  'stack'  : 'Each row represents one State, showing the break-up of <strong>%Rows%</strong>.' +
-             'Click on it to reveal more boxes on the right representing each District.' + '<br> Blue = <strong>%Blue%</strong>, Red = <strong>%Red%</strong>, Green = <strong>%Green%</strong>.',
-  'scatter': 'Each circle represents one %Circlev0%. Click on a %Circlev0% or choose from the drop down for the %Circlev0% and %Circlev1%' + 
-						 ' that you want to see. The size of the circle represents <strong>%CircleSize%</strong>. The x-axis is based on %AxisX%. The y-axis is based on <strong>%AxisY%</strong>.',
-	'cartogram': 'Each circle represents one %Circlev0%. The size of the circle represents <strong>%CircleSize%</strong>.' +
-							'<br> The colour of the circles represents <strong>%Colour%</strong>. Red is low, Green is high.'
-};
+
 if(host == iwp){
 		d3.selectAll('#demo').style('display', 'block');
 		d3.selectAll('#about').style('display', 'none');			
@@ -126,11 +116,6 @@ function hashchange(e) {
 }
 window.addEventListener('hashchange', hashchange);
 hashchange();
-// Allow download of SVG
-//d3.select('#downloadsvg').on('click', function() {
-//  d3.event.preventDefault();
-//  svgcrowbar();
-//});
 // When any menu option is clicked, draw it.
 function draw(story) {
 	if (d3.event) {
@@ -154,8 +139,6 @@ function draw(story) {
   d3.select('#title').text(story.title);
   d3.select('#subtitle').text(story.subtitle);
   d3.select('#story').text(story.story);
-  d3.selectAll('#legend p').remove();
-  d3.select('#legend').append('p').html(legends[story.type].replace(/%\w+%/g, function(all){ return story.legend[all] || all; }));
   d3.selectAll('#columns text').remove();
   d3.select('#columns').text(story.cols.join(", "));
   d3.selectAll('#source a').remove();
@@ -170,6 +153,26 @@ function draw(story) {
       .text(String);
   window.location.hash = encodeURIComponent(story.menu + '|' + story.title);
   window['draw_' + story.type](story);
+	d3.select('#exp_text').text(' ');	
+	if(story.context){
+		var cont = d3.select('#exp_text').append('p').html('<strong>Context:</strong> ');
+		cont.append('span').html(story.context);
+		var expl = story.cont_p.split('@');
+		d3.select('#exp_text')
+		  	.selectAll('.expl')
+			  	.data(expl)
+			  .enter().append('p')
+		      .html(function(d){ return d.split('$').join('&nbsp &nbsp'); }); 		
+		var viz = d3.select('#exp_text').append('p').html('<strong>Using the visualization:</strong> ');
+		viz.append('span').html(story.viz);
+		var expl = story.viz_p.split('@');	
+		d3.select('#exp_text')
+		  	.selectAll('.expl')
+			  	.data(expl)
+			  .enter().append('p')
+		      .html(function(d){ return d.split('$').join('&nbsp &nbsp'); });
+		d3.select('#exp_text').append('p').html(story.ppt);				
+	}
 }
 function draw_date(daterow, story) {
     var dates = _.uniq(_.map(story.cols, function(col) { return daterow[col]; }));
@@ -179,16 +182,7 @@ function draw_treemap(story) {
 	d3.selectAll('.tooltip').remove();
   // Add gradient legend for treemap
   d3.select('#gradient_cont').style('display', 'block');
-
 	d3.selectAll('#gradient text').remove();
-	d3.select('#exp_text').text(' ');	
-	if(story.exp){
-		var expl = story.exp.split('@');
-		d3.select('#exp_text').selectAll('.expl')
-				.data(expl)
-			.enter().append('p')
-				.html(function(d){ return d.split('$').join('&nbsp &nbsp'); }); 		
-	}
 	d3.select('.legend.treemap').style('display', 'block');	
 	// Creates gradient legend for treemap
 	var gradient = d3.select('#gradient');
@@ -292,18 +286,9 @@ function draw_cartogram(story) {
 	// Add gradient legend for cartogram
   d3.select('#gradient_cont').style('display', 'block');
 	d3.select('#exp_text').text(' ');
-	if(story.exp){
-		var expl = story.exp.split('@');
-		d3.select('#exp_text').selectAll('.expl')
-				.data(expl)
-				.enter().append('p')
-				.html(function(d){ return d.split('$').join('&nbsp &nbsp'); }); 
-	}		
 	d3.selectAll('#gradient text').remove();
 	d3.selectAll('.legend').style('display', 'none');	
 	d3.selectAll('.feature').remove();
-
-
 	d3.selectAll('.state_bubbles').remove();	
 	// Creates gradient legend for cartogram
 	var gradient = d3.select('#gradient');
@@ -317,22 +302,16 @@ function draw_cartogram(story) {
     .attr('y', 20)
     .data(story.pertext) 
     .text(function(d){ return d + '%'; })
-
-
     .style('fill', function(d, i){ return i == 3 ? 'white' : 'black';});	
 	var svg = d3.select('#chart');
 			svg.selectAll('*').remove();
 			svg.style('border', '1px solid #ddd');
 	var width = parseInt(svg.style('width'));
   var height = parseInt(svg.style('height'));			
-
 	var projection = d3.geo.mercator()
 			.scale(width*6)
 			.translate([-width+115, height+115]);
-
 	var path = d3.geo.path()
-
-
 			.projection(projection);			
 	var zoom = d3.behavior.zoom()
 			.on('zoom', function() {
@@ -340,21 +319,15 @@ function draw_cartogram(story) {
 							d3.event.translate.join(',')+')scale('+d3.event.scale+')');
 					g.selectAll('path')  
 							.attr('d', path.projection(projection)); 
-
-
 	});		
 	var maps = svg.append('g').call(zoom);	
-
 	var g = maps.append('g');		
-
 	d3.json('topojson/in-states-topo.json', function(json) {
 			g.selectAll('.feature')
 					.data(topojson.object(json, json.objects.states).geometries)
 				.enter().append('path')
 					.attr('class', 'feature')
 					.attr('d', function(d){ return path(d);})
-
-
 					.style('fill', function(d, i){ return gen_color_vals[i]; });					
 			d3.csv(story.data || datafile(), function(data){ 
 					if(story.data){ $('#data_cont').hide(); d3.select('#data').attr('href', story.data); } else { $('#data_cont').show();}
@@ -370,8 +343,6 @@ function draw_cartogram(story) {
 						})
 						.entries(subset); 
 					var states = _.filter(dataset, function(d){ return d.key != 'PUDUCHERRY' ;});
-
-
 					var rState = d3.scale.linear().domain(d3.extent(states.map(function(d) { return d.values['rads'];}))).range([5, 30]);											
 					g.selectAll('.state_bubbles')
 						.data(topojson.object(json, json.objects.states).geometries)
@@ -401,16 +372,7 @@ function draw_scatter(story) {
   // Add scatterplot info container
   d3.select('#right_container').style('display','block');
 	d3.select('#hide_text').style('display', 'block');
-
 	d3.select('.legend.scatter').style('display', 'block');
-	if(story.exp){
-		d3.select('#exp_text').text(' ');
-		var expl = story.exp.split('@');
-		d3.select('#exp_text').selectAll('.expl')
-				.data(expl)
-				.enter().append('p')
-				.html(function(d){ return d.split('$').join('&nbsp &nbsp'); }); 
-	}
 	// Filter the data
   d3.csv(story.data || datafile(), function(data) {
 		if(story.data){ $('#data_cont').hide(); d3.select('#data').attr('href', story.data); } else { $('#data_cont').show();}
@@ -443,8 +405,6 @@ function draw_scatter(story) {
 		select.on('change', function() {
 			var group = d3.select(this).property('value');			
 		  d3.selectAll('.tooltip').remove();
-
-
 			d3.selectAll('.tags').style('display', 'none');      
 			if (group) {
 				tempGroup = group;	
@@ -682,13 +642,6 @@ function draw_scatter(story) {
 function draw_stack(story) {
 	d3.selectAll('.tooltip').remove();
 	d3.select('#exp_text').text(' ');	
-	if(story.exp){
-		var expl = story.exp.split('@');
-		d3.select('#exp_text').selectAll('.expl')
-				.data(expl)
-				.enter().append('p')
-				.html(function(d){ return d.split('$').join('&nbsp &nbsp'); }); 
-	}		
 	d3.selectAll('.v1').remove();
 	d3.selectAll('.y1').remove();
 	d3.selectAll('text, line, .y2').remove();
