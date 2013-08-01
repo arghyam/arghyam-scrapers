@@ -448,7 +448,7 @@ var stories = [
     scatter_story({
         'menu'   : 'Performance',
         'title'  : 'Comparing spending to toilet construction',
-				'context': 'This visualisation compares spending on the rural sanitation scheme with spending on incentives given for toilet construction for the rural poor houses. Ideally, every states must fall on the linear trendline meaning that it spent proportionate to construction. Being off that line means that the state has either under-spent or overspent to build the same number of toilets. ',
+				'context': 'This visualisation compares spending on the rural sanitation scheme with spending on incentives given for toilet construction for the rural poor houses. Ideally, every state must fall on the linear trendline meaning that it spent proportionate to construction. Being off that line means that the state has either under-spent or overspent to build the same number of toilets. ',
 				'cont_p' : ' ',					 
 				'viz'    : 'Each circle represents one State / Union Territory. Click on a State or select from the drop down for the State and District that you want to see. The size of the circle represents rural poor toilets required. The x-axis is based on overall spending on rural sanitation (since toilet construction for the rural poor and allied activities is the biggest spend in the whole allotted sum). The y-axis is based on % toilets constructed for rural poor households. ' +
 									 'If the circle lies in the green part of the graph - that means that the respective state or district is doing well, if it lies in the red part then it is not. ',
