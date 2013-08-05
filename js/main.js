@@ -1,6 +1,7 @@
-var host = window.location.host;
+ var host = window.location.host;
 //var iwp = 'www.indiawaterportal.org';
-var iwp = 'arghyam.github.io';
+//var iwp = 'arghyam.github.io';
+var iwp = 'localhost';
 console.log(host);
 d3.selectAll('.tooltip').remove();
 // Clicking on the home button...
@@ -116,13 +117,13 @@ function hashchange(e) {
 }
 window.addEventListener('hashchange', hashchange);
 hashchange();
+
 // When any menu option is clicked, draw it.
 function draw(story) {
 	if (d3.event) {
     d3.event.preventDefault();		
   }
-	d3.selectAll('.tooltip').remove();
-  d3.select('#about').style('display', 'none');
+	d3.select('#about').style('display', 'none');
 	d3.select('#exp_text').text(' ');	
 	d3.selectAll('#demo').style('display', 'none');
   d3.select('#visual').style('display', 'block');
@@ -144,6 +145,7 @@ function draw(story) {
   d3.selectAll('#source a').remove();
 	d3.select('#chart').attr('height', 500);
 	d3.selectAll('.horiz0, .horiz1').remove();
+	d3.selectAll('.tooltip').remove();
   d3.select('#source').selectAll('a')
       .data(story.url)
     .enter()
@@ -154,25 +156,33 @@ function draw(story) {
   window.location.hash = encodeURIComponent(story.menu + '|' + story.title);
   window['draw_' + story.type](story);
 	d3.select('#exp_text').text(' ');	
+	d3.select('#bottom').remove();
 	if(story.context){
 		var cont = d3.select('#exp_text').append('p').html('<strong>Context:</strong> ');
 		cont.append('span').html(story.context);
 		var expl = story.cont_p.split('@');
-		d3.select('#exp_text')
-		  	.selectAll('.expl')
+		cont.selectAll('.expl')
 			  	.data(expl)
 			  .enter().append('p')
 		      .html(function(d){ return d.split('$').join('&nbsp &nbsp'); }); 		
-		var viz = d3.select('#exp_text').append('p').html('<strong>Using the visualization:</strong> ');
+		var viz = cont.append('p').html('<strong>Using the visualization:</strong> ');
 		viz.append('span').html(story.viz);
 		var expl = story.viz_p.split('@');	
-		d3.select('#exp_text')
-		  	.selectAll('.expl')
+		cont.selectAll('.expl')
 			  	.data(expl)
 			  .enter().append('p')
 		      .html(function(d){ return d.split('$').join('&nbsp &nbsp'); });
-		d3.select('#exp_text').append('p').html(story.ppt);				
+		cont.append('p').append('a').text('Click here for help - ppt with using visualization').style('cursor', 'pointer').on('click', toBottom);				
+		function toBottom()
+		{
+			window.scrollTo(0, document.body.scrollHeight);
+		}
 	}
+	d3.select('#slideshare').style('display', 'none');
+	if(story.slideshare){
+		d3.select('#slideshare').style('display', 'block');
+		d3.select('#pptFrame').attr('src', story.slideshare);		
+	}	
 }
 function draw_date(daterow, story) {
     var dates = _.uniq(_.map(story.cols, function(col) { return daterow[col]; }));
@@ -279,7 +289,7 @@ function draw_treemap(story) {
       svg.selectAll('rect').classed('mark', false);
       svg.selectAll('rect[data-q="' + subgroup + '"]').classed('mark', true);
     });
-  });
+  });	
 }
 function draw_cartogram(story) {
 	d3.selectAll('.tooltip').remove();
@@ -307,28 +317,25 @@ function draw_cartogram(story) {
 			svg.selectAll('*').remove();
 			svg.style('border', '1px solid #ddd');
 	var width = parseInt(svg.style('width'));
-  var height = parseInt(svg.style('height'));			
-	var projection = d3.geo.mercator()
+  var height = parseInt(svg.style('height'));
+	var centered;
+  var projection = d3.geo.mercator()
 			.scale(width*6)
 			.translate([-width+115, height+115]);
 	var path = d3.geo.path()
-			.projection(projection);			
-	var zoom = d3.behavior.zoom()
-			.on('zoom', function() {
-					g.attr('transform', 'translate('+ 
-							d3.event.translate.join(',')+')scale('+d3.event.scale+')');
-					g.selectAll('path')  
-							.attr('d', path.projection(projection)); 
-	});		
-	var maps = svg.append('g').call(zoom);	
-	var g = maps.append('g');		
+			.projection(projection);					
+	var maps = svg.append('g');
+	var g = maps.append('g');
+  var dt = maps.append('g'); 	
 	d3.json('topojson/in-states-topo.json', function(json) {
 			g.selectAll('.feature')
 					.data(topojson.object(json, json.objects.states).geometries)
 				.enter().append('path')
 					.attr('class', 'feature')
 					.attr('d', function(d){ return path(d);})
-					.style('fill', function(d, i){ return gen_color_vals[i]; });					
+					.style('fill', function(d, i){ return gen_color_vals[i]; })
+					.on('click', clicked);
+					
 			d3.csv(story.data || datafile(), function(data){ 
 					if(story.data){ $('#data_cont').hide(); d3.select('#data').attr('href', story.data); } else { $('#data_cont').show();}
 					var subset = _.filter(data, story.filter);
@@ -337,9 +344,9 @@ function draw_cartogram(story) {
 						.key(function(d){ return d[story.group]; })
 						.rollup(function(rows){ 
 							return { 'rads': d3.sum(rows, function(d){ return d[story.area[1]] ;}),
-											 'num': d3.sum(rows, function(d){ return d[story.num[1]] ;}),
-											 'den': d3.sum(rows, function(d){ return d[story.den[1]] ;}),
-								       'col' : d3.mean(rows, function(d){ return d[story.num[1]] / d[story.den[1]];}) }
+											 'num': d3.sum(rows, function(d){ return (parseInt(d[story.num[1]]) + parseInt(d[story.cen2001[1]]));}),   //(parseInt(d[story.cen2001[1]]) + parseInt(d[story.num[1]])); }),
+											 'den': d3.sum(rows, function(d){ return d[story.den[1]] ;})
+										 }								      
 						})
 						.entries(subset); 
 					var states = _.filter(dataset, function(d){ return d.key != 'PUDUCHERRY' ;});
@@ -353,17 +360,45 @@ function draw_cartogram(story) {
 						.data(states)
 						// Delhi in topojson and D & N Haveli in data file... not displaying D & N Haveli 
 						.attr('r', function(d){ return d.key == 'D & N HAVELI' ? 0 : rState(d.values['rads']); })
-						.style('fill', function(d){ return color(d.values['col']) ;})
+						.style('fill', function(d){ return color(d.values['num']/d.values['den']) ;}) 
+						.attr('data-q', function(d){ return d.key; })
 						.on('mouseover', function(){
 							var details = d3.select(this).text(); 
 							$('#copy_title').val(details).select();	
 						})
 						.append('title')
 						.text(function(d){ return d.key +': '+ story.area[0]+ ' = '+ N(d.values['rads']) + '. '
-										+ story.num[0] +' / '+ story.den[0]+' = ' + N(d.values['num']) +' / '+ N(d.values['den']) +' = '+ P(d.values['col']);
+										+ story.num[0] + ' + ' + story.cen2001[0] +' / '+ story.den[0]+' = ' + N(d.values['num']) +' / '+ N(d.values['den']) +' = '
+										+ P(d.values['num']/d.values['den']);
 						});
-			});		
-	});
+			});
+			/*d3.json('topojson/in-map-major-cities.json', function(jsons) {
+				console.log(JSON.stringify(jsons));
+				dt.selectAll('path')
+					.data(topojson.object(jsons, jsons.objects.places).geometries)
+				.enter().append('path')
+					//.attr('class', 'feature')
+					.attr('d', function(d){ return path(d);})
+					//.pointRadius(4)
+					//.attr('fill', 'steelblue')
+					.append('title')
+					.text(function(d){ return d.properties.name;});
+			});*/	
+	});	
+	function clicked(d) {
+		var x, y, k;
+		if (d && centered !== d) {
+			var centroid = path.centroid(d); x = centroid[0]; y = centroid[1]; k = 4; centered = d;
+		} else {
+			x = width / 2.3; y = height / 1.9; k = 1; centered = null;
+		}
+		g.selectAll("path")
+				.classed("active", centered && function(d) { return d === centered; });
+		g.transition()
+				.duration(750)
+				.attr("transform", "translate(" + width / 2.3 + "," + height / 1.9  + ")scale(" + k + ")translate(" + -x + "," + -y + ")");
+				//.style("stroke-width", 1.5 / k + "px");
+	}
 }
 var tempGroup = '', tempSubgroup = '', tempResult = [];
 function draw_scatter(story) {

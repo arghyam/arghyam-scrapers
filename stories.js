@@ -160,6 +160,7 @@ var stories = [
         'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
+				'slideshare': 'https://skydrive.live.com/embed?cid=5F394E534EE15E07&resid=5F394E534EE15E07%21114&authkey=AAvTbPR9SP_xg5Y&em=2&wdAr=1.3333333333333333',
 				'IWP'    : 'true'
     }),
     treemap_story({
@@ -183,6 +184,7 @@ var stories = [
         'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
+				'slideshare': 'https://skydrive.live.com/embed?cid=5F394E534EE15E07&resid=5F394E534EE15E07%21112&authkey=AE51yDpVVlHU55k&em=2&wdAr=1.3333333333333333', 
 				'IWP'    : 'true'
     }),
     treemap_story({
@@ -320,6 +322,7 @@ var stories = [
 				'lines'  : 'true', 
         'story'  : 'Story to be written...',
         'legend' : { '%Blue%': 'Centre', '%Red%': 'State', '%Green%': 'Beneficiary' },
+				'slideshare': 'https://skydrive.live.com/embed?cid=5F394E534EE15E07&resid=5F394E534EE15E07%21110&authkey=AKRfPtIJhjye7-4&em=2&wdAr=1.3333333333333333&wdEaa=1',
 				'IWP'    : 'true'
     }),
     stack_story({
@@ -358,7 +361,7 @@ var stories = [
         'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
-				'IWP'    : 'false'
+				'IWP'    : 'true'
     }),
     treemap_story({
         'menu'   : 'Toilets built',
@@ -380,6 +383,7 @@ var stories = [
         'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
+				'slideshare': 'https://skydrive.live.com/embed?cid=5F394E534EE15E07&resid=5F394E534EE15E07%21105&authkey=AN2MtcfwpdjuGHg&em=2&wdAr=1.3333333333333333', 
 				'IWP'    : 'true'
     }),
     treemap_story({
@@ -404,14 +408,15 @@ var stories = [
 										'http://www.indiawaterportal.org/data/2011-census-household-tables-0'],
         'cols'   : ['PP_IHHL_TOTAL', 'Rural_Households'],
         'group'  : ['State_Name'],
-        'area'   : ['Total Rural Households' , 'Rural_Households'],
-        'num'    : ['Rural Households (WT)', 'PP_IHHL_TOTAL'],
-        'den'    : ['Total Rural Households', 'Rural_Households'],
-        'story'  : 'Story to be written...',
+        'area'   : ['Total Rural Households Census 2011' , 'Rural_Households'],
+				'num'    : ['TSC total number of toilets built from 2001', 'PP_IHHL_TOTAL'],
+        'den'    : ['Total Rural Households Census 2011', 'Rural_Households'],
+        'cen2001': ['Census 2001 Rural Households (WT)', 'Census_2001_IHHL'],
+				'story'  : 'Story to be written...',
         'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
-				'IWP'    : 'false'
+				'IWP'    : 'true'
     }),
 		treemap_story({
         'menu'   : 'Toilets built',
@@ -427,7 +432,7 @@ var stories = [
         'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
-				'IWP'    : 'false'
+				'IWP'    : 'true'
     }),
 		treemap_story({
         'menu'   : 'Toilets built',
@@ -443,7 +448,7 @@ var stories = [
         'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
-				'IWP'    : 'false'
+				'IWP'    : 'true'
     }),
     scatter_story({
         'menu'   : 'Performance',
@@ -465,6 +470,7 @@ var stories = [
         'xdom'   : [0, 1.5],
         'ydom'   : [0, 1.5],
         'story'  : 'Story to be written...',
+				'slideshare': 'https://skydrive.live.com/embed?cid=5F394E534EE15E07&resid=5F394E534EE15E07%21116&authkey=ALNXoAqMwro4HP4&em=2&wdAr=1.3333333333333333', 
         'IWP'    : 'true'						
 		}),
     scatter_story({

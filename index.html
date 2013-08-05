@@ -2,7 +2,8 @@
 <head>
   <title>Nirmal Bharat Abhiyan: trends</title>
   <link rel="stylesheet" href="css/bootstrap.min.css">
-  <style>
+	<link rel="shortcut icon" href="img/favicon.ico">
+  <style>	
     body { padding-top: 60px; }
 		#home{font-size:1.1em;}
 		#home:hover{color:#000;}
@@ -35,9 +36,9 @@
     #datafiles { padding: 0; margin: auto; height: auto; }
     #columns{ padding-left:5px; font-family: arial; color:#444; font-size: 1em; }
     #source a { display: block; }
-    #right_container{ float:right; width:210px; position:relative; padding:5px; bottom:475px; font-size:0.7em; }
+    #right_container{ margin-left:180px; width:220px; font-size:0.7em; }
     #header{ font-size: 1.2em; padding:5px; background-color: black; color:white; font-weight: bold; }
-    #details{ border:1px solid gray; padding:5px; }
+    #details{  border:1px solid gray; padding:5px; }
     #details tr td{ vertical-align: top; }
     #info{ font-size: 1.1em; padding-top: 5px; line-height: 1.5em; }
     .v0 text { fill: #08c; cursor: pointer; }
@@ -50,8 +51,8 @@
 		#btn{ position:relative; top:80px;margin-right:250px; }	
 		.frame { stroke: none; fill: none; pointer-events: all;	}
 		.feature { stroke: #aaa; fill-opacity:0.05; }
-		.state_bubbles{ fill: none; stroke:#ddd; }	
-		.state_bubbles:hover{ stroke:#888; }
+		.state_bubbles{ fill: none; stroke:#888; }	
+		.state_bubbles:hover{ stroke:#444; }
 		</style>
   <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
 </head><body>
@@ -69,8 +70,8 @@
 	<h2 id="menu"></h2>
   <h1 id="title"></h1>
 	<h3 id="subtitle"></h3>
-  <p id="exp_text"></p>  
-	<div id="btn"><button id="hide_text" class="btn pull-right">Show / Hide States</button></div>
+  <p id="exp_text"></span></p>
+	<div id="btn"><button id="hide_text" class="btn pull-right">Show / Hide State names</button></div>
 	<div>
 		<div style="margin-left:-28px; padding-bottom:10px;" class="span12">
 			<div class="legend treemap span5" data-story="treemap"></div>
@@ -85,8 +86,10 @@
 			</div>			
 		</div>	
 	</div>
-  <div><svg id="chart" width="960" height="500"></svg></div>
-   <div id="gradient_cont">
+  <div style="margin-left:-2px;" class="span8"><svg id="chart" width="960" height="500"></svg></div>
+	<div id="right_container" class="span2"><div id="header"></div><div id="details"></div><div id="info"></div></div>
+	<div class="clear:both;"></div>
+   <div id="gradient_cont" class="span12" style="margin-left:-2px;">
 		<svg id="gradient" width="956" height="30">
 			<defs>
 				<linearGradient id="gradient_legend" x="0%" y="0%">
@@ -105,10 +108,10 @@
 				</linearGradient>
 			</defs>
 		</svg>
-  </div>
-  <div id="right_container"><div id="header"></div><div id="details"></div><div id="info"></div></div>
-  <br>
-  <div>
+  </div>  
+  <br><br>
+  <div style="margin-left:0px;"class="span12">
+		<br>
 		<div style="float:left"id="download_cont"><strong>Download</strong>:
 				<a href="#" id="data">full dataset</a> |      
 				<a href="glossary/glossary_of_terms.xlsx">Glossary of terms</a>
@@ -118,8 +121,14 @@
 	<br>
   <div style="float:left;margin-right:5px;"><strong>Source</strong>:</div>
   <div style="float:left;" id="source"></div>
-	<div style="clear:both;"></div>
-	<br><br><br>
+	<div style="clear:both;"></div>	
+	<div>
+		<br>
+		<iframe id="pptFrame" 
+			width='500px' height='385px' frameborder='0'>This is an embedded Microsoft Office presentation, powered by Office Web Apps.
+		</iframe>
+	</div>
+	<br>
 </div>
 <div id="about" class="container">
   <h2>Ministry of Water &amp; Sanitation</h2>
@@ -138,8 +147,8 @@
 </div>		
 <div id="demo" class="container-fluid container">
 	<h1>Rural sanitation scheme - progress & performance</h1>
-	<h4>We can find out how the rural sanitation scheme is doing because of the data that is published on the <a href="http://tsc.gov.in">Ministry of the Drinking Water and Sanitation website</a>. 
-      This project aims to create simple tools that will demystify the large datasets and compare it to other relevant datasets.</h4>
+	<h4>We can find out how the rural sanitation scheme is doing because of the data that is published on the <a href="http://tsc.gov.in" target="_blank">Ministry of the Drinking Water and Sanitation website</a>. 
+This project aims to create simple tools that will demystify the large datasets and compare it to other relevant datasets.</h4>
 	<div class="row-fluid">
 		<div class="span12">
 				<a class="demo thumbnail pull-left" href="#Money%20spent%7CSpending%20on%20rural%20sanitation">
@@ -160,42 +169,41 @@
 					<h3>Money Given vs Money Spent</h3>
 					<p>What is the contribution of the state, centre and people towards toilet construction?</p>
 				</a>				
-				<!--<a class="demo thumbnail pull-left" href="#Money%20spent%7CXML%20-%202">
+				<a class="demo thumbnail pull-left" href="#Money%20spent%7CXML%20-%202">
 					<h4 style="padding-left:5px">Money spent</h4>
 					<img src="img/XML_-_2.png?v=1">
 					<h3>XML - 2</h3>
 					<p>Need short description</p>
-				</a>-->				
+				</a>			
 				<a class="demo thumbnail pull-left" href="#Toilets%20built%7CEvaluation%20of%20toilets%20built%20for%20the%20rural%20poor">
 					<h4 style="padding-left:5px">Toilets built</h4>
 					<img src="img/evaluation_of_toilets_built_for_the_rural_poor.png?v=1">
 					<h3>Evaluation of toilets built for the rural poor</h3>
 					<p>How many toilets were built for rural poor households? Have targets been met?</p>
 				</a>				
-				<!--<a class="demo thumbnail pull-left" href="#Toilets%20built%7CCoverage%20of%20Toilets%20-%20Rural%20Households">
+				<a class="demo thumbnail pull-left" href="#Toilets%20built%7CCoverage%20of%20Toilets%20-%20Rural%20Households">
 					<h4 style="padding-left:5px">Toilets built</h4>
 					<img src="img/coverage_of_toilets-rural_households.png?v=1">
 					<h3>Coverage of toilets Rural households</h3>
 					<p>How does toilet coverage compare with total rural households as per census 2011?</p>
-				</a>-->
-				<!-- Cartogram - 2				
-					<a class="demo thumbnail pull-left" href="#">
+				</a>
+				<!--<a class="demo thumbnail pull-left" href="#">
 					<img src="img/coverage_of_toilets-rural_households.png?v=1">
-					<h3>Toilet coverage from census 2011</h3>
+					<h3>Toilets coverage from census 2011</h3>
 					<p>What does the census 2011 say about toilet coverage in the country? See this to check if the census and NBA numbers matching?</p>
-				</a>-->					
-				<!--<a class="demo thumbnail pull-left" href="#Toilets%20built%7CXML%20-%201%20-%20first">
+				</a>-->				
+				<a class="demo thumbnail pull-left" href="#Toilets%20built%7CXML%20-%201%20-%20first">
 					<h4 style="padding-left:5px">Toilets built</h4>
 					<img src="img/XML_-_1_-_first.png?v=1">
 					<h3>XML - 1 - First</h3>
 					<p>Need short description</p>
-				</a>-->				
-				<!--<a class="demo thumbnail pull-left" href="#Toilets%20built%7CXML%20-%201%20-%20second">
+				</a>
+				<a class="demo thumbnail pull-left" href="#Toilets%20built%7CXML%20-%201%20-%20second">
 					<h4 style="padding-left:5px">Toilets built</h4>
 					<img src="img/XML_-_1_-_second.png?v=1">
 					<h3>XML - 1 - Second</h3>
 					<p>Need short description</p>
-				</a>-->
+				</a>
 				<a class="demo thumbnail pull-left" href="#Performance%7CComparing%20spending%20to%20toilet%20construction">
 					<h4 style="padding-left:5px">Performance</h4>
 					<img src="img/comparing_spending_to_toilet_construction.png?v=1">
@@ -205,7 +213,7 @@
 		</div>			
 	</div>
 	<div class="container-fluid" style="margin-top:25px;">
-		<p> For queries, email <code>contact@arghyam.org</code></p>
+		<p> For more queries and feedback please contact us: <a href="http://www.indiawaterportal.org/contact" target="_blank"><code>click here</code></a></p>
 		<p><a href="http://arghyam.org">Arghyam.org</a></p>
 	</div>
 </div>
@@ -238,11 +246,12 @@
 <script src="js/underscore-min.js"></script>
 <script src="js/d3.v2.min.js"></script>
 <script src="js/topojson.v0.min.js"></script>
+<script src="js/d3.geo.tile.v0.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/svg-crowbar.js"></script>
 <script src="stories.js"></script>
 <script src="js/main.js"></script>
-<script type="text/javascript">
+<!--<script type="text/javascript">
   var _gaq = _gaq || [];
   _gaq.push(['_setAccount', 'UA-3937466-7']);
   _gaq.push(['_trackPageview']);
@@ -251,5 +260,5 @@
     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   })();
-</script>
+</script>-->
 </body></html>
