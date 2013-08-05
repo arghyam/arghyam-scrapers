@@ -1,4 +1,4 @@
- var host = window.location.host;
+var host = window.location.host;
 //var iwp = 'www.indiawaterportal.org';
 var iwp = 'arghyam.github.io';
 console.log(host);
@@ -171,7 +171,7 @@ function draw(story) {
 			  	.data(expl)
 			  .enter().append('p')
 		      .html(function(d){ return d.split('$').join('&nbsp &nbsp'); });
-		cont.append('p').append('a').text('Click here for help - ppt on using visualization').style('cursor', 'pointer').on('click', toBottom);				
+		cont.append('p').append('a').text('Click on the ppt for more help with using the visualisation.').style('cursor', 'pointer').on('click', toBottom);				
 		function toBottom()
 		{
 			window.scrollTo(0, document.body.scrollHeight);
