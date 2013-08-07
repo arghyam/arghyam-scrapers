@@ -48,8 +48,7 @@
 		.y1, .y2{	fill:#000; stroke:none;	text-anchor:middle;	font-size:0.8em; }
 		.horiz0, .horiz1{	fill:none; stroke:#999;	stroke-width:1;	shape-rendering:crispEdges;	}
 		.h, .v{	fill:none; stroke:#fff;	stroke-width:1;	stroke-opacity:0.6;	shape-rendering:crispEdges; }	
-		#btn{ position:relative; top:80px;margin-right:250px; }	
-		.frame { stroke: none; fill: none; pointer-events: all;	}
+		#btn{ position:relative; top:80px;margin-right:250px; }			
 		.feature { stroke: #aaa; fill-opacity:0.05; }
 		.state_bubbles{ fill: none; stroke:#888; }	
 		.state_bubbles:hover{ stroke:#444; }
@@ -73,15 +72,15 @@
   <p id="exp_text"></span></p>
 	<div id="btn"><button id="hide_text" class="btn pull-right">Show / Hide State names</button></div>
 	<div>
-		<div style="margin-left:-1px; padding-bottom:10px;" class="span12">
+		<div style="width:1200px;margin-left:-1px; padding-bottom:10px;" class="span12">
 			<div class="legend treemap span5" data-story="treemap" style="margin-left:-1px;"></div>
 			<div class="legend stack span5" data-story="stack" style="margin-left:-1px;"></div>
 			<div class="legend scatter span5" data-story="scatter" style="margin-left:-1px;"></div>
 			<div id="data_cont" class="span4" style="margin-left:-4px;">
-				<strong>Start Year: 2001, Till Date:</strong> <select id="datafiles" class="input-medium" style="padding:5px;"></select>
+				<strong>From: 2001, Till (Change Date):</strong> <select id="datafiles" class="input-medium" style="padding:5px;"></select>
 			</div>
-			<div style="margin-left:-25px; width:360px;" class="form-inline span3">
-				<label for="copy_title">Ctrl+c to Copy text </label>
+			<div style="margin-left:5px; width:340px;" class="form-inline span3">
+				<label for="copy_title">Ctrl+c to Copy text</label>
 				<input type="text" id="copy_title" placeholder="Hover text">
 			</div>			
 		</div>	
