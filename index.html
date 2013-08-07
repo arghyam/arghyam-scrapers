@@ -73,14 +73,14 @@
   <p id="exp_text"></span></p>
 	<div id="btn"><button id="hide_text" class="btn pull-right">Show / Hide State names</button></div>
 	<div>
-		<div style="margin-left:-28px; padding-bottom:10px;" class="span12">
-			<div class="legend treemap span5" data-story="treemap"></div>
-			<div class="legend stack span5" data-story="stack"></div>
-			<div class="legend scatter span5" data-story="scatter"></div>
-			<div id="data_cont" class="span3">
-				<strong>Change Date</strong>: <select id="datafiles" class="input-medium" style="padding:5px;"></select>
+		<div style="margin-left:-1px; padding-bottom:10px;" class="span12">
+			<div class="legend treemap span5" data-story="treemap" style="margin-left:-1px;"></div>
+			<div class="legend stack span5" data-story="stack" style="margin-left:-1px;"></div>
+			<div class="legend scatter span5" data-story="scatter" style="margin-left:-1px;"></div>
+			<div id="data_cont" class="span4" style="margin-left:-4px;">
+				<strong>Start Year: 2001, Till Date:</strong> <select id="datafiles" class="input-medium" style="padding:5px;"></select>
 			</div>
-			<div style="margin-left:-8px;" class="form-inline span4">
+			<div style="margin-left:-25px; width:360px;" class="form-inline span3">
 				<label for="copy_title">Ctrl+c to Copy text </label>
 				<input type="text" id="copy_title" placeholder="Hover text">
 			</div>			
@@ -250,7 +250,7 @@ This project aims to create simple tools that will demystify the large datasets 
 <script src="js/svg-crowbar.js"></script>
 <script src="stories.js"></script>
 <script src="js/main.js"></script>
-<!--<script type="text/javascript">
+<script type="text/javascript">
   var _gaq = _gaq || [];
   _gaq.push(['_setAccount', 'UA-3937466-7']);
   _gaq.push(['_trackPageview']);
@@ -259,5 +259,5 @@ This project aims to create simple tools that will demystify the large datasets 
     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   })();
-</script>-->
+</script>
 </body></html>
