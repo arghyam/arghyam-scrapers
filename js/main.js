@@ -7,7 +7,7 @@ d3.selectAll('.tooltip').remove();
 d3.select('#home').on('click', function() {
 	d3.selectAll('.tooltip').remove();
   //d3.event.preventDefault();
-  d3.select('#visual').style('display', 'none');	
+	d3.select('#visual').style('display', 'none');	
 	if(host == iwp){
 		d3.select('#demo').style('display', 'block');
 		d3.select('#about').style('display', 'none');
@@ -15,7 +15,17 @@ d3.select('#home').on('click', function() {
 		d3.select('#demo').style('display', 'none');
 		d3.select('#about').style('display', 'block');
 	}	
+	d3.select('#method').style('display', 'none');
 });
+d3.select('#methodology').on('click', method_disclaim);
+function method_disclaim(){
+	d3.selectAll('.tooltip').remove();
+	d3.select('#visual').style('display', 'none');	
+	d3.select('#demo').style('display', 'none');		
+	d3.select('#about').style('display', 'none');	
+	d3.select('#method').style('display', 'block');
+	d3.select('.container').style('margin-left', '90px');	
+}
 if(host == iwp){
 	var iwpStories = _.filter(stories, function(d){ return d.IWP == 'true'; });
 	var menu = d3.nest().key(function(d) { return d.menu; }).entries(iwpStories);
@@ -74,14 +84,12 @@ d3.select('#datafiles')
   .enter()
     .append('option')
     .attr('value', String)
-    .text(function(d) { return d.replace(/^data\-/, '').replace(/\.csv/, ''); });
-		
+    .text(function(d) { return d.replace(/^data\-/, '').replace(/\.csv/, ''); });		
 var svg = d3.select('#chart')
     .on('click', function() {
       var drilldown = d3.select('#visual').classed('drilldown');
       d3.select('#visual').classed('drilldown', !drilldown);			
     });
-
 if(host == iwp){
 		d3.selectAll('#demo').style('display', 'block');
 		d3.selectAll('#about').style('display', 'none');			
@@ -116,13 +124,13 @@ function hashchange(e) {
 }
 window.addEventListener('hashchange', hashchange);
 hashchange();
-
 // When any menu option is clicked, draw it.
 function draw(story) {
 	if (d3.event) {
     d3.event.preventDefault();		
   }
 	d3.select('#about').style('display', 'none');
+	d3.select('#method').style('display', 'none');
 	d3.select('#exp_text').text(' ');	
 	d3.selectAll('#demo').style('display', 'none');
   d3.select('#visual').style('display', 'block');
@@ -135,7 +143,7 @@ function draw(story) {
   d3.select('#right_container').style('display','none');
 	d3.select('#hide_text').style('display', 'none');
   // Set the title and story
-  d3.select('#menu').text(story.menu);
+  d3.select('#menu').text(story.menu);	
   d3.select('#title').text(story.title);
   d3.select('#subtitle').text(story.subtitle);
   d3.select('#story').text(story.story);
@@ -214,7 +222,7 @@ function draw_treemap(story) {
 		var treemap = d3.layout.treemap()
       .size([parseInt(svg.style('width'), 10), svg.attr('height')])
       .sticky(true)
-      .children(function(d) { return d.values; })
+			.children(function(d) { return d.values; })
       .padding(1.5)
       .value(story.size);
     var nodes = d3.nest();
@@ -281,12 +289,14 @@ function draw_treemap(story) {
     });
     subselect.on('change', function() {
 			d3.select('#visual').classed('drilldown', true);
-      var subgroup = d3.select(this).property('value');
+			var group = d3.select('.states').property('value');
+			var subgroup = d3.select(this).property('value');
 			var details = svg.select('rect[data-q="' + subgroup + '"]').text();
 			$('#copy_title').val(details);
 			$('#copy_title').on('mouseover', function(){ $(this).select(); });	
       svg.selectAll('rect').classed('mark', false);
-      svg.selectAll('rect[data-q="' + subgroup + '"]').classed('mark', true);
+      svg.selectAll('rect[data-q="' + subgroup + '"]').classed('mark', true);			
+      
     });
   });	
 }
@@ -319,22 +329,22 @@ function draw_cartogram(story) {
   var height = parseInt(svg.style('height'));
 	var centered;
   var projection = d3.geo.mercator()
-			.scale(width*6)
-			.translate([-width+115, height+115]);
+			.scale(width*5.5)
+			.translate([-width+250, height+100]);
 	var path = d3.geo.path()
 			.projection(projection);					
 	var maps = svg.append('g');
 	var g = maps.append('g');
-  var dt = maps.append('g'); 	
-	d3.json('topojson/in-states-topo.json', function(json) {
+  var dt = maps.append('g'); 		
+	d3.json('topojson/ind_states.json', function(json) {
 			g.selectAll('.feature')
-					.data(topojson.object(json, json.objects.states).geometries)
+					.data(topojson.object(json, json.objects.india_states).geometries)
 				.enter().append('path')
 					.attr('class', 'feature')
 					.attr('d', function(d){ return path(d);})
-					.style('fill', function(d, i){ return gen_color_vals[i]; })
-					.on('click', clicked);
-					
+
+					.on('click', clicked);					
+
 			d3.csv(story.data || datafile(), function(data){ 
 					if(story.data){ $('#data_cont').hide(); d3.select('#data').attr('href', story.data); } else { $('#data_cont').show();}
 					var subset = _.filter(data, story.filter);
@@ -343,22 +353,20 @@ function draw_cartogram(story) {
 						.key(function(d){ return d[story.group]; })
 						.rollup(function(rows){ 
 							return { 'rads': d3.sum(rows, function(d){ return d[story.area[1]] ;}),
-											 'num': d3.sum(rows, function(d){ return (parseInt(d[story.num[1]]) + parseInt(d[story.cen2001[1]]));}),   //(parseInt(d[story.cen2001[1]]) + parseInt(d[story.num[1]])); }),
+											 'num': d3.sum(rows, function(d){ return (parseInt(d[story.num[1]]) + parseInt(d[story.cen2001[1]]));}),   
 											 'den': d3.sum(rows, function(d){ return d[story.den[1]] ;})
 										 }								      
 						})
 						.entries(subset); 
-					var states = _.filter(dataset, function(d){ return d.key != 'PUDUCHERRY' ;});
-					var rState = d3.scale.linear().domain(d3.extent(states.map(function(d) { return d.values['rads'];}))).range([5, 30]);											
+					var rState = d3.scale.linear().domain(d3.extent(dataset.map(function(d) { return d.values['rads'];}))).range([5, 30]);					
 					g.selectAll('.state_bubbles')
-						.data(topojson.object(json, json.objects.states).geometries)
+						.data(topojson.object(json, json.objects.india_states).geometries)
 					.enter().append('circle')	
 						.attr('class', 'state_bubbles')
 						.attr('cx', function(d){ return path.centroid(d)[0]; })
 						.attr('cy', function(d){ return path.centroid(d)[1]; })
-						.data(states)
-						// Delhi in topojson and D & N Haveli in data file... not displaying D & N Haveli 
-						.attr('r', function(d){ return d.key == 'D & N HAVELI' ? 0 : rState(d.values['rads']); })
+						.data(dataset)
+						.attr('r', function(d){ return rState(d.values['rads']); })
 						.style('fill', function(d){ return color(d.values['num']/d.values['den']) ;}) 
 						.attr('data-q', function(d){ return d.key; })
 						.on('mouseover', function(){
@@ -370,19 +378,7 @@ function draw_cartogram(story) {
 										+ story.num[0] + ' + ' + story.cen2001[0] +' / '+ story.den[0]+' = ' + N(d.values['num']) +' / '+ N(d.values['den']) +' = '
 										+ P(d.values['num']/d.values['den']);
 						});
-			});
-			/*d3.json('topojson/in-map-major-cities.json', function(jsons) {
-				console.log(JSON.stringify(jsons));
-				dt.selectAll('path')
-					.data(topojson.object(jsons, jsons.objects.places).geometries)
-				.enter().append('path')
-					//.attr('class', 'feature')
-					.attr('d', function(d){ return path(d);})
-					//.pointRadius(4)
-					//.attr('fill', 'steelblue')
-					.append('title')
-					.text(function(d){ return d.properties.name;});
-			});*/	
+			});	
 	});	
 	function clicked(d) {
 		var x, y, k;
@@ -395,8 +391,7 @@ function draw_cartogram(story) {
 				.classed("active", centered && function(d) { return d === centered; });
 		g.transition()
 				.duration(750)
-				.attr("transform", "translate(" + width / 2.3 + "," + height / 1.9  + ")scale(" + k + ")translate(" + -x + "," + -y + ")");
-				//.style("stroke-width", 1.5 / k + "px");
+				.attr("transform", "translate(" + width / 2.3 + "," + height / 1.9  + ")scale(" + k + ")translate(" + -x + "," + -y + ")");				
 	}
 }
 var tempGroup = '', tempSubgroup = '', tempResult = [];
@@ -572,22 +567,20 @@ function draw_scatter(story) {
 			})
 			.append('title')
 			.text(function(d){ return d.key + ': ' + story.area[0] + ' = ' + N(d.values['rads']) +'. '+ story.x[0] + ' = ' + P(d.values['cx'])
-				+'. '+ story.y[0] + ' = ' + P(d.values['cy']); });	
-		
+				+'. '+ story.y[0] + ' = ' + P(d.values['cy']); });			
 		states.append('text')
 			.attr('class', 'tags')
 			.attr('x', function(d) { return xscale(d.values['cx']); })  
       .attr('y', function(d) { return yscale(d.values['cy']) - rState(d.values['rad']); })  
 			.text(function(d){ return d.key;})
 			.classed('hide', true)
-			.attr('font-size', 10);		
-		
-			d3.select('#hide_text').on('click', function(){ 
-				if(!d3.select('.state').classed('hide')){ 
-					var hide = d3.selectAll('.tags').classed('hide');
-						d3.selectAll('.tags').classed('hide', !hide);
-				}		
-			});	
+			.attr('font-size', 10);				
+		d3.select('#hide_text').on('click', function(){ 
+			if(!d3.select('.state').classed('hide')){ 
+				var hide = d3.selectAll('.tags').classed('hide');
+					d3.selectAll('.tags').classed('hide', !hide);
+			}		
+		});	
 		if(tempSubgroup){
 			svg.selectAll('circle[data-q="' + tempGroup + '"]')
           .classed('fade', false)
@@ -769,8 +762,7 @@ function draw_stack(story) {
 			var subgroup = d3.select(this).property('value'); 
 			svg.selectAll('.horiz0, .horiz1').classed('fade', true);
 			svg.selectAll('.v1').classed('fade', true);
-			var group = d3.select(this).property('value');
-			
+			var group = d3.select(this).property('value');			
 			svg.attr('height', 150);
 			svg.selectAll('.horiz1').classed('fade', true);		
 			svg.selectAll('.v1[data-q="' + subgroup + '"]')
