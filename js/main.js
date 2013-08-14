@@ -131,6 +131,7 @@ function draw(story) {
   }
 	d3.select('#about').style('display', 'none');
 	d3.select('#method').style('display', 'none');
+  d3.select('#demo').style('display', 'none');		
 	d3.select('#exp_text').text(' ');	
 	d3.selectAll('#demo').style('display', 'none');
   d3.select('#visual').style('display', 'block');
@@ -291,11 +292,11 @@ function draw_treemap(story) {
 			d3.select('#visual').classed('drilldown', true);
 			var group = d3.select('.states').property('value');
 			var subgroup = d3.select(this).property('value');
-			var details = svg.select('rect[data-q="' + subgroup + '"]').text();
+			var details = svg.select('rect[data-r="' + group + '"][data-q="' + subgroup + '"]').text();
 			$('#copy_title').val(details);
 			$('#copy_title').on('mouseover', function(){ $(this).select(); });	
       svg.selectAll('rect').classed('mark', false);
-      svg.selectAll('rect[data-q="' + subgroup + '"]').classed('mark', true);			
+      svg.selectAll('rect[data-r="' + group + '"][data-q="' + subgroup + '"]').classed('mark', true);				
       
     });
   });	
@@ -912,7 +913,8 @@ function position() {
     .attr('width', function(d) { return d.dx; })
     .attr('height', function(d) { return d.dy; })
     .attr('class', function(d) { return "l" + d.depth; })
-    .attr('data-q', function(d) { return d.depth == 1 ? d.key : d.District_Name; });
+    .attr('data-q', function(d) { return d.depth == 1 ? d.key : d.District_Name; })
+    .attr('data-r', function(d) { return d.depth == 2 ? d.State_Name : null; });    
 }
 function positionText() { 
   this.transition()

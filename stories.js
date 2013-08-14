@@ -416,6 +416,7 @@ var stories = [
         'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
+				'slideshare': 'https://skydrive.live.com/embed?cid=5F394E534EE15E07&resid=5F394E534EE15E07%21118&authkey=ACidFJozKYbUARQ&em=2',
 				'IWP'    : 'true'
     }),
 		treemap_story({
