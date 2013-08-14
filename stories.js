@@ -361,7 +361,7 @@ var stories = [
         'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
-				'IWP'    : 'true'
+				'IWP'    : 'false'
     }),
     treemap_story({
         'menu'   : 'Toilets built',
@@ -432,7 +432,7 @@ var stories = [
         'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
-				'IWP'    : 'true'
+				'IWP'    : 'false'
     }),
 		treemap_story({
         'menu'   : 'Toilets built',
@@ -448,7 +448,7 @@ var stories = [
         'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
-				'IWP'    : 'true'
+				'IWP'    : 'false'
     }),
     scatter_story({
         'menu'   : 'Performance',
