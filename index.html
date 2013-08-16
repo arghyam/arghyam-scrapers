@@ -17,6 +17,9 @@
            -o-transition: all 0.3s ease-out;  /* Opera 10.50-12.00 */
               transition: all 0.3s ease-out;  /* Chrome 26, Firefox 16+, IE 10+, Opera 12.50+ */
     }
+		.logo{ width:120px; height:85px; background:#fff; border:1px solid #999;}
+		.logo:hover{ border:1px solid #222; }
+		footer{ padding:10px; background:#ddd; }
 		.chart, .legend { display: none;}
     .legend select { margin-right: 1em; }
 		.drilldown #chart .l1 { stroke: none; fill: #fff; }
@@ -237,10 +240,30 @@
 </div>
 <br>
 <footer>
-	<div class="container" style="padding:25px; border-top:1px solid #ddd;">
-	<span style="margin-right:380px;"><a href="http://www.indiawaterportal.org/ruralsanitation" target="_blank"><img src="img/sos_logo.png" width="85" height="85"></a></span>
-	<span style="margin-right:300px;"><a href="http://www.arghyam.org" target="_blank"><img src="img/arghyam_logo.jpg" width="120" height="120"></a></span>
-	<span style="font-size:1.2em;">Powered by: <a href="http://www.gramener.com" target="_blank"><img src="img/gramener_logo.jpg" width="180" height="150"></a></span>
+	<div class="container">
+		<div class="span2">
+			<a href="http://www.indiawaterportal.org/topics/rural-sanitation" target="_blank">
+				<div class="logo" style="padding:10px 0px 10px 40px;">
+					<span><img src="img/sos_logo.png" width="80" height="80"></span>
+				</div>
+			</a>	
+		</div>
+		<div class="span1" style="margin-left:200px;"></div>	
+		<div class="span2">
+			<a href="http://www.arghyam.org" target="_blank">
+				<div class="logo" style="padding:10px 20px;">
+					<span><img src="img/arghyam_logo.jpg" width="120" height="120"></span>
+				</div>
+			</a>	
+		</div>	
+		<div class="span1" style="margin-left:200px;"></div>
+		<div class="span2"><div style="margin-left:30px; font-size:1.2em;">Powered by:</div>
+			<a href="http://www.gramener.com" target="_blank">
+				<div class="logo" style="padding:25px 15px 10px 15px; height:45px;" >
+					<span><img src="img/gramener_logo.jpg" width="180" height="150"></span>
+				</div>
+			</a>
+		</div>	
 	</div>
 <footer>	
 <script src="js/jquery.min.js"></script>
