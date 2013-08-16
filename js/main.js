@@ -131,7 +131,7 @@ function draw(story) {
   }
 	d3.select('#about').style('display', 'none');
 	d3.select('#method').style('display', 'none');
-  d3.select('#demo').style('display', 'none');		
+	d3.select('#demo').style('display', 'none');		
 	d3.select('#exp_text').text(' ');	
 	d3.selectAll('#demo').style('display', 'none');
   d3.select('#visual').style('display', 'block');
@@ -172,7 +172,16 @@ function draw(story) {
 		cont.selectAll('.expl')
 			  	.data(expl)
 			  .enter().append('p')
-		      .html(function(d){ return d.split('$').join('&nbsp &nbsp'); }); 		
+		      .html(function(d){ return d.split('$').join('&nbsp &nbsp'); }); 	
+		if(story.calc){
+			var calc = cont.append('p').html('<strong>Calculation:</strong> ');
+			calc.append('span').html(story.calc);
+			var expl = story.calc_p.split('@');
+			cont.selectAll('.expl')
+				.data(expl)
+			 .enter().append('p')
+				.html(function(d){ return d.split('$').join('&nbsp &nbsp')});				
+		}				
 		var viz = cont.append('p').html('<strong>Using the visualization:</strong> ');
 		viz.append('span').html(story.viz);
 		var expl = story.viz_p.split('@');	
@@ -296,8 +305,7 @@ function draw_treemap(story) {
 			$('#copy_title').val(details);
 			$('#copy_title').on('mouseover', function(){ $(this).select(); });	
       svg.selectAll('rect').classed('mark', false);
-      svg.selectAll('rect[data-r="' + group + '"][data-q="' + subgroup + '"]').classed('mark', true);				
-      
+			svg.selectAll('rect[data-r="' + group + '"][data-q="' + subgroup + '"]').classed('mark', true);				
     });
   });	
 }
@@ -343,9 +351,7 @@ function draw_cartogram(story) {
 				.enter().append('path')
 					.attr('class', 'feature')
 					.attr('d', function(d){ return path(d);})
-
 					.on('click', clicked);					
-
 			d3.csv(story.data || datafile(), function(data){ 
 					if(story.data){ $('#data_cont').hide(); d3.select('#data').attr('href', story.data); } else { $('#data_cont').show();}
 					var subset = _.filter(data, story.filter);
@@ -764,14 +770,14 @@ function draw_stack(story) {
 			svg.selectAll('.horiz0, .horiz1').classed('fade', true);
 			svg.selectAll('.v1').classed('fade', true);
 			var group = d3.select(this).property('value');			
-			svg.attr('height', 150);
 			svg.selectAll('.horiz1').classed('fade', true);		
 			svg.selectAll('.v1[data-q="' + subgroup + '"]')
           .classed('fade', false)
 					.attr('transform', function(d){ return 'translate(0, 15)'; });		
+			svg.attr('height', 150);		
     });			
     function showstack(cls, data, x0, H, W, h) {
-			svg.attr('height', d3.max([(story.ydom * h + h * ypad + H), story.height]));
+			svg.attr('height', parseInt(d3.max([(story.ydom * h + h * ypad + H), story.height])));
 			svg.selectAll('g.' + cls).remove();
       var update = svg.selectAll('g.' + cls)
           .data(data);
@@ -779,7 +785,7 @@ function draw_stack(story) {
           .append('g')
           .classed(cls, true)
           .attr('data-q', function(d) { return d.key; })
-          .attr('transform', function(d, i) { return 'translate(0, ' + (H + i * (parseInt(story.ydom) + ypad )) + ')'; });
+					.attr('transform', function(d, i) { return 'translate(0, ' + (H + i * (parseInt(story.ydom) + ypad )) + ')'; });
 			enter.append('text')
           .text(function(d) { return d.key; })
           .attr('x', x0 - 10)
@@ -815,7 +821,7 @@ function draw_stack(story) {
             .text(function(d, i) { 
               var s = this.parentNode.parentNode.parentNode;
 							var g = this.parentNode.parentNode;
-              return d3.select(s).attr('data-q') +': '+ d3.select(g).attr('data-row') + ', ' + story.hover(d, i);
+              return (d3.select(s).attr('data-r') || '') + d3.select(s).attr('data-q') + ': '+ d3.select(g).attr('data-row') + ', ' + story.hover(d, i);
             });
 			if(story.lines == 'true'){
 				svg.append('g').selectAll('.horiz0')

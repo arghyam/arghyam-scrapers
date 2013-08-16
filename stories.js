@@ -404,6 +404,18 @@ var stories = [
     cartogram_story({
         'menu'   : 'Toilets built',
         'title'  : 'Coverage of Toilets - Rural Households',
+				'context': 'The states set targets for construction of toilets, especially for rural poor toilets where they also have to provide an incentive. The targets seem to have been set based on 2001 population figures and there is a huge discrepancy between these numbers and the rural household numbers in 2011.', 
+				'cont_p' : '@'+
+									 'This visualization presents what the TSC achievement looks like when analysed based on current household numbers.',
+				'calc'   : '(2001 Rural Households with Toilets + TSC cumulative achievement numbers (2001-current))/Total Rural Households (Census 2011).'+
+									 ' However, there are a couple of caveats to using this visual:',
+				'calc_p' : "$a) It uses TSC cumulative numbers from the Ministry's website. However, the census 2011 presented data that was starkly different from this data. A current exercise is being undertaken by the Ministry to re-do baseline numbers. These numbers therefore are up for revision @" +						
+				           '$b) The achievements presented in this visual may therefore be more exaggerated than the actual achievements on the ground', 
+				'viz'		 : 'Each circle represents one State. Click on the state to zoom in, hover over the circle to see the data.',
+				'viz_p'  : '$1) Size of the circle: Total number of rural households as per 2011 census @' + 
+									 '$2) Colour of the circle: Number of rural households that have toilets. This number is the 2001 Census toilet count plus the current TSC achievement numbers. @',
+				'ppt'		 : 'Click on the ppt for more help with using the visualisation.',
+
 				'url'    : ['http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home',
 										'http://www.indiawaterportal.org/data/2011-census-household-tables-0'],
         'cols'   : ['PP_IHHL_TOTAL', 'Rural_Households'],
@@ -487,8 +499,8 @@ var stories = [
         'xdom'   : [0, 1.5],
         'ydom'   : [0, 1.5],
 				'story'  : 'Story to be written...',
-        'IWP'    : 'false'						
-   })										
+        'IWP'    : 'false'					
+   })	
 ];
 
 // List of the historical data files, latest on top
