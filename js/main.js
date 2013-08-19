@@ -1,5 +1,5 @@
 var host = window.location.href;
-var iwp = 'http://www.arghyam.github.io/arghyam-scrapers/?';
+var iwp = 'http://arghyam.github.io/arghyam-scrapers/?'; 
 console.log(host);
 d3.selectAll('.tooltip').remove();
 // Clicking on the home button...
