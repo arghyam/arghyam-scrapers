@@ -1,5 +1,5 @@
 var host = window.location.href;
-var iwp = 'http://www.indiawaterportal.org/data-apps/arghyam-scrapers/index.html'; 
+var iwp = 'http://www.indiawaterportal.org/data-apps/'; 
 console.log(host);
 d3.selectAll('.tooltip').remove();
 // Clicking on the home button...
