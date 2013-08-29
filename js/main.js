@@ -275,6 +275,7 @@ function draw_treemap(story) {
     var select = legend.append('select').attr('class', 'states');
     var subselect = legend.append('select').attr('class', 'districts');
     var groups = _.uniq(_.pluck(subset, story.group[0]));
+		var temp = groups;
     groups.unshift('select State');
 		select.selectAll('option')
         .data(groups)
@@ -911,6 +912,12 @@ function initchart(story, data) {
       .attr('data-type', story.type);
   }
   return _.filter(data, story.filter);
+}
+console.log(window.location.search);
+if(window.location.search == '?embed=1'){
+	d3.select('body').style('padding', '10px').style('margin-left', '-160px').style('margin-bottom', '-100px');
+	d3.select('#data_cont').attr('class', 'pull-right').style('margin-right', '245px');
+	d3.selectAll('.navbar-inner, #menu, #title, #subtitle, #exp_text, #copy_cont, #right_container, #details, #info, #slideshare, #download_cont, #source_cont, #source, footer').remove();	
 }
 function position() {
   this.transition()
