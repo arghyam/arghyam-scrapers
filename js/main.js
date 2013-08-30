@@ -917,7 +917,7 @@ if(window.location.search == '?embed=1'){
 	d3.select('#visual').style('margin', '0px').style('padding', '0px');
 	d3.select('#legend_cont').style('width', '960px');
 	d3.selectAll('.legend').style('width', '475px').style('margin-left', '0px').style('padding-left','5px');
-	d3.select('#copy_cont').style('width', '365px');
+	d3.select('#data_cont').style('width', '375px');
 	d3.select('svg').style('border', 'none');
 	d3.selectAll('.navbar-inner, #menu, #title, #subtitle, #exp_text, #copy_cont, #right_container, #details, #info, #slideshare, #download_cont, #source_cont, #source, footer').remove();	
 }
