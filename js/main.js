@@ -190,11 +190,9 @@ function draw(story) {
 			  	.data(expl)
 			  .enter().append('p')
 		      .html(function(d){ return d.split('$').join('&nbsp &nbsp'); });
-		cont.append('p').append('a').text('Click on the ppt for more help with using the visualisation.').style('cursor', 'pointer').on('click', toBottom);				
-		function toBottom()
-		{
-			window.scrollTo(0, document.body.scrollHeight);
-		}
+		cont.append('p').append('a').text('Click on the ppt for more help with using the visualisation.')
+					.style('cursor', 'pointer')
+			    .on('click', function(){ window.scrollTo(0, document.body.scrollHeight) ;});
 	}
 	d3.select('#slideshare').style('display', 'none');
 	if(story.slideshare){
@@ -916,7 +914,8 @@ function initchart(story, data) {
 console.log(window.location.search);
 if(window.location.search == '?embed=1'){
 	d3.select('body').style('padding', '0px');
-	d3.select('#visual').style('margin', '0px');
+	d3.select('#visual').style('margin', '0px').style('padding', '10px');
+	d3.selectAll('.legend').style('margin', '0px');
 	d3.select('svg').style('border', 'none');
 	d3.select('#data_cont').attr('class', 'pull-right').style('margin-right', '245px');
 	d3.selectAll('.navbar-inner, #menu, #title, #subtitle, #exp_text, #copy_cont, #right_container, #details, #info, #slideshare, #download_cont, #source_cont, #source, footer').remove();	
