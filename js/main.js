@@ -914,7 +914,7 @@ function initchart(story, data) {
 console.log(window.location.search);
 if(window.location.search == '?embed=1'){
 	d3.select('body').style('padding', '0px');
-	d3.select('#visual').style('margin', '0px').style('padding', '10px');
+	d3.select('#visual').style('margin', '0px').style('padding', '0px');
 	d3.select('#legend_cont').style('width', '960px').style('margin-left', '0px');
 	d3.selectAll('.legend').style('margin-left', '0px');
 	d3.select('svg').style('border', 'none');
