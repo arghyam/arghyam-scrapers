@@ -130,6 +130,8 @@ function draw(story) {
 	if (d3.event) {
     d3.event.preventDefault();		
   }
+	$('#emb_text').val('');
+	$('#status').val('');
 	d3.select('#about').style('display', 'none');
 	d3.select('#method').style('display', 'none');
 	d3.select('#demo').style('display', 'none');		
@@ -192,7 +194,7 @@ function draw(story) {
 		      .html(function(d){ return d.split('$').join('&nbsp &nbsp'); });
 		cont.append('p').append('a').text('Click on the ppt for more help with using the visualisation.')
 					.style('cursor', 'pointer')
-			    .on('click', function(){ window.scrollTo(0, document.body.scrollHeight) ;});
+			    .on('click', function(){ window.scrollTo(0, document.body.scrollHeight) ;});		
 	}
 	d3.select('#slideshare').style('display', 'none');
 	if(story.slideshare){
@@ -484,7 +486,7 @@ function draw_scatter(story) {
 						return d.District_Name == subgroup ? true : false;
 			  });
 			d3.selectAll('.tooltip').remove();
-			var details = svg.select('.district[data-r="' + subgroup + '"]').text();
+			var details = svg.select('.district[data-q="' + group + '"][data-r="' + subgroup + '"]').text();
 			$('#copy_title').val(details);
 			$('#copy_title').on('mouseover', function(){ $(this).select(); });	
       $('.mark').tooltip({ title:function(){ return $('.mark title').text(); }, trigger:'focus', container:'body' }).tooltip('show');						
@@ -912,14 +914,38 @@ function initchart(story, data) {
   return _.filter(data, story.filter);
 }
 console.log(window.location.search);
+d3.select('#emb_btn').on('click', function(){			
+	var host_temp = window.location.href;
+	var embed = host_temp.split('#').join('embed=1#');
+	$('#emb_text').val('<iframe src="'+embed+'" width="960" height="610" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"'
+	+' style="padding:0px 0px 0px 5px;border:1px solid #CCC;border-width:1px;" ></iframe>').select();	
+});
+$('#copy_btn').on('click', function(e){ 
+	e.preventDefault();
+}).each(function(){
+	$(this).zclip({
+    path: "js/ZeroClipboard.swf",
+    copy: function(){
+			return $('#emb_text').val();
+		},		
+		afterCopy: function(){
+			if($('#emb_text').val()){ 
+				$('#status').val('Copied!').fadeIn(200).delay(1500).fadeOut(250);			
+			}else{
+				$('#status').val('Click Embed button!').fadeIn(200).delay(1500).fadeOut(250);			
+			}
+		}
+	});	
+});	
 if(window.location.search == '?embed=1'){
 	d3.select('body').style('padding', '0px');
-	d3.select('#visual').style('margin', '0px').style('padding', '0px');
+	d3.selectAll('#visual, #btn').style('margin', '0px').style('padding', '0px');
 	d3.select('#legend_cont').style('width', '960px');
 	d3.selectAll('.legend').style('width', '475px').style('margin-left', '0px').style('padding-left','5px');
 	d3.select('#data_cont').style('width', '375px');
 	d3.select('svg').style('border', 'none');
-	d3.selectAll('.navbar-inner, #menu, #title, #subtitle, #exp_text, #copy_cont, #right_container, #details, #info, #slideshare, #download_cont, #source_cont, #source, footer').remove();	
+	d3.select('#hide_btn').style('margin-left', '382px');
+	d3.selectAll('.navbar-inner, #menu, #title, #subtitle, #exp_text, #copy_cont,.btn-group, #right_container, #details, #info, #slideshare, #download_cont, #source_cont, #source, footer').remove();	
 }
 function position() {
   this.transition()

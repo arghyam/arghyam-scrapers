@@ -4,8 +4,8 @@
   <link rel="stylesheet" href="css/bootstrap.min.css">
 	<link rel="shortcut icon" href="img/favicon.ico">
   <style>	
-    body { padding-top: 60px; }
-		#home, #methodology{font-size:1.1em;}
+    body { padding-top: 60px; }		 
+		#home, #state, #methodology{font-size:1.1em;}
 		#home:hover, #methodology:hover{color:#000;}
 		.nav li a{font-size:1.1em;}
 		h2 { font-size: 125%; line-height: 1.25; color: #c0504d; }
@@ -17,9 +17,9 @@
            -o-transition: all 0.3s ease-out;  /* Opera 10.50-12.00 */
               transition: all 0.3s ease-out;  /* Chrome 26, Firefox 16+, IE 10+, Opera 12.50+ */
     }
-		.logo{ width:120px; height:85px; background:#fff; border:1px solid #999;}
-		.logo:hover{ border:1px solid #222; }
-		footer{ padding:10px; background:#ddd; }
+		.logo{ width:120px; height:90px; background:#fff; border:1px solid #999; -webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px}
+		.logo:hover{ border:1px solid #08c; -webkit-box-shadow:0 1px 4px rgba(0,105,214,0.25);-moz-box-shadow:0 1px 4px rgba(0,105,214,0.25);box-shadow:0 1px 4px rgba(0,105,214,0.25);}
+		footer{ padding:10px; background:#ddd; border-top:1px solid #888;}
 		.chart, .legend { display: none;}
     .legend select { margin-right: 1em; }
 		.drilldown #chart .l1 { stroke: none; fill: #fff; }
@@ -39,9 +39,9 @@
     #datafiles { padding: 0; margin: auto; height: auto; }
     #columns{ padding-left:5px; font-family: arial; color:#444; font-size: 1em; }
     #source a { display: block; }
-    #right_container{ margin-left:180px; width:220px; font-size:0.7em; }
+    #right_container{ width:220px; font-size:0.7em; margin-top:38px;}
     #header{ font-size: 1.2em; padding:5px; background-color: black; color:white; font-weight: bold; }
-    #details{  border:1px solid gray; padding:5px; }
+    #details{ border:1px solid gray; padding:5px; }
     #details tr td{ vertical-align: top; }
     #info{ font-size: 1.1em; padding-top: 5px; line-height: 1.5em; }
     .v0 text { fill: #08c; cursor: pointer; }
@@ -51,12 +51,14 @@
 		.y1, .y2{	fill:#000; stroke:none;	text-anchor:middle;	font-size:0.8em; }
 		.horiz0, .horiz1{	fill:none; stroke:#999;	stroke-width:1;	shape-rendering:crispEdges;	}
 		.h, .v{	fill:none; stroke:#fff;	stroke-width:1;	stroke-opacity:0.6;	shape-rendering:crispEdges; }	
-		#btn{ position:relative; top:80px;margin-right:250px; }	
+		#hide_btn{ position:absolute; margin-left:50px; margin-top:60px;}	
 		.feature{ fill:#F5F5F0; stroke:#000; stroke-width:0.2px;  }
-		.feature.active {	fill:#ddd; }
+		.feature.active {	fill:#ddd;	}
 		.state_bubbles{ fill: none; stroke:#888; }	
-		.state_bubbles:hover{ stroke:#444; }
-		</style>
+
+		.state_bubbles:hover{ stroke:#444; }		
+		#copy_btn{ border-top-right-radius:4px; border-bottom-right-radius:4px;}
+	</style>
   <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
 </head><body>
 <div class="navbar navbar-fixed-top">
@@ -65,7 +67,8 @@
       <a id="home" class="brand" href="#"><span>Home</span></a>									
       <ul class="nav"></ul>
 
-			<a id="methodology" class="brand" href="#"><span>Methodology & Disclaimer</span></a>
+			<a id="state" class="brand" href="#"><span>State</span></a>
+			<a id="methodology" class="brand" href="#"><span>Methodology</span></a>
 			<span style="margin-top:10px; font-size:1.2em;" class="pull-right"><a href="http://www.indiawaterportal.org/topics/rural-sanitation" target="_blank">State of Sanitation</a> brought to you by <a href="http://arghyam.org/" target="_blank">Arghyam</a></span>
     </div>
   </div>
@@ -74,10 +77,16 @@
 	<h2 id="menu"></h2>
   <h1 id="title"></h1>
 	<h3 id="subtitle"></h3>
-  <p id="exp_text"></span></p>
-	<div id="btn"><button id="hide_text" class="btn pull-right">Show / Hide State names</button></div>
+  <p id="exp_text"></p>
+
+	<div  class="btn-group" style="margin-bottom:15px;">		
+			<button id="emb_btn" class="btn ">Embed</button>
+			<input id="emb_text" style="width:300px; background:#fff; cursor:text;" class="btn"/>
+			<button id="copy_btn" class="btn">Copy</button>
+			<input id="status" class="span2" style="border:none; margin-left:10px; color:red;" >&nbsp;</input>	
+	</div>
 	<div>
-		<div id="legend_cont" style="width:1200px; margin-left:-1px; padding-bottom:10px;" class="span12">
+		<div id="legend_cont" style="width:1200px;margin-left:-1px; padding-bottom:10px;" class="span12">
 			<div class="legend treemap span5" data-story="treemap" style="margin-left:-1px;"></div>
 			<div class="legend stack span5" data-story="stack" style="margin-left:-1px;"></div>
 			<div class="legend scatter span5" data-story="scatter" style="margin-left:-1px;"></div>
@@ -88,10 +97,13 @@
 				<label for="copy_title">Ctrl+c to Copy text</label>
 				<input type="text" id="copy_title" placeholder="Hover text">
 			</div>			
-		</div>	
+		</div>
+		<div id="hide_btn" class="span9"><button id="hide_text" class="btn pull-right">Show / Hide State names</button></div>
 	</div>
   <div style="margin-left:-2px;" class="span8"><svg id="chart" width="960" height="500"></svg></div>
-	<div id="right_container" class="span2"><div id="header"></div><div id="details"></div><div id="info"></div></div>
+	<div id="right_container" class="pull-right span2">		
+		<div id="header"></div><div id="details"></div><div id="info"></div>
+	</div>
 	<div class="clear:both;"></div>
    <div id="gradient_cont" class="span12" style="margin-left:-2px;">
 		<svg id="gradient" width="956" height="30">
@@ -114,9 +126,9 @@
 		</svg>
   </div>  
   <br><br>
-  <div id="download_cont" style="margin:0;"class="span12">
+  <div id="download_cont" style="margin:0;" class="span12">
 		<br>
-		<div style="float:left" ><strong>Download</strong>:
+		<div style="float:left"><strong>Download</strong>:
 				<a href="#" id="data">full dataset</a> |      
 				<a href="glossary/glossary_of_terms.xlsx">Glossary of terms</a>
 		</div>
@@ -236,36 +248,39 @@
 
 		<h4>Disclaimer:</h4>
 		<p>We are providing the data here with the understanding that we are not representing it to be accurate, correct or complete for your intended purpose. Please see India Water Portal's full <a href="http://www.indiawaterportal.org/disclaimer" target="_blank">disclaimer</a>.</p>
+		<!--<div class="dipity_embed" style="width:600px"><iframe width="600" height="400" src="http://www.dipity.com/arghyam/Rural-Sanitation-in-India/?mode=embed&z=0#tl" style="border:1px solid #CCC;"></iframe><p style="margin:0;font-family:Arial,sans;font-size:13px;text-align:center"><a href="http://www.dipity.com/arghyam/Rural-Sanitation-in-India/">Rural Sanitation in India</a> on <a href="http://www.dipity.com/" />Dipity</a>.</p></div>-->
 	</div>		
 </div>
 <br>
 <footer>
-	<div class="container">
+	<div class="container" >
 		<div class="span2" style="margin-left:0px;">
 			<a href="http://www.indiawaterportal.org/topics/rural-sanitation" target="_blank">
-				<div class="logo" style="padding:0px 10px 25px 30px;">
-					<span><img src="img/sos_logo.png" width="100" height="100"></span>
+
+				<div class="logo">
+					<span><img style="margin-left:18px;" src="img/sos_logo.png" width="80" height="80"></span>
 				</div>
 			</a>	
 		</div>
 		<div class="span1" style="margin-left:230px;"></div>	
 		<div class="span2">
 			<a href="http://www.arghyam.org" target="_blank">
-				<div class="logo" style="padding:10px 20px;">
-					<span><img src="img/arghyam_logo.jpg" width="120" height="120"></span>
+
+				<div class="logo">
+					<span><img style="margin:8px;" src="img/arghyam_logo.jpg" width="100" height="80"></span>
 				</div>
 			</a>	
 		</div>	
 		<div class="span1" style="margin-left:230px;"></div>
-		<div class="span2"><div style="margin-left:30px; font-size:1.2em;">Powered by:</div>
+		<div class="span2"><div style="margin-left:20px; font-size:1em;">Powered by:</div>
 			<a href="http://www.gramener.com" target="_blank">
-				<div class="logo" style="padding:25px 15px 10px 15px; height:45px;" >
-					<span><img src="img/gramener_logo.jpg" width="180" height="150"></span>
+				<div class="logo" style="width:120px; height:70px;">
+					<span><img style="margin:25px 10px 10px 10px;	" src="img/gramener_logo.jpg" width="100" height="80"></span>
 				</div>
 			</a>
 		</div>	
 	</div>
-<footer>	
+</footer>	
 <script src="js/jquery.min.js"></script>
 <script>
 	$(window).on('load resize', function() {
@@ -293,6 +308,7 @@
 	}); 
 </script>
 <script src="js/underscore-min.js"></script>
+<script src="js/jquery.zclip.min.js"></script>
 <script src="js/d3.v2.min.js"></script>
 <script src="js/topojson.v0.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
