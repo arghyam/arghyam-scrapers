@@ -61,28 +61,33 @@
   <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
 </head><body>
 <div class="navbar navbar-fixed-top">
-  <div class="navbar-inner">
-    <div class="container">
-      <a id="home" class="brand" href="#"><span>Home</span></a>									
-      <ul class="nav"></ul>
-			<!--<a id="state" class="brand" href="#"><span>State</span></a>-->
-			<a id="methodology" class="brand" href="#"><span>Methodology</span></a>
-			<span style="margin-top:10px; font-size:1.2em;" class="pull-right"><a href="http://www.indiawaterportal.org/topics/rural-sanitation" target="_blank">State of Sanitation</a> brought to you by <a href="http://arghyam.org/" target="_blank">Arghyam</a></span>
-    </div>
-  </div>
+	<div class="row-fluid">	
+		<div class="navbar-inner">	
+			<div class="container">
+				<div class="span8">
+					<a id="home" class="brand" href="#"><span>Home</span></a>									
+					<ul class="nav"></ul>
+					<!--<a id="state" class="brand" href="#"><span>State</span></a>-->
+					<a id="methodology" class="brand" href="#"><span>Methodology</span></a>			
+				</div>
+				<div style="margin-top:10px;" class="pull-right span4">
+					<a href="http://www.indiawaterportal.org/topics/rural-sanitation" target="_blank">State of Sanitation</a> brought to you by <a href="http://arghyam.org/" target="_blank">Arghyam</a>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 <div id="visual" class="container">
 	<h2 id="menu"></h2>
   <h1 id="title"></h1>
 	<h3 id="subtitle"></h3>
   <p id="exp_text"></p>
-
-	<div  class="btn-group" style="margin-bottom:15px;">		
+	<!--<div class="btn-group" style="margin-bottom:15px;">		
 			<button id="emb_btn" class="btn ">Embed</button>
 			<input id="emb_text" style="width:300px; background:#fff; cursor:text;" class="btn"/>
 			<button id="copy_btn" class="btn">Copy</button>
 			<input id="status" class="span2" style="border:none; margin-left:10px; color:red;" >&nbsp;</input>	
-	</div>
+	</div>-->
 	<div>
 		<div id="legend_cont" style="width:1200px;margin-left:-1px; padding-bottom:10px;" class="span12">
 			<div class="legend treemap span5" data-story="treemap" style="margin-left:-1px;"></div>
@@ -137,10 +142,7 @@
   <div style="float:left;" id="source"></div>
 	<div style="clear:both;"></div>	
 	<div id="slideshare">
-		<br>
-		<iframe id="pptFrame" 
-			width='500px' height='385px' frameborder='0'>This is an embedded Microsoft Office presentation, powered by Office Web Apps.
-		</iframe>
+		<br><iframe id="pptFrame" width='500px' height='385px' frameborder='0'>This is an embedded Microsoft Office presentation, powered by Office Web Apps.		</iframe>
 	</div>
 	<br>	
 </div>
@@ -158,8 +160,7 @@
     </div>
     <div class="span6" id="about-entry"></div>
   </div>
-</div>		
-
+</div>	
 <div id="demo" class="container-fluid container">
 	<h1>Rural sanitation scheme - progress & performance</h1>
 	<h4>We can find out how the rural sanitation scheme is doing because of the data that is published on the <a href="http://tsc.gov.in" target="_blank">Ministry of the Drinking Water and Sanitation website</a>. This project aims to create simple tools that will demystify the large datasets and compare it to other relevant datasets.</h4>
@@ -251,31 +252,31 @@
 </div>
 <br>
 <footer>
-	<div class="container" >
-		<div class="span2" style="margin-left:0px;">
-			<a href="http://www.indiawaterportal.org/topics/rural-sanitation" target="_blank">
-
-				<div class="logo">
-					<span><img style="margin-left:18px;" src="img/sos_logo.png" width="80" height="80"></span>
-				</div>
-			</a>	
-		</div>
-		<div class="span1" style="margin-left:230px;"></div>	
-		<div class="span2">
-			<a href="http://www.arghyam.org" target="_blank">
-
-				<div class="logo">
-					<span><img style="margin:8px;" src="img/arghyam_logo.jpg" width="100" height="80"></span>
-				</div>
-			</a>	
-		</div>	
-		<div class="span1" style="margin-left:230px;"></div>
-		<div class="span2"><div style="margin-left:20px; font-size:1em;">Powered by:</div>
-			<a href="http://www.gramener.com" target="_blank">
-				<div class="logo" style="width:120px; height:70px;">
-					<span><img style="margin:25px 10px 10px 10px;	" src="img/gramener_logo.jpg" width="100" height="80"></span>
-				</div>
-			</a>
+	<div class="row-fluid">
+		<div  class="container">
+			<div class="span2">
+				<a href="http://www.indiawaterportal.org/topics/rural-sanitation" target="_blank">
+					<div class="logo">
+						<span><img style="margin:0 20px;" src="img/sos_logo.png" width="80" height="80"></span>
+					</div>
+				</a>	
+			</div>
+			<div class="span3"></div>	
+			<div class="span2">
+				<a href="http://www.arghyam.org" target="_blank">
+					<div class="logo">
+						<span><img style="margin:8px;" src="img/arghyam_logo.jpg" width="100" height="80"></span>
+					</div>
+				</a>	
+			</div>	
+			<div class="span3"></div>
+			<div class="span2"><div>Powered by:</div>
+				<a href="http://www.gramener.com" target="_blank">
+					<div class="logo" style="height:70px;">
+						<span><img style="margin:10px; margin-top:25px;" src="img/gramener_logo.jpg" width="100" height="80"></span>
+					</div>
+				</a>
+			</div>	
 		</div>	
 	</div>
 </footer>	

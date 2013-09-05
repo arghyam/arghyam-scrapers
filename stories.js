@@ -150,7 +150,8 @@ var stories = [
 									 '$2) Colour of the box: How much has the state / union territory spent on rural sanitation when compared to what was planned @'+
 									 '$3) The larger the size of the box, the greater the expenditure planned. Green and shades of green indicate spending according to plan while red and shades of red indicate failure to spend according to plan.@',
 				'ppt'		 : 'Click on the ppt for more help with using the visualisation.',
-        'url'    : ['http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home'],
+        'url'    : ['http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home',
+										'http://data.gov.in/dataset/nirmal-bharat-abhiyan-district-wise-financial-progress-date'],
         'cols'   : ['Total_Projects_Outlay', 'ExpReported_Total'],
         'group'  : ['State_Name'],
         'area'   : ['Total plan', 'Total_Projects_Outlay'],
@@ -373,7 +374,8 @@ var stories = [
                    '$2) Colour of the box: Toilets built for rural poor households when compared to the target @' + 
                    '$3) The larger the size of the box, the greater the target. Green and shades of green indicate building of toilets according to target while red and shades of red indicate failure to meet targets. @',
         'ppt'    : 'Click on the ppt for more help with using the visualisation. ',
-        'url'    : ['http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home'],
+        'url'    : ['http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home',
+									 'http://data.gov.in/dataset/nirmal-bharat-abhiyan-district-wise-physical-progress-as-on-date'],
         'cols'   : ['PO_IHHL_BPL', 'PP_IHHL_BPL'],
         'group'  : ['State_Name'],
         'area'   : ['Toilets planned for rural poor', 'PO_IHHL_BPL'],

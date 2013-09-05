@@ -1,7 +1,7 @@
-//var host = window.location.host;
-//var iwp = 'www.indiawaterportal.org';
-var host = window.location.href; 
-var iwp = 'http://arghyam.github.io/arghyam-scrapers/?'; 
+var host = window.location.host;
+var iwp = 'www.indiawaterportal.org';
+//var host = window.location.href; 
+//var iwp = 'http://arghyam.github.io/arghyam-scrapers/?'; 
 console.log(host);
 d3.selectAll('.tooltip').remove();
 // Clicking on the home button...
@@ -130,8 +130,8 @@ function draw(story) {
 	if (d3.event) {
     d3.event.preventDefault();		
   }
-	$('#emb_text').val('');
-	$('#status').val('');
+//	$('#emb_text').val('');
+//	$('#status').val('');
 	d3.select('#about').style('display', 'none');
 	d3.select('#method').style('display', 'none');
 	d3.select('#demo').style('display', 'none');		
@@ -920,7 +920,7 @@ d3.select('#emb_btn').on('click', function(){
 	$('#emb_text').val('<iframe src="'+embed+'" width="960" height="610" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"'
 	+' style="padding:0px 0px 0px 5px;border:1px solid #CCC;border-width:1px;" ></iframe>').select();	
 });
-$('#copy_btn').on('click', function(e){ 
+/*$('#copy_btn').on('click', function(e){ 
 	e.preventDefault();
 }).each(function(){
 	$(this).zclip({
@@ -936,7 +936,7 @@ $('#copy_btn').on('click', function(e){
 			}
 		}
 	});	
-});	
+});*/	
 if(window.location.search == '?embed=1'){
 	d3.select('body').style('padding', '0px');
 	d3.selectAll('#visual, #btn').style('margin', '0px').style('padding', '0px');
