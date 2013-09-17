@@ -135,6 +135,7 @@ function draw(story) {
 	d3.select('#about').style('display', 'none');
 	d3.select('#method').style('display', 'none');
 	d3.select('#demo').style('display', 'none');		
+	d3.select('#brought').style('display', 'none');		
 	d3.select('#exp_text').text(' ');	
 	d3.selectAll('#demo').style('display', 'none');
   d3.select('#visual').style('display', 'block');
@@ -940,10 +941,11 @@ $('#copy_btn').on('click', function(e){
 if(window.location.search == '?embed=1'){
 	d3.select('body').style('padding', '0px');
 	d3.select('#title').style('font-size', '2em').style('margin-top','-15px');
+	d3.select('#brought').style('display', 'block');
 	d3.selectAll('#visual, #btn').style('margin', '0px').style('padding', '0px');
 	d3.select('#legend_cont').style('width', '960px');
 	d3.selectAll('.legend').style('width', '475px').style('margin-left', '0px').style('padding-left','5px');
-	d3.select('#data_cont').style('width', '375px');
+	d3.select('#data_cont').style('width', '375px').style('padding-left', '5px');
 	d3.select('svg').style('border', 'none');
 	d3.select('#hide_btn').style('margin-left', '382px');
 	d3.selectAll('.navbar-inner, #menu, #subtitle, #exp_text, #copy_cont,.btn-group, #right_container, #details, #info, #slideshare, #download_cont, #source_cont, #source, footer').remove();	
