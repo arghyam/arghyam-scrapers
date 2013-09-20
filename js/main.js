@@ -1,32 +1,9 @@
 //var host = window.location.host;
 //var iwp = 'www.indiawaterportal.org';
 var host = window.location.href; 
-var iwp = 'http://arghyam.github.io/arghyam-scrapers/?'; 
+var iwp = 'http://arghyam.github.io/arghyam-scrapers/?#'; 
 console.log(host);
 d3.selectAll('.tooltip').remove();
-// Clicking on the home button...
-d3.select('#home').on('click', function() {
-	d3.selectAll('.tooltip').remove();
-  //d3.event.preventDefault();
-	d3.select('#visual').style('display', 'none');	
-	if(host == iwp){
-		d3.select('#demo').style('display', 'block');
-		d3.select('#about').style('display', 'none');
-	}else{
-		d3.select('#demo').style('display', 'none');
-		d3.select('#about').style('display', 'block');
-	}	
-	d3.select('#method').style('display', 'none');
-});
-d3.select('#methodology').on('click', method_disclaim);
-function method_disclaim(){
-	d3.selectAll('.tooltip').remove();
-	d3.select('#visual').style('display', 'none');	
-	d3.select('#demo').style('display', 'none');		
-	d3.select('#about').style('display', 'none');	
-	d3.select('#method').style('display', 'block');
-	d3.select('.container').style('margin-left', '90px');	
-}
 if(host == iwp){
 	var iwpStories = _.filter(stories, function(d){ return d.IWP == 'true'; });
 	var menu = d3.nest().key(function(d) { return d.menu; }).entries(iwpStories);
@@ -98,6 +75,25 @@ if(host == iwp){
 		d3.select('#demo').style('display', 'none');	
 		d3.select('#about').style('display', 'block');		
 }
+d3.select('#home').on('click', function() {
+	d3.selectAll('.tooltip').remove();
+  d3.selectAll('#visual, #method').style('display', 'none');
+	if(host == iwp){
+		d3.select('#demo').style('display', 'block');
+		d3.select('#about').style('display', 'none');
+	}else{
+		d3.select('#about').style('display', 'block');
+		d3.select('#demo').style('display', 'none');
+	}		
+});
+d3.select('#methodology').on('click', function () {
+		d3.event.preventDefault();
+		window.location.replace('#methodology');
+		d3.selectAll('.tooltip').remove();	
+		d3.select('.container').style('margin-left', '90px');	
+		d3.select('#method').style('display', 'block');		
+		d3.selectAll('#about, #demo, #visual').style('display', 'none');				
+});
 // Returns the name of the data file for the currently selected date.
 function datafile() { 
   var file = d3.select('#datafiles').property('value');
@@ -107,21 +103,25 @@ function datafile() {
 // When the URL hash changes, draw the appropriate story.
 function hashchange(e) {
   var hash = decodeURIComponent(window.location.hash.replace(/^#/, '')).split('|');
-  for (var i=0, l=stories.length; i<l; i++) {
-    var story = stories[i];
-    if ((story.menu == hash[0]) && (story.title == hash[1])) {
-			return draw(story);
-    }
-  }
-  d3.select('#about').style('display', 'none');
-  d3.select('#visual').style('display', 'none');
-	if(host == iwp){
-		d3.select('#demo').style('display', 'block');
-		d3.select('#about').style('display', 'none');
+  if(hash == ''){
+		if(host == iwp){
+			d3.select('#demo').style('display', 'block');
+			d3.selectAll('#about, #visual, #method').style('display', 'none');
+		}else{
+			d3.select('#about').style('display', 'block');
+			d3.selectAll('#demo, #visual, #method').style('display', 'none');
+		}
+	}else if (hash == 'methodology'){		
+		d3.select('#method').style('display', 'block');
+		d3.selectAll('#about, #demo, #visual').style('display', 'none');		
 	}else{
-		d3.select('#demo').style('display', 'none');
-		d3.select('#about').style('display', 'block');
-	}	
+		for (var i=0, l=stories.length; i<l; i++) {
+			var story = stories[i];
+			if ((story.menu == hash[0]) && (story.title == hash[1])) {
+				return draw(story);
+			}
+		}
+	} 	
 }
 window.addEventListener('hashchange', hashchange);
 hashchange();
@@ -198,10 +198,12 @@ function draw(story) {
 			    .on('click', function(){ window.scrollTo(0, document.body.scrollHeight) ;});		
 	}
 	d3.select('#slideshare').style('display', 'none');
-	if(story.slideshare){
-		d3.select('#slideshare').style('display', 'block');
-		d3.select('#pptFrame').attr('src', story.slideshare);		
-	}	
+	if(window.location.search != '?embed=1'){
+		if(story.slideshare){
+			d3.select('#slideshare').style('display', 'block');
+			d3.select('#pptFrame').attr('src', story.slideshare);		
+		}
+	}		
 }
 function draw_date(daterow, story) {
     var dates = _.uniq(_.map(story.cols, function(col) { return daterow[col]; }));
@@ -226,6 +228,7 @@ function draw_treemap(story) {
     .data(story.pertext) // color domain
     .text(function(d){ return d + '%'; })
     .style('fill', function(d, i){ return i == 3 ? 'white' : 'black';});
+	d3.select('#brought').style('display', function(){ return window.location.search == '?embed=1' ? 'block' : 'none';});	
   // Filter the data
   d3.csv(story.data || datafile(), function(data) {
 		if(story.data){ $('#data_cont').hide(); d3.select('#data').attr('href', story.data); } else { $('#data_cont').show();}
@@ -336,7 +339,7 @@ function draw_cartogram(story) {
     .style('fill', function(d, i){ return i == 3 ? 'white' : 'black';});	
 	var svg = d3.select('#chart');
 			svg.selectAll('*').remove();
-			svg.style('border', '1px solid #ddd');
+			svg.style('border', function(){ return window.location.search == '?embed=1' ?  '1px solid #fff' : '1px solid #ddd';});
 	var width = parseInt(svg.style('width'));
   var height = parseInt(svg.style('height'));
 	var centered;
@@ -347,7 +350,8 @@ function draw_cartogram(story) {
 			.projection(projection);					
 	var maps = svg.append('g');
 	var g = maps.append('g');
-  var dt = maps.append('g'); 		
+  var dt = maps.append('g'); 	
+	d3.select('#brought').style('display', function(){ return window.location.search == '?embed=1' ? 'block' : 'none';});	
 	d3.json('topojson/ind_states.json', function(json) {
 			g.selectAll('.feature')
 					.data(topojson.object(json, json.objects.india_states).geometries)
@@ -412,6 +416,7 @@ function draw_scatter(story) {
   d3.select('#right_container').style('display','block');
 	d3.select('#hide_text').style('display', 'block');
 	d3.select('.legend.scatter').style('display', 'block');
+	d3.select('#brought').style('display', function(){ return window.location.search == '?embed=1' ? 'block' : 'none';});
 	// Filter the data
   d3.csv(story.data || datafile(), function(data) {
 		if(story.data){ $('#data_cont').hide(); d3.select('#data').attr('href', story.data); } else { $('#data_cont').show();}
@@ -683,6 +688,7 @@ function draw_stack(story) {
 	d3.selectAll('.y1').remove();
 	d3.selectAll('text, line, .y2').remove();
 	d3.select('.legend.stack').style('display', 'block');	
+	d3.select('#brought').style('display', function(){ return window.location.search == '?embed=1' ? 'block' : 'none';});
   d3.csv(story.data || datafile(), function(data) {
 		if(story.data){ $('#data_cont').hide(); d3.select('#data').attr('href', story.data); } else { $('#data_cont').show();}
     var subset = initchart(story, data);
@@ -921,27 +927,24 @@ d3.select('#emb_btn').on('click', function(){
 	$('#emb_text').val('<iframe src="'+embed+'" width="960" height="647" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"'
 	+' style="padding:0px 0px 0px 5px;border:1px solid #CCC;border-width:1px;" ></iframe>').select();	
 });
-$('#copy_btn').on('click', function(e){ 
-	e.preventDefault();
-}).each(function(){
-	$(this).zclip({
-    path: "js/ZeroClipboard.swf",
-    copy: function(){
-			return $('#emb_text').val();
-		},		
-		afterCopy: function(){
-			if($('#emb_text').val()){ 
-				$('#status').val('Copied!').fadeIn(200).delay(1500).fadeOut(250);			
-			}else{
-				$('#status').val('Click Embed button!').fadeIn(200).delay(1500).fadeOut(250);			
+d3.select('#copy_btn').on('click', function(){  
+		$(this).zclip({
+			path: "js/ZeroClipboard.swf",
+			copy: function(){
+				return $('#emb_text').val();
+			},		
+			afterCopy: function(){
+				if($('#emb_text').val()){ 
+					$('#status').val('Copied!').fadeIn(200).delay(1500).fadeOut(250);			
+				}else{
+					$('#status').val('Click Embed button!').fadeIn(200).delay(1500).fadeOut(250);			
+				}
 			}
-		}
-	});	
+		});		
 });
 if(window.location.search == '?embed=1'){
 	d3.select('body').style('padding', '0px');
 	d3.select('#title').style('font-size', '2em').style('margin-top','-15px');
-	d3.select('#brought').style('display', 'block');
 	d3.selectAll('#visual, #btn').style('margin', '0px').style('padding', '0px');
 	d3.select('#legend_cont').style('width', '960px');
 	d3.selectAll('.legend').style('width', '475px').style('margin-left', '0px').style('padding-left','5px');
@@ -964,7 +967,7 @@ function position() {
 function positionText() { 
   this.transition()
 		.duration(-2000)
-		.attr('x', function(d) { return d.x; })
+		.attr('x', function(d) { return d.x + '50'; })
     .attr('y', function(d) { return d.y; })
 		.attr('text-anchor', 'middle')
 		.attr('dominant-baseline', 'middle')
