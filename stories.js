@@ -157,7 +157,6 @@ var stories = [
         'area'   : ['Total plan', 'Total_Projects_Outlay'],
         'num'    : ['Total spent', 'ExpReported_Total'],
         'den'    : ['Total plan', 'Total_Projects_Outlay'],
-        'story'  : 'Story to be written...',
         'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
@@ -181,7 +180,6 @@ var stories = [
         'area'   : ['Total plan - Rural poor', 'BPL_Appr.(C+S+B)'],
         'num'    : ['Total spent - Rural poor', 'BPL_Exp.(C+S+B)'],
         'den'    : ['Total plan - Rural poor', 'BPL_Appr.(C+S+B)'],
-        'story'  : 'Story to be written...',
         'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
@@ -197,7 +195,6 @@ var stories = [
         'area'   : ['Total plan - School', 'School_Appr.(C+S+B)'],
         'num'    : ['Total spent - School', 'School_Exp.(C+S+B)'],
         'den'    : ['Total plan - School', 'School_Appr.(C+S+B)'],
-        'story'  : 'Story to be written...',
         'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
@@ -212,7 +209,6 @@ var stories = [
         'area'   : ['Total plan - Sanitary Complexes', 'Sanitary_Complex_Appr.(C+S+B)'],
         'num'    : ['Total spent - Sanitary Complexes', 'Sanitary_Complex_Exp.(C+S+B)'],
         'den'    : ['Total plan - Sanitary Complexes', 'Sanitary_Complex_Appr.(C+S+B)'],
-        'story'  : 'Story to be written...',
         'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
@@ -220,14 +216,13 @@ var stories = [
     }),
     treemap_story({
         'menu'   : 'Money spent',
-        'title'  : 'Project plan used - Anganwadi',
+        'title'  : 'Project plan used - Nursery Schools',
         'url'    : ['http://tsc.gov.in/tsc/Report/Financial/RptPercentageFinComponentStatewiseDistrictwise_net.aspx?id=FIN'],
         'cols'   : ['Anganwadi_Appr.(C+S+B)', 'Anganwadi_Exp.(C+S+B)'],
         'group'  : ['State_Name'],
-        'area'   : ['Total plan - Anganwadi', 'Anganwadi_Appr.(C+S+B)'],
-        'num'    : ['Total spent - Anganwadi', 'Anganwadi_Exp.(C+S+B)'],
-        'den'    : ['Total plan - Anganwadi', 'Anganwadi_Appr.(C+S+B)'],
-        'story'  : 'Story to be written...',
+        'area'   : ['Total plan - Nursery Schools', 'Anganwadi_Appr.(C+S+B)'],
+        'num'    : ['Total spent - Nursery Schools', 'Anganwadi_Exp.(C+S+B)'],
+        'den'    : ['Total plan - Nursery Schools', 'Anganwadi_Appr.(C+S+B)'],
         'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
@@ -247,7 +242,6 @@ var stories = [
 											sum(d, ['ApprShare_Center']) / 
 											sum(d, ['ApprShare_Center', 'ApprShare_State', 'ApprShare_Beneficiary'])).replace(/NaNNaNNaN/i, 'eee'); 
 								   },
-        'story'  : 'Story to be written...',
         'grad'   : 'gradient_legend_SocP',
 				'percent': [1, 30, 57, 95],
 				'pertext': [0, 60, 70, 200],
@@ -262,7 +256,6 @@ var stories = [
         'area'   : ['Total plan', 'Total_Projects_Outlay'],
         'num'    : ['Money given by centre', 'Rof_Center'],
         'den'    : ['Total Money given', 'Rof_Total'],
-        'story'  : 'Story to be written...',
         'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
@@ -277,7 +270,6 @@ var stories = [
         'area'   : ['Total plan', 'Total_Projects_Outlay'],
         'num'    : ['Centre spent', 'ExpReported_Center'],
         'den'    : ['Total spent', 'ExpReported_Total'],
-        'story'  : 'Story to be written...',
         'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
@@ -321,7 +313,6 @@ var stories = [
 				'height' : '1430',
 				'ydom'   : '45',
 				'lines'  : 'true', 
-        'story'  : 'Story to be written...',
         'legend' : { '%Blue%': 'Centre', '%Red%': 'State', '%Green%': 'Beneficiary' },
 				'slideshare': 'https://skydrive.live.com/embed?cid=5F394E534EE15E07&resid=5F394E534EE15E07%21110&authkey=AKRfPtIJhjye7-4&em=2&wdAr=1.3333333333333333&wdEaa=1',
 				'IWP'    : 'true'
@@ -344,7 +335,6 @@ var stories = [
 				'height' : '530',
 				'ydom'   : '15',
 				'lines'  : 'false',
-        'story'  : 'Story to be written...',
         'legend' : { '%Blue%': 'APL SC + ST', '%Red%': 'Rural poor SC + ST', '%Green%': 'Others' },
 				'IWP'    : 'false'
     }),		
@@ -358,7 +348,6 @@ var stories = [
         'area'   : ['Funds given', 'Total_Release_of_funds'],
         'num'    : ['Funds spent', 'Total_Expenditure_Reported'],
         'den'    : ['Funds given', 'Total_Release_of_funds'],
-        'story'  : 'Story to be written...',
         'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
@@ -381,7 +370,6 @@ var stories = [
         'area'   : ['Toilets planned for rural poor', 'PO_IHHL_BPL'],
         'num'    : ['Toilets built for rural poor', 'PP_IHHL_BPL'],
         'den'    : ['Toilets planned for rural poor', 'PO_IHHL_BPL'],
-        'story'  : 'Story to be written...',
         'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
@@ -397,7 +385,6 @@ var stories = [
         'area'   : ['Planned APL toilets', 'PO_IHHL_APL'],
         'num'    : ['Built APL toilets', 'PP_IHHL_APL'],
         'den'    : ['Planned APL toilets', 'PO_IHHL_APL'],
-        'story'  : 'Story to be written...',
         'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
@@ -417,7 +404,6 @@ var stories = [
 				'viz_p'  : '$1) Size of the circle: Total number of rural households as per 2011 census @' + 
 									 '$2) Colour of the circle: Number of rural households that have toilets. This number is the 2001 Census toilet count plus the current TSC achievement numbers. @',
 				'ppt'		 : 'Click on the ppt for more help with using the visualisation.',
-
 				'url'    : ['http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home',
 										'http://www.indiawaterportal.org/data/2011-census-household-tables-0'],
         'cols'   : ['PP_IHHL_TOTAL', 'Rural_Households'],
@@ -426,12 +412,39 @@ var stories = [
 				'num'    : ['TSC total number of toilets built from 2001', 'PP_IHHL_TOTAL'],
         'den'    : ['Total Rural Households Census 2011', 'Rural_Households'],
         'cen2001': ['Census 2001 Rural Households (WT)', 'Census_2001_IHHL'],
-				'story'  : 'Story to be written...',
-        'grad'   : 'gradient_legend',
+			  'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
 				'slideshare': 'https://skydrive.live.com/embed?cid=5F394E534EE15E07&resid=5F394E534EE15E07%21118&authkey=ACidFJozKYbUARQ&em=2',
 				'IWP'    : 'true'
+    }),
+		treemap_story({
+        'menu'   : 'Toilets built',
+        'title'  : 'Toilets built for Schools',
+				'url'    : ['http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home'],
+        'cols'   : ['PO_School_Toilets', 'PP_School_Toilets'],
+        'group'  : ['State_Name'],
+        'area'   : ['Number of toilets to be built for Schools', 'PO_School_Toilets'],
+        'num'    : ['Number of toilets built for Schools', 'PP_School_Toilets'],
+        'den'    : ['Number of toilets to be built for Schools', 'PO_School_Toilets'],
+        'grad'   : 'gradient_legend',
+				'percent': [1, 37, 70, 95],
+				'pertext': [0, 50, 100, 200],
+				'IWP'    : 'false'
+    }),		
+		treemap_story({
+        'menu'   : 'Toilets built',
+        'title'  : 'Toilets built for Nursery Schools',
+				'url'    : ['http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home'],										 
+        'cols'   : ['PO_Anganwadi_Toilets', 'PP_Anganwadi_Toilets'],
+        'group'  : ['State_Name'],
+        'area'   : ['Number of toilets to be built for Nursery Schools', 'PO_Anganwadi_Toilets'],
+        'num'    : ['Number of toilets built for Nursery Schools', 'PP_Anganwadi_Toilets'],
+        'den'    : ['Number of toilets to be built for Nursery Schools', 'PO_Anganwadi_Toilets'],
+        'grad'   : 'gradient_legend',
+				'percent': [1, 37, 70, 95],
+				'pertext': [0, 50, 100, 200],
+				'IWP'    : 'false'
     }),
 		treemap_story({
         'menu'   : 'Toilets built',
@@ -443,7 +456,6 @@ var stories = [
         'area'   : ['Number of toilets to be built for the Rural poor', 'Project_Objectives_IHHL_BPL'],
         'num'    : ['Number of toilets built for the Rural poor', 'Project_Performance-IHHL_BPL'],
         'den'    : ['Number of toilets to be built for the Rural poor', 'Project_Objectives_IHHL_BPL'],
-        'story'  : 'Story to be written...',
         'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
@@ -459,7 +471,6 @@ var stories = [
         'area'   : ['Total number of toilets to be built', 'Project_Objectives_IHHL_TOTAL'],
         'num'    : ['Total number of toilets built', 'Project_Performance-IHHL_TOTAL'],
         'den'    : ['Total number of toilets to be built', 'Project_Objectives_IHHL_TOTAL'],
-        'story'  : 'Story to be written...',
         'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
@@ -467,7 +478,7 @@ var stories = [
     }),
     scatter_story({
         'menu'   : 'Performance',
-        'title'  : 'Comparing spending to toilet construction',
+        'title'  : 'Comparing spending to toilet construction - TSC',
 				'context': 'This visualisation compares spending on the rural sanitation scheme with spending on incentives given for toilet construction for the rural poor houses. Ideally, every state must fall on the linear trendline meaning that it spent proportionate to construction. Being off that line means that the state has either under-spent or overspent to build the same number of toilets. ',
 				'cont_p' : ' ',					 
 				'viz'    : 'Each circle represents one State / Union Territory. Click on a State or select from the drop down for the State and District that you want to see. The size of the circle represents rural poor toilets required. The x-axis is based on overall spending on rural sanitation (since toilet construction for the rural poor and allied activities is the biggest spend in the whole allotted sum). The y-axis is based on % toilets constructed for rural poor households. ' +
@@ -484,14 +495,13 @@ var stories = [
         'R'      : 40,
         'xdom'   : [0, 1.5],
         'ydom'   : [0, 1.5],
-        'story'  : 'Story to be written...',
-				'slideshare': 'https://skydrive.live.com/embed?cid=5F394E534EE15E07&resid=5F394E534EE15E07%21116&authkey=ALNXoAqMwro4HP4&em=2&wdAr=1.3333333333333333', 
-        'IWP'    : 'true'						
+        'slideshare': 'https://skydrive.live.com/embed?cid=5F394E534EE15E07&resid=5F394E534EE15E07%21116&authkey=ALNXoAqMwro4HP4&em=2&wdAr=1.3333333333333333', 
+        'IWP'    : 'true'			
 		}),
     scatter_story({
         'menu'   : 'Performance',
-        'title'  : 'Effective fund utilisation',
-        'url'    : ['TBD'],
+        'title'  : 'Comparing spending to toilet construction - Census',
+				'url'    : ['TBD'],
         'cols'   : ['BPL_WT', 'BPL_WOT', 'ExpReported_Total', 'Total_Projects_Outlay', 'PP_IHHL_BPL'],
         'group'  : ['State_Name'],
         'area'   : ['# Rural poor toilets required', function(d) { return +d['BPL_WT'] + +d['BPL_WOT']; }],
@@ -500,8 +510,7 @@ var stories = [
         'R'      : 40,
         'xdom'   : [0, 1.5],
         'ydom'   : [0, 1.5],
-				'story'  : 'Story to be written...',
-        'IWP'    : 'false'					
+				'IWP'    : 'false'				
    })	
 ];
 

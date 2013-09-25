@@ -77,6 +77,7 @@ if(host == iwp){
 }
 d3.select('#home').on('click', function() {
 	d3.selectAll('.tooltip').remove();
+	d3.select('.container').style('margin-left', '90px');	
   d3.selectAll('#visual, #method').style('display', 'none');
 	if(host == iwp){
 		d3.select('#demo').style('display', 'block');
@@ -923,7 +924,7 @@ function initchart(story, data) {
 console.log(window.location.search);
 d3.select('#emb_btn').on('click', function(){			
 	var host_temp = window.location.href;
-	var embed = host_temp.split('#').join('embed=1#');
+	var embed = host_temp.split('#').join('?embed=1#');
 	$('#emb_text').val('<iframe src="'+embed+'" width="960" height="647" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"'
 	+' style="padding:0px 0px 0px 5px;border:1px solid #CCC;border-width:1px;" ></iframe>').select();	
 });
@@ -947,8 +948,8 @@ if(window.location.search == '?embed=1'){
 	d3.select('#title').style('font-size', '2em').style('margin-top','-15px');
 	d3.selectAll('#visual, #btn').style('margin', '0px').style('padding', '0px');
 	d3.select('#legend_cont').style('width', '960px');
-	d3.selectAll('.legend').style('width', '475px').style('margin-left', '0px').style('padding-left','5px');
-	d3.select('#data_cont').style('width', '375px').style('padding-left', '5px');
+	d3.selectAll('.legend').style('width', '475px').style('padding-left','5px');
+	d3.select('#data_cont div').style('width', '455px');
 	d3.select('svg').style('border', 'none');
 	d3.select('#hide_btn').style('margin-left', '382px');
 	d3.selectAll('.navbar-inner, #menu, #subtitle, #exp_text, #copy_cont,.btn-group, #right_container, #details, #info, #slideshare, #download_cont, #source_cont, #source, footer').remove();	

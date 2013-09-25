@@ -84,24 +84,26 @@
   <h1 id="title"></h1>
 	<h3 id="subtitle"></h3>
   <p id="exp_text"></p>
-	<div class="btn-group" style="margin-bottom:15px;">		
-			<button id="emb_btn" class="btn ">Embed</button>
-			<input id="emb_text" style="width:300px; background:#fff; cursor:text;" class="btn"/>
-			<button id="copy_btn" class="btn">Copy</button>
-			<input id="status" class="span2" style="border:none; margin-left:10px; color:red;" >&nbsp;</input>	
+	<div class="row-fluid">		
+			<div class="btn-group span6" style="margin-bottom:15px;">		
+				<button id="emb_btn" class="btn">Embed</button>
+				<input id="emb_text" style="width:250px; background:#fff; cursor:text;" class="btn"/>
+				<button id="copy_btn" class="btn">Copy</button>
+				<input id="status" style="border:none; margin-left:10px; width:150px; color:red;" ></input>				
+			</div>
+			<div id="copy_cont" style="margin-left:45px; width:380px;" class="form-inline span3">
+				<label for="copy_title">Ctrl+c to Copy text</label>
+				<input type="text" id="copy_title" placeholder="Hover text">
+			</div>	
 	</div>
 	<div>
-		<div id="legend_cont" style="width:1200px;margin-left:-1px; padding-bottom:10px;" class="span12">
+		<div id="legend_cont" style="margin-left:-1px; padding-bottom:10px;" class="span12">
 			<div class="legend treemap span5" data-story="treemap" style="margin-left:-1px;"></div>
 			<div class="legend stack span5" data-story="stack" style="margin-left:-1px;"></div>
 			<div class="legend scatter span5" data-story="scatter" style="margin-left:-1px;"></div>
-			<div id="data_cont" class="span4" style="margin-left:-4px;">
-				<strong>From: 2001, Till (Change Date):</strong> <select id="datafiles" class="input-medium" style="padding:5px;"></select>
-			</div>
-			<div id="copy_cont" style="margin-left:5px; width:340px;" class="form-inline span3">
-				<label for="copy_title">Ctrl+c to Copy text</label>
-				<input type="text" id="copy_title" placeholder="Hover text">
-			</div>			
+			<div id="data_cont" class="span5">
+				<div style="padding-left:90px;"><strong>From: 2001, Till (Change Date):</strong> <select id="datafiles" class="input-medium" style="padding:5px;"></select></div>
+			</div>						
 		</div>
 		<div id="hide_btn" class="span9"><button id="hide_text" class="btn pull-right">Show / Hide State names</button></div>
 	</div>
@@ -162,7 +164,7 @@
     </div>
     <div class="span6" id="about-entry"></div>
   </div>
-</div>	
+</div>
 <div id="demo" class="container-fluid container">
 	<h1>Rural sanitation scheme - progress & performance</h1>
 	<h4>We can find out how the rural sanitation scheme is doing because of the data that is published on the <a href="http://tsc.gov.in" target="_blank">Ministry of the Drinking Water and Sanitation website</a>. This project aims to create simple tools that will demystify the large datasets and compare it to other relevant datasets.</h4>
@@ -238,18 +240,12 @@
 		<h1>Methodology and Disclaimer</h1>
 		<h4>Methodology:</h4>
 		<p>This site is made up of data visualizations done by Gramener on behalf of Arghyam. The purpose of which is to demystify sanitation data in India.</p>
-
 		<p>All the data on this site is sourced Government of India data from <a href="http://tsc.gov.in/tsc/NBA/NBAHome.aspx" target="_blank">TSC.GOV.IN</a> or directly from the <a href="http://censusindia.gov.in/" target="_blank">Indian Census Bureau</a>. You can see the exact data source for each visual at the bottom of each page.</p>
-		
 		<p>The data was not changed or altered in anyway. You can see the code for our visualizations here on <a href="https://github.com/arghyam/arghyam-scrapers" target="_blank">Github</a>.</p>
-
 		<p>The TSC.GOV.IN data is being updated weekly from the website and is being archived by Arghyam for future analysis. We do not claim accuracy of the data.</p>
-
 		<p>For further questions please <a href="http://indiawaterportal.org/contact" target="_blank">contact us.</a></p>
-
 		<h4>Disclaimer:</h4>
 		<p>We are providing the data here with the understanding that we are not representing it to be accurate, correct or complete for your intended purpose. Please see India Water Portal's full <a href="http://www.indiawaterportal.org/disclaimer" target="_blank">disclaimer</a>.</p>
-		<!--<div class="dipity_embed" style="width:600px"><iframe width="600" height="400" src="http://www.dipity.com/arghyam/Rural-Sanitation-in-India/?mode=embed&z=0#tl" style="border:1px solid #CCC;"></iframe><p style="margin:0;font-family:Arial,sans;font-size:13px;text-align:center"><a href="http://www.dipity.com/arghyam/Rural-Sanitation-in-India/">Rural Sanitation in India</a> on <a href="http://www.dipity.com/" />Dipity</a>.</p></div>-->
 	</div>		
 </div>
 <br>
