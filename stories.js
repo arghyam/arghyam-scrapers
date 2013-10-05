@@ -149,18 +149,17 @@ var stories = [
 				'viz_p'  : '$1) Size of the box: Money planned to be set aside for rural sanitation @' + 
 									 '$2) Colour of the box: How much has the state / union territory spent on rural sanitation when compared to what was planned @'+
 									 '$3) The larger the size of the box, the greater the expenditure planned. Green and shades of green indicate spending according to plan while red and shades of red indicate failure to spend according to plan.@',
-				'ppt'		 : 'Click on the ppt for more help with using the visualisation.',
-        'url'    : ['http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home',
+				'url'    : ['http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home',
 										'http://data.gov.in/dataset/nirmal-bharat-abhiyan-district-wise-financial-progress-date'],
         'cols'   : ['Total_Projects_Outlay', 'ExpReported_Total'],
         'group'  : ['State_Name'],
         'area'   : ['Total plan', 'Total_Projects_Outlay'],
         'num'    : ['Total spent', 'ExpReported_Total'],
         'den'    : ['Total plan', 'Total_Projects_Outlay'],
-        'grad'   : 'gradient_legend',
-				'percent': [1, 37, 70, 95],
+				'grad'   : 'gradient_legend',
+        'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
-				'slideshare': 'https://skydrive.live.com/embed?cid=5F394E534EE15E07&resid=5F394E534EE15E07%21114&authkey=AAvTbPR9SP_xg5Y&em=2&wdAr=1.3333333333333333',
+				'slideshare': 'https://skydrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21120&authkey=ADJSIvNj-QPmj3Y&em=2',
 				'IWP'    : 'true'
     }),
     treemap_story({
@@ -173,8 +172,7 @@ var stories = [
 				'viz_p'  : '$1) Size of the box: Money planned to be spent on incentives for rural poor household toilets @' +
 									 '$2) Colour of the box: How much has the state/ union territory spent on incentives to the rural poor for building toilets rural sanitation when compared to what was planned @' +
 									 '$3) The larger the size of the box, the greater the amount planned to be spent. Green and shades of green indicate spending according to plan while red and shades of red indicate failure to spend according to plan. @',
-				'ppt'    : 'Click on the ppt for more help with using the visualisation.',
-        'url'    : ['http://tsc.gov.in/tsc/Report/Financial/RptPercentageFinComponentStatewiseDistrictwise_net.aspx?id=FIN'],
+				'url'    : ['http://tsc.gov.in/tsc/Report/Financial/RptPercentageFinComponentStatewiseDistrictwise_net.aspx?id=FIN'],
         'cols'   : ['BPL_Appr.(C+S+B)', 'BPL_Exp.(C+S+B)'],
         'group'  : ['State_Name'],
         'area'   : ['Total plan - Rural poor', 'BPL_Appr.(C+S+B)'],
@@ -183,12 +181,19 @@ var stories = [
         'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
-				'slideshare': 'https://skydrive.live.com/embed?cid=5F394E534EE15E07&resid=5F394E534EE15E07%21112&authkey=AE51yDpVVlHU55k&em=2&wdAr=1.3333333333333333', 
+				'slideshare': 'https://skydrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21122&authkey=ALfMHYjHSM_LaIA&em=2', 
 				'IWP'    : 'true'
     }),
     treemap_story({
         'menu'   : 'Money spent',
-        'title'  : 'Project plan used - Schools',
+        'title'  : 'Money spent on sanitation coverage of rural schools',
+				'context': 'School sanitation is highlighted as one of the important components under the Nirmal Bharat Abhiyan. The amount allotted for building school toilets is Rs.35,000 per school (Rs. 38,500 in hilly and difficult areas). This amount has not changed when from the current scheme’s precursor, the total sanitation campaign guidelines of 2010.' + 
+                   'This visualisation looks at the money planned to be spent to ensure that all rural, government schools have toilets.It assesses the performance of the scheme through the lens of amount spent vis a vis amount planned to be spent on money given to toilets for rural, government schools.',
+				'cont_p' : '',
+				'viz'    : 'Each large box represents one State. Click on it to reveal smaller boxes that represent a District. All amounts are in Rs. Lakhs.',
+				'viz_p'  : '$1) Size of the box: Money planned to be set aside for coverage of schools @'+
+									 '$2) Colour of the box: How much has the state / union territory spent on school sanitation when compared to what was planned @'+	
+									 '$3) The larger the size of the box, the greater the expenditure. Green and shades of green indicate spending according to plan while red and shades of red indicate failure to spend according to plan. @',
         'url'    : ['http://tsc.gov.in/tsc/Report/Financial/RptPercentageFinComponentStatewiseDistrictwise_net.aspx?id=FIN'],
         'cols'   : ['School_Appr.(C+S+B)', 'School_Exp.(C+S+B)'],
         'group'  : ['State_Name'],
@@ -198,6 +203,7 @@ var stories = [
         'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
+				'slideshare': 'https://skydrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21109&authkey=AJPTL0crW7cA5a8&em=2',
 				'IWP'    : 'false'
     }),
     treemap_story({
@@ -216,7 +222,13 @@ var stories = [
     }),
     treemap_story({
         'menu'   : 'Money spent',
-        'title'  : 'Project plan used - Nursery Schools',
+        'title'  : 'Money spent on sanitation coverage of rural nursery schools',
+				'context': 'Nursery schools or anganwadis were set up by Government of India to address child hunger and malnutrition. It is meant for children between the ages of 0 – 6 years. Providing safe sanitation in these become important to ensure good health. The idea is also to get children to learn to use a toilet from a very young age. The amount allotted for building baby-friendly nursery school toilets is Rs.8,000 per school (Rs. 10,000 in hilly and difficult areas). This amount has not changed when from the current scheme’s precursor, the total sanitation campaign guidelines of 2010.',
+        'cont_p' : '',
+        'viz'    : 'Each large box represents one State. Click on it to reveal smaller boxes that represent a District. All amounts are in Rs. Lakhs.',
+        'viz_p'	 : '$1) Size of the box: Money planned to be set aside for coverage of nursery schools @' +
+									 '$2) Colour of the box: How much has the state / union territory spent on nursery school sanitation when compared to what was planned @' +	
+									 '$3) The larger the size of the box, the greater the expenditure. Green and shades of green indicate spending according to plan while red and shades of red indicate failure to spend according to plan. @',			
         'url'    : ['http://tsc.gov.in/tsc/Report/Financial/RptPercentageFinComponentStatewiseDistrictwise_net.aspx?id=FIN'],
         'cols'   : ['Anganwadi_Appr.(C+S+B)', 'Anganwadi_Exp.(C+S+B)'],
         'group'  : ['State_Name'],
@@ -226,6 +238,7 @@ var stories = [
         'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
+				'slideshare': 'https://skydrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21110&authkey=AEik8JpuxrdZHxY&em=2',
 				'IWP'    : 'false'
     }),
     treemap_story({
@@ -283,7 +296,6 @@ var stories = [
         'cont_p' : ' ',          
 				'viz'    : 'Each row represents one State, showing the break-up of Plan, Money given, Spending.Click on it to reveal more boxes on the right representing each District. ',
 				'viz_p'  : ' ',					 
-				'ppt'		 : 'Click on the ppt for more help with using the visualisation.',  
 				'subtitle': 'Share of centre, State and People (Beneficiaries)',
         'url'    : ['http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home'],
         'cols'   : ['ApprShare_Center', 'ApprShare_State', 'ApprShare_Beneficiary', 'Rof_Center', 'Rof_State', 'Rof_Beneficiary', 'Rof_Total', 'ExpReported_Center', 'ExpReported_State', 'ExpReported_Beneficiary'],
@@ -314,7 +326,7 @@ var stories = [
 				'ydom'   : '45',
 				'lines'  : 'true', 
         'legend' : { '%Blue%': 'Centre', '%Red%': 'State', '%Green%': 'Beneficiary' },
-				'slideshare': 'https://skydrive.live.com/embed?cid=5F394E534EE15E07&resid=5F394E534EE15E07%21110&authkey=AKRfPtIJhjye7-4&em=2&wdAr=1.3333333333333333&wdEaa=1',
+				'slideshare': 'https://skydrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21119&authkey=AOc6r1bY3i073_I&em=2',
 				'IWP'    : 'true'
     }),
     stack_story({
@@ -362,7 +374,6 @@ var stories = [
         'viz_p'  : '$1) Size of the box: Target of toilets planned to be built for rural poor households @' +
                    '$2) Colour of the box: Toilets built for rural poor households when compared to the target @' + 
                    '$3) The larger the size of the box, the greater the target. Green and shades of green indicate building of toilets according to target while red and shades of red indicate failure to meet targets. @',
-        'ppt'    : 'Click on the ppt for more help with using the visualisation. ',
         'url'    : ['http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home',
 									 'http://data.gov.in/dataset/nirmal-bharat-abhiyan-district-wise-physical-progress-as-on-date'],
         'cols'   : ['PO_IHHL_BPL', 'PP_IHHL_BPL'],
@@ -373,7 +384,7 @@ var stories = [
         'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
-				'slideshare': 'https://skydrive.live.com/embed?cid=5F394E534EE15E07&resid=5F394E534EE15E07%21105&authkey=AN2MtcfwpdjuGHg&em=2&wdAr=1.3333333333333333', 
+				'slideshare': 'https://skydrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21118&authkey=AAX0ZIwWrOpxzHo&em=2', 
 				'IWP'    : 'true'
     }),
     treemap_story({
@@ -386,7 +397,7 @@ var stories = [
         'num'    : ['Built APL toilets', 'PP_IHHL_APL'],
         'den'    : ['Planned APL toilets', 'PO_IHHL_APL'],
         'grad'   : 'gradient_legend',
-				'percent': [1, 37, 70, 95],
+        'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
 				'IWP'    : 'false'
     }),
@@ -403,7 +414,6 @@ var stories = [
 				'viz'		 : 'Each circle represents one State. Click on the state to zoom in, hover over the circle to see the data.',
 				'viz_p'  : '$1) Size of the circle: Total number of rural households as per 2011 census @' + 
 									 '$2) Colour of the circle: Number of rural households that have toilets. This number is the 2001 Census toilet count plus the current TSC achievement numbers. @',
-				'ppt'		 : 'Click on the ppt for more help with using the visualisation.',
 				'url'    : ['http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home',
 										'http://www.indiawaterportal.org/data/2011-census-household-tables-0'],
         'cols'   : ['PP_IHHL_TOTAL', 'Rural_Households'],
@@ -412,15 +422,21 @@ var stories = [
 				'num'    : ['TSC total number of toilets built from 2001', 'PP_IHHL_TOTAL'],
         'den'    : ['Total Rural Households Census 2011', 'Rural_Households'],
         'cen2001': ['Census 2001 Rural Households (WT)', 'Census_2001_IHHL'],
-			  'grad'   : 'gradient_legend',
+				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
-				'slideshare': 'https://skydrive.live.com/embed?cid=5F394E534EE15E07&resid=5F394E534EE15E07%21118&authkey=ACidFJozKYbUARQ&em=2',
+				'slideshare': 'https://skydrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21121&authkey=ALqTaNinQiR3Fn4&em=2',
 				'IWP'    : 'true'
-    }),
+    }),		
 		treemap_story({
         'menu'   : 'Toilets built',
         'title'  : 'Toilets built for Schools',
+				'context': 'School sanitation is highlighted as one of the important components under the Nirmal Bharat Abhiyan. The scheme focuses on toilet construction combined with hygiene education to promote early adoption of toilet usage in rural, government schools. Specific guidelines for implementation have been provided in the scheme document. For example, each toilet block must consist of a toilet and at least 2 urinals and co-educational schools are mandated to provide separate toilets for boys and girls. While the earlier scheme, the Total Sanitaiton Campaign set 2012 as the target year for universalising access to sanitation in rural scheme, the new scheme sets a broad guideline for achieving Nirmal Gram status by 2022.',
+        'cont_p' : '',
+        'viz'    : 'Each large box represents one State. Click on it to reveal smaller boxes that represent a District.',
+        'viz_p'  : '$1) Size of the box: Target of toilets planned to be built for rural, government schools @' +
+									 '$2) Colour of the box: Toilets built for rural government schools when compared to the target @' +
+									 '$3) The larger the size of the box, the greater the target. Green and shades of green indicate building of toilets according to target while red and shades of red indicate failure to meet targets @', 				
 				'url'    : ['http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home'],
         'cols'   : ['PO_School_Toilets', 'PP_School_Toilets'],
         'group'  : ['State_Name'],
@@ -430,11 +446,18 @@ var stories = [
         'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
+				'slideshare': 'https://skydrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21108&authkey=AIwj62fwxNULyHM&em=2',
 				'IWP'    : 'false'
     }),		
 		treemap_story({
         'menu'   : 'Toilets built',
         'title'  : 'Toilets built for Nursery Schools',
+				'context': 'Nursery schools or anganwadis were set up by Government of India to address child hunger and malnutrition. It is meant for children between the ages of 0 – 6 years. The idea is also to get children to learn to use a toilet from a very young age; to prevent diseases related to poor hygiene; and to prevent malnutrition. The guidelines require that baby friendly toilets must be constructed but do not specify the design for such toilets.',
+				'cont_p' : 'While the earlier scheme, the Total Sanitaiton Campaign set 2012 as the target year for universalising access to sanitation in rural scheme, the new scheme sets a broad guideline for achieving Nirmal Gram status by 2022.',
+				'viz'    : 'Each large box represents one State. Click on it to reveal smaller boxes that represent a District.',
+				'viz_p'  : '$1) Size of the box: Target of toilets planned to be built for rural nursey schools @' +
+				           '$2) Colour of the box: Toilets built for rural nursery schools when compared to the target @' +
+									 '$3) The larger the size of the box, the greater the target. Green and shades of green indicate building of toilets according to target while red and shades of red indicate failure to meet targets. @', 
 				'url'    : ['http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home'],										 
         'cols'   : ['PO_Anganwadi_Toilets', 'PP_Anganwadi_Toilets'],
         'group'  : ['State_Name'],
@@ -444,8 +467,9 @@ var stories = [
         'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
+				'slideshare': 'https://skydrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21107&authkey=AJ3NfRms6zlBD_g&em=2',
 				'IWP'    : 'false'
-    }),
+    }),		
 		treemap_story({
         'menu'   : 'Toilets built',
         'title'  : 'XML - 1 - first',
@@ -484,8 +508,7 @@ var stories = [
 				'viz'    : 'Each circle represents one State / Union Territory. Click on a State or select from the drop down for the State and District that you want to see. The size of the circle represents rural poor toilets required. The x-axis is based on overall spending on rural sanitation (since toilet construction for the rural poor and allied activities is the biggest spend in the whole allotted sum). The y-axis is based on % toilets constructed for rural poor households. ' +
 									 'If the circle lies in the green part of the graph - that means that the respective state or district is doing well, if it lies in the red part then it is not. ',
 				'viz_p'  : ' ',					 
-				'ppt'    : 'Click on the ppt for more help with using the visualisation.', 
-        'url'    : ['http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home', 
+				'url'    : ['http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home', 
                     'http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home'],
         'cols'   : ['PO_IHHL_BPL', 'PP_IHHL_BPL', 'ExpReported_Total', 'Total_Projects_Outlay'],
         'group'  : ['State_Name', 'District_Name'],
@@ -495,13 +518,13 @@ var stories = [
         'R'      : 40,
         'xdom'   : [0, 1.5],
         'ydom'   : [0, 1.5],
-        'slideshare': 'https://skydrive.live.com/embed?cid=5F394E534EE15E07&resid=5F394E534EE15E07%21116&authkey=ALNXoAqMwro4HP4&em=2&wdAr=1.3333333333333333', 
-        'IWP'    : 'true'			
+        'slideshare': 'https://skydrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21128&authkey=ANXXSi5VLhu352w&em=2', 
+        'IWP'    : 'true'						
 		}),
     scatter_story({
         'menu'   : 'Performance',
         'title'  : 'Comparing spending to toilet construction - Census',
-				'url'    : ['TBD'],
+        'url'    : ['TBD'],
         'cols'   : ['BPL_WT', 'BPL_WOT', 'ExpReported_Total', 'Total_Projects_Outlay', 'PP_IHHL_BPL'],
         'group'  : ['State_Name'],
         'area'   : ['# Rural poor toilets required', function(d) { return +d['BPL_WT'] + +d['BPL_WOT']; }],
@@ -510,10 +533,9 @@ var stories = [
         'R'      : 40,
         'xdom'   : [0, 1.5],
         'ydom'   : [0, 1.5],
-				'IWP'    : 'false'				
-   })	
+				'IWP'    : 'false'					
+   })
 ];
-
 // List of the historical data files, latest on top
 var datafiles = [
 		'data-15-Sep-2013.csv',

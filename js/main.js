@@ -240,7 +240,7 @@ function draw_treemap(story) {
       .sticky(true)
 			.children(function(d) { return d.values; })
       .padding(1.5)
-      .value(story.size);
+      .value(story.size);			
     var nodes = d3.nest();
     story.group.forEach(function(group) {
       nodes = nodes.key(function(d) { return d[group]; });
@@ -324,7 +324,8 @@ function draw_cartogram(story) {
 	d3.selectAll('#gradient text').remove();
 	d3.selectAll('.legend').style('display', 'none');	
 	d3.selectAll('.feature').remove();
-	d3.selectAll('.state_bubbles').remove();	
+	d3.selectAll('.state_bubbles').remove();
+  d3.select('#legend_cont').style('padding-left', '470px');		
 	// Creates gradient legend for cartogram
 	var gradient = d3.select('#gradient');
   gradient.append('rect').attr('x', 0).attr('y', 0)
