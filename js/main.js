@@ -142,7 +142,8 @@ function draw(story) {
   d3.select('#visual').style('display', 'block');
   d3.selectAll('.treemap text').remove();
   d3.select('#chart').style('border', 'none');
-	d3.selectAll('.legend').style('display', 'none');	
+	d3.selectAll('.legend').style('display', 'none');
+  d3.select('#legend_cont').style('padding-left', '1px');		
 	// Remove treemap gradient container 
   d3.select('#gradient_cont').style('display', 'none');
   // Remove scatterplot info container

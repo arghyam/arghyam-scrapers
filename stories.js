@@ -453,7 +453,8 @@ var stories = [
         'menu'   : 'Toilets built',
         'title'  : 'Toilets built for Nursery Schools',
 				'context': 'Nursery schools or anganwadis were set up by Government of India to address child hunger and malnutrition. It is meant for children between the ages of 0 – 6 years. The idea is also to get children to learn to use a toilet from a very young age; to prevent diseases related to poor hygiene; and to prevent malnutrition. The guidelines require that baby friendly toilets must be constructed but do not specify the design for such toilets.',
-				'cont_p' : 'While the earlier scheme, the Total Sanitaiton Campaign set 2012 as the target year for universalising access to sanitation in rural scheme, the new scheme sets a broad guideline for achieving Nirmal Gram status by 2022.',
+				'cont_p' : ' @' +
+				           'While the earlier scheme, the Total Sanitaiton Campaign set 2012 as the target year for universalising access to sanitation in rural scheme, the new scheme sets a broad guideline for achieving Nirmal Gram status by 2022.',
 				'viz'    : 'Each large box represents one State. Click on it to reveal smaller boxes that represent a District.',
 				'viz_p'  : '$1) Size of the box: Target of toilets planned to be built for rural nursey schools @' +
 				           '$2) Colour of the box: Toilets built for rural nursery schools when compared to the target @' +
@@ -538,6 +539,9 @@ var stories = [
 ];
 // List of the historical data files, latest on top
 var datafiles = [
+		'data-06-Oct-2013.csv',
+		'data-29-Sep-2013.csv',
+		'data-22-Sep-2013.csv',
 		'data-15-Sep-2013.csv',
 		'data-08-Sep-2013.csv',
 		'data-01-Sep-2013.csv',
