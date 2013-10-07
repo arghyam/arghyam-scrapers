@@ -187,7 +187,7 @@ var stories = [
     treemap_story({
         'menu'   : 'Money spent',
         'title'  : 'Money spent on sanitation coverage of rural schools',
-				'context': 'School sanitation is highlighted as one of the important components under the Nirmal Bharat Abhiyan. The amount allotted for building school toilets is Rs.35,000 per school (Rs. 38,500 in hilly and difficult areas). This amount has not changed when from the current scheme’s precursor, the total sanitation campaign guidelines of 2010.' + 
+				'context': "School sanitation is highlighted as one of the important components under the Nirmal Bharat Abhiyan. The amount allotted for building school toilets is Rs.35,000 per school (Rs. 38,500 in hilly and difficult areas). This amount has not changed when from the current scheme's precursor, the total sanitation campaign guidelines of 2010." + 
                    'This visualisation looks at the money planned to be spent to ensure that all rural, government schools have toilets.It assesses the performance of the scheme through the lens of amount spent vis a vis amount planned to be spent on money given to toilets for rural, government schools.',
 				'cont_p' : '',
 				'viz'    : 'Each large box represents one State. Click on it to reveal smaller boxes that represent a District. All amounts are in Rs. Lakhs.',
@@ -223,7 +223,7 @@ var stories = [
     treemap_story({
         'menu'   : 'Money spent',
         'title'  : 'Money spent on sanitation coverage of rural nursery schools',
-				'context': 'Nursery schools or anganwadis were set up by Government of India to address child hunger and malnutrition. It is meant for children between the ages of 0 - 6 years. Providing safe sanitation in these become important to ensure good health. The idea is also to get children to learn to use a toilet from a very young age. The amount allotted for building baby-friendly nursery school toilets is Rs.8,000 per school (Rs. 10,000 in hilly and difficult areas). This amount has not changed when from the current scheme’s precursor, the total sanitation campaign guidelines of 2010.',
+				'context': "Nursery schools or anganwadis were set up by Government of India to address child hunger and malnutrition. It is meant for children between the ages of 0 - 6 years. Providing safe sanitation in these become important to ensure good health. The idea is also to get children to learn to use a toilet from a very young age. The amount allotted for building baby-friendly nursery school toilets is Rs.8,000 per school (Rs. 10,000 in hilly and difficult areas). This amount has not changed when from the current scheme's precursor, the total sanitation campaign guidelines of 2010.",
         'cont_p' : '',
         'viz'    : 'Each large box represents one State. Click on it to reveal smaller boxes that represent a District. All amounts are in Rs. Lakhs.',
         'viz_p'	 : '$1) Size of the box: Money planned to be set aside for coverage of nursery schools @' +
