@@ -1,7 +1,7 @@
-var host = window.location.host;
-var iwp = 'www.indiawaterportal.org';
-//var host = window.location.href; 
-//var iwp = 'http://arghyam.github.io/arghyam-scrapers/?#'; 
+//var host = window.location.host;
+//var iwp = 'www.indiawaterportal.org';
+var host = window.location.href; 
+var iwp = 'http://arghyam.github.io/arghyam-scrapers/?#'; 
 console.log(host);
 d3.selectAll('.tooltip').remove();
 if(host == iwp){
