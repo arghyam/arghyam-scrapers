@@ -223,7 +223,7 @@ var stories = [
     treemap_story({
         'menu'   : 'Money spent',
         'title'  : 'Money spent on sanitation coverage of rural nursery schools',
-				'context': 'Nursery schools or anganwadis were set up by Government of India to address child hunger and malnutrition. It is meant for children between the ages of 0 – 6 years. Providing safe sanitation in these become important to ensure good health. The idea is also to get children to learn to use a toilet from a very young age. The amount allotted for building baby-friendly nursery school toilets is Rs.8,000 per school (Rs. 10,000 in hilly and difficult areas). This amount has not changed when from the current scheme’s precursor, the total sanitation campaign guidelines of 2010.',
+				'context': 'Nursery schools or anganwadis were set up by Government of India to address child hunger and malnutrition. It is meant for children between the ages of 0 - 6 years. Providing safe sanitation in these become important to ensure good health. The idea is also to get children to learn to use a toilet from a very young age. The amount allotted for building baby-friendly nursery school toilets is Rs.8,000 per school (Rs. 10,000 in hilly and difficult areas). This amount has not changed when from the current scheme’s precursor, the total sanitation campaign guidelines of 2010.',
         'cont_p' : '',
         'viz'    : 'Each large box represents one State. Click on it to reveal smaller boxes that represent a District. All amounts are in Rs. Lakhs.',
         'viz_p'	 : '$1) Size of the box: Money planned to be set aside for coverage of nursery schools @' +
@@ -452,7 +452,7 @@ var stories = [
 		treemap_story({
         'menu'   : 'Toilets built',
         'title'  : 'Toilets built for Nursery Schools',
-				'context': 'Nursery schools or anganwadis were set up by Government of India to address child hunger and malnutrition. It is meant for children between the ages of 0 – 6 years. The idea is also to get children to learn to use a toilet from a very young age; to prevent diseases related to poor hygiene; and to prevent malnutrition. The guidelines require that baby friendly toilets must be constructed but do not specify the design for such toilets.',
+				'context': 'Nursery schools or anganwadis were set up by Government of India to address child hunger and malnutrition. It is meant for children between the ages of 0 - 6 years. The idea is also to get children to learn to use a toilet from a very young age; to prevent diseases related to poor hygiene; and to prevent malnutrition. The guidelines require that baby friendly toilets must be constructed but do not specify the design for such toilets.',
 				'cont_p' : ' @' +
 				           'While the earlier scheme, the Total Sanitaiton Campaign set 2012 as the target year for universalising access to sanitation in rural scheme, the new scheme sets a broad guideline for achieving Nirmal Gram status by 2022.',
 				'viz'    : 'Each large box represents one State. Click on it to reveal smaller boxes that represent a District.',

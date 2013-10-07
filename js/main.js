@@ -133,13 +133,9 @@ function draw(story) {
   }
 	$('#emb_text').val('');
 	$('#status').val('');
-	d3.select('#about').style('display', 'none');
-	d3.select('#method').style('display', 'none');
-	d3.select('#demo').style('display', 'none');		
-	d3.select('#brought').style('display', 'none');		
+	d3.selectAll('#about, #method, #demo, #brought').style('display', 'none');
 	d3.select('#exp_text').text(' ');	
-	d3.selectAll('#demo').style('display', 'none');
-  d3.select('#visual').style('display', 'block');
+	d3.select('#visual').style('display', 'block');
   d3.selectAll('.treemap text').remove();
   d3.select('#chart').style('border', 'none');
 	d3.selectAll('.legend').style('display', 'none');
