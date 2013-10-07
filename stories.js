@@ -204,7 +204,7 @@ var stories = [
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
 				'slideshare': 'https://skydrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21109&authkey=AJPTL0crW7cA5a8&em=2',
-				'IWP'    : 'false'
+				'IWP'    : 'true'
     }),
     treemap_story({
         'menu'   : 'Money spent',
@@ -239,7 +239,7 @@ var stories = [
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
 				'slideshare': 'https://skydrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21110&authkey=AEik8JpuxrdZHxY&em=2',
-				'IWP'    : 'false'
+				'IWP'    : 'true'
     }),
     treemap_story({
         'menu'   : 'Money spent',
@@ -447,7 +447,7 @@ var stories = [
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
 				'slideshare': 'https://skydrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21108&authkey=AIwj62fwxNULyHM&em=2',
-				'IWP'    : 'false'
+				'IWP'    : 'true'
     }),		
 		treemap_story({
         'menu'   : 'Toilets built',
@@ -469,7 +469,7 @@ var stories = [
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
 				'slideshare': 'https://skydrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21107&authkey=AJ3NfRms6zlBD_g&em=2',
-				'IWP'    : 'false'
+				'IWP'    : 'true'
     }),		
 		treemap_story({
         'menu'   : 'Toilets built',
