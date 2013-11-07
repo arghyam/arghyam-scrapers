@@ -136,6 +136,26 @@ function stack_story(story) {
     return story;
 }
 
+function boxscatter_story(story) {
+    story.type = 'boxscatter';
+    story.cols = story.cols || [];
+    story.filter = function(d) { return d.District_Name.match(/^[A-Z]/); };
+    story.color = function(d) { return gen_color(d[story.group[0]]); };
+    story.X = story.x[1];
+    story.YT = story.yT[1];
+    story.YC = story.yC[1];
+		story.xdom = story.xdom || [0, 1];
+    story.ydom = story.ydom || [0, 1];
+    story.hover = function(d) {
+      var prefix = d['State_Name'] + ' - ' + d['District_Name'] + ': ';
+      return (prefix +
+        story.area[0] + ' = ' + N(story.area[1](d)) + '. ' +
+        story.x[0]    + ' = ' + P(story.x[1](d)) + '. ' +
+        story.y[0]    + ' = ' + P(story.y[1](d)) + '.'
+      );
+    };
+    return story;
+}
 var stories = [
     treemap_story({
         'menu'   : 'Money spent',
@@ -431,8 +451,9 @@ var stories = [
 		treemap_story({
         'menu'   : 'Toilets built',
         'title'  : 'Toilets built for Schools',
-				'context': 'School sanitation is highlighted as one of the important components under the Nirmal Bharat Abhiyan. The scheme focuses on toilet construction combined with hygiene education to promote early adoption of toilet usage in rural, government schools. Specific guidelines for implementation have been provided in the scheme document. For example, each toilet block must consist of a toilet and at least 2 urinals and co-educational schools are mandated to provide separate toilets for boys and girls. While the earlier scheme, the Total Sanitaiton Campaign set 2012 as the target year for universalising access to sanitation in rural scheme, the new scheme sets a broad guideline for achieving Nirmal Gram status by 2022.',
-        'cont_p' : '',
+				'context': 'School sanitation is highlighted as one of the important components under the Nirmal Bharat Abhiyan. The scheme focuses on toilet construction combined with hygiene education to promote early adoption of toilet usage in rural, government schools. Specific guidelines for implementation have been provided in the scheme document. For example, each toilet block must consist of a toilet and at least 2 urinals and co-educational schools are mandated to provide separate toilets for boys and girls. ',
+        'cont_p' : ' @'+
+									 'While the earlier scheme, the Total Sanitaiton Campaign set 2012 as the target year for universalising access to sanitation in rural scheme, the new scheme sets a broad guideline for achieving Nirmal Gram status by 2022.',	
         'viz'    : 'Each large box represents one State. Click on it to reveal smaller boxes that represent a District.',
         'viz_p'  : '$1) Size of the box: Target of toilets planned to be built for rural, government schools @' +
 									 '$2) Colour of the box: Toilets built for rural government schools when compared to the target @' +
@@ -522,23 +543,31 @@ var stories = [
         'slideshare': 'https://skydrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21128&authkey=ANXXSi5VLhu352w&em=2', 
         'IWP'    : 'true'						
 		}),
-    scatter_story({
+    boxscatter_story({
         'menu'   : 'Performance',
         'title'  : 'Comparing spending to toilet construction - Census',
-        'url'    : ['TBD'],
-        'cols'   : ['BPL_WT', 'BPL_WOT', 'ExpReported_Total', 'Total_Projects_Outlay', 'PP_IHHL_BPL'],
-        'group'  : ['State_Name'],
-        'area'   : ['# Rural poor toilets required', function(d) { return +d['BPL_WT'] + +d['BPL_WOT']; }],
-        'x'      : ['Spent / Plan', function(d) { return d['ExpReported_Total'] / d['Total_Projects_Outlay']; }],
-        'y'      : ['% Rural poor Households with toilet', function(d) { return +d['PP_IHHL_BPL'] / (+d['BPL_WT'] + +d['BPL_WOT']); }],
+				'option' : '',
+				'suboption' : '',
+				'data'   : 'comparing_spending_toilets_2011.csv',
+        'url'    : ['http://tsc.gov.in/tsc/Report/Physical/RptYearWiseCountryLevelAch.aspx?id=PHY','https://drive.google.com/folderview?id=0B9MvDRHquaP6SWdxUkpteHFZYWs&usp=sharing'],
+				'group'  : ['State_Name', 'District_Name'],
+        'cols'   : ['TSC_Finance','TSC_IHHL_2011','Census_IHHL_2011'],
+        'area'   : ['#Rural poor toilets required', function(d) { return +d['BPL_WT'] + +d['BPL_WOT']; }],
+        'x'      : ['Cumulative Finance', 'TSC_Finance'],
+        'yT'     : ['Toilets Built', 'TSC_IHHL_2011'],
+				'yC'     : ['Toilets Built from Census', 'Census_IHHL_2011'], 
         'R'      : 40,
-        'xdom'   : [0, 1.5],
-        'ydom'   : [0, 1.5],
+        'xdom'   : [0, 2.5],
+        'ydom'   : [0, 2.5],
 				'IWP'    : 'false'					
-   })
+    })
 ];
 // List of the historical data files, latest on top
 var datafiles = [
+		'data-03-Nov-2013.csv',
+		'data-27-Oct-2013.csv',
+		'data-20-Oct-2013.csv',
+		'data-13-Oct-2013.csv',
 		'data-06-Oct-2013.csv',
 		'data-29-Sep-2013.csv',
 		'data-22-Sep-2013.csv',

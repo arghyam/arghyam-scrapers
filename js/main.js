@@ -277,8 +277,7 @@ function draw_treemap(story) {
     var select = legend.append('select').attr('class', 'states');
     var subselect = legend.append('select').attr('class', 'districts');
     var groups = _.uniq(_.pluck(subset, story.group[0]));
-		var temp = groups;
-    groups.unshift('select State');
+		groups.unshift('select State');
 		select.selectAll('option')
         .data(groups)
       .enter()
@@ -678,6 +677,259 @@ function draw_scatter(story) {
 	// Subtext for the info container	  
     d3.select('#info')
 		.text('These districts have achieved over '+ story.ydom[1] * 100 + '% , and are outside the graph.');
+  });
+}
+function draw_boxscatter(story) {
+  d3.selectAll('.tooltip').remove();
+  // Add scatterplot info container
+  d3.selectAll('#right_container').remove();
+	//d3.select('#hide_text').style('display', 'block');
+	d3.select('.legend.boxscatter').style('display', 'block');
+	d3.select('#brought').style('display', function(){ return window.location.search == '?embed=1' ? 'block' : 'none';});
+	// Filter the data
+  d3.csv(story.data || datafile(), function(data) {
+		if(story.data){ $('#data_cont').hide(); d3.select('#data').attr('href', story.data); } else { $('#data_cont').show();}
+    var subset = initchart(story, data);
+		draw_date(data[data.length-1], story);
+		// TODO: Make these move
+    svg.selectAll('*').remove();
+    var width = parseInt(svg.style('width'), 10);
+    var height = svg.attr('height');		
+		var rmax = _.max(_.map(subset, story.area[1]));
+		// Set up the legend
+    var legend = d3.select('.legend.boxscatter');
+    legend.selectAll('*').remove();
+    var select = legend.append('select').attr('class', 'states');
+    var subselect = legend.append('select').attr('class', 'districts');
+    var groups = _.uniq(_.pluck(subset, story.group[0]));
+    groups.unshift('select State');
+		select.selectAll('option')
+        .data(groups)
+      .enter()
+        .append('option')
+        .text(String);
+		select.on('change', function() {
+			var group = d3.select(this).property('value');			
+		  d3.selectAll('.tooltip').remove();
+			var result = _.filter(subset, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); });
+			result.unshift({"District_Name":"select District"});
+      subselect.selectAll('option').remove();
+      subselect.selectAll('option')
+          .data(result)
+        .enter()
+          .append('option')
+          .text(function(d){ return d.District_Name; });
+			grids(extentYDminmax[1] + 1000, 50000, yscaleD, extentXD[1] + 1000 , 500, xscaleD);
+			svg.selectAll('.states').classed('hide', true);
+			svg.selectAll('.districts').classed('hide', true);
+			svg.selectAll('.districts[data-q="' + group + '"]').classed('hide', false);
+			svg.selectAll('.axis').classed('hide', true);
+			axes(xscaleD, yscaleD);	
+		});
+		subselect.on('change', function() {
+      var subgroup = d3.select(this).property('value');
+			svg.selectAll('.districts').classed('mark', false);
+      var group = select.property('value');
+			var result = _.filter(subset, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); });
+			svg.selectAll('rect')
+        .data(result)
+        .classed('mark', function(d){
+          return d.District_Name == subgroup ? true : false; 
+				});
+			d3.selectAll('.tooltip').remove();
+			var details = svg.selectAll('rect[data-q="' + group + '"][data-r="' + subgroup + '"]').text();
+			$('#copy_title').val(details);
+			$('#copy_title').on('mouseover', function(){ $(this).select(); });	
+      $('.mark').tooltip({ title:function(){ return $('.mark title').text(); }, trigger:'focus', container:'body' }).tooltip('show');						
+		});
+
+		// Accumulated values of states
+		var nested_data = d3.nest()
+				.key(function(d){ return d[story.group[0]]; })
+				.rollup(function(rows){ return {'x'  : d3.sum(rows, function(d){ return d[story.X];}),
+							                          'yT' : d3.sum(rows, function(d){ return d[story.YT];}),
+							                          'yC' : d3.sum(rows, function(d){ return d[story.YC];})};							                          
+				})
+				.entries(subset); 
+				
+				nested_data.sort(function(a, b){ return b.values['yT'] - a.values['yT'];});
+		var R = story.R,
+		    extentX = d3.extent(nested_data, function(d){ return d.values['x'] ; }),
+		    extentYT = d3.extent(nested_data, function(d){ return d.values['yT']; }),
+		    extentYC = d3.extent(nested_data, function(d){ return d.values['yC']; }),
+		    extentYminmax = d3.extent(d3.merge([extentYT,extentYC]));
+				
+		var	extentXD = d3.extent(subset, function(d){ return Math.floor(d[story.X]);}),
+				extentYTD = d3.extent(subset, function(d){ return Math.floor(d[story.YT]);}),
+				extentYCD = d3.extent(subset, function(d){ return Math.floor(d[story.YC]);}),
+				extentYDminmax = d3.extent(d3.merge([extentYTD,extentYCD]));
+				
+		var xscale = d3.scale.sqrt().domain([extentX[0] - 50 , extentX[1] + 10000]).range([R, width - R]),
+		    yscale = d3.scale.sqrt().domain([extentYminmax[0] - 20000, extentYminmax[1]]).range([height - R, R]); 
+		var xscaleD = d3.scale.sqrt().domain([extentXD[0] - 5, extentXD[1] + 1000]).range([R, width - R]),
+		    yscaleD = d3.scale.sqrt().domain([extentYDminmax[0] - 1000,extentYDminmax[1] + 1000]).range([height - R, R]); 		
+
+		grids(extentYminmax[1], 1000000, yscale, extentX[1] + 10000, 10000, xscale);			
+		axes(xscale, yscale);
+		
+		var district_boxS	= svg.append('g')
+					.selectAll('.districts').data(subset).enter();	
+			
+		district_boxS.append('rect')	
+					.attr('x', function(d){ return xscaleD(d[story.X]) - R / 8; })
+					.attr('y', function(d){ return yscaleD(Math.max(d[story.YT],d[story.YC])) - R / 8; })
+					.attr('width', R/4)
+					.attr('height', function(d){ return Math.abs(yscaleD(Math.max(d[story.YT],d[story.YC])) - yscaleD(Math.min(d[story.YT],d[story.YC]))) + R / 4;})
+					.classed('hide districts', true)
+					.attr('data-q', function(d) { return d[story.group[0]]; })
+					.attr('data-r', function(d) { return d[story.group[1]]; })
+					.on('click', stateBox)
+					.on('mouseover', function() {
+							var details = d3.select(this).text(); 
+							$('#copy_title').val(details).select();	
+					})
+					.style('fill', function(d){ return d[story.YT] - d[story.YC] < 0 ? '#9BBB59' : '#C0504D' ; })
+					.style('stroke', '#000')
+					.append('title')
+					.text(function(d){ return d.State_Name+' - '+d.District_Name +' : TSC Finance = '+ N(d[story.X])+'. TSC data = ' + N(d[story.YT])+'. Census data = ' + N(d[story.YC]) +'. Difference (TSC - Census) = ' + N(d[story.YT]) +' - '+ N(d[story.YC]) +' = '+ N(d[story.YT] - d[story.YC]) + '.'; });
+		
+		district_boxS.append('circle')	
+					.attr('cx', function(d){ return xscaleD(d[story.X]); })
+					.attr('cy', function(d){ return yscaleD(Math.max(d[story.YT], d[story.YC])); })
+					.attr('r', R/9)
+					.classed('hide districts', true)
+					.attr('data-q', function(d) { return d[story.group[0]]; })
+					.attr('data-r', function(d) { return d[story.group[1]]; })
+					.on('click', stateBox)
+					.style('fill', function(d){ return d[story.YT] - d[story.YC] > 0 ? '#4F81BD' : '#F79646';})
+					.style('stroke', '#000')
+					.append('title')
+					.text(function(d){ return d[story.YT] - d[story.YC] > 0 ? d.District_Name +' : TSC = ' + N(d[story.YT]) : d.District_Name +' : Census = ' + N(d[story.YC]);});
+		
+		district_boxS.append('circle')	
+					.attr('cx', function(d){ return xscaleD(d[story.X]); })
+					.attr('cy', function(d){ return yscaleD(Math.min(d[story.YT], d[story.YC])); })
+					.attr('r', R/9)
+					.classed('hide districts', true)
+					.attr('data-q', function(d) { return d[story.group[0]]; })
+					.attr('data-r', function(d) { return d[story.group[1]]; })
+					.on('click', stateBox)
+					.style('fill', function(d){ return d[story.YT] - d[story.YC] < 0 ? '#4F81BD' : '#F79646';})
+					.style('stroke', '#000')
+					.append('title')
+					.text(function(d){ return d[story.YT] - d[story.YC] < 0 ? d.District_Name +' : TSC = ' + N(d[story.YT]) : d.District_Name +' : Census = ' + N(d[story.YC]);});
+		
+		var state_boxS = svg.append('g').classed('states', true).selectAll('.rect')
+					.data(nested_data).enter();	
+					
+		state_boxS.append('rect')	
+					.attr('x', function(d){ return xscale(d.values['x']) - R / 8; })
+					.attr('y', function(d){ return yscale(Math.max(d.values['yT'], d.values['yC'])) - R / 8; }) 
+					.attr('width', R/4)
+					.attr('height', function(d){ return Math.abs(yscale(Math.max(d.values['yT'],d.values['yC'])) - yscale(Math.min(d.values['yT'],d.values['yC']))) + R / 4; }) 
+					.attr('data-q', function(d) { return d.key; })
+					.on('click', districtBox)
+					.on('mouseover', function() {
+							var details = d3.select(this).text(); 
+							$('#copy_title').val(details).select();	
+					})
+					.style('fill', function(d){ return d.values['yT'] - d.values['yC'] < 0 ? '#9BBB59' : '#C0504D' ; })
+					.style('stroke', '#000')
+					.append('title')
+					.text(function(d){ return d.key +' : TSC Finance = '+ N(d.values['x'])+'. TSC data = ' + N(d.values['yT'])+'. Census data = ' + N(d.values['yC']) +'. Difference (TSC - Census) = ' + N(d.values['yT']) +' - '+ N(d.values['yC']) +' = '+ N(d.values['yT'] - d.values['yC']) + '.'; });
+				
+		state_boxS.append('circle')
+					.attr('cx', function(d){ return xscale(d.values['x']); })
+					.attr('cy', function(d){ return yscale(Math.max(d.values['yT'], d.values['yC'])); }) 
+					.attr('r', R/9)
+					.attr('data-q', function(d) { return d.key; })
+					.on('click', districtBox)
+					.style('fill', function(d){ return d.values['yT'] - d.values['yC'] > 0 ? '#4F81BD' : '#F79646';})
+					.style('stroke', '#000')
+					.append('title')
+					.text(function(d){ return d.values['yT'] - d.values['yC'] > 0 ? d.key +' : TSC = ' + N(d.values['yT']) : d.key +' : Census = ' + N(d.values['yC']);});
+					
+		 state_boxS.append('circle')
+					.attr('cx', function(d){ return xscale(d.values['x']); })
+					.attr('cy', function(d){ return yscale(Math.min(d.values['yT'],d.values['yC'])); }) 
+					.attr('r', R/9)
+					.attr('data-q', function(d) { return d.key; })
+					.on('click', districtBox)
+					.style('fill', function(d){ return d.values['yT'] - d.values['yC'] < 0 ? '#4F81BD' : '#F79646';})
+					.style('stroke', '#000')
+					.append('title')
+					.text(function(d){ return d.values['yT'] - d.values['yC'] < 0 ? d.key +' : TSC = ' + N(d.values['yT']) : d.key +' : Census = ' + N(d.values['yC']);});
+		
+		function districtBox(d){
+					grids(extentYDminmax[1] + 1000, 50000, yscaleD, extentXD[1] + 1000 , 500, xscaleD);
+					var q = d3.select(this).attr('data-q');
+					select.property('value', q).on('change').call(select.node());
+					svg.selectAll('.districts[data-q="' + q + '"]').classed('hide', false);
+					svg.selectAll('.states').classed('hide', true);
+					axes(xscaleD, yscaleD);	
+		}
+		function stateBox(d){		
+					grids(extentYminmax[1], 1000000, yscale, extentX[1] + 10000, 10000, xscale);
+					axes(xscale, yscale);
+					svg.selectAll('.districts').classed('hide', true);
+					svg.selectAll('.states').classed('hide', false);
+		}
+		function axes(x, y){
+					svg.selectAll('.axis').remove();
+					var xaxis = svg.append('g')
+						.attr('class', 'axis')
+						.attr('transform', 'translate(0,' + (height - R) + ')')
+						.call(d3.svg.axis()
+										.scale(x)
+										.orient('bottom')
+										.ticks(15)
+										.tickFormat(d3.format('2s')))
+						.append('text')
+						.text(story.x[0])
+						.attr('transform', 'translate(-5, -5)')
+						.attr('x', width - R)
+						.attr('text-anchor', 'end');
+					var yaxis = svg.append('g')
+						.attr('class', 'axis')
+						.attr('transform', 'translate(' + R + ',0)')
+						.call(d3.svg.axis()
+										.scale(y)
+										.orient('left')
+										.ticks(15)
+										.tickFormat(d3.format('2s')))
+						.append('text')
+						.text(story.yT[0])
+						.attr('x', R)
+						.attr('transform', 'translate(5,5) rotate(-90,' + R + ',' + R + ')')
+						.attr('text-anchor', 'end')
+						.attr('dominant-baseline', 'hanging');	  			
+		}
+		function grids(h1, h2, y, v1, v2, x){ 
+		// Lines joining x-axis and y-axis
+		  svg.selectAll('.h, .v').remove();
+			svg.append('g').selectAll('.h')
+				.data(d3.range(1, h1, h2))   
+				.enter().append('line')
+				.attr('class', 'h')
+				.attr('x1', R)
+				.attr('y1', function(d){ return y(d);})
+				.attr('x2', width - R) 
+				.attr('y2', function(d){ return y(d);})
+				.style('fill','none')
+				.style('stroke', '#ddd')
+				.style('shape-rendering','crispEdges');
+			svg.append('g').selectAll('.v')
+				.data(d3.range(1, v1, v2))  
+				.enter().append('line')
+				.attr('class', 'v')
+				.attr('x1', function(d){ return x(d);})
+				.attr('y1', R)  
+				.attr('x2', function(d){ return x(d);})
+				.attr('y2', height - R)
+				.style('fill','none')
+				.style('stroke', '#ddd')
+				.style('shape-rendering','crispEdges');
+		}	
   });
 }
 function draw_stack(story) {
