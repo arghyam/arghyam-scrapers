@@ -1,7 +1,7 @@
 //var host = window.location.host;
 //var iwp = 'www.indiawaterportal.org';
-var host = window.location.href; 
-var iwp = 'http://arghyam.github.io/arghyam-scrapers/?#'; 
+var host = window.location.href;
+var iwp = 'http://arghyam.github.io/arghyam-scrapers/?#';
 console.log(host);
 d3.selectAll('.tooltip').remove();
 if(host == iwp){
@@ -25,10 +25,23 @@ parentmenu
   .text(function(d) { return d.key + ' '; })
       .append('b')
       .classed('caret', true);
-parentmenu
+var submenu = parentmenu
   .append('ul')
-  .classed('dropdown-menu', true)
-  .selectAll('li')
+  .classed('dropdown-menu', true);
+var search = submenu.append('div').classed('dropdown-toggle', true);
+
+		search.append('input')
+		.attr('type', 'text')
+		.attr('id','search')
+		.attr('placeholder', 'search...')
+		.style('margin', '0 20px -20px 20px');
+		
+	search.append('i')
+		.classed('icon-search', true)
+		.style('margin-top', '-8px')
+		.style('margin-left', '220px')
+		.style('opacity', '0.4');		
+  submenu.selectAll('li')
       .data(function(d) { return d.values; })
     .enter()
       .append('li')
@@ -36,6 +49,18 @@ parentmenu
         .attr('href', '#')
         .text(function(d) { return d.title;	}) 
         .on('click', draw);
+$('input#search').click(function(){return false;}); //prevent menu hide					
+$('.dropdown-toggle').click(function(){ 
+	$allListElements = $('.nav ul > li');
+	$allListElements.show(); 
+});				
+$('input#search').keyup(function(){
+	searchText = new RegExp($(this).val(), 'i');
+	$allListElements = $('.nav ul > li');
+	$matchingListElements = $allListElements.filter(function(i, el){ return $(el).text().match(searchText) });
+	$allListElements.hide();
+	$matchingListElements.show();			
+});
 // Create the menu on #about as well
 d3.select('#about-entry').append('ul')
   .selectAll('li')
@@ -118,8 +143,20 @@ function hashchange(e) {
 	}else{
 		for (var i=0, l=stories.length; i<l; i++) {
 			var story = stories[i];
-			if ((story.menu == hash[0]) && (story.title == hash[1])) {
-				return draw(story);
+			if((story.menu == hash[0]) && (story.title == hash[1])) {						
+					if(story.menu == 'State'){
+						//console.log(hash[3]);
+						story.param1 = hash[2];
+						story.param2 = hash[3];
+						story.url = tmp_story[hash[3]].url;
+						story.cols = tmp_story[hash[3]].cols;
+						story.area = tmp_story[hash[3]].area;
+						story.size = tmp_story[hash[3]].area[1];
+						story.num = tmp_story[hash[3]].num;
+						story.den = tmp_story[hash[3]].den;		
+						return draw(story);	
+					}
+				return draw(story);	
 			}
 		}
 	} 	
@@ -133,8 +170,11 @@ function draw(story) {
   }
 	$('#emb_text').val('');
 	$('#status').val('');
+  d3.select('#exp_text').text(' ');	
 	d3.selectAll('#about, #method, #demo, #brought').style('display', 'none');
-	d3.select('#exp_text').text(' ');	
+	d3.select('#data_cont div').style('padding-left','90px').style('margin-left','0');
+	d3.select('#data_cont div strong').text('From: 2001, Till (Change Date):');	
+	
 	d3.select('#visual').style('display', 'block');
   d3.selectAll('.treemap text').remove();
   d3.select('#chart').style('border', 'none');
@@ -163,7 +203,17 @@ function draw(story) {
       .attr('target', '_blank')
       .attr('href', String)
       .text(String);
-  window.location.hash = encodeURIComponent(story.menu + '|' + story.title);
+  if(story.menu == 'State'){		
+	  window.location.hash = encodeURIComponent(story.menu + '|' + story.title + '|' + story.param1 + '|' + story.param2);
+		story.url = tmp_story[story.param2].url;
+		story.cols = tmp_story[story.param2].cols;
+		story.area = tmp_story[story.param2].area;
+		story.size = tmp_story[story.param2].area[1];
+		story.num = tmp_story[story.param2].num;
+		story.den = tmp_story[story.param2].den;		
+	}else{
+		window.location.hash = encodeURIComponent(story.menu + '|' + story.title);
+	}
   window['draw_' + story.type](story);
 	d3.select('#exp_text').text(' ');	
 	d3.select('#bottom').remove();
@@ -780,7 +830,7 @@ function draw_boxscatter(story) {
 					.attr('y', function(d){ return yscaleD(Math.max(d[story.YT],d[story.YC])) - R / 8; })
 					.attr('width', R/4)
 					.attr('height', function(d){ return Math.abs(yscaleD(Math.max(d[story.YT],d[story.YC])) - yscaleD(Math.min(d[story.YT],d[story.YC]))) + R / 4;})
-					.classed('hide districts', true)
+					.classed('hide districts distsBox', true)
 					.attr('data-q', function(d) { return d[story.group[0]]; })
 					.attr('data-r', function(d) { return d[story.group[1]]; })
 					.on('click', stateBox)
@@ -789,7 +839,6 @@ function draw_boxscatter(story) {
 							$('#copy_title').val(details).select();	
 					})
 					.style('fill', function(d){ return d[story.YT] - d[story.YC] < 0 ? '#9BBB59' : '#C0504D' ; })
-					.style('stroke', '#000')
 					.append('title')
 					.text(function(d){ return d.State_Name+' - '+d.District_Name +' : TSC Finance = '+ N(d[story.X])+'. TSC data = ' + N(d[story.YT])+'. Census data = ' + N(d[story.YC]) +'. Difference (TSC - Census) = ' + N(d[story.YT]) +' - '+ N(d[story.YC]) +' = '+ N(d[story.YT] - d[story.YC]) + '.'; });
 		
@@ -810,7 +859,7 @@ function draw_boxscatter(story) {
 					.attr('cx', function(d){ return xscaleD(d[story.X]); })
 					.attr('cy', function(d){ return yscaleD(Math.min(d[story.YT], d[story.YC])); })
 					.attr('r', R/9)
-					.classed('hide districts', true)
+					.classed('hide districts distsBox', true)
 					.attr('data-q', function(d) { return d[story.group[0]]; })
 					.attr('data-r', function(d) { return d[story.group[1]]; })
 					.on('click', stateBox)
@@ -827,6 +876,7 @@ function draw_boxscatter(story) {
 					.attr('y', function(d){ return yscale(Math.max(d.values['yT'], d.values['yC'])) - R / 8; }) 
 					.attr('width', R/4)
 					.attr('height', function(d){ return Math.abs(yscale(Math.max(d.values['yT'],d.values['yC'])) - yscale(Math.min(d.values['yT'],d.values['yC']))) + R / 4; }) 
+          .classed('statsBox', true) 
 					.attr('data-q', function(d) { return d.key; })
 					.on('click', districtBox)
 					.on('mouseover', function() {
@@ -834,7 +884,7 @@ function draw_boxscatter(story) {
 							$('#copy_title').val(details).select();	
 					})
 					.style('fill', function(d){ return d.values['yT'] - d.values['yC'] < 0 ? '#9BBB59' : '#C0504D' ; })
-					.style('stroke', '#000')
+     
 					.append('title')
 					.text(function(d){ return d.key +' : TSC Finance = '+ N(d.values['x'])+'. TSC data = ' + N(d.values['yT'])+'. Census data = ' + N(d.values['yC']) +'. Difference (TSC - Census) = ' + N(d.values['yT']) +' - '+ N(d.values['yC']) +' = '+ N(d.values['yT'] - d.values['yC']) + '.'; });
 				
@@ -868,7 +918,8 @@ function draw_boxscatter(story) {
 					svg.selectAll('.states').classed('hide', true);
 					axes(xscaleD, yscaleD);	
 		}
-		function stateBox(d){		
+		function stateBox(d){
+					d3.selectAll('.tooltip').remove();
 					grids(extentYminmax[1], 1000000, yscale, extentX[1] + 10000, 10000, xscale);
 					axes(xscale, yscale);
 					svg.selectAll('.districts').classed('hide', true);
@@ -1155,6 +1206,131 @@ function draw_stack(story) {
 				}	
 			}		
   });
+}
+function draw_dorling(story) {
+	console.log(story);
+	d3.selectAll('.tooltip').remove();
+	//d3.select('body').style('padding-top', 0);
+	//d3.select('.navbar').classed('navbar-fixed-top', false).classed('navbar-default', true);
+	//d3.select('.navbar-inner').style('padding-left', '90px');
+	d3.select('#data_cont div').style('padding-left','15px').style('margin-left','-10px');
+	d3.select('#data_cont div strong').text('Change Date : ');
+	d3.selectAll('#gradient_cont, .legend.dorling').style('display', 'block');
+	d3.selectAll('#demo, #about').style('display', 'none');		
+	d3.select('#exp_text').text(' ');
+	d3.selectAll('#gradient text, .state_bubbles, .feature').remove();
+	d3.selectAll('rect').remove();
+	// Creates gradient legend for cartogram	
+	var gradient = d3.select('#gradient');
+  gradient.append('rect').attr('x', 0).attr('y', 0)
+    .attr('width', 958).attr('height', 30)
+    .attr('fill', 'url(#'+ story.grad +')');
+  gradient.selectAll('text')
+    .data(story.percent) 
+   .enter().append('text')
+    .attr('x', function(d){ return d + '%';})
+    .attr('y', 20)
+    .data(story.pertext) 
+    .text(function(d){ return d + '%'; })
+    .style('fill', function(d, i){ return i == 3 ? 'white' : 'black';});
+	var svg = d3.select('#chart');
+			svg.selectAll('*').remove();
+			svg.style('border', function(){ return window.location.search == '?embed=1' ?  '1px solid #fff' : '1px solid #ddd';});
+	var width = parseInt(svg.style('width'));
+  var height = parseInt(svg.style('height'));
+	d3.csv(story.data || datafile(), function(data) {
+		if(story.data){ $('#data_cont').hide(); d3.select('#data').attr('href', story.data); } else { $('#data_cont').show();}
+		var subset = initchart(story, data),		
+	  legend = d3.select('.legend.dorling');
+		legend.selectAll('*').remove();
+		var select = legend.append('select').attr('class', 'param input-medium'); 
+    var subselect = legend.append('select').attr('class', 'subparam'),
+    disselect = legend.append('select').attr('class', 'districts'),
+    group = (story.title).toUpperCase(),    
+	  result = _.filter(subset, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); });
+		select.selectAll('option')
+				.data(d3.keys(options))
+			.enter()
+				.append('option')
+				.text(String);
+		var hashdec = decodeURIComponent(window.location.hash.replace(/^#/, '')).split('|');	
+		subselect.selectAll('option').data(options[hashdec[2]] || options['Money spent']).enter().append('option').text(String);
+		select.on('change', function(d){ 
+				var param = d3.select(this).property('value');				
+				var subparam = options[param];
+				subparam.unshift('select parameters');
+				subparam[1] == 'select parameters' ? subparam.shift() : '';
+				subselect.selectAll('*').remove();
+				subselect.selectAll('option')
+						.data(subparam)
+					.enter()
+						.append('option')	
+						.text(String);
+		});
+		subselect.on('change', function(d){
+					story.param1 = select.property('value');
+					story.param2 = subselect.property('value');
+					draw(story);		
+		});
+		$('select.param').val(hashdec[2]);
+		$('select.subparam').val(hashdec[3]);
+		disselect.selectAll('option')
+				.data(result)
+			.enter()
+				.append('option')
+				.text(function(d){ return d.District_Name; });				
+		disselect.on('change', function(d){
+			d3.selectAll('.tooltip').remove();
+			var dist = d3.select(this).property('value');
+			svg.selectAll('circle')
+        .data(result)
+        .classed('mark', function(d){
+          return d.District_Name == dist ? true : false; 
+				});
+			var details = svg.select('.distsDor[data-q="' + dist + '"]').text();
+			$('#copy_title').val(details);
+			$('#copy_title').on('mouseover', function(){ $(this).select(); });		
+			$('.mark').tooltip({ title:function(){ return $('.mark title').text(); }, trigger:'focus', container:'body' }).tooltip('show');						
+		});
+		d3.csv('GeocodeLatLong.csv', function(geo){
+			georesult = _.filter(geo, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); });
+			var R = story.R,		
+			xscale = d3.scale.linear().domain(d3.extent(georesult, function(d){ return parseFloat(d.Longitude);})).range([240, width - 240]),		
+			yscale = d3.scale.linear().domain(d3.extent(georesult, function(d){ return parseFloat(d.Latitude);})).range([height - 80, 80]),
+			r = d3.scale.linear().domain(d3.extent(result, function(d){ return parseFloat(d[story.size]);})).range([10, 25]);				
+			var districts = svg.selectAll('.distsDor')
+							.data(georesult)
+						.enter()
+						
+					districts.append('circle')	
+							.attr('cx', function(d, i){ return xscale(d.Longitude);}) 
+							.attr('cy', function(d, i){ return yscale(d.Latitude);}) 
+				      .data(result)
+							.attr('r', function(d){ return r(d[story.size]); })
+							.attr('class', 'distsDor')
+							.attr('data-q', function(d) { return d.District_Name; })
+							.attr('fill', story.color)  
+							.style('stroke', '#999')
+							.on('mouseover', function(){ 
+								d3.select(this).style('stroke', '#000');
+								var details = d3.select(this).text(); 
+								$('#copy_title').val(details).select();
+							})
+							.on('mouseout', function(){ 
+								d3.select(this).style('stroke', '#999');		
+							})
+							.append('title')
+							.text(story.hover);
+							
+				districts.append('text')
+						.attr('class', 'tags')
+						.attr('x', function(d) { return xscale(d.Longitude); })
+						.attr('y', function(d) { return yscale(d.Latitude); })  
+						.data(result)
+						.text(function(d){ return d.District_Name; });  
+						
+		});		
+	});
 }
 function initchart(story, data) { 
   // No transitions work for other chart types, so just empty it
