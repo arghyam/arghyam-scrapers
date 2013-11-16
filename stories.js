@@ -6,7 +6,12 @@ var color = d3.scale.linear()
 var	colorsSocP = d3.scale.linear()
 		.clamp(true)
 		.domain([0, 0.6, 0.6, 0.7, 0.7, 2])
-		.range(['#D73027', '#D73027', '#90EE90', '#90EE90', '#1A9850', '#000']);	
+		.range(['#D73027', '#D73027', '#90EE90', '#90EE90', '#1A9850', '#000']);
+
+var colorDor = d3.scale.linear()
+		.clamp(true)
+		.domain([-1, 0, 1])
+    .range(['#D73027', '#FFFFBF', '#1A9850']);		
 		
 // Display formats
 var F = d3.format(',.0f'); // Float
@@ -177,6 +182,20 @@ function dorling_story(story) {
       );
     };
     return story;
+}
+function dorlingCart_story(story){
+		story.type = 'dorlingCart';
+		story.cols = story.cols || [];
+    story.filter = function(d) { return d.District_Name.match(/^[A-Z]/); };
+		story.size = story.area[1];
+		story.ihhl2011 = story.IHHL2011[1];
+		story.ihhl2001 = story.IHHL2001[1];
+		story.trh2011 = story.TRH2011[1];
+		story.trh2001 = story.TRH2001[1];
+		story.X = story.val1[1];
+		story.Y = story.val2[1];
+		story.color = story.colors || function(d) { return colorDor((story.factor || 1) * (d[story.val1[1]] - d[story.val2[1]])).replace(/NaNNaNNaN/i, 'eee'); };
+		return story;
 }
 
 var stories = [
@@ -580,10 +599,28 @@ var stories = [
         'yT'     : ['Toilets Built', 'TSC_IHHL_2011'],
 				'yC'     : ['Toilets Built from Census', 'Census_IHHL_2011'], 
         'R'      : 40,
-        'xdom'   : [0, 2.5],
-        'ydom'   : [0, 2.5],
-				'IWP'    : 'false'					
+        'IWP'    : 'false'					
     }),
+		dorlingCart_story({
+				'menu'   : 'Performance',
+        'title'  : 'Census 2001 vs. 2011',
+				'data'   : 'aggregated_census_data.csv',
+				'url'    : ['TBD'],
+				'group'  : ['State_Name'],
+				'cols'   : ['Census_2001_Total_Rural_Households','Census_2011_Total_Rural_Households','Census_2001_IHHL','Census_2011_IHHL'],
+        'area'   : ['Census 2011 Total Rural Households', 'Census_2011_Total_Rural_Households'],
+				'IHHL2011': ['Census 2011 Households with toilets', 'Census_2011_IHHL'],
+				'IHHL2001': ['Census 2001 Households with toilets', 'Census_2001_IHHL'],
+				'TRH2011': ['Census 2011 Total Rural Households', 'Census_2011_Total_Rural_Households'],
+				'TRH2001': ['Census 2001 Total Rural Households', 'Census_2001_Total_Rural_Households'],
+        'val1'   : ['%Census 2011 Households without toilets', '%2011_Households_WOT'],
+        'val2'   : ['%Census 2001 Households without toilets', '%2001_Households_WOT'],
+				'R'      : 40,
+				'grad'   : 'gradient_legend_dorCart',
+				'percent': [1, 50, 98],
+				'pertext': [-1, 0, 1],
+				'IWP'    : 'true'
+		}),
 		dorling_story({
         'menu'   : 'State',
         'title'  : 'Andhra Pradesh',
@@ -597,9 +634,6 @@ var stories = [
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
-				'R'      : 40,
-        'xdom'   : [0, 1.5],
-        'ydom'   : [0, 1.5],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -615,9 +649,6 @@ var stories = [
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
-				'R'      : 40,
-        'xdom'   : [0, 1.5],
-        'ydom'   : [0, 1.5],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -633,9 +664,6 @@ var stories = [
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
-				'R'      : 40,
-        'xdom'   : [0, 1.5],
-        'ydom'   : [0, 1.5],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -651,9 +679,6 @@ var stories = [
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
-				'R'      : 40,
-        'xdom'   : [0, 1.5],
-        'ydom'   : [0, 1.5],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -669,9 +694,6 @@ var stories = [
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
-				'R'      : 40,
-        'xdom'   : [0, 1.5],
-        'ydom'   : [0, 1.5],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -687,9 +709,6 @@ var stories = [
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
-				'R'      : 40,
-        'xdom'   : [0, 1.5],
-        'ydom'   : [0, 1.5],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -705,9 +724,6 @@ var stories = [
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
-				'R'      : 40,
-        'xdom'   : [0, 1.5],
-        'ydom'   : [0, 1.5],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -723,9 +739,6 @@ var stories = [
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
-				'R'      : 40,
-        'xdom'   : [0, 1.5],
-        'ydom'   : [0, 1.5],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -741,9 +754,6 @@ var stories = [
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
-				'R'      : 40,
-        'xdom'   : [0, 1.5],
-        'ydom'   : [0, 1.5],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -759,9 +769,6 @@ var stories = [
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
-				'R'      : 40,
-        'xdom'   : [0, 1.5],
-        'ydom'   : [0, 1.5],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -777,9 +784,6 @@ var stories = [
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
-				'R'      : 40,
-        'xdom'   : [0, 1.5],
-        'ydom'   : [0, 1.5],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -795,9 +799,6 @@ var stories = [
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
-				'R'      : 40,
-        'xdom'   : [0, 1.5],
-        'ydom'   : [0, 1.5],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -813,9 +814,6 @@ var stories = [
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
-				'R'      : 40,
-        'xdom'   : [0, 1.5],
-        'ydom'   : [0, 1.5],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -831,9 +829,6 @@ var stories = [
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
-				'R'      : 40,
-        'xdom'   : [0, 1.5],
-        'ydom'   : [0, 1.5],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -849,9 +844,6 @@ var stories = [
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
-				'R'      : 40,
-        'xdom'   : [0, 1.5],
-        'ydom'   : [0, 1.5],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -867,9 +859,6 @@ var stories = [
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
-				'R'      : 40,
-        'xdom'   : [0, 1.5],
-        'ydom'   : [0, 1.5],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -885,9 +874,6 @@ var stories = [
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
-				'R'      : 40,
-        'xdom'   : [0, 1.5],
-        'ydom'   : [0, 1.5],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -903,9 +889,6 @@ var stories = [
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
-				'R'      : 40,
-        'xdom'   : [0, 1.5],
-        'ydom'   : [0, 1.5],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -921,9 +904,6 @@ var stories = [
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
-				'R'      : 40,
-        'xdom'   : [0, 1.5],
-        'ydom'   : [0, 1.5],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -939,9 +919,6 @@ var stories = [
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
-				'R'      : 40,
-        'xdom'   : [0, 1.5],
-        'ydom'   : [0, 1.5],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -957,9 +934,6 @@ var stories = [
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
-				'R'      : 40,
-        'xdom'   : [0, 1.5],
-        'ydom'   : [0, 1.5],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -975,9 +949,6 @@ var stories = [
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
-				'R'      : 40,
-        'xdom'   : [0, 1.5],
-        'ydom'   : [0, 1.5],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -993,9 +964,6 @@ var stories = [
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
-				'R'      : 40,
-        'xdom'   : [0, 1.5],
-        'ydom'   : [0, 1.5],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -1011,9 +979,6 @@ var stories = [
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
-				'R'      : 40,
-        'xdom'   : [0, 1.5],
-        'ydom'   : [0, 1.5],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -1029,9 +994,6 @@ var stories = [
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
-				'R'      : 40,
-        'xdom'   : [0, 1.5],
-        'ydom'   : [0, 1.5],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -1047,9 +1009,6 @@ var stories = [
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
-				'R'      : 40,
-        'xdom'   : [0, 1.5],
-        'ydom'   : [0, 1.5],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -1065,9 +1024,6 @@ var stories = [
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
-				'R'      : 40,
-        'xdom'   : [0, 1.5],
-        'ydom'   : [0, 1.5],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -1083,9 +1039,6 @@ var stories = [
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
-				'R'      : 40,
-        'xdom'   : [0, 1.5],
-        'ydom'   : [0, 1.5],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -1101,9 +1054,6 @@ var stories = [
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
-				'R'      : 40,
-        'xdom'   : [0, 1.5],
-        'ydom'   : [0, 1.5],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -1119,11 +1069,8 @@ var stories = [
 				'grad'   : 'gradient_legend',
 				'percent': [1, 37, 70, 95],
 				'pertext': [0, 50, 100, 200],
-				'R'      : 40,
-        'xdom'   : [0, 1.5],
-        'ydom'   : [0, 1.5],
 				'IWP'    : 'true'					
-    })		
+    })
 ];
 // List of the historical data files, latest on top
 var datafiles = [

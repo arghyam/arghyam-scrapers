@@ -30,7 +30,7 @@ var submenu = parentmenu
   .classed('dropdown-menu', true);
 var search = submenu.append('div').classed('dropdown-toggle', true);
 
-		search.append('input')
+	search.append('input')
 		.attr('type', 'text')
 		.attr('id','search')
 		.attr('placeholder', 'search...')
@@ -145,7 +145,6 @@ function hashchange(e) {
 			var story = stories[i];
 			if((story.menu == hash[0]) && (story.title == hash[1])) {						
 					if(story.menu == 'State'){
-						//console.log(hash[3]);
 						story.param1 = hash[2];
 						story.param2 = hash[3];
 						story.url = tmp_story[hash[3]].url;
@@ -153,8 +152,7 @@ function hashchange(e) {
 						story.area = tmp_story[hash[3]].area;
 						story.size = tmp_story[hash[3]].area[1];
 						story.num = tmp_story[hash[3]].num;
-						story.den = tmp_story[hash[3]].den;		
-						return draw(story);	
+						story.den = tmp_story[hash[3]].den;								
 					}
 				return draw(story);	
 			}
@@ -174,7 +172,6 @@ function draw(story) {
 	d3.selectAll('#about, #method, #demo, #brought').style('display', 'none');
 	d3.select('#data_cont div').style('padding-left','90px').style('margin-left','0');
 	d3.select('#data_cont div strong').text('From: 2001, Till (Change Date):');	
-	
 	d3.select('#visual').style('display', 'block');
   d3.selectAll('.treemap text').remove();
   d3.select('#chart').style('border', 'none');
@@ -205,12 +202,6 @@ function draw(story) {
       .text(String);
   if(story.menu == 'State'){		
 	  window.location.hash = encodeURIComponent(story.menu + '|' + story.title + '|' + story.param1 + '|' + story.param2);
-		story.url = tmp_story[story.param2].url;
-		story.cols = tmp_story[story.param2].cols;
-		story.area = tmp_story[story.param2].area;
-		story.size = tmp_story[story.param2].area[1];
-		story.num = tmp_story[story.param2].num;
-		story.den = tmp_story[story.param2].den;		
 	}else{
 		window.location.hash = encodeURIComponent(story.menu + '|' + story.title);
 	}
@@ -456,7 +447,7 @@ function draw_cartogram(story) {
 				.attr("transform", "translate(" + width / 2.3 + "," + height / 1.9  + ")scale(" + k + ")translate(" + -x + "," + -y + ")");				
 	}
 }
-var tempGroup = '', tempSubgroup = '', tempResult = [];
+var tempGroup = '', tempSubgroup = ''; //, tempResult = [];
 function draw_scatter(story) {
   var beyond = [];
 	d3.selectAll('.tooltip').remove();
@@ -513,7 +504,7 @@ function draw_scatter(story) {
         svg.selectAll('circle.mark').classed('mark', false);
 			}
 			var result = _.filter(subset, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); });
-			tempResult = result;
+			//tempResult = result;
 			result.unshift({"District_Name":"select District"});
       subselect.selectAll('option').remove();
       subselect.selectAll('option')
@@ -524,27 +515,7 @@ function draw_scatter(story) {
 			var details = svg.selectAll('.state[data-q="' + group + '"]').text();
 			$('#copy_title').val(details);
 			$('#copy_title').on('mouseover', function(){ $(this).select(); });			
-		});
-		subselect.on('change', function() {
-      var subgroup = d3.select(this).property('value');
-			svg.selectAll('circle').classed('mark', false);
-      var group = d3.selectAll('.states').property('value');
-			var result = _.filter(subset, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); });
-			tempSubgroup = subgroup;
-			svg.selectAll('circle[data-q="' + group + '"]')
-        .data(result)
-        .classed('mark', function(d){
-          return d.District_Name == subgroup ? true : false; 
-				})
-				.classed('show', function(d){ 
-						return d.District_Name == subgroup ? true : false;
-			  });
-			d3.selectAll('.tooltip').remove();
-			var details = svg.select('.district[data-q="' + group + '"][data-r="' + subgroup + '"]').text();
-			$('#copy_title').val(details);
-			$('#copy_title').on('mouseover', function(){ $(this).select(); });	
-      $('.mark').tooltip({ title:function(){ return $('.mark title').text(); }, trigger:'focus', container:'body' }).tooltip('show');						
-		});	
+		});			
 		// Accumulated values of states
 		var states = d3.nest()
 				.key(function(d){ return d[story.group[0]]; })
@@ -661,7 +632,27 @@ function draw_scatter(story) {
 							.classed('hide', false)
 							.classed('show', false);
 					});
-		}		
+		}
+		subselect.on('change', function() {
+      var subgroup = d3.select(this).property('value');
+			svg.selectAll('circle').classed('mark', false);
+      var group = d3.selectAll('.states').property('value');
+			var result = _.filter(subset, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); });
+			tempSubgroup = subgroup;
+			svg.selectAll('circle[data-q="' + group + '"]')
+        .data(result)
+        .classed('mark', function(d){
+          return d.District_Name == subgroup ? true : false; 
+				})
+				.classed('show', function(d){ 
+						return d.District_Name == subgroup ? true : false;
+			  });
+			d3.selectAll('.tooltip').remove();
+			var details = svg.select('.district[data-q="' + group + '"][data-r="' + subgroup + '"]').text();
+			$('#copy_title').val(details);
+			$('#copy_title').on('mouseover', function(){ $(this).select(); });	
+      $('.mark').tooltip({ title:function(){ return $('.mark title').text(); }, trigger:'focus', container:'body' }).tooltip('show');						
+		});	
 		var xaxis = svg.append('g')
       .classed('axis', true)
       .attr('transform', 'translate(0,' + (height - R) + ')')
@@ -731,19 +722,24 @@ function draw_scatter(story) {
 }
 function draw_boxscatter(story) {
   d3.selectAll('.tooltip').remove();
-  // Add scatterplot info container
   d3.selectAll('#right_container').remove();
-	//d3.select('#hide_text').style('display', 'block');
 	d3.select('.legend.boxscatter').style('display', 'block');
 	d3.select('#brought').style('display', function(){ return window.location.search == '?embed=1' ? 'block' : 'none';});
-	// Filter the data
-  d3.csv(story.data || datafile(), function(data) {
+	d3.csv(story.data || datafile(), function(data) {
 		if(story.data){ $('#data_cont').hide(); d3.select('#data').attr('href', story.data); } else { $('#data_cont').show();}
     var subset = initchart(story, data);
 		draw_date(data[data.length-1], story);
-		// TODO: Make these move
-    svg.selectAll('*').remove();
-    var width = parseInt(svg.style('width'), 10);
+		svg.selectAll('*').remove();
+		svg.append('text').attr('x', 50).attr('y', 25).text('Click to filter -->').style('fill', '#000').style('stroke', 'none');
+		svg.append('circle').attr('cx', 170).attr('cy', 20).attr('r', 8).attr('id', 'cirTSC').style('fill', '#4F81BD').style('stroke', '#000').style('cursor', 'pointer');
+		svg.append('text').attr('x', 185).attr('y', 25).text('TSC value').style('fill', '#000').style('stroke', 'none');
+    svg.append('circle').attr('cx', 340).attr('cy', 20).attr('r', 8).attr('id', 'cirCEN').style('fill', '#F79646').style('stroke', '#000').style('cursor', 'pointer');
+		svg.append('text').attr('x', 355).attr('y', 25).text('Census value').style('fill', '#000').style('stroke', 'none');
+		svg.append('rect').attr('x', 520).attr('y', 10).attr('width', 15).attr('height', 18).attr('id', 'recTSC').style('fill', '#C0504D').style('stroke', '#000').style('cursor', 'pointer');
+		svg.append('text').attr('x', 540).attr('y', 25).text('TSC value is high').style('fill', '#000').style('stroke', 'none');
+		svg.append('rect').attr('x', 730).attr('y', 10).attr('width', 15).attr('height', 18).attr('id', 'recCEN').style('fill', '#9BBB59').style('stroke', '#000').style('cursor', 'pointer');
+		svg.append('text').attr('x', 750).attr('y', 25).text('Census value is high').style('fill', '#000').style('stroke', 'none');
+		var width = parseInt(svg.style('width'), 10);
     var height = svg.attr('height');		
 		var rmax = _.max(_.map(subset, story.area[1]));
 		// Set up the legend
@@ -758,42 +754,7 @@ function draw_boxscatter(story) {
       .enter()
         .append('option')
         .text(String);
-		select.on('change', function() {
-			var group = d3.select(this).property('value');			
-		  d3.selectAll('.tooltip').remove();
-			var result = _.filter(subset, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); });
-			result.unshift({"District_Name":"select District"});
-      subselect.selectAll('option').remove();
-      subselect.selectAll('option')
-          .data(result)
-        .enter()
-          .append('option')
-          .text(function(d){ return d.District_Name; });
-			grids(extentYDminmax[1] + 1000, 50000, yscaleD, extentXD[1] + 1000 , 500, xscaleD);
-			svg.selectAll('.states').classed('hide', true);
-			svg.selectAll('.districts').classed('hide', true);
-			svg.selectAll('.districts[data-q="' + group + '"]').classed('hide', false);
-			svg.selectAll('.axis').classed('hide', true);
-			axes(xscaleD, yscaleD);	
-		});
-		subselect.on('change', function() {
-      var subgroup = d3.select(this).property('value');
-			svg.selectAll('.districts').classed('mark', false);
-      var group = select.property('value');
-			var result = _.filter(subset, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); });
-			svg.selectAll('rect')
-        .data(result)
-        .classed('mark', function(d){
-          return d.District_Name == subgroup ? true : false; 
-				});
-			d3.selectAll('.tooltip').remove();
-			var details = svg.selectAll('rect[data-q="' + group + '"][data-r="' + subgroup + '"]').text();
-			$('#copy_title').val(details);
-			$('#copy_title').on('mouseover', function(){ $(this).select(); });	
-      $('.mark').tooltip({ title:function(){ return $('.mark title').text(); }, trigger:'focus', container:'body' }).tooltip('show');						
-		});
-
-		// Accumulated values of states
+    // Accumulated values of states
 		var nested_data = d3.nest()
 				.key(function(d){ return d[story.group[0]]; })
 				.rollup(function(rows){ return {'x'  : d3.sum(rows, function(d){ return d[story.X];}),
@@ -801,72 +762,19 @@ function draw_boxscatter(story) {
 							                          'yC' : d3.sum(rows, function(d){ return d[story.YC];})};							                          
 				})
 				.entries(subset); 
-				
-				nested_data.sort(function(a, b){ return b.values['yT'] - a.values['yT'];});
+				//nested_data.sort(function(a, b){ return b.values['yT'] - a.values['yT'];});
+				nested_data.sort(function(a, b){ return b.values['x'] - a.values['x'];});
 		var R = story.R,
 		    extentX = d3.extent(nested_data, function(d){ return d.values['x'] ; }),
 		    extentYT = d3.extent(nested_data, function(d){ return d.values['yT']; }),
 		    extentYC = d3.extent(nested_data, function(d){ return d.values['yC']; }),
 		    extentYminmax = d3.extent(d3.merge([extentYT,extentYC]));
-				
-		var	extentXD = d3.extent(subset, function(d){ return Math.floor(d[story.X]);}),
-				extentYTD = d3.extent(subset, function(d){ return Math.floor(d[story.YT]);}),
-				extentYCD = d3.extent(subset, function(d){ return Math.floor(d[story.YC]);}),
-				extentYDminmax = d3.extent(d3.merge([extentYTD,extentYCD]));
-				
+		//Set scale for state level visual		
 		var xscale = d3.scale.sqrt().domain([extentX[0] - 50 , extentX[1] + 10000]).range([R, width - R]),
 		    yscale = d3.scale.sqrt().domain([extentYminmax[0] - 20000, extentYminmax[1]]).range([height - R, R]); 
-		var xscaleD = d3.scale.sqrt().domain([extentXD[0] - 5, extentXD[1] + 1000]).range([R, width - R]),
-		    yscaleD = d3.scale.sqrt().domain([extentYDminmax[0] - 1000,extentYDminmax[1] + 1000]).range([height - R, R]); 		
-
-		grids(extentYminmax[1], 1000000, yscale, extentX[1] + 10000, 10000, xscale);			
-		axes(xscale, yscale);
 		
-		var district_boxS	= svg.append('g')
-					.selectAll('.districts').data(subset).enter();	
-			
-		district_boxS.append('rect')	
-					.attr('x', function(d){ return xscaleD(d[story.X]) - R / 8; })
-					.attr('y', function(d){ return yscaleD(Math.max(d[story.YT],d[story.YC])) - R / 8; })
-					.attr('width', R/4)
-					.attr('height', function(d){ return Math.abs(yscaleD(Math.max(d[story.YT],d[story.YC])) - yscaleD(Math.min(d[story.YT],d[story.YC]))) + R / 4;})
-					.classed('hide districts distsBox', true)
-					.attr('data-q', function(d) { return d[story.group[0]]; })
-					.attr('data-r', function(d) { return d[story.group[1]]; })
-					.on('click', stateBox)
-					.on('mouseover', function() {
-							var details = d3.select(this).text(); 
-							$('#copy_title').val(details).select();	
-					})
-					.style('fill', function(d){ return d[story.YT] - d[story.YC] < 0 ? '#9BBB59' : '#C0504D' ; })
-					.append('title')
-					.text(function(d){ return d.State_Name+' - '+d.District_Name +' : TSC Finance = '+ N(d[story.X])+'. TSC data = ' + N(d[story.YT])+'. Census data = ' + N(d[story.YC]) +'. Difference (TSC - Census) = ' + N(d[story.YT]) +' - '+ N(d[story.YC]) +' = '+ N(d[story.YT] - d[story.YC]) + '.'; });
-		
-		district_boxS.append('circle')	
-					.attr('cx', function(d){ return xscaleD(d[story.X]); })
-					.attr('cy', function(d){ return yscaleD(Math.max(d[story.YT], d[story.YC])); })
-					.attr('r', R/9)
-					.classed('hide districts', true)
-					.attr('data-q', function(d) { return d[story.group[0]]; })
-					.attr('data-r', function(d) { return d[story.group[1]]; })
-					.on('click', stateBox)
-					.style('fill', function(d){ return d[story.YT] - d[story.YC] > 0 ? '#4F81BD' : '#F79646';})
-					.style('stroke', '#000')
-					.append('title')
-					.text(function(d){ return d[story.YT] - d[story.YC] > 0 ? d.District_Name +' : TSC = ' + N(d[story.YT]) : d.District_Name +' : Census = ' + N(d[story.YC]);});
-		
-		district_boxS.append('circle')	
-					.attr('cx', function(d){ return xscaleD(d[story.X]); })
-					.attr('cy', function(d){ return yscaleD(Math.min(d[story.YT], d[story.YC])); })
-					.attr('r', R/9)
-					.classed('hide districts distsBox', true)
-					.attr('data-q', function(d) { return d[story.group[0]]; })
-					.attr('data-r', function(d) { return d[story.group[1]]; })
-					.on('click', stateBox)
-					.style('fill', function(d){ return d[story.YT] - d[story.YC] < 0 ? '#4F81BD' : '#F79646';})
-					.style('stroke', '#000')
-					.append('title')
-					.text(function(d){ return d[story.YT] - d[story.YC] < 0 ? d.District_Name +' : TSC = ' + N(d[story.YT]) : d.District_Name +' : Census = ' + N(d[story.YC]);});
+		grids(extentYminmax[0] - 100, extentYminmax[1], 1000000, yscale, extentX[0] - 10000, extentX[1] + 10000, 10000, xscale);
+		axes(xscale, yscale, 15);
 		
 		var state_boxS = svg.append('g').classed('states', true).selectAll('.rect')
 					.data(nested_data).enter();	
@@ -877,6 +785,7 @@ function draw_boxscatter(story) {
 					.attr('width', R/4)
 					.attr('height', function(d){ return Math.abs(yscale(Math.max(d.values['yT'],d.values['yC'])) - yscale(Math.min(d.values['yT'],d.values['yC']))) + R / 4; }) 
           .classed('statsBox', true) 
+					.attr('class', function(d){ return d.values['yT'] - d.values['yC'] < 0 ? 'statsBoxT' : 'statsBoxC';})
 					.attr('data-q', function(d) { return d.key; })
 					.on('click', districtBox)
 					.on('mouseover', function() {
@@ -884,7 +793,6 @@ function draw_boxscatter(story) {
 							$('#copy_title').val(details).select();	
 					})
 					.style('fill', function(d){ return d.values['yT'] - d.values['yC'] < 0 ? '#9BBB59' : '#C0504D' ; })
-     
 					.append('title')
 					.text(function(d){ return d.key +' : TSC Finance = '+ N(d.values['x'])+'. TSC data = ' + N(d.values['yT'])+'. Census data = ' + N(d.values['yC']) +'. Difference (TSC - Census) = ' + N(d.values['yT']) +' - '+ N(d.values['yC']) +' = '+ N(d.values['yT'] - d.values['yC']) + '.'; });
 				
@@ -892,6 +800,7 @@ function draw_boxscatter(story) {
 					.attr('cx', function(d){ return xscale(d.values['x']); })
 					.attr('cy', function(d){ return yscale(Math.max(d.values['yT'], d.values['yC'])); }) 
 					.attr('r', R/9)
+					.attr('class', function(d){ return d.values['yT'] - d.values['yC'] > 0 ? 'statsT' : 'statsC';})
 					.attr('data-q', function(d) { return d.key; })
 					.on('click', districtBox)
 					.style('fill', function(d){ return d.values['yT'] - d.values['yC'] > 0 ? '#4F81BD' : '#F79646';})
@@ -903,6 +812,7 @@ function draw_boxscatter(story) {
 					.attr('cx', function(d){ return xscale(d.values['x']); })
 					.attr('cy', function(d){ return yscale(Math.min(d.values['yT'],d.values['yC'])); }) 
 					.attr('r', R/9)
+					.attr('class', function(d){ return d.values['yT'] - d.values['yC'] < 0 ? 'statsT' : 'statsC';})
 					.attr('data-q', function(d) { return d.key; })
 					.on('click', districtBox)
 					.style('fill', function(d){ return d.values['yT'] - d.values['yC'] < 0 ? '#4F81BD' : '#F79646';})
@@ -910,22 +820,161 @@ function draw_boxscatter(story) {
 					.append('title')
 					.text(function(d){ return d.values['yT'] - d.values['yC'] < 0 ? d.key +' : TSC = ' + N(d.values['yT']) : d.key +' : Census = ' + N(d.values['yC']);});
 		
+		var lineST = d3.svg.line()
+				  .x(function(d){ return xscale(d.values['x']);})
+				  .y(function(d){ return yscale(d.values['yT']);});
+					
+		var lineSC = d3.svg.line()
+					.interpolate('linear')
+					.x(function(d){ return xscale(d.values['x']);})
+					.y(function(d){ return yscale(d.values['yC']);});			
+					
+		state_boxS.append('path')
+					.attr('d', function(){ return lineST(nested_data);})
+					.classed('lineST', true)
+					.style('stroke', '#4F81BD');
+		
+		state_boxS.append('path')
+					.attr('d', function(){ return lineSC(nested_data);})
+					.classed('lineSC', true)
+					.style('stroke', '#F79646');
+	
+		select.on('change', districtBox);
 		function districtBox(d){
-					grids(extentYDminmax[1] + 1000, 50000, yscaleD, extentXD[1] + 1000 , 500, xscaleD);
-					var q = d3.select(this).attr('data-q');
-					select.property('value', q).on('change').call(select.node());
-					svg.selectAll('.districts[data-q="' + q + '"]').classed('hide', false);
-					svg.selectAll('.states').classed('hide', true);
-					axes(xscaleD, yscaleD);	
+				svg.selectAll('.distsgrp').remove();
+				d3.selectAll('.tooltip').remove();
+				svg.selectAll('*').classed('fade', false);
+				var selstate = d3.select(this).property('value');
+				var q = selstate || d3.select(this).attr('data-q');
+				$('select.states').val(q);
+				svg.selectAll('.districts[data-q="' + q + '"]').classed('hide', false);
+				svg.selectAll('.states').classed('hide', true);
+				var result = _.filter(subset, function(d){ return d.State_Name == q && !d.District_Name.match(/^Total/); });
+				groups = result;
+				groups.unshift({"District_Name":"select District"});
+			  subselect.selectAll('option').remove();
+				subselect.selectAll('option')
+						.data(groups)
+					.enter()
+						.append('option')
+						.text(function(d){ return d.District_Name; });
+			  result.shift();
+				result.sort(function(a, b){ return b[story.X] - a[story.X];});
+				var	extentXD = d3.extent(result, function(d){ return Math.floor(d[story.X]);}),
+				extentYTD = d3.extent(result, function(d){ return Math.floor(d[story.YT]);}),
+				extentYCD = d3.extent(result, function(d){ return Math.floor(d[story.YC]);}),
+				extentYDminmax = d3.extent(d3.merge([extentYTD,extentYCD])),				
+				xscaleD = d3.scale.sqrt().domain([extentXD[0]-(getlength(extentXD[0]) * 10), extentXD[1]+(getlength(extentXD[0]) * 10)]).range([R, width - R]),
+				yscaleD = d3.scale.sqrt().domain([(extentYDminmax[0] - (Math.pow(10, getlength(extentYDminmax[0]) - 1))),extentYDminmax[1]+(getlength(extentYDminmax[1]) * 10)]).range([height - R, R]); 
+				axes(xscaleD, yscaleD, 10);	
+				
+				var district_boxS	= svg.append('g').classed('distsgrp', true)
+				.selectAll('.districts').data(result).enter();	
+		
+				district_boxS.append('rect')	
+						.attr('x', function(d){ return xscaleD(d[story.X]) - R / 8; })
+						.attr('y', function(d){ return yscaleD(Math.max(d[story.YT],d[story.YC])) - R / 8; })
+						.attr('width', R/4)
+						.attr('height', function(d){ return Math.abs(yscaleD(Math.max(d[story.YT],d[story.YC])) - yscaleD(Math.min(d[story.YT],d[story.YC]))) + R / 4;})
+						.classed('districts distsBox', true)
+						.attr('class', function(d){ return d[story.YT] - d[story.YC] < 0 ? 'districts distsBoxT' : 'districts distsBoxC' ; })
+						.attr('data-q', function(d) { return d[story.group[0]]; })
+						.attr('data-r', function(d) { return d[story.group[1]]; })
+						.on('click', stateBox)
+						.on('mouseover', function() {
+								var details = d3.select(this).text(); 
+								$('#copy_title').val(details).select();	
+						})
+						.style('fill', function(d){ return d[story.YT] - d[story.YC] < 0 ? '#9BBB59' : '#C0504D' ; })
+						.append('title')
+						.text(function(d){ return d.State_Name+' - '+d.District_Name +' : TSC Finance = '+ N(d[story.X])+'. TSC data = ' + N(d[story.YT])+'. Census data = ' + N(d[story.YC]) +'. Difference (TSC - Census) = ' + N(d[story.YT]) +' - '+ N(d[story.YC]) +' = '+ N(d[story.YT] - d[story.YC]) + '.'; });
+			
+				district_boxS.append('circle')	
+						.attr('cx', function(d){ return xscaleD(d[story.X]); })
+						.attr('cy', function(d){ return yscaleD(Math.max(d[story.YT], d[story.YC])); })
+						.attr('r', R/9)
+						.attr('class', function(d){ return d[story.YT] - d[story.YC] > 0 ? 'distsT' : 'distsC';})
+						.attr('data-q', function(d) { return d[story.group[0]]; })
+						.attr('data-r', function(d) { return d[story.group[1]]; })
+						.on('click', stateBox)
+						.style('fill', function(d){ return d[story.YT] - d[story.YC] > 0 ? '#4F81BD' : '#F79646';})
+						.style('stroke', '#000')
+						.append('title')
+						.text(function(d){ return d[story.YT] - d[story.YC] > 0 ? d.District_Name +' : TSC = ' + N(d[story.YT]) : d.District_Name +' : Census = ' + N(d[story.YC]);});
+			
+				district_boxS.append('circle')	
+						.attr('cx', function(d){ return xscaleD(d[story.X]); })
+						.attr('cy', function(d){ return yscaleD(Math.min(d[story.YT], d[story.YC])); })
+						.attr('r', R/9)
+						.attr('class', function(d){ return d[story.YT] - d[story.YC] < 0 ? 'distsT' : 'distsC';})
+						.attr('data-q', function(d) { return d[story.group[0]]; })
+						.attr('data-r', function(d) { return d[story.group[1]]; })
+						.on('click', stateBox)
+						.style('fill', function(d){ return d[story.YT] - d[story.YC] < 0 ? '#4F81BD' : '#F79646';})
+						.style('stroke', '#000')
+						.append('title')
+						.text(function(d){ return d[story.YT] - d[story.YC] < 0 ? d.District_Name +' : TSC = ' + N(d[story.YT]) : d.District_Name +' : Census = ' + N(d[story.YC]);});
+		
+				var lineDT = d3.svg.line()
+							.x(function(d){ return xscaleD(d[story.X]);})
+							.y(function(d){ return yscaleD(d[story.YT]);});
+							
+				var lineDC = d3.svg.line()
+							.x(function(d){ return xscaleD(d[story.X]);})
+							.y(function(d){ return yscaleD(d[story.YC]);});			
+							
+				district_boxS.append('path')
+							.attr('d', function(d){ return lineDT(result);})
+							.classed('lineDT', true)
+							.style('stroke', '#4F81BD');
+							
+				district_boxS.append('path')
+							.attr('d', function(d){ return lineDC(result);})
+							.classed('lineDC', true)
+							.style('stroke', '#F79646');
+		}
+		subselect.on('change', function(){
+			var subgroup = d3.select(this).property('value');
+			svg.selectAll('.districts').classed('mark', false);
+      var group = select.property('value');
+			d3.selectAll('.tooltip').remove();
+			var details = svg.select('.districts[data-q="' + group + '"][data-r="' + subgroup + '"]').classed('mark', true).text();
+			$('#copy_title').val(details);
+			$('#copy_title').on('mouseover', function(){ $(this).select(); });	
+      $('.mark').tooltip({ title:function(){ return $('.mark title').text(); }, trigger:'focus', container:'body' }).tooltip('show');						
+		});
+		svg.select('#cirTSC').on('click', function(){
+			svg.selectAll('*').classed('fade', false);
+			svg.selectAll('.statsBoxC, .statsBoxT, .distsBoxC, .distsBoxT, .statsC, .distsC, .lineSC, .lineDC').classed('fade', true);
+		});
+		svg.select('#cirCEN').on('click', function(){		
+			svg.selectAll('*').classed('fade', false);
+			svg.selectAll('.statsBoxC, .statsBoxT, .distsBoxC, .distsBoxT, .statsT, .distsT, .lineST, .lineDT').classed('fade', true);	
+		});
+		svg.select('#recTSC').on('click', function(){
+			svg.selectAll('*').classed('fade', false);
+			svg.selectAll('.statsBoxT, .distsBoxT, .statsT, .statsC, .distsC, .distsT, .lineST, .lineSC, .lineDT, .lineDC').classed('fade', true);		
+			svg.selectAll('.statsBoxC, .distsBoxC').classed('show', true);
+		});
+		svg.select('#recCEN').on('click', function(){	
+			svg.selectAll('*').classed('fade', false);	
+			svg.selectAll('.statsBoxC, .distsBoxC, .statsT, .statsC, .distsC, .distsT, .lineST, .lineSC, .lineDT, .lineDC').classed('fade', true);		
+			svg.selectAll('.statsBoxT, .distsBoxT').classed('show', true);
+		});
+		function getlength(n) {
+				return n.toString().length;
 		}
 		function stateBox(d){
 					d3.selectAll('.tooltip').remove();
-					grids(extentYminmax[1], 1000000, yscale, extentX[1] + 10000, 10000, xscale);
-					axes(xscale, yscale);
-					svg.selectAll('.districts').classed('hide', true);
+					svg.selectAll('*').classed('fade', false);
+					select.property('value', 'select State');
+					subselect.selectAll('*').remove();
+					d3.selectAll('.distsgrp, .lineDT, .lineDC').remove();
+					axes(xscale, yscale, 15);
+					svg.selectAll('.distgrp').classed('hide', true);
 					svg.selectAll('.states').classed('hide', false);
 		}
-		function axes(x, y){
+		function axes(x, y, t){
 					svg.selectAll('.axis').remove();
 					var xaxis = svg.append('g')
 						.attr('class', 'axis')
@@ -933,7 +982,7 @@ function draw_boxscatter(story) {
 						.call(d3.svg.axis()
 										.scale(x)
 										.orient('bottom')
-										.ticks(15)
+										.ticks(t)
 										.tickFormat(d3.format('2s')))
 						.append('text')
 						.text(story.x[0])
@@ -946,7 +995,7 @@ function draw_boxscatter(story) {
 						.call(d3.svg.axis()
 										.scale(y)
 										.orient('left')
-										.ticks(15)
+										.ticks(t)
 										.tickFormat(d3.format('2s')))
 						.append('text')
 						.text(story.yT[0])
@@ -955,11 +1004,11 @@ function draw_boxscatter(story) {
 						.attr('text-anchor', 'end')
 						.attr('dominant-baseline', 'hanging');	  			
 		}
-		function grids(h1, h2, y, v1, v2, x){ 
+		function grids(h0, h1, h2, y, v0, v1, v2, x){ 
 		// Lines joining x-axis and y-axis
 		  svg.selectAll('.h, .v').remove();
 			svg.append('g').selectAll('.h')
-				.data(d3.range(1, h1, h2))   
+				.data(d3.range(h0, h1, h2))   
 				.enter().append('line')
 				.attr('class', 'h')
 				.attr('x1', R)
@@ -970,7 +1019,7 @@ function draw_boxscatter(story) {
 				.style('stroke', '#ddd')
 				.style('shape-rendering','crispEdges');
 			svg.append('g').selectAll('.v')
-				.data(d3.range(1, v1, v2))  
+				.data(d3.range(v0, v1, v2))  
 				.enter().append('line')
 				.attr('class', 'v')
 				.attr('x1', function(d){ return x(d);})
@@ -1207,16 +1256,13 @@ function draw_stack(story) {
 			}		
   });
 }
+var tempresults = [];
 function draw_dorling(story) {
-	console.log(story);
 	d3.selectAll('.tooltip').remove();
-	//d3.select('body').style('padding-top', 0);
-	//d3.select('.navbar').classed('navbar-fixed-top', false).classed('navbar-default', true);
-	//d3.select('.navbar-inner').style('padding-left', '90px');
 	d3.select('#data_cont div').style('padding-left','15px').style('margin-left','-10px');
 	d3.select('#data_cont div strong').text('Change Date : ');
 	d3.selectAll('#gradient_cont, .legend.dorling').style('display', 'block');
-	d3.selectAll('#demo, #about').style('display', 'none');		
+	//d3.selectAll('#demo, #about').style('display', 'none');		
 	d3.select('#exp_text').text(' ');
 	d3.selectAll('#gradient text, .state_bubbles, .feature').remove();
 	d3.selectAll('rect').remove();
@@ -1238,6 +1284,7 @@ function draw_dorling(story) {
 			svg.style('border', function(){ return window.location.search == '?embed=1' ?  '1px solid #fff' : '1px solid #ddd';});
 	var width = parseInt(svg.style('width'));
   var height = parseInt(svg.style('height'));
+	d3.select('#brought').style('display', function(){ return window.location.search == '?embed=1' ? 'block' : 'none';});
 	d3.csv(story.data || datafile(), function(data) {
 		if(story.data){ $('#data_cont').hide(); d3.select('#data').attr('href', story.data); } else { $('#data_cont').show();}
 		var subset = initchart(story, data),		
@@ -1245,9 +1292,10 @@ function draw_dorling(story) {
 		legend.selectAll('*').remove();
 		var select = legend.append('select').attr('class', 'param input-medium'); 
     var subselect = legend.append('select').attr('class', 'subparam'),
-    disselect = legend.append('select').attr('class', 'districts'),
+    distselect = legend.append('select').attr('class', 'districts'),
     group = (story.title).toUpperCase(),    
 	  result = _.filter(subset, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); });
+		tempresults = result;
 		select.selectAll('option')
 				.data(d3.keys(options))
 			.enter()
@@ -1267,23 +1315,18 @@ function draw_dorling(story) {
 						.append('option')	
 						.text(String);
 		});
-		subselect.on('change', function(d){
-					story.param1 = select.property('value');
-					story.param2 = subselect.property('value');
-					draw(story);		
-		});
 		$('select.param').val(hashdec[2]);
 		$('select.subparam').val(hashdec[3]);
-		disselect.selectAll('option')
-				.data(result)
+		distselect.selectAll('option')
+				.data(tempresults)
 			.enter()
 				.append('option')
 				.text(function(d){ return d.District_Name; });				
-		disselect.on('change', function(d){
+		distselect.on('change', function(d){
 			d3.selectAll('.tooltip').remove();
 			var dist = d3.select(this).property('value');
 			svg.selectAll('circle')
-        .data(result)
+        .data(tempresults)
         .classed('mark', function(d){
           return d.District_Name == dist ? true : false; 
 				});
@@ -1298,40 +1341,274 @@ function draw_dorling(story) {
 			xscale = d3.scale.linear().domain(d3.extent(georesult, function(d){ return parseFloat(d.Longitude);})).range([240, width - 240]),		
 			yscale = d3.scale.linear().domain(d3.extent(georesult, function(d){ return parseFloat(d.Latitude);})).range([height - 80, 80]),
 			r = d3.scale.linear().domain(d3.extent(result, function(d){ return parseFloat(d[story.size]);})).range([10, 25]);				
-			var districts = svg.selectAll('.distsDor')
-							.data(georesult)
-						.enter()
-						
-					districts.append('circle')	
-							.attr('cx', function(d, i){ return xscale(d.Longitude);}) 
-							.attr('cy', function(d, i){ return yscale(d.Latitude);}) 
-				      .data(result)
-							.attr('r', function(d){ return r(d[story.size]); })
-							.attr('class', 'distsDor')
-							.attr('data-q', function(d) { return d.District_Name; })
-							.attr('fill', story.color)  
-							.style('stroke', '#999')
-							.on('mouseover', function(){ 
-								d3.select(this).style('stroke', '#000');
-								var details = d3.select(this).text(); 
-								$('#copy_title').val(details).select();
-							})
-							.on('mouseout', function(){ 
-								d3.select(this).style('stroke', '#999');		
-							})
-							.append('title')
-							.text(story.hover);
-							
-				districts.append('text')
-						.attr('class', 'tags')
-						.attr('x', function(d) { return xscale(d.Longitude); })
-						.attr('y', function(d) { return yscale(d.Latitude); })  
-						.data(result)
-						.text(function(d){ return d.District_Name; });  
-						
+			svg.selectAll('text').remove();		
+			var force = d3.layout.force()
+				.gravity(0)
+				.size([width, height]);
+			var nodes = georesult.map(function(d){ return {
+							x : xscale(d.Longitude), y : yscale(d.Latitude),
+							x0 : xscale(d.Longitude), y0 : yscale(d.Latitude)
+						}			
+			});
+			var node = svg.selectAll('.distsDor')
+					.data(tempresults)
+				.enter().append('circle')
+				.attr('r', function(d){ return r(d[story.size]); })
+					.on('mouseover', function(){ 
+						d3.select(this).style('stroke', '#000');
+						var details = d3.select(this).text(); 
+						$('#copy_title').val(details).select();
+					})
+					.on('mouseout', function(){ 
+						d3.select(this).style('stroke', '#999');		
+					})
+					.attr('class', 'distsDor')
+					.attr('data-q', function(d) { return d.District_Name; })
+					.attr('fill', story.color)  
+					.style('stroke', '#999');	
+			node.append('title')
+					.text(story.hover);
+			var text = svg.selectAll('.tags')
+					.data(tempresults)
+				.enter().append('text')
+          .text(function(d){ return d.District_Name; })
+					.attr('text-anchor', 'middle')
+					.attr('dominant-baseline', 'middle')
+					.style('font-size', '10px');
+			force.nodes(nodes)
+					.charge(-350)
+					.on('tick', tick)
+					.start();
+			function tick(e) {
+					node.data(nodes)
+							.each(gravity(e.alpha * .5))
+							.attr('cx', function(d) { return d.x; })
+							.attr('cy', function(d) { return d.y; });	
+					text.data(nodes)
+							.each(gravity(e.alpha * .5))
+							.attr('x', function(d){ return d.x; })
+							.attr('y', function(d){ return d.y; });
+				}		
+			  function gravity(k) {
+					return function(d) {
+						d.x += (d.x0 - d.x) * k;
+						d.y += (d.y0 - d.y) * k;
+					};
+				}		
+			subselect.on('change', function(d){
+					story.param1 = select.property('value');
+					story.param2 = subselect.property('value');
+					window.location.hash = encodeURIComponent(story.menu + '|' + story.title + '|' + story.param1 + '|' + story.param2);
+				});								
 		});		
 	});
 }
+
+function draw_dorlingCart(story) {
+	d3.selectAll('.tooltip').remove();
+	d3.select('#data_cont div').style('padding-left','15px').style('margin-left','-10px');
+	d3.select('#data_cont div strong').text('Change Date : ');
+	d3.selectAll('#gradient_cont, .legend.dorlingCart').style('display', 'block');
+	d3.selectAll('#demo, #about').style('display', 'none');		
+	d3.select('#exp_text').text(' ');
+	d3.selectAll('#gradient text, .state_bubbles, .feature').remove();
+	d3.selectAll('rect').remove();
+	// Creates gradient legend for cartogram	
+	var gradient = d3.select('#gradient');
+  gradient.append('rect').attr('x', 0).attr('y', 0)
+    .attr('width', 958).attr('height', 30)
+    .attr('fill', 'url(#'+ story.grad +')');
+  gradient.selectAll('text')
+    .data(story.percent) 
+   .enter().append('text')
+    .attr('x', function(d){ return d + '%';})
+    .attr('y', 20)
+    .data(story.pertext) 
+    .text(function(d){ return d; })
+    .style('fill', function(d, i){ return i == 3 ? 'white' : 'black';});
+	var svg = d3.select('#chart');
+			svg.selectAll('*').remove();
+			svg.style('border', function(){ return window.location.search == '?embed=1' ?  '1px solid #fff' : '1px solid #ddd';});
+	var width = parseInt(svg.style('width'));
+  var height = parseInt(svg.style('height'));	
+	var force = d3.layout.force()
+			.gravity(0)
+			.size([width, height]);
+	d3.select('#brought').style('display', function(){ return window.location.search == '?embed=1' ? 'block' : 'none';});
+	d3.csv(story.data || datafile(), function(data) {
+		if(story.data){ $('#data_cont').hide(); d3.select('#data').attr('href', story.data); } else { $('#data_cont').show();}
+		var subset = initchart(story, data),		
+	  legend = d3.select('.legend.dorlingCart');
+		legend.selectAll('*').remove();
+		var select = legend.append('select').attr('class', 'states'),
+    subselect = legend.append('select').attr('class', 'districts');
+		var groups = _.uniq(_.pluck(subset, story.group[0]));
+    groups.unshift('select State');
+		result = _.filter(subset, function(d){ return d.State_Name == groups && !d.District_Name.match(/^Total/); });
+		select.selectAll('option')
+				.data(groups)
+			.enter()
+				.append('option')
+				.text(String);
+		select.on('change', function(d){ 
+				var group = d3.select(this).property('value');			
+				d3.selectAll('.tooltip').remove();
+				var result = _.filter(subset, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); });
+				result.unshift({"District_Name":"select District"});
+				subselect.selectAll('option').remove();
+				subselect.selectAll('option')
+						.data(result)
+					.enter()
+						.append('option')
+						.text(function(d){ return d.District_Name; });
+		});
+		var nested_data = d3.nest()
+				.key(function(d){ return d[story.group[0]]; })
+				.rollup(function(rows){ return { 'cen2011'  : d3.sum(rows, function(d){ return d[story.size]; }),
+																				 'IHHL2011' : d3.sum(rows, function(d){ return d[story.ihhl2011]; }),
+																				 'IHHL2001' : d3.sum(rows, function(d){ return d[story.ihhl2001]; }),
+																				 'cen2001'  : d3.sum(rows, function(d){ return d[story.trh2001]; })
+																			 } 
+				})
+				.entries(subset);
+		d3.csv('GeocodeLatLong.csv', function(geo){
+			var R = story.R,
+			longminmax = d3.extent(geo, function(d){ return parseFloat(d.Longitude);}),
+			latminmax = d3.extent(geo, function(d){ return parseFloat(d.Latitude);});
+			var xscale = d3.scale.linear().domain(longminmax).range([R * 6, width - R * 6]),
+			yscale = d3.scale.linear().domain(latminmax).range([height - R*2, R*2]);
+			var nested_geo = d3.nest()
+				.key(function(d){ return d[story.group[0]]; })
+				.rollup(function(rows){ return { 'long' :	d3.mean(rows, function(d){ return d.Longitude; }),
+																				 'lat'  : d3.mean(rows, function(d){ return d.Latitude; })} 
+				})
+				.entries(geo);
+			var nodes = nested_geo.map(function(d){ return {
+																x: xscale(d.values['long']), y: yscale(d.values['lat']),
+																x0: xscale(d.values['long']), y0: yscale(d.values['lat'])    
+															};
+			});
+			force.nodes(nodes)
+					.charge(-250)
+					.on('tick', tick)
+					.start();
+			var node = svg.selectAll('circle')
+					.data(nested_data)
+				.enter().append('circle')
+					.attr('data-q', function(d, i){ return d.key; }) 
+					.attr('r', function(d){ return Math.pow(d.values['cen2011'], 1/5) ; }) 
+					.on('click', distsDor)
+					.classed('states', true)
+					.style('fill', function(d){ return colorDor((1 - d.values['IHHL2011']/d.values['cen2011']) - (1 - d.values['IHHL2001']/d.values['cen2001']));}) 
+					.style('stroke', '#000');
+			node.append('title')
+					.text(function(d){ return d.key+' : '+story.area[0]+ ' = '+N(d.values['cen2011']) +'. '
+						 +story.IHHL2011[0]+' = '+N(d.values['IHHL2011'])+'. ' 
+						 +story.TRH2001[0]+' = '+N(d.values['cen2001'])+'. '
+						 +story.IHHL2001[0]+' = '+N(d.values['IHHL2001'])+'. '
+						 +story.val1[0]+' = '+(1 - d.values['IHHL2011']/d.values['cen2011'])+'. '
+						 +story.val2[0]+' = '+(1 - d.values['IHHL2001']/d.values['cen2001'])+'. Diff ( '
+						 +story.val1[0]+' - '+story.val2[0]+' ) = '+((1 - d.values['IHHL2011']/d.values['cen2011']) - (1 - d.values['IHHL2001']/d.values['cen2001'])); 
+					});
+			function tick(e) {
+				node.data(nodes)
+						.each(gravity(e.alpha * .5))
+						.attr('cx', function(d) { return d.x; })
+						.attr('cy', function(d) { return d.y; });
+			}		
+			function gravity(k) {
+				return function(d) {
+					d.x += (d.x0 - d.x) * k;
+					d.y += (d.y0 - d.y) * k;
+				};
+			}		
+			select.on('change', distsDor);
+			function distsDor(){ 
+				svg.selectAll('.districts').classed('hide', true);
+				var selstate = d3.select(this).property('value');
+				var q = selstate || d3.select(this).attr('data-q');
+				$('select.states').val(q);
+				svg.selectAll('.states').classed('hide', true);
+				var georesult = _.filter(geo, function(d){ return d.State_Name == q && !d.District_Name.match(/^Total/); });
+				var subresult = _.filter(subset, function(d){ return d.State_Name == q && !d.District_Name.match(/^Total/); });
+				groups = subresult;
+				groups.unshift({"District_Name":"select District"});
+			  subselect.selectAll('option').remove();
+				subselect.selectAll('option')
+						.data(groups)
+					.enter()
+						.append('option')
+						.text(function(d){ return d.District_Name; });
+			  subresult.shift();
+				longminmax = d3.extent(georesult, function(d){ return parseFloat(d.Longitude);}),
+				latminmax = d3.extent(georesult, function(d){ return parseFloat(d.Latitude);});
+				var xscale = d3.scale.linear().domain(longminmax).range([R * 8, width - R * 8]),
+				yscale = d3.scale.linear().domain(latminmax).range([height - R * 4, R * 4]);
+				var nodes = georesult.map(function(d){ return {
+							x: xscale(parseFloat(d.Longitude)), y: yscale(parseFloat(d.Latitude)),
+							x0: xscale(parseFloat(d.Longitude)), y0: yscale(parseFloat(d.Latitude))
+						}				
+				});
+				force.nodes(nodes)
+					.charge(-350)
+					.on('tick', tick)
+					.start();
+				var node = svg.append('g').selectAll('.districts')
+						.data(subresult)
+					.enter().append('circle')
+						.attr('r', function(d){ return Math.pow(d[story.size], 1/4 );}) 
+						.attr('data-q', function(d){ return d.State_Name})
+						.attr('data-r', function(d){ return d.District_Name})	
+						.classed('districts', true)
+						.on('mouseover', function(){
+								var details = d3.select(this).text(); 
+								$('#copy_title').val(details).select();	
+						})
+						.on('click', function(){ 
+								d3.selectAll('.tooltip').remove();
+								$('select.states').val('select State');
+								subselect.selectAll('option').remove();
+								svg.selectAll('.districts').classed('hide', true);
+								svg.selectAll('.states').classed('hide', false);
+						})
+						.style('fill', function(d){ return colorDor(d[story.X] - d[story.Y]).replace(/NaNNaNNaN/i, 'eee'); })
+						.style('stroke', '#000');
+				node.append('title')
+					.text(function(d){ return d.State_Name +' - '+d.District_Name+': '
+						+story.area[0]+' = '+N(d[story.size])+'. '
+						+story.IHHL2011[0]+' = '+N(d[story.ihhl2011])+'. '
+						+story.TRH2001[0]+' = '+N(d[story.trh2001])+'. '
+						+story.IHHL2001[0]+' = '+N(d[story.ihhl2001])+'. '
+						+story.val1[0]+' = '+d[story.X]+'. '
+						+story.val2[0]+' = '+d[story.Y]+'. Diff ( '
+						+story.val1[0]+' - '+story.val2[0]+' ) = '+(d[story.X] - d[story.Y]);		
+					});					
+				function tick(e) {
+					node.data(nodes)
+							.each(gravity(e.alpha * .5))
+							.attr('cx', function(d) { return d.x; })
+							.attr('cy', function(d) { return d.y; });	
+				}		
+			  function gravity(k) {
+					return function(d) {
+						d.x += (d.x0 - d.x) * k;
+						d.y += (d.y0 - d.y) * k;
+					};
+				}				
+			}
+			subselect.on('change', function(d){
+				d3.selectAll('.tooltip').remove();
+				svg.selectAll('.districts').classed('mark', false);
+				var group = select.property('value');
+				var subgroup = d3.select(this).property('value');
+				var details = svg.selectAll('.districts[data-q="' + group + '"][data-r="' + subgroup + '"]').classed('mark', true).text();
+				$('#copy_title').val(details);
+				$('#copy_title').on('mouseover', function(){ $(this).select(); });	
+				$('.mark').tooltip({ title:function(){ return $('.mark title').text(); }, trigger:'focus', container:'body' }).tooltip('show');						
+			});
+		});	
+	});
+}	
 function initchart(story, data) { 
   // No transitions work for other chart types, so just empty it
   var svgtype = svg.attr('data-type');
@@ -1347,7 +1624,7 @@ function initchart(story, data) {
   }
   return _.filter(data, story.filter);
 }
-console.log(window.location.search);
+//console.log(window.location.search);
 d3.select('#emb_btn').on('click', function(){			
 	var host_temp = window.location.href;
 	var embed = host_temp.split('#').join('?embed=1#');
@@ -1375,6 +1652,7 @@ if(window.location.search == '?embed=1'){
 	d3.selectAll('#visual, #btn').style('margin', '0px').style('padding', '0px');
 	d3.select('#legend_cont').style('width', '960px');
 	d3.selectAll('.legend').style('width', '475px').style('padding-left','5px');
+	d3.selectAll('.legend.dorling').style('width', '645px').style('padding-left','5px');
 	d3.select('#data_cont div').style('width', '455px');
 	d3.select('svg').style('border', 'none');
 	d3.select('#hide_btn').style('margin-left', '382px');
@@ -1399,4 +1677,4 @@ function positionText() {
 		.attr('text-anchor', 'middle')
 		.attr('dominant-baseline', 'middle')
 		.style('pointer-events', 'none');   
-}    
+}  
