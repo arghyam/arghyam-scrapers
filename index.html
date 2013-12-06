@@ -1,7 +1,8 @@
 <!DOCTYPE html><html lang="en">
 <head>
   <title>Nirmal Bharat Abhiyan: trends</title>
-  <link rel="stylesheet" href="css/bootstrap.min.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="css/bootstrap.min.css">
 	<link rel="shortcut icon" href="img/favicon.ico">
   <style>	
     body { padding-top: 60px; }		 
@@ -9,6 +10,7 @@
 		#home:hover, #methodology:hover{color:#000;}
 		.nav li a{font-size:1.1em;}
 		h2 { font-size: 125%; line-height: 1.25; color: #c0504d; }
+		.icon-search { margin-top: -8px; margin-left: 220px; opacity: 0.4; }
     #chart .l2 {
       opacity: 0;
       pointer-events: none;
@@ -55,15 +57,17 @@
 		#hide_btn{ position:absolute; margin-left:50px; margin-top:60px;}	
 		.feature{ fill:#F5F5F0; stroke:#000; stroke-width:0.2px;  cursor:pointer;}
 		.feature.active {	fill:#ddd;	}
-		.state_bubbles{ fill: none; stroke:#888; }	
-		.state_bubbles:hover{ stroke:#444; }		
+		.state_bubbles,.distsDor,.statCircs{ stroke:#888; }	
+		.state_bubbles:hover,.distsDor:hover,.statCircs:hover{ stroke:#444; }		
 		#copy_btn{ border-top-right-radius:4px; border-bottom-right-radius:4px;}
     #brought{ font-size:12px; width:250px; padding-left:800px; margin-top:-15px;}
     .tags{ text-anchor:middle; dominant-baseline:middle; font-family:arial; font-size:11px; pointer-events:none; }
 		.statsBoxT, .statsBoxC, .distsBoxT, .distsBoxC {stroke:#000; stroke-width:1px; shape-rendering:crispEdges; }
 		.statsBoxT:hover, .statsBoxC:hover, .distsBoxT:hover, .distsBoxC:hover {stroke:#000; stroke-width:2px;}
 		.lineST, .lineSC, .lineDT, .lineDC { fill:none; }
-		.dorFade{ stroke:2; opacity:0.09; stroke-opacity:0.09; }
+		.dorFade{ stroke:2; opacity:0.09; stroke-opacity:0.09; }		
+		#cirTSC, #cirCEN, #recTSC, #recCEN { stroke: #000; cursor: pointer;}
+		.auto{ cursor: auto }
 	</style>
   <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
 </head><body>
@@ -115,7 +119,7 @@
 		</div>
 		<div id="hide_btn" class="span9"><button id="hide_text" class="btn pull-right">Show / Hide State names</button></div>
 	</div>
-  <div style="margin-left:-2px;" class="span8"><svg id="chart" width="960" height="500"></svg></div>
+  <div class="row-fluid" style="margin-left:-2px;" class="span8"><svg id="chart" width="960" height="500"></svg></div>
 	<div id="right_container" class="pull-right span2">		
 		<div id="header"></div><div id="details"></div><div id="info"></div>
 	</div>
@@ -146,7 +150,7 @@
 		</svg>
   </div>  
   <br><br>
-  <div id="download_cont" style="margin:0;" class="span12">
+  <div id="download_cont" style="margin:0; float:left;" class="span12">
 		<br>
 		<div style="float:left"><strong>Download</strong>:
 				<a href="#" id="data">full dataset</a> |      
@@ -178,7 +182,7 @@
     <div class="span6" id="about-entry"></div>
   </div>
 </div>
-<div id="demo" class="container-fluid container">
+<div id="demo" class="container">
 	<h1>Rural sanitation scheme - progress & performance</h1>
 	<h4>We can find out how the rural sanitation scheme is doing because of the data that is published on the <a href="http://tsc.gov.in" target="_blank">Ministry of the Drinking Water and Sanitation website</a>. This project aims to create simple tools that will demystify the large datasets and compare it to other relevant datasets.</h4>
 	<div class="row-fluid">
@@ -242,7 +246,7 @@
 					<img src="img/comparing_spending_to_toilet_construction.png?v=1">
 					<h3>Comparing spending to toilet construction</h3>
 					<p>How do toilet construction and spending on toilet construction compare?</p>
-				</a>				
+				</a>
 		</div>			
 	</div>
 	<div class="container" style="margin-top:25px;">
@@ -263,9 +267,9 @@
 	</div>		
 </div>
 <br>
-<footer>
-	<div class="row-fluid">
-		<div  class="container">
+<footer> 
+	<div class="container">
+		<div class="row-fluid">
 			<div class="span2">
 				<a href="http://www.indiawaterportal.org/topics/rural-sanitation" target="_blank">
 					<div class="logo">
@@ -291,7 +295,7 @@
 			</div>	
 		</div>	
 	</div>
-</footer>	
+</footer>
 <script src="js/jquery.min.js"></script>
 <script>
 	$(window).on('load resize', function() {

@@ -386,6 +386,7 @@ var stories = [
         'colors' : ['#4f81bd', '#c0504d', '#9bbb59'],
 				'height' : '1430',
 				'ydom'   : '45',
+				'barHeight' : '49',
 				'lines'  : 'true', 
         'legend' : { '%Blue%': 'Centre', '%Red%': 'State', '%Green%': 'Beneficiary' },
 				'slideshare': 'https://skydrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21119&authkey=AOc6r1bY3i073_I&em=2',
@@ -408,6 +409,7 @@ var stories = [
         'colors' : ['#4f81bd', '#c0504d', '#9bbb59'],
 				'height' : '530',
 				'ydom'   : '15',
+				'barHeight' : '20',
 				'lines'  : 'false',
         'legend' : { '%Blue%': 'APL SC + ST', '%Red%': 'Rural poor SC + ST', '%Green%': 'Others' },
 				'IWP'    : 'false'
