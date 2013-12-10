@@ -66,7 +66,7 @@
 		.statsBoxT:hover, .statsBoxC:hover, .distsBoxT:hover, .distsBoxC:hover {stroke:#000; stroke-width:2px;}
 		.lineST, .lineSC, .lineDT, .lineDC { fill:none; }
 		.dorFade{ stroke:2; opacity:0.09; stroke-opacity:0.09; }		
-		#cirTSC, #cirCEN, #recTSC, #recCEN { stroke: #000; cursor: pointer;}
+		#cirTSC, #cirCEN, #recTSC, #recCEN, #recGRD { stroke: #000; cursor: pointer;}
 		.auto{ cursor: auto }
 	</style>
   <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
@@ -118,14 +118,13 @@
 			</div>						
 		</div>
 		<div id="hide_btn" class="span9"><button id="hide_text" class="btn pull-right">Show / Hide State names</button></div>
-	</div>	
+	</div>
   <div class="row-fluid">
 			<div class="span8"><svg id="chart" width="960" height="500"></svg></div>
 			<div id="right_container" class="pull-right span2">	
 				<div id="header"></div><div id="details"></div><div id="info"></div>
 			</div>
-	</div>	
-	<div class="clear:both;"></div>
+	</div>
   <div id="gradient_cont" class="span12" style="margin-left:-2px;">
 		<svg id="gradient" width="956" height="30">
 			<defs>
@@ -146,7 +145,7 @@
 				<linearGradient id="gradient_legend_dorCart" x="0%" y="0%">
 					<stop offset="1%"  style="stop-color:#D73027;stop-opacity:1"/>
 					<stop offset="50%" style="stop-color:#FFFFBF;stop-opacity:1"/>
-					<stop offset="100%" style="stop-color:#1A9850;stop-opacity:1"/>
+					<stop offset="100%" style="stop-color:#1A9850;stop-opacity:1"/> 
 				</linearGradient>
 			</defs>
 		</svg>

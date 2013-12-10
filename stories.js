@@ -8,9 +8,14 @@ var	colorsSocP = d3.scale.linear()
 		.domain([0, 0.6, 0.6, 0.7, 0.7, 2])
 		.range(['#D73027', '#D73027', '#90EE90', '#90EE90', '#1A9850', '#000']);
 
-var colorDor = d3.scale.linear()
+var colorDorCart = d3.scale.linear()
 		.clamp(true)
 		.domain([-1, 0, 1])
+    .range(['#D73027', '#FFFFBF', '#1A9850']);		
+		
+var colorDor = d3.scale.linear()
+		.clamp(true)
+		.domain([0, 1, 2])
     .range(['#D73027', '#FFFFBF', '#1A9850']);		
 		
 // Display formats
@@ -169,7 +174,7 @@ function dorling_story(story) {
     story.cols = story.cols || [];
     story.filter = function(d) { return d.District_Name.match(/^[A-Z]/); };
 		story.size = story.area[1];
-		story.color = story.colors || function(d) { return color((story.factor || 1) * d[story.num[1]] / d[story.den[1]]).replace(/NaNNaNNaN/i, 'eee'); };
+		story.color = story.colors || function(d) { return colorDor((story.factor || 1) * d[story.num[1]] / d[story.den[1]]).replace(/NaNNaNNaN/i, 'eee'); };
     story.hover = function(d) {
       var prefix = d['State_Name'] +' - '+ d['District_Name'] + ' : ';
       var num = story.num[1];
@@ -194,7 +199,7 @@ function dorlingCart_story(story){
 		story.trh2001 = story.TRH2001[1];
 		story.X = story.val1[1];
 		story.Y = story.val2[1];
-		story.color = story.colors || function(d) { return colorDor((story.factor || 1) * (d[story.val1[1]] - d[story.val2[1]])).replace(/NaNNaNNaN/i, 'eee'); };
+		story.color = story.colors || function(d) { return colorDorCart((story.factor || 1) * (d[story.val1[1]] - d[story.val2[1]])).replace(/NaNNaNNaN/i, 'eee'); };
 		return story;
 }
 
@@ -633,9 +638,9 @@ var stories = [
         'area'   : ['Total plan', 'Total_Projects_Outlay'],
         'num'    : ['Total spent', 'ExpReported_Total'],
         'den'    : ['Total plan', 'Total_Projects_Outlay'],
-				'grad'   : 'gradient_legend',
-				'percent': [1, 37, 70, 95],
-				'pertext': [0, 50, 100, 200],
+				'grad'   : 'gradient_legend_dorCart',
+				'percent': [1, 50, 95],
+				'pertext': [0, 100, 200],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -648,9 +653,9 @@ var stories = [
         'area'   : ['Total plan', 'Total_Projects_Outlay'],
         'num'    : ['Total spent', 'ExpReported_Total'],
         'den'    : ['Total plan', 'Total_Projects_Outlay'],
-				'grad'   : 'gradient_legend',
-				'percent': [1, 37, 70, 95],
-				'pertext': [0, 50, 100, 200],
+				'grad'   : 'gradient_legend_dorCart',
+				'percent': [1, 50, 95],
+				'pertext': [0, 100, 200],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -663,9 +668,9 @@ var stories = [
         'area'   : ['Total plan', 'Total_Projects_Outlay'],
         'num'    : ['Total spent', 'ExpReported_Total'],
         'den'    : ['Total plan', 'Total_Projects_Outlay'],
-				'grad'   : 'gradient_legend',
-				'percent': [1, 37, 70, 95],
-				'pertext': [0, 50, 100, 200],
+				'grad'   : 'gradient_legend_dorCart',
+				'percent': [1, 50, 95],
+				'pertext': [0, 100, 200],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -678,9 +683,9 @@ var stories = [
         'area'   : ['Total plan', 'Total_Projects_Outlay'],
         'num'    : ['Total spent', 'ExpReported_Total'],
         'den'    : ['Total plan', 'Total_Projects_Outlay'],
-				'grad'   : 'gradient_legend',
-				'percent': [1, 37, 70, 95],
-				'pertext': [0, 50, 100, 200],
+				'grad'   : 'gradient_legend_dorCart',
+				'percent': [1, 50, 95],
+				'pertext': [0, 100, 200],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -693,9 +698,9 @@ var stories = [
         'area'   : ['Total plan', 'Total_Projects_Outlay'],
         'num'    : ['Total spent', 'ExpReported_Total'],
         'den'    : ['Total plan', 'Total_Projects_Outlay'],
-				'grad'   : 'gradient_legend',
-				'percent': [1, 37, 70, 95],
-				'pertext': [0, 50, 100, 200],
+				'grad'   : 'gradient_legend_dorCart',
+				'percent': [1, 50, 95],
+				'pertext': [0, 100, 200],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -708,9 +713,9 @@ var stories = [
         'area'   : ['Total plan', 'Total_Projects_Outlay'],
         'num'    : ['Total spent', 'ExpReported_Total'],
         'den'    : ['Total plan', 'Total_Projects_Outlay'],
-				'grad'   : 'gradient_legend',
-				'percent': [1, 37, 70, 95],
-				'pertext': [0, 50, 100, 200],
+				'grad'   : 'gradient_legend_dorCart',
+				'percent': [1, 50, 95],
+				'pertext': [0, 100, 200],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -723,9 +728,9 @@ var stories = [
         'area'   : ['Total plan', 'Total_Projects_Outlay'],
         'num'    : ['Total spent', 'ExpReported_Total'],
         'den'    : ['Total plan', 'Total_Projects_Outlay'],
-				'grad'   : 'gradient_legend',
-				'percent': [1, 37, 70, 95],
-				'pertext': [0, 50, 100, 200],
+				'grad'   : 'gradient_legend_dorCart',
+				'percent': [1, 50, 95],
+				'pertext': [0, 100, 200],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -738,9 +743,9 @@ var stories = [
         'area'   : ['Total plan', 'Total_Projects_Outlay'],
         'num'    : ['Total spent', 'ExpReported_Total'],
         'den'    : ['Total plan', 'Total_Projects_Outlay'],
-				'grad'   : 'gradient_legend',
-				'percent': [1, 37, 70, 95],
-				'pertext': [0, 50, 100, 200],
+				'grad'   : 'gradient_legend_dorCart',
+				'percent': [1, 50, 95],
+				'pertext': [0, 100, 200],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -753,9 +758,9 @@ var stories = [
         'area'   : ['Total plan', 'Total_Projects_Outlay'],
         'num'    : ['Total spent', 'ExpReported_Total'],
         'den'    : ['Total plan', 'Total_Projects_Outlay'],
-				'grad'   : 'gradient_legend',
-				'percent': [1, 37, 70, 95],
-				'pertext': [0, 50, 100, 200],
+				'grad'   : 'gradient_legend_dorCart',
+				'percent': [1, 50, 95],
+				'pertext': [0, 100, 200],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -768,9 +773,9 @@ var stories = [
         'area'   : ['Total plan', 'Total_Projects_Outlay'],
         'num'    : ['Total spent', 'ExpReported_Total'],
         'den'    : ['Total plan', 'Total_Projects_Outlay'],
-				'grad'   : 'gradient_legend',
-				'percent': [1, 37, 70, 95],
-				'pertext': [0, 50, 100, 200],
+				'grad'   : 'gradient_legend_dorCart',
+				'percent': [1, 50, 95],
+				'pertext': [0, 100, 200],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -783,9 +788,9 @@ var stories = [
         'area'   : ['Total plan', 'Total_Projects_Outlay'],
         'num'    : ['Total spent', 'ExpReported_Total'],
         'den'    : ['Total plan', 'Total_Projects_Outlay'],
-				'grad'   : 'gradient_legend',
-				'percent': [1, 37, 70, 95],
-				'pertext': [0, 50, 100, 200],
+				'grad'   : 'gradient_legend_dorCart',
+				'percent': [1, 50, 95],
+				'pertext': [0, 100, 200],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -798,9 +803,9 @@ var stories = [
         'area'   : ['Total plan', 'Total_Projects_Outlay'],
         'num'    : ['Total spent', 'ExpReported_Total'],
         'den'    : ['Total plan', 'Total_Projects_Outlay'],
-				'grad'   : 'gradient_legend',
-				'percent': [1, 37, 70, 95],
-				'pertext': [0, 50, 100, 200],
+				'grad'   : 'gradient_legend_dorCart',
+				'percent': [1, 50, 95],
+				'pertext': [0, 100, 200],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -813,9 +818,9 @@ var stories = [
         'area'   : ['Total plan', 'Total_Projects_Outlay'],
         'num'    : ['Total spent', 'ExpReported_Total'],
         'den'    : ['Total plan', 'Total_Projects_Outlay'],
-				'grad'   : 'gradient_legend',
-				'percent': [1, 37, 70, 95],
-				'pertext': [0, 50, 100, 200],
+				'grad'   : 'gradient_legend_dorCart',
+				'percent': [1, 50, 95],
+				'pertext': [0, 100, 200],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -828,9 +833,9 @@ var stories = [
         'area'   : ['Total plan', 'Total_Projects_Outlay'],
         'num'    : ['Total spent', 'ExpReported_Total'],
         'den'    : ['Total plan', 'Total_Projects_Outlay'],
-				'grad'   : 'gradient_legend',
-				'percent': [1, 37, 70, 95],
-				'pertext': [0, 50, 100, 200],
+				'grad'   : 'gradient_legend_dorCart',
+				'percent': [1, 50, 95],
+				'pertext': [0, 100, 200],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -843,9 +848,9 @@ var stories = [
         'area'   : ['Total plan', 'Total_Projects_Outlay'],
         'num'    : ['Total spent', 'ExpReported_Total'],
         'den'    : ['Total plan', 'Total_Projects_Outlay'],
-				'grad'   : 'gradient_legend',
-				'percent': [1, 37, 70, 95],
-				'pertext': [0, 50, 100, 200],
+				'grad'   : 'gradient_legend_dorCart',
+				'percent': [1, 50, 95],
+				'pertext': [0, 100, 200],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -858,9 +863,9 @@ var stories = [
         'area'   : ['Total plan', 'Total_Projects_Outlay'],
         'num'    : ['Total spent', 'ExpReported_Total'],
         'den'    : ['Total plan', 'Total_Projects_Outlay'],
-				'grad'   : 'gradient_legend',
-				'percent': [1, 37, 70, 95],
-				'pertext': [0, 50, 100, 200],
+				'grad'   : 'gradient_legend_dorCart',
+				'percent': [1, 50, 95],
+				'pertext': [0, 100, 200],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -873,9 +878,9 @@ var stories = [
         'area'   : ['Total plan', 'Total_Projects_Outlay'],
         'num'    : ['Total spent', 'ExpReported_Total'],
         'den'    : ['Total plan', 'Total_Projects_Outlay'],
-				'grad'   : 'gradient_legend',
-				'percent': [1, 37, 70, 95],
-				'pertext': [0, 50, 100, 200],
+				'grad'   : 'gradient_legend_dorCart',
+				'percent': [1, 50, 95],
+				'pertext': [0, 100, 200],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -888,9 +893,9 @@ var stories = [
         'area'   : ['Total plan', 'Total_Projects_Outlay'],
         'num'    : ['Total spent', 'ExpReported_Total'],
         'den'    : ['Total plan', 'Total_Projects_Outlay'],
-				'grad'   : 'gradient_legend',
-				'percent': [1, 37, 70, 95],
-				'pertext': [0, 50, 100, 200],
+				'grad'   : 'gradient_legend_dorCart',
+				'percent': [1, 50, 95],
+				'pertext': [0, 100, 200],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -903,9 +908,9 @@ var stories = [
         'area'   : ['Total plan', 'Total_Projects_Outlay'],
         'num'    : ['Total spent', 'ExpReported_Total'],
         'den'    : ['Total plan', 'Total_Projects_Outlay'],
-				'grad'   : 'gradient_legend',
-				'percent': [1, 37, 70, 95],
-				'pertext': [0, 50, 100, 200],
+				'grad'   : 'gradient_legend_dorCart',
+				'percent': [1, 50, 95],
+				'pertext': [0, 100, 200],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -918,9 +923,9 @@ var stories = [
         'area'   : ['Total plan', 'Total_Projects_Outlay'],
         'num'    : ['Total spent', 'ExpReported_Total'],
         'den'    : ['Total plan', 'Total_Projects_Outlay'],
-				'grad'   : 'gradient_legend',
-				'percent': [1, 37, 70, 95],
-				'pertext': [0, 50, 100, 200],
+				'grad'   : 'gradient_legend_dorCart',
+				'percent': [1, 50, 95],
+				'pertext': [0, 100, 200],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -933,9 +938,9 @@ var stories = [
         'area'   : ['Total plan', 'Total_Projects_Outlay'],
         'num'    : ['Total spent', 'ExpReported_Total'],
         'den'    : ['Total plan', 'Total_Projects_Outlay'],
-				'grad'   : 'gradient_legend',
-				'percent': [1, 37, 70, 95],
-				'pertext': [0, 50, 100, 200],
+				'grad'   : 'gradient_legend_dorCart',
+				'percent': [1, 50, 95],
+				'pertext': [0, 100, 200],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -948,9 +953,9 @@ var stories = [
         'area'   : ['Total plan', 'Total_Projects_Outlay'],
         'num'    : ['Total spent', 'ExpReported_Total'],
         'den'    : ['Total plan', 'Total_Projects_Outlay'],
-				'grad'   : 'gradient_legend',
-				'percent': [1, 37, 70, 95],
-				'pertext': [0, 50, 100, 200],
+				'grad'   : 'gradient_legend_dorCart',
+				'percent': [1, 50, 95],
+				'pertext': [0, 100, 200],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -963,9 +968,9 @@ var stories = [
         'area'   : ['Total plan', 'Total_Projects_Outlay'],
         'num'    : ['Total spent', 'ExpReported_Total'],
         'den'    : ['Total plan', 'Total_Projects_Outlay'],
-				'grad'   : 'gradient_legend',
-				'percent': [1, 37, 70, 95],
-				'pertext': [0, 50, 100, 200],
+				'grad'   : 'gradient_legend_dorCart',
+				'percent': [1, 50, 95],
+				'pertext': [0, 100, 200],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -978,9 +983,9 @@ var stories = [
         'area'   : ['Total plan', 'Total_Projects_Outlay'],
         'num'    : ['Total spent', 'ExpReported_Total'],
         'den'    : ['Total plan', 'Total_Projects_Outlay'],
-				'grad'   : 'gradient_legend',
-				'percent': [1, 37, 70, 95],
-				'pertext': [0, 50, 100, 200],
+				'grad'   : 'gradient_legend_dorCart',
+				'percent': [1, 50, 95],
+				'pertext': [0, 100, 200],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -993,9 +998,9 @@ var stories = [
         'area'   : ['Total plan', 'Total_Projects_Outlay'],
         'num'    : ['Total spent', 'ExpReported_Total'],
         'den'    : ['Total plan', 'Total_Projects_Outlay'],
-				'grad'   : 'gradient_legend',
-				'percent': [1, 37, 70, 95],
-				'pertext': [0, 50, 100, 200],
+				'grad'   : 'gradient_legend_dorCart',
+				'percent': [1, 50, 95],
+				'pertext': [0, 100, 200],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -1008,9 +1013,9 @@ var stories = [
         'area'   : ['Total plan', 'Total_Projects_Outlay'],
         'num'    : ['Total spent', 'ExpReported_Total'],
         'den'    : ['Total plan', 'Total_Projects_Outlay'],
-				'grad'   : 'gradient_legend',
-				'percent': [1, 37, 70, 95],
-				'pertext': [0, 50, 100, 200],
+				'grad'   : 'gradient_legend_dorCart',
+				'percent': [1, 50, 95],
+				'pertext': [0, 100, 200],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -1023,9 +1028,9 @@ var stories = [
         'area'   : ['Total plan', 'Total_Projects_Outlay'],
         'num'    : ['Total spent', 'ExpReported_Total'],
         'den'    : ['Total plan', 'Total_Projects_Outlay'],
-				'grad'   : 'gradient_legend',
-				'percent': [1, 37, 70, 95],
-				'pertext': [0, 50, 100, 200],
+				'grad'   : 'gradient_legend_dorCart',
+				'percent': [1, 50, 95],
+				'pertext': [0, 100, 200],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -1038,9 +1043,9 @@ var stories = [
         'area'   : ['Total plan', 'Total_Projects_Outlay'],
         'num'    : ['Total spent', 'ExpReported_Total'],
         'den'    : ['Total plan', 'Total_Projects_Outlay'],
-				'grad'   : 'gradient_legend',
-				'percent': [1, 37, 70, 95],
-				'pertext': [0, 50, 100, 200],
+				'grad'   : 'gradient_legend_dorCart',
+				'percent': [1, 50, 95],
+				'pertext': [0, 100, 200],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -1053,9 +1058,9 @@ var stories = [
         'area'   : ['Total plan', 'Total_Projects_Outlay'],
         'num'    : ['Total spent', 'ExpReported_Total'],
         'den'    : ['Total plan', 'Total_Projects_Outlay'],
-				'grad'   : 'gradient_legend',
-				'percent': [1, 37, 70, 95],
-				'pertext': [0, 50, 100, 200],
+				'grad'   : 'gradient_legend_dorCart',
+				'percent': [1, 50, 95],
+				'pertext': [0, 100, 200],
 				'IWP'    : 'true'					
     }),
 		dorling_story({
@@ -1068,14 +1073,15 @@ var stories = [
         'area'   : ['Total plan', 'Total_Projects_Outlay'],
         'num'    : ['Total spent', 'ExpReported_Total'],
         'den'    : ['Total plan', 'Total_Projects_Outlay'],
-				'grad'   : 'gradient_legend',
-				'percent': [1, 37, 70, 95],
-				'pertext': [0, 50, 100, 200],
+				'grad'   : 'gradient_legend_dorCart',
+				'percent': [1, 50, 95],
+				'pertext': [0, 100, 200],
 				'IWP'    : 'true'					
     })
 ];
 // List of the historical data files, latest on top
 var datafiles = [
+		'data-08-Dec-2013.csv',
 		'data-01-Dec-2013.csv',
 		'data-24-Nov-2013.csv',
 		'data-17-Nov-2013.csv',

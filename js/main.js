@@ -234,7 +234,7 @@ function draw(story) {
 			d3.select('#slideshare').style('display', 'block');
 			d3.select('#pptFrame').attr('src', story.slideshare);		
 		}
-	}		
+	}	
 }
 function draw_date(daterow, story) {
     var dates = _.uniq(_.map(story.cols, function(col) { return daterow[col]; }));
@@ -684,15 +684,17 @@ function draw_boxscatter(story) {
     var subset = initchart(story, data);
 		draw_date(data[data.length-1], story);
 		svg.selectAll('*').remove();
-		svg.append('text').attr({ x: 50, y: 25, fill: '#000', stroke: 'none' }).text('Click to filter -->');
-		svg.append('circle').attr({ id: 'cirTSC',cx: 170, cy: 20, r: 8, fill: '#4F81BD' });
-		svg.append('text').attr({ x: 185, y: 25, fill: '#000', stroke: 'none' }).text('TSC value');
-		svg.append('circle').attr({ id: 'cirCEN', cx: 340, cy: 20, r: 8, fill: '#F79646' });
-		svg.append('text').attr({ x: 355, y: 25, fill: '#000', stroke: 'none' }).text('Census value');
-		svg.append('rect').attr({ id: 'recTSC', x: 520, y: 10, width: 15, height: 18, fill: '#C0504D', 'shape-rendering': 'crispEdges' });
-		svg.append('text').attr({ x: 540, y: 25, fill: '#000', stroke: 'none' }).text('TSC value is high');
-		svg.append('rect').attr({ id: 'recCEN', x: 730, y: 10, width: 15, height: 18, fill: '#9BBB59', 'shape-rendering': 'crispEdges' });
-		svg.append('text').attr({ x: 750, y: 25, fill: '#000', stroke: 'none' }).text('Census value is high');
+		svg.append('text').attr({ x: 15, y: 25, fill: '#000', stroke: 'none' }).text('Click to filter -->');
+		svg.append('circle').attr({ id: 'cirTSC',cx: 130, cy: 20, r: 8, fill: '#4F81BD' });
+		svg.append('text').attr({ x: 145, y: 25, fill: '#000', stroke: 'none' }).text('TSC value');
+		svg.append('circle').attr({ id: 'cirCEN', cx: 260, cy: 20, r: 8, fill: '#F79646' });
+		svg.append('text').attr({ x: 275, y: 25, fill: '#000', stroke: 'none' }).text('Census value');
+		svg.append('rect').attr({ id: 'recTSC', x: 410, y: 10, width: 15, height: 18, fill: '#C0504D', 'shape-rendering': 'crispEdges' });
+		svg.append('text').attr({ x: 430, y: 25, fill: '#000', stroke: 'none' }).text('TSC value is high');
+		svg.append('rect').attr({ id: 'recCEN', x: 580, y: 10, width: 15, height: 18, fill: '#9BBB59', 'shape-rendering': 'crispEdges' });
+		svg.append('text').attr({ x: 605, y: 25, fill: '#000', stroke: 'none' }).text('Census value is high');
+		svg.append('rect').attr({ x: 775, y: 10, width: 140, height: 18, fill: '#eee', 'stroke': '#aaa','shape-rendering': 'crispEdges' });
+		svg.append('text').attr({ id: 'grdlines', x: 778, y: 25, 'cursor': 'pointer' }).text('Show / Hide grid lines');
 		var width = parseInt(svg.style('width'), 10);
     var height = svg.attr('height');		
 		var rmax = _.max(_.map(subset, story.area[1]));
@@ -725,7 +727,7 @@ function draw_boxscatter(story) {
 		//Set scale for state level visual		
 		var xscale = d3.scale.sqrt().domain([extentX[0] - 50 , extentX[1] + 10000]).range([R, width - R]),
 		    yscale = d3.scale.sqrt().domain([extentYminmax[0] - 20000, extentYminmax[1]]).range([height - R, R]); 		
-		grids(extentYminmax[0] - 100, extentYminmax[1], 1000000, yscale, extentX[0] - 10000, extentX[1] + 10000, 10000, xscale);
+		grids(extentYminmax[0] - 100, extentYminmax[1], 1000000, yscale, extentX[0] - 10000, extentX[1] + 10000, 10000, xscale);		
 		axes(xscale, yscale, 15);
 		var state_boxS = svg.append('g').classed('states', true).selectAll('.rect')
 					.data(nested_data).enter();	
@@ -786,87 +788,91 @@ function draw_boxscatter(story) {
 				d3.selectAll('.tooltip').remove();
 				svg.selectAll('*').classed('fade', false);
 				var selstate = d3.select(this).property('value');
-				var q = selstate || d3.select(this).attr('data-q');
-				$('select.states').val(q);
-				svg.selectAll('.districts[data-q="' + q + '"]').classed('hide', false);
-				svg.selectAll('.states').classed('hide', true);
-				var result = _.filter(subset, function(d){ return d.State_Name == q && !d.District_Name.match(/^Total/); });
-				groups = result;
-				groups.unshift({"District_Name":"select District"});
-			  subselect.selectAll('option').remove();
-				subselect.selectAll('option')
-						.data(groups)
-					.enter()
-						.append('option')
-						.text(function(d){ return d.District_Name; });
-			  result.shift();
-				result.sort(function(a, b){ return b[story.X] - a[story.X];});
-				var	extentXD = d3.extent(result, function(d){ return Math.floor(d[story.X]);}),
-				extentYTD = d3.extent(result, function(d){ return Math.floor(d[story.YT]);}),
-				extentYCD = d3.extent(result, function(d){ return Math.floor(d[story.YC]);}),
-				extentYDminmax = d3.extent(d3.merge([extentYTD,extentYCD])),				
-				xscaleD = d3.scale.sqrt()
-							.domain([extentXD[0]-(getlength(extentXD[0]) * 10), extentXD[1]+(getlength(extentXD[0]) * 10)])
-							.range([R, width - R]),
-				yscaleD = d3.scale.sqrt()
-							.domain([(extentYDminmax[0] - (Math.pow(10, getlength(extentYDminmax[0]) - 1))),extentYDminmax[1]+(getlength(extentYDminmax[1]) * 10)])
-							.range([height - R, R]); 
-				axes(xscaleD, yscaleD, 10);	
-				var district_boxS	= svg.append('g').classed('distsgrp', true)
-						.selectAll('.districts').data(result).enter();	
-				district_boxS.append('rect')
-						.attr({ x: function(d){ return xscaleD(d[story.X]) - R / 8; }, 'data-r': function(d) { return d[story.group[1]]; },	 
-										y: function(d){ return yscaleD(Math.max(d[story.YT],d[story.YC])) - R / 8; }, width: R/4, 
-										height: function(d){ return Math.abs(yscaleD(Math.max(d[story.YT],d[story.YC])) 
-														- yscaleD(Math.min(d[story.YT],d[story.YC]))) + R / 4;},
-										class: function(d){ return d[story.YT] - d[story.YC] < 0 ? 'distsBox districts distsBoxT' : 'distsBox districts distsBoxC' ; },
-										'data-q': function(d) { return d[story.group[0]]; }, 
-										fill: function(d){ return d[story.YT] - d[story.YC] < 0 ? '#9BBB59' : '#C0504D' ; }
-						})
-						.on('click', stateBox)
-						.on('mouseover', function() {
-								var details = d3.select(this).text(); 
-								$('#copy_title').val(details).select();	
-						})
-						.append('title')
-						.text(function(d){ return d.State_Name+' - '+d.District_Name +' : TSC Finance = '+ N(d[story.X])+'. TSC data = ' 
-									+ N(d[story.YT])+'. Census data = ' + N(d[story.YC]) +'. Difference (TSC - Census) = ' + N(d[story.YT]) +' - '
-									+ N(d[story.YC]) +' = '+ N(d[story.YT] - d[story.YC]) + '.'; 
-						});
-			  district_boxS.append('circle')	
-						.attr({ cx: function(d){ return xscaleD(d[story.X]); }, 
-										cy: function(d){ return yscaleD(Math.max(d[story.YT], d[story.YC])); }, r: R/9,
-										class: function(d){ return d[story.YT] - d[story.YC] > 0 ? 'distsT' : 'distsC';}, 
-										fill:	function(d){ return d[story.YT] - d[story.YC] > 0 ? '#4F81BD' : '#F79646';},
-										'data-q': function(d) { return d[story.group[0]]; }, 
-										'data-r': function(d) { return d[story.group[1]]; }, stroke: '#000'							
-						})
-						.on('click', stateBox)
-						.append('title')
-						.text(function(d){ return d[story.YT] > d[story.YC] ? d.District_Name +' : TSC = ' + N(d[story.YT]) : 
+				if(selstate == 'select State'){
+					draw_boxscatter(story);		
+				} else {	
+					var q = selstate || d3.select(this).attr('data-q');
+					$('select.states').val(q);
+					svg.selectAll('.districts[data-q="' + q + '"]').classed('hide', false);
+					svg.selectAll('.states').classed('hide', true);
+					var result = _.filter(subset, function(d){ return d.State_Name == q && !d.District_Name.match(/^Total/); });
+					groups = result;
+					groups.unshift({"District_Name":"select District"});
+					subselect.selectAll('option').remove();
+					subselect.selectAll('option')
+							.data(groups)
+						.enter()
+							.append('option')
+							.text(function(d){ return d.District_Name; });
+					result.shift();
+					result.sort(function(a, b){ return b[story.X] - a[story.X];});
+					var	extentXD = d3.extent(result, function(d){ return Math.floor(d[story.X]);}),
+					extentYTD = d3.extent(result, function(d){ return Math.floor(d[story.YT]);}),
+					extentYCD = d3.extent(result, function(d){ return Math.floor(d[story.YC]);}),
+					extentYDminmax = d3.extent(d3.merge([extentYTD,extentYCD])),				
+					xscaleD = d3.scale.sqrt()
+								.domain([extentXD[0]-(getlength(extentXD[0]) * 10), extentXD[1]+(getlength(extentXD[0]) * 10)])
+								.range([R, width - R]),
+					yscaleD = d3.scale.sqrt()
+								.domain([(extentYDminmax[0] - (Math.pow(10, getlength(extentYDminmax[0]) - 1))),extentYDminmax[1]+(getlength(extentYDminmax[1]) * 10)])
+								.range([height - R, R]); 
+					axes(xscaleD, yscaleD, 10);	
+					var district_boxS	= svg.append('g').classed('distsgrp', true)
+							.selectAll('.districts').data(result).enter();	
+					district_boxS.append('rect')
+							.attr({ x: function(d){ return xscaleD(d[story.X]) - R / 8; }, 'data-r': function(d) { return d[story.group[1]]; },	 
+											y: function(d){ return yscaleD(Math.max(d[story.YT],d[story.YC])) - R / 8; }, width: R/4, 
+											height: function(d){ return Math.abs(yscaleD(Math.max(d[story.YT],d[story.YC])) 
+															- yscaleD(Math.min(d[story.YT],d[story.YC]))) + R / 4;},
+											class: function(d){ return d[story.YT] - d[story.YC] < 0 ? 'distsBox districts distsBoxT' : 'distsBox districts distsBoxC' ; },
+											'data-q': function(d) { return d[story.group[0]]; }, 
+											fill: function(d){ return d[story.YT] - d[story.YC] < 0 ? '#9BBB59' : '#C0504D' ; }
+							})
+							.on('click', stateBox)
+							.on('mouseover', function() {
+									var details = d3.select(this).text(); 
+									$('#copy_title').val(details).select();	
+							})
+							.append('title')
+							.text(function(d){ return d.State_Name+' - '+d.District_Name +' : TSC Finance = '+ N(d[story.X])+'. TSC data = ' 
+										+ N(d[story.YT])+'. Census data = ' + N(d[story.YC]) +'. Difference (TSC - Census) = ' + N(d[story.YT]) +' - '
+										+ N(d[story.YC]) +' = '+ N(d[story.YT] - d[story.YC]) + '.'; 
+							});
+					district_boxS.append('circle')	
+							.attr({ cx: function(d){ return xscaleD(d[story.X]); }, 
+											cy: function(d){ return yscaleD(Math.max(d[story.YT], d[story.YC])); }, r: R/9,
+											class: function(d){ return d[story.YT] - d[story.YC] > 0 ? 'distsT' : 'distsC';}, 
+											fill:	function(d){ return d[story.YT] - d[story.YC] > 0 ? '#4F81BD' : '#F79646';},
+											'data-q': function(d) { return d[story.group[0]]; }, 
+											'data-r': function(d) { return d[story.group[1]]; }, stroke: '#000'							
+							})
+							.on('click', stateBox)
+							.append('title')
+							.text(function(d){ return d[story.YT] > d[story.YC] ? d.District_Name +' : TSC = ' + N(d[story.YT]) : 
+										d.District_Name +' : Census = ' + N(d[story.YC]);
+							});
+				 district_boxS.append('circle')	
+							.attr({ cx: function(d){ return xscaleD(d[story.X]); }, 
+											cy: function(d){ return yscaleD(Math.min(d[story.YT], d[story.YC])); }, r: R/9,
+											class: function(d){ return d[story.YT] - d[story.YC] < 0 ? 'distsT' : 'distsC';}, 
+											fill: function(d){ return d[story.YT] - d[story.YC] < 0 ? '#4F81BD' : '#F79646';},
+											'data-q': function(d) { return d[story.group[0]]; }, 
+											'data-r': function(d) { return d[story.group[1]]; }, stroke: '#000'
+							})
+							.on('click', stateBox)
+							.append('title')
+							.text(function(d){ return d[story.YT] - d[story.YC] < 0 ? d.District_Name +' : TSC = ' + N(d[story.YT]) : 
 									d.District_Name +' : Census = ' + N(d[story.YC]);
-						});
-			 district_boxS.append('circle')	
-						.attr({ cx: function(d){ return xscaleD(d[story.X]); }, 
-										cy: function(d){ return yscaleD(Math.min(d[story.YT], d[story.YC])); }, r: R/9,
-										class: function(d){ return d[story.YT] - d[story.YC] < 0 ? 'distsT' : 'distsC';}, 
-										fill: function(d){ return d[story.YT] - d[story.YC] < 0 ? '#4F81BD' : '#F79646';},
-										'data-q': function(d) { return d[story.group[0]]; }, 
-										'data-r': function(d) { return d[story.group[1]]; }, stroke: '#000'
-						})
-						.on('click', stateBox)
-						.append('title')
-						.text(function(d){ return d[story.YT] - d[story.YC] < 0 ? d.District_Name +' : TSC = ' + N(d[story.YT]) : 
-								d.District_Name +' : Census = ' + N(d[story.YC]);
-						});
-				var lineDT = d3.svg.line()
-							.x(function(d){ return xscaleD(d[story.X]);})
-							.y(function(d){ return yscaleD(d[story.YT]);});
-				var lineDC = d3.svg.line()
-							.x(function(d){ return xscaleD(d[story.X]);})
-							.y(function(d){ return yscaleD(d[story.YC]);});			
-				district_boxS.append('path').attr({ d: function(d){ return lineDT(result);}, class: 'lineDT', stroke: '#4F81BD' });
-				district_boxS.append('path').attr({ d: function(d){ return lineDC(result);}, class: 'lineDC', stroke: '#F79646' });
+							});
+					var lineDT = d3.svg.line()
+								.x(function(d){ return xscaleD(d[story.X]);})
+								.y(function(d){ return yscaleD(d[story.YT]);});
+					var lineDC = d3.svg.line()
+								.x(function(d){ return xscaleD(d[story.X]);})
+								.y(function(d){ return yscaleD(d[story.YC]);});			
+					district_boxS.append('path').attr({ d: function(d){ return lineDT(result);}, class: 'lineDT', stroke: '#4F81BD' });
+					district_boxS.append('path').attr({ d: function(d){ return lineDC(result);}, class: 'lineDC', stroke: '#F79646' });
+				}
 		}
 		subselect.on('change', function(){
 			var subgroup = d3.select(this).property('value');
@@ -895,6 +901,10 @@ function draw_boxscatter(story) {
 			svg.selectAll('*').classed('fade', false);	
 			svg.selectAll('.statsBoxC, .distsBoxC, .statsT, .statsC, .distsC, .distsT, .lineST, .lineSC, .lineDT, .lineDC').classed('fade', true);		
 			svg.selectAll('.statsBoxT, .distsBoxT').classed('show', true);
+		});
+		svg.select('#grdlines').on('click', function(){
+			var hide = svg.selectAll('.h, .v').classed('hide');
+      svg.selectAll('.h, .v').classed('hide', !hide);			
 		});
 		function getlength(n) {
 				return n.toString().length;
@@ -938,12 +948,12 @@ function draw_boxscatter(story) {
 			svg.append('g').selectAll('.h')
 					.data(d3.range(h0, h1, h2))   
 				.enter().append('line')
-					.attr({ class: 'h', x1: R, y1: function(d){ return y(d);}, x2: width - R, y2: function(d){ return y(d);} })
+					.attr({ class: 'h hide', x1: R, y1: function(d){ return y(d);}, x2: width - R, y2: function(d){ return y(d);} })
 					.style({ 'fill': 'none', 'stroke': '#ddd', 'shape-rendering': 'crispEdges'});
 			svg.append('g').selectAll('.v')
 					.data(d3.range(v0, v1, v2))  
 				.enter().append('line')
-					.attr({ class: 'v', x1: function(d){ return x(d);}, y1: R, x2: function(d){ return x(d);}, y2: height - R })
+					.attr({ class: 'v hide', x1: function(d){ return x(d);}, y1: R, x2: function(d){ return x(d);}, y2: height - R })
 					.style({ 'fill': 'none', 'stroke': '#ddd', 'shape-rendering': 'crispEdges'});
 		}	
   });
@@ -1277,7 +1287,7 @@ function draw_dorling(story) {
 		});		
 	});
 }
-function draw_dorlingCart(story) {
+function draw_dorlingCart(story) {   // census 2001 vs 2011
 	d3.selectAll('.tooltip').remove();
 	d3.select('#data_cont div').style('padding-left','15px').style('margin-left','-10px');
 	d3.select('#data_cont div strong').text('Change Date : ');
@@ -1365,8 +1375,8 @@ function draw_dorlingCart(story) {
 				})
 				.entries(geo);
 			var nodes = nested_geo.map(function(d){ return {
-																x: xscale(d.values['long']), y: yscale(d.values['lat'])
-																//x0: xscale(d.values['long']), y0: yscale(d.values['lat'])    
+																x: xscale(d.values['long']), y: yscale(d.values['lat']),
+																x0: xscale(d.values['long']), y0: yscale(d.values['lat'])    
 															};
 			});
 			nodesD = geo.map(function(d){ return {
@@ -1387,7 +1397,7 @@ function draw_dorlingCart(story) {
 							.attr({ class: 'statCircs', cx: function(d) { return d.x; }, cy: function(d) { return d.y; } })
 							.data(nested_data)
 							.attr({ 'data-q': function(d){ return d.key; }, r: function(d){ return Math.pow(d.values['cen2011'], 1/6) ; }, 
-											fill: function(d){ return colorDor((1 - d.values['IHHL2011']/d.values['cen2011']) 
+											fill: function(d){ return colorDorCart((1 - d.values['IHHL2011']/d.values['cen2011']) 
 											- (1 - d.values['IHHL2001']/d.values['cen2001']));} 
 							})
 							.on('mouseover', function(){
@@ -1412,7 +1422,7 @@ function draw_dorlingCart(story) {
 							})
 							.data(subset)
 							.attr({ r: function(d){ return Math.pow(d[story.size], 1/12 );}, 'stroke': '#000', 'stroke-width': 0.25,
-											fill: function(d){ return colorDor(d[story.X] - d[story.Y]).replace(/NaNNaNNaN/i, 'eee'); },
+											fill: function(d){ return colorDorCart(d[story.X] - d[story.Y]).replace(/NaNNaNNaN/i, 'eee'); },
 											'data-q': function(d){ return d.State_Name; }, 'data-r': function(d){ return d.District_Name; }
 							})							
 							.on('mouseover', function(){
@@ -1451,7 +1461,7 @@ function draw_dorlingCart(story) {
 					.attr("transform", "translate(" + width / 2.3 + "," + height / 2  + ")scale(" + k + ")translate(" + -x + "," + -y + ")");
 			force.nodes(nodesD)
 				.charge(-5)
-				.gravity(.1)
+				.gravity(.1)	
 				.on('tick', tick)
 				.start();			
 		}
@@ -1529,10 +1539,8 @@ if(window.location.search == '?embed=1'){
 function position() {
   this.transition()
 		.duration(400)
-		.attr({ x: function(d){ return d.x; }, y: function(d){ return d.y; }, width: function(d){ return d.dx; }, 
-				height: function(d){ return d.dy; }, class: function(d){ return "l" + d.depth; }, 
-				'data-q': function(d){ return d.depth == 1 ? d.key : d.District_Name; }, 
-				'data-r': function(d){ return d.depth == 2 ? d.State_Name : null; }
+		.attr({ x: function(d){ return d.x; }, y: function(d){ return d.y; }, width: function(d){ return d.dx; }, height: function(d){ return d.dy; },
+				class: function(d){ return "l" + d.depth; }, 'data-q': function(d){ return d.depth == 1 ? d.key : d.District_Name; }, 'data-r': function(d){ return d.depth == 2 ? d.State_Name : null; }
 		});		
 }
 function positionText() { 
