@@ -684,17 +684,17 @@ function draw_boxscatter(story) {
     var subset = initchart(story, data);
 		draw_date(data[data.length-1], story);
 		svg.selectAll('*').remove();
-		svg.append('text').attr({ x: 15, y: 25, fill: '#000', stroke: 'none' }).text('Click to filter -->');
-		svg.append('circle').attr({ id: 'cirTSC',cx: 130, cy: 20, r: 8, fill: '#4F81BD' });
-		svg.append('text').attr({ x: 145, y: 25, fill: '#000', stroke: 'none' }).text('TSC value');
-		svg.append('circle').attr({ id: 'cirCEN', cx: 260, cy: 20, r: 8, fill: '#F79646' });
-		svg.append('text').attr({ x: 275, y: 25, fill: '#000', stroke: 'none' }).text('Census value');
-		svg.append('rect').attr({ id: 'recTSC', x: 410, y: 10, width: 15, height: 18, fill: '#C0504D', 'shape-rendering': 'crispEdges' });
-		svg.append('text').attr({ x: 430, y: 25, fill: '#000', stroke: 'none' }).text('TSC value is high');
-		svg.append('rect').attr({ id: 'recCEN', x: 580, y: 10, width: 15, height: 18, fill: '#9BBB59', 'shape-rendering': 'crispEdges' });
-		svg.append('text').attr({ x: 605, y: 25, fill: '#000', stroke: 'none' }).text('Census value is high');
-		svg.append('rect').attr({ x: 775, y: 10, width: 140, height: 18, fill: '#eee', 'stroke': '#aaa','shape-rendering': 'crispEdges' });
-		svg.append('text').attr({ id: 'grdlines', x: 778, y: 25, 'cursor': 'pointer' }).text('Show / Hide grid lines');
+		svg.append('text').attr({ x: 25, y: 25, fill: '#000', stroke: 'none' }).text('Click to filter -->');
+		svg.append('circle').attr({ id: 'cirTSC',cx: 155, cy: 20, r: 8, fill: '#4F81BD' });
+		svg.append('text').attr({ x: 170, y: 25, fill: '#000', stroke: 'none' }).text('TSC value');
+		svg.append('circle').attr({ id: 'cirCEN', cx: 290, cy: 20, r: 8, fill: '#F79646' });
+		svg.append('text').attr({ x: 305, y: 25, fill: '#000', stroke: 'none' }).text('Census value');
+		svg.append('rect').attr({ id: 'recTSC', x: 445, y: 10, width: 15, height: 18, fill: '#C0504D', 'shape-rendering': 'crispEdges' });
+		svg.append('text').attr({ x: 465, y: 25, fill: '#000', stroke: 'none' }).text('TSC value is high');
+		svg.append('rect').attr({ id: 'recCEN', x: 625, y: 10, width: 15, height: 18, fill: '#9BBB59', 'shape-rendering': 'crispEdges' });
+		svg.append('text').attr({ x: 650, y: 25, fill: '#000', stroke: 'none' }).text('Census value is high');
+		svg.append('rect').attr({ x: 830, y: 10, width: 75, height: 18, fill: '#eee', 'stroke': '#aaa','shape-rendering': 'crispEdges' });
+		svg.append('text').attr({ id: 'clrFtr', x: 835, y: 25, 'cursor': 'pointer' }).text('Clear filter');
 		var width = parseInt(svg.style('width'), 10);
     var height = svg.attr('height');		
 		var rmax = _.max(_.map(subset, story.area[1]));
@@ -780,13 +780,12 @@ function draw_boxscatter(story) {
 					.interpolate('linear')
 					.x(function(d){ return xscale(d.values['x']);})
 					.y(function(d){ return yscale(d.values['yC']);});			
-		state_boxS.append('path').attr({ d: function(){ return lineST(nested_data);}, class: 'lineST', stroke: '#4F81BD' });
-		state_boxS.append('path').attr({ d: function(){ return lineSC(nested_data);}, class: 'lineSC', stroke: '#F79646' });
+		state_boxS.append('path').attr({ d: function(){ return lineST(nested_data);}, class: 'lineST fade', stroke: '#4F81BD' });
+		state_boxS.append('path').attr({ d: function(){ return lineSC(nested_data);}, class: 'lineSC fade', stroke: '#F79646' });
 		select.on('change', districtBox);
 		function districtBox(d){
 				svg.selectAll('.distsgrp').remove();
 				d3.selectAll('.tooltip').remove();
-				svg.selectAll('*').classed('fade', false);
 				var selstate = d3.select(this).property('value');
 				if(selstate == 'select State'){
 					draw_boxscatter(story);		
@@ -870,8 +869,8 @@ function draw_boxscatter(story) {
 					var lineDC = d3.svg.line()
 								.x(function(d){ return xscaleD(d[story.X]);})
 								.y(function(d){ return yscaleD(d[story.YC]);});			
-					district_boxS.append('path').attr({ d: function(d){ return lineDT(result);}, class: 'lineDT', stroke: '#4F81BD' });
-					district_boxS.append('path').attr({ d: function(d){ return lineDC(result);}, class: 'lineDC', stroke: '#F79646' });
+					district_boxS.append('path').attr({ d: function(d){ return lineDT(result);}, class: 'lineDT fade', stroke: '#4F81BD' });
+					district_boxS.append('path').attr({ d: function(d){ return lineDC(result);}, class: 'lineDC fade', stroke: '#F79646' });
 				}
 		}
 		subselect.on('change', function(){
@@ -902,16 +901,15 @@ function draw_boxscatter(story) {
 			svg.selectAll('.statsBoxC, .distsBoxC, .statsT, .statsC, .distsC, .distsT, .lineST, .lineSC, .lineDT, .lineDC').classed('fade', true);		
 			svg.selectAll('.statsBoxT, .distsBoxT').classed('show', true);
 		});
-		svg.select('#grdlines').on('click', function(){
-			var hide = svg.selectAll('.h, .v').classed('hide');
-      svg.selectAll('.h, .v').classed('hide', !hide);			
+		svg.select('#clrFtr').on('click', function(){
+			svg.selectAll('.lineST, .lineSC, .lineDT, .lineDC').classed('fade', true);	
+			svg.selectAll('.statsBoxC, .statsBoxT, .distsBoxC, .distsBoxT, .statsC, .statsT, .distsC, .distsT').classed('fade', false);
 		});
 		function getlength(n) {
 				return n.toString().length;
 		}
 		function stateBox(d){
 					d3.selectAll('.tooltip').remove();
-					svg.selectAll('*').classed('fade', false);
 					select.property('value', 'select State');
 					subselect.selectAll('*').remove();
 					d3.selectAll('.distsgrp, .lineDT, .lineDC').remove();
@@ -948,12 +946,12 @@ function draw_boxscatter(story) {
 			svg.append('g').selectAll('.h')
 					.data(d3.range(h0, h1, h2))   
 				.enter().append('line')
-					.attr({ class: 'h hide', x1: R, y1: function(d){ return y(d);}, x2: width - R, y2: function(d){ return y(d);} })
+					.attr({ class: 'h', x1: R, y1: function(d){ return y(d);}, x2: width - R, y2: function(d){ return y(d);} })
 					.style({ 'fill': 'none', 'stroke': '#ddd', 'shape-rendering': 'crispEdges'});
 			svg.append('g').selectAll('.v')
 					.data(d3.range(v0, v1, v2))  
 				.enter().append('line')
-					.attr({ class: 'v hide', x1: function(d){ return x(d);}, y1: R, x2: function(d){ return x(d);}, y2: height - R })
+					.attr({ class: 'v', x1: function(d){ return x(d);}, y1: R, x2: function(d){ return x(d);}, y2: height - R })
 					.style({ 'fill': 'none', 'stroke': '#ddd', 'shape-rendering': 'crispEdges'});
 		}	
   });
