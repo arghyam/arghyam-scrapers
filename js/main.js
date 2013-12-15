@@ -925,7 +925,7 @@ function draw_boxscatter(story) {
 										.scale(x)
 										.orient('bottom')
 										.ticks(t)
-										.tickFormat(d3.format('2s')))
+										.tickFormat(function(d) { return d / 100000 + 'L';}))
 						.append('text')
 						.text(story.x[0])
 						.attr({ transform: 'translate(-5, -5)', x: width - R, 'text-anchor': 'end' });
@@ -935,7 +935,7 @@ function draw_boxscatter(story) {
 										.scale(y)
 										.orient('left')
 										.ticks(t)
-										.tickFormat(d3.format('2s')))
+										.tickFormat(function(d) { return d / 100000 + 'L';}))
 						.append('text')
 						.text(story.yT[0])
 						.attr({ x: R, transform: 'translate(5,5) rotate(-90,' + R + ',' + R + ')', 'text-anchor': 'end', 'dominant-baseline': 'hanging' });
@@ -1315,7 +1315,7 @@ function draw_dorlingCart(story) {   // census 2001 vs 2011
 	var centered;
 	var projection = d3.geo.mercator()
 			.scale(width*5.5)
-			.translate([-width+230, height+100]);
+			.translate([-width+230, height+100]);			
 	var path = d3.geo.path()
 			.projection(projection);					
 	var topomaps = [];		
@@ -1351,10 +1351,9 @@ function draw_dorlingCart(story) {   // census 2001 vs 2011
 		});
 		var nested_data = d3.nest()
 				.key(function(d){ return d[story.group[0]]; })
-				.rollup(function(rows){ return { 'cen2011'  : d3.sum(rows, function(d){ return d[story.size]; }),
-																				 'IHHL2011' : d3.sum(rows, function(d){ return d[story.ihhl2011]; }),
-																				 'IHHL2001' : d3.sum(rows, function(d){ return d[story.ihhl2001]; }),
-																				 'cen2001'  : d3.sum(rows, function(d){ return d[story.trh2001]; })
+				.rollup(function(rows){ return { 'cen2011': d3.sum(rows, function(d){ return d[story.size]; }),
+																				 'cen2001%' : d3.sum(rows, function(d){ return d[story.cen2001];}),
+																				 'cen2011%' : d3.sum(rows, function(d){ return d[story.cen2011];})
 																			 } 
 				})
 				.entries(subset);
@@ -1365,7 +1364,7 @@ function draw_dorlingCart(story) {   // census 2001 vs 2011
 			longminmax = d3.extent(geo, function(d){ return parseFloat(d.Longitude);}),
 			latminmax = d3.extent(geo, function(d){ return parseFloat(d.Latitude);});
 			var xscale = d3.scale.linear().domain(longminmax).range([295, 685]).clamp(true), 
-			yscale = d3.scale.linear().domain(latminmax).range([485, 65]).clamp(true); 
+			yscale = d3.scale.linear().domain(latminmax).range([477, 60]).clamp(true); 
 			var nested_geo = d3.nest()
 				.key(function(d){ return d[story.group[0]]; })
 				.rollup(function(rows){ return { 'long' :	d3.mean(rows, function(d){ return d.Longitude; }),
@@ -1391,37 +1390,32 @@ function draw_dorlingCart(story) {   // census 2001 vs 2011
 							});
 					g.selectAll('.statCircs')
 							.data(nodes)
-						.enter().append('circle')
+						.enter().append('circle')						
 							.attr({ class: 'statCircs', cx: function(d) { return d.x; }, cy: function(d) { return d.y; } })
 							.data(nested_data)
 							.attr({ 'data-q': function(d){ return d.key; }, r: function(d){ return Math.pow(d.values['cen2011'], 1/6) ; }, 
-											fill: function(d){ return colorDorCart((1 - d.values['IHHL2011']/d.values['cen2011']) 
-											- (1 - d.values['IHHL2001']/d.values['cen2001']));} 
-							})
+											fill: function(d){ return colorDorCart(1 - d.values['cen2001%']/d.values['cen2011%']).replace(/NaNNaNNaN/i, 'eee');}	
+              })
 							.on('mouseover', function(){
 								var details = d3.select(this).text(); 
 								$('#copy_title').val(details).select();	
 							})
 							.append('title')
 							.text(function(d){ return d.key+' : '+story.area[0]+ ' = '+N(d.values['cen2011']) +'. ' 
-								 +story.IHHL2011[0]+' = '+N(d.values['IHHL2011'])+'. ' 
-								 +story.TRH2001[0]+' = '+N(d.values['cen2001'])+'. '
-								 +story.IHHL2001[0]+' = '+N(d.values['IHHL2001'])+'. '
-								 +story.val1[0]+' = '+(1 - d.values['IHHL2011']/d.values['cen2011'])+'. '
-								 +story.val2[0]+' = '+(1 - d.values['IHHL2001']/d.values['cen2001'])+'. Diff ( '
-								 +story.val1[0]+' - '+story.val2[0]+' ) = '+((1 - d.values['IHHL2011']/d.values['cen2011']) 
-											- (1 - d.values['IHHL2001']/d.values['cen2001'])); 
-							});
+								+story.num[0]+' = '+N(d.values['cen2001%'])+'. '
+								+story.den[0]+' = '+N(d.values['cen2011%'])+'. '
+							  +'%'+story.den[0]+' - %'+story.num[0]+' = '+(1 - d.values['cen2001%']/d.values['cen2011%']);									 
+              });
 					node = g.selectAll('.distCircs')
 							.data(geo)
 						.enter().append('circle')	
-							.attr({ class: 'distCircs hide', cx: function(d) { return xscale(d.Longitude); }, 
+							.attr({ class: 'distCircs  hide', cx: function(d) { return xscale(d.Longitude); }, 
 											cy: function(d) { return yscale(d.Latitude); } 
 							})
 							.data(subset)
 							.attr({ r: function(d){ return Math.pow(d[story.size], 1/12 );}, 'stroke': '#000', 'stroke-width': 0.25,
-											fill: function(d){ return colorDorCart(d[story.X] - d[story.Y]).replace(/NaNNaNNaN/i, 'eee'); },
-											'data-q': function(d){ return d.State_Name; }, 'data-r': function(d){ return d.District_Name; }
+											fill: function(d){ return colorDorCart(1 - d[story.cen2001] / d[story.cen2011]).replace(/NaNNaNNaN/i, 'eee'); },
+											'data-q': function(d){ return d.State_Name; }, 'data-r': function(d){ return d.District_Name; }											
 							})							
 							.on('mouseover', function(){
 								var details = d3.select(this).text(); 
@@ -1429,13 +1423,10 @@ function draw_dorlingCart(story) {   // census 2001 vs 2011
 							});
 					node.append('title')
 							.text(function(d){ return d.State_Name +' - '+d.District_Name+': '
-									+story.area[0]+' = '+N(d[story.size])+'. '
-									+story.IHHL2011[0]+' = '+N(d[story.ihhl2011])+'. '
-									+story.TRH2001[0]+' = '+N(d[story.trh2001])+'. '
-									+story.IHHL2001[0]+' = '+N(d[story.ihhl2001])+'. '
-									+story.val1[0]+' = '+d[story.X]+'. '
-									+story.val2[0]+' = '+d[story.Y]+'. Diff ( '
-									+story.val1[0]+' - '+story.val2[0]+' ) = '+(d[story.X] - d[story.Y]);		
+								  +story.area[0]+ ' = '+N(d[story.area[1]]) +'. ' 
+									+story.num[0]+' = '+N(d[story.cen2001])+'. '
+									+story.den[0]+' = '+N(d[story.cen2011])+'. '
+									+'%'+story.den[0]+' - %'+story.num[0]+' = '+(1 - d[story.cen2001]/d[story.cen2011]);									 									
 							});
 				});
 		});		
@@ -1456,24 +1447,9 @@ function draw_dorlingCart(story) {   // census 2001 vs 2011
 			}
 			g.transition()
 					.duration(0)
-					.attr("transform", "translate(" + width / 2.3 + "," + height / 2  + ")scale(" + k + ")translate(" + -x + "," + -y + ")");
-			force.nodes(nodesD)
-				.charge(-5)
-				.gravity(.1)	
-				.on('tick', tick)
-				.start();			
-		}
-		function tick(e){
-				node.data(nodesD)
-					.each(gravity(e.alpha * 2.5))
-					.attr({ cx : function(d){ return d.x ; }, cy : function(d){ return d.y; }});
-		}	
-		function gravity(k) {
-			return function(d) {
-				d.x += (d.x0 - d.x) * k; d.y += (d.y0 - d.y) * k;
-			};
-		}	
-		subselect.on('change', function(d){
+					.attr("transform", "translate(" + width / 2 + "," + height / 2  + ")scale(" + k + ")translate(" + -x + "," + -y + ")");
+			}
+			subselect.on('change', function(d){
 				d3.selectAll('.tooltip').remove();
 				svg.selectAll('.distCircs').classed('mark', false);
 				var group = select.property('value');

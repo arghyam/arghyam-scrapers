@@ -193,13 +193,9 @@ function dorlingCart_story(story){
 		story.cols = story.cols || [];
     story.filter = function(d) { return d.District_Name.match(/^[A-Z]/); };
 		story.size = story.area[1];
-		story.ihhl2011 = story.IHHL2011[1];
-		story.ihhl2001 = story.IHHL2001[1];
-		story.trh2011 = story.TRH2011[1];
-		story.trh2001 = story.TRH2001[1];
-		story.X = story.val1[1];
-		story.Y = story.val2[1];
-		story.color = story.colors || function(d) { return colorDorCart((story.factor || 1) * (d[story.val1[1]] - d[story.val2[1]])).replace(/NaNNaNNaN/i, 'eee'); };
+		story.diff = story.cen2011_2001[1];
+		story.cen2001 = story.num[1];
+		story.cen2011 = story.den[1];
 		return story;
 }
 
@@ -614,14 +610,11 @@ var stories = [
 				'data'   : 'aggregated_census_data.csv',
 				'url'    : ['TBD'],
 				'group'  : ['State_Name'],
-				'cols'   : ['Census_2001_Total_Rural_Households','Census_2011_Total_Rural_Households','Census_2001_IHHL','Census_2011_IHHL'],
+				'cols'   : ['Census_2011_Total_Rural_Households','Census_2001_IHHL','Census_2011_IHHL'],
         'area'   : ['Census 2011 Total Rural Households', 'Census_2011_Total_Rural_Households'],
-				'IHHL2011': ['Census 2011 Households with toilets', 'Census_2011_IHHL'],
-				'IHHL2001': ['Census 2001 Households with toilets', 'Census_2001_IHHL'],
-				'TRH2011': ['Census 2011 Total Rural Households', 'Census_2011_Total_Rural_Households'],
-				'TRH2001': ['Census 2001 Total Rural Households', 'Census_2001_Total_Rural_Households'],
-        'val1'   : ['%Census 2011 Households without toilets', '%2011_Households_WOT'],
-        'val2'   : ['%Census 2001 Households without toilets', '%2001_Households_WOT'],
+				'cen2011_2001' : ['%census 2011 - %census 2001', '%Census_2011_IHHL - %Census_2001_IHHL'],
+				'num'    : ['Census 2001 Households with toilets', 'Census_2001_IHHL'],
+				'den'    : ['Census 2011 Households with toilets', 'Census_2011_IHHL'],
 				'R'      : 40,
 				'grad'   : 'gradient_legend_dorCart',
 				'percent': [1, 50, 98],
