@@ -10,6 +10,7 @@ if(host == iwp){
 }else{
 	var menu = d3.nest().key(function(d) { return d.menu; }).entries(stories);
 }
+d3.selectAll('.navbar').on('click', function(){ return d3.selectAll('.tooltip').remove(); });
 // Display the menus
 var parentmenu = d3.select('ul.nav')
   .selectAll('li.dropdown')
@@ -162,30 +163,21 @@ function draw(story) {
 	$('#status').val('');
   d3.select('#exp_text').text(' ');	
 	d3.selectAll('#about, #method, #demo, #brought').style('display', 'none');
+	d3.selectAll('.legend, #chart1, #chart2, #gradient_cont, #right_container, #hide_text').style('display', 'none');
+	d3.selectAll('#source a, .treemap text, #columns text, #gradient text, .horiz0, .horiz1, .tooltip').remove();
+	d3.select('#visual').style('display', 'block');
+	d3.select('#chart').style('border', 'none');
 	d3.select('#data_cont div').style('padding-left','90px').style('margin-left','0');
 	d3.select('#data_cont div strong').text('From: 2001, Till (Change Date):');	
-	d3.select('#visual').style('display', 'block');
-  d3.selectAll('.treemap text').remove();
-  d3.select('#chart').style('border', 'none');
-	d3.selectAll('.legend').style('display', 'none');
-  d3.select('#legend_cont').style('padding-left', '1px');		
-	// Remove treemap gradient container 
-  d3.select('#gradient_cont').style('display', 'none');
-  // Remove scatterplot info container
-  d3.select('#right_container').style('display','none');
-	d3.select('#hide_text').style('display', 'none');
-  // Set the title and story
+	d3.select('#legend_cont').style('padding-left', '1px');		
+	// Set the title and story
   d3.select('#menu').text(story.menu);	
   d3.select('#title').text(story.title);
   d3.select('#subtitle').text(story.subtitle);
   d3.select('#story').text(story.story);
-  d3.selectAll('#columns text').remove();
   d3.select('#columns').text(story.cols.join(", "));
-  d3.selectAll('#source a').remove();
-	d3.select('#chart').attr('height', 500);
-	d3.selectAll('.horiz0, .horiz1').remove();
-	d3.selectAll('.tooltip').remove();
-  d3.select('#source').selectAll('a')
+  d3.select('#chart').attr('height', 500);
+	d3.select('#source').selectAll('a')
       .data(story.url)
     .enter()
       .append('a')
@@ -198,8 +190,6 @@ function draw(story) {
 		window.location.hash = encodeURIComponent(story.menu + '|' + story.title);
 	}
   window['draw_' + story.type](story);
-	d3.select('#exp_text').text(' ');	
-	d3.select('#bottom').remove();
 	if(story.context){
 		var cont = d3.select('#exp_text').append('p').html('<strong>Context:</strong> ');
 		cont.append('span').html(story.context);
@@ -241,11 +231,8 @@ function draw_date(daterow, story) {
     d3.select('#date').text(dates.join(', '));
 }
 function draw_treemap(story) { 
-	d3.selectAll('.tooltip').remove();
-  // Add gradient legend for treemap
-  d3.select('#gradient_cont').style('display', 'block');
-	d3.selectAll('#gradient text').remove();
-	d3.select('.legend.treemap').style('display', 'block');	
+	// Add gradient legend for treemap
+  d3.selectAll('#gradient_cont, .legend.treemap').style('display', 'block');
 	// Creates gradient legend for treemap
 	var gradient = d3.select('#gradient');
   gradient.append('rect')
@@ -343,15 +330,9 @@ function draw_treemap(story) {
   });	
 }
 function draw_cartogram(story) {
-	d3.selectAll('.tooltip').remove();
 	// Add gradient legend for cartogram
   d3.select('#gradient_cont').style('display', 'block');
-	d3.select('#exp_text').text(' ');
-	d3.selectAll('#gradient text').remove();
-	d3.selectAll('.legend').style('display', 'none');	
-	d3.selectAll('.feature').remove();
-	d3.selectAll('.state_bubbles').remove();
-  d3.select('#legend_cont').style('padding-left', '470px');		
+	d3.select('#legend_cont').style('padding-left', '470px');		
 	// Creates gradient legend for cartogram
 	var gradient = d3.select('#gradient');
   gradient.append('rect')
@@ -363,32 +344,22 @@ function draw_cartogram(story) {
     .data(story.pertext) 
     .text(function(d){ return d + '%'; })
     .style('fill', function(d, i){ return i == 3 ? 'white' : 'black';});	
-	var svg = d3.select('#chart');
-			svg.selectAll('*').remove();
+	var svg = d3.select('#chart');			
 			svg.style('border', function(){ return window.location.search == '?embed=1' ?  '1px solid #fff' : '1px solid #ddd';});
 	var width = parseInt(svg.style('width'));
   var height = parseInt(svg.style('height'));
-	var centered;
-  var projection = d3.geo.mercator()
+	d3.select('#brought').style('display', function(){ return window.location.search == '?embed=1' ? 'block' : 'none';});	
+	d3.csv(story.data || datafile(), function(data){ 
+		if(story.data){ $('#data_cont').hide(); d3.select('#data').attr('href', story.data); } else { $('#data_cont').show();}
+		var subset = initchart(story, data);
+		var centered;
+		var projection = d3.geo.mercator()
 			.scale(width*5.5)
 			.translate([-width+250, height+100]);
-	var path = d3.geo.path()
-			.projection(projection);					
-	var maps = svg.append('g');
-	var g = maps.append('g');
-  var dt = maps.append('g'); 	
-	d3.select('#brought').style('display', function(){ return window.location.search == '?embed=1' ? 'block' : 'none';});	
-	d3.json('topojson/ind_states.json', function(json) {
-			g.selectAll('.feature')
-					.data(topojson.object(json, json.objects.india_states).geometries)
-				.enter().append('path')
-					.attr({ class: 'feature', d: function(d){ return path(d);} })
-					.on('click', clicked);					
-			d3.csv(story.data || datafile(), function(data){ 
-					if(story.data){ $('#data_cont').hide(); d3.select('#data').attr('href', story.data); } else { $('#data_cont').show();}
-					var subset = _.filter(data, story.filter);
-					    draw_date(data[data.length-1], story);
-					var dataset = d3.nest()
+		var path = d3.geo.path()
+			.projection(projection);
+		var	map = svg.append('g');
+		var dataset = d3.nest()
 						.key(function(d){ return d[story.group]; })
 						.rollup(function(rows){ 
 							return { 'rads': d3.sum(rows, function(d){ return d[story.area[1]] ;}),
@@ -397,49 +368,52 @@ function draw_cartogram(story) {
 										 }								      
 						})
 						.entries(subset); 
-					var rState = d3.scale.linear().domain(d3.extent(dataset.map(function(d) { return d.values['rads'];}))).range([5, 30]);					
-					g.selectAll('.state_bubbles')
-						.data(topojson.object(json, json.objects.india_states).geometries)
-					.enter().append('circle')	
-						.attr({ class: 'state_bubbles', cx: function(d){ return path.centroid(d)[0]; }, cy: function(d){ return path.centroid(d)[1];} })
-						.data(dataset)
-						.attr({ r: function(d){ return rState(d.values['rads']);}, 'data-q': function(d){ return d.key;} })
-						.style('fill', function(d){ return color(d.values['num']/d.values['den']) ;}) 
-						.on('mouseover', function(){
-							var details = d3.select(this).text(); 
-						 	$('#copy_title').val(details).select();	
-						})
-						.append('title')
-						.text(function(d){ return d.key +': '+ story.area[0]+ ' = '+ N(d.values['rads']) + '. ' + story.num[0] + ' + ' + story.cen2001[0]
-								+' / '+ story.den[0]+' = ' + N(d.values['num']) +' / '+ N(d.values['den']) +' = ' + P(d.values['num']/d.values['den']);
-						});
-			});	
-	});	
-	function clicked(d) {
-		var x, y, k;
-		if (d && centered !== d) {
-			var centroid = path.centroid(d); x = centroid[0]; y = centroid[1]; k = 4; centered = d;
-		} else {
-			x = width / 2.3; y = height / 1.9; k = 1; centered = null;
-		}
-		g.selectAll("path")
-				.classed("active", centered && function(d) { return d === centered; });
-		g.transition()
-				.duration(750)
-				.attr("transform", "translate(" + width / 2.3 + "," + height / 1.9  + ")scale(" + k + ")translate(" + -x + "," + -y + ")");				
-	}
+		var rState = d3.scale.linear().domain(d3.extent(dataset.map(function(d) { return d.values['rads'];}))).range([5, 30]);							
+		d3.json('topojson/ind_states.json', function(json) {
+				svg.selectAll('.feature, .state_bubbles').remove();
+				map.selectAll('.feature')
+							.data(topojson.object(json, json.objects.india_states).geometries)
+						.enter().append('path')
+							.attr({ class: 'feature', d: function(d){ return path(d);} })
+							.on('click', clicked);					
+				map.selectAll('.state_bubbles')
+							.data(topojson.object(json, json.objects.india_states).geometries)
+						.enter().append('circle')
+							.attr({ class: 'state_bubbles', cx: function(d){ return path.centroid(d)[0]; }, cy: function(d){ return path.centroid(d)[1];} })
+							.data(dataset)
+							.attr({ r: function(d){ return rState(d.values['rads']);}, 'data-q': function(d){ return d.key;} })
+							.style('fill', function(d){ return color(d.values['num']/d.values['den']) ;}) 
+							.on('mouseover', function(){
+								var details = d3.select(this).text(); 
+								$('#copy_title').val(details).select();	
+							})
+							.append('title')
+							.text(function(d){ return d.key +': '+ story.area[0]+ ' = '+ N(d.values['rads']) + '. ' + story.num[0] + ' + ' + story.cen2001[0]
+									+' / '+ story.den[0]+' = ' + N(d.values['num']) +' / '+ N(d.values['den']) +' = ' + P(d.values['num']/d.values['den']);
+							});					
+		});
+		function clicked(d) {
+				var x, y, k;
+				if (d && centered !== d) {
+					var centroid = path.centroid(d); x = centroid[0]; y = centroid[1]; k = 4; centered = d;
+				} else {
+					x = width / 2.3; y = height / 1.9; k = 1; centered = null;
+				}
+				map.selectAll("path")
+						.classed("active", centered && function(d) { return d === centered; });
+				map.transition()
+						.duration(750)
+						.attr("transform", "translate(" + width / 2.3 + "," + height / 1.9  + ")scale(" + k + ")translate(" + -x + "," + -y + ")");				
+		}	
+	});
 }
-var tempGroup = '', tempSubgroup = ''; //, tempResult = [];
+var tempGroup = '', tempSubgroup = ''; 
 function draw_scatter(story) {
   var beyond = [];
-	d3.selectAll('.tooltip').remove();
-  // Add scatterplot info container
-  d3.select('#right_container').style('display','block');
-	d3.select('#hide_text').style('display', 'block');
-	d3.select('.legend.scatter').style('display', 'block');
+	// Add scatterplot info container
+  d3.selectAll('#right_container, .legend.scatter, #hide_text').style('display','block');
 	d3.select('#brought').style('display', function(){ return window.location.search == '?embed=1' ? 'block' : 'none';});
-	// Filter the data
-  d3.csv(story.data || datafile(), function(data) {
+	d3.csv(story.data || datafile(), function(data) {
 		if(story.data){ $('#data_cont').hide(); d3.select('#data').attr('href', story.data); } else { $('#data_cont').show();}
     var subset = initchart(story, data);
 		draw_date(data[data.length-1], story);
@@ -484,7 +458,6 @@ function draw_scatter(story) {
         svg.selectAll('circle.mark').classed('mark', false);
 			}
 			var result = _.filter(subset, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); });
-			//tempResult = result;
 			result.unshift({"District_Name":"select District"});
       subselect.selectAll('option').remove();
       subselect.selectAll('option')
@@ -530,10 +503,7 @@ function draw_scatter(story) {
 				d3.select(this).style('stroke', '#000').style('stroke-opacity', 0.5);		
       })
       .on('click', function() {
-        // Set the main selection to blank if anything is faded; else set to selected circle
-        var val = svg.selectAll('.show')[0].length ? '' : d3.select(this).attr('data-q');
-        select.property('value', val).on('change').call(select.node());
-				svg.selectAll('.district')
+        svg.selectAll('.district')
 						.classed('show', false).classed('hide', true);
 				svg.selectAll('.state')
 						.classed('hide', false).classed('show', true);
@@ -560,8 +530,6 @@ function draw_scatter(story) {
 				d3.select(this).style({ 'stroke': '#000', 'stroke-opacity': .5 });
 			})
 			.on('click', function(){
-				var val = svg.selectAll('.fade')[0].length ? '' : d3.select(this).attr('data-q');
-        select.property('value', val).on('change').call(select.node());
 				var q = d3.select(this).attr('data-q');
         svg.selectAll('.district[data-q="' + q + '"]').classed('hide', false);
 				svg.selectAll('.state').classed('hide', true);
@@ -675,9 +643,7 @@ function draw_scatter(story) {
   });
 }
 function draw_boxscatter(story) {
-  d3.selectAll('.tooltip').remove();
-  d3.selectAll('#right_container').remove();
-	d3.select('.legend.boxscatter').style('display', 'block');
+  d3.select('.legend.boxscatter').style('display', 'block');
 	d3.select('#brought').style('display', function(){ return window.location.search == '?embed=1' ? 'block' : 'none';});
 	d3.csv(story.data || datafile(), function(data) {
 		if(story.data){ $('#data_cont').hide(); d3.select('#data').attr('href', story.data); } else { $('#data_cont').show();}
@@ -957,11 +923,7 @@ function draw_boxscatter(story) {
   });
 }
 function draw_stack(story) {
-	d3.selectAll('.tooltip').remove();
-	d3.select('#exp_text').text(' ');	
-	d3.selectAll('.v1').remove();
-	d3.selectAll('.y1').remove();
-	d3.selectAll('text, line, .y2').remove();
+	d3.selectAll('text, line').remove();
 	d3.select('.legend.stack').style('display', 'block');	
 	d3.select('#brought').style('display', function(){ return window.location.search == '?embed=1' ? 'block' : 'none';});
   d3.csv(story.data || datafile(), function(data) {
@@ -1154,15 +1116,10 @@ function draw_stack(story) {
 			}		
   });
 }
-var tempresults = [];
 function draw_dorling(story) {
-	d3.selectAll('.tooltip').remove();
 	d3.select('#data_cont div').style('padding-left','15px').style('margin-left','-10px');
 	d3.select('#data_cont div strong').text('Change Date : ');
-	d3.selectAll('#gradient_cont, .legend.dorling').style('display', 'block');
-	d3.select('#exp_text').text(' ');
-	d3.selectAll('#gradient text, .state_bubbles, .feature').remove();
-	d3.selectAll('rect').remove();
+	d3.selectAll('#chart1, #chart2, #gradient_cont, .legend.dorling').style('display', 'block');  //#chart1, #chart2
 	var gradient = d3.select('#gradient');
   gradient.append('rect')
 		.attr({ x: 0, y: 0, width: 958, height: 30, fill: 'url(#'+ story.grad +')' });		
@@ -1171,24 +1128,191 @@ function draw_dorling(story) {
    .enter().append('text')
 		.attr({ x: function(d){ return d + '%';}, y: 20, fill: function(d, i){ return i == 3 ? 'white' : 'black';} })
 		.data(story.pertext) 
-    .text(function(d){ return d + '%'; });    
-	var svg = d3.select('#chart');
-			svg.selectAll('*').remove();
-			svg.style('border', function(){ return window.location.search == '?embed=1' ?  '1px solid #fff' : '1px solid #ddd';});
-	var width = parseInt(svg.style('width'));
-  var height = parseInt(svg.style('height'));
-	d3.select('#brought').style('display', function(){ return window.location.search == '?embed=1' ? 'block' : 'none';});
+    .text(function(d){ return d + '%'; });
+		var svg = d3.select('#chart');
+		var svg1 = d3.select('#chart1');
+		var svg2 = d3.select('#chart2');
+		svg.style('border', function(){ return window.location.search == '?embed=1' ?  '1px solid #fff' : '1px solid #ddd';});
+		var width = parseInt(svg.style('width')),
+		height = parseInt(svg.style('height'));
+		var group = (story.title).toUpperCase();
+		var R = story.R;
+    var result2 = [];		
+	d3.select('#brought').style('display', function(){ return window.location.search == '?embed=1' ? 'block' : 'none';});	
+	d3.csv(story.data2, function(data){
+		svg2.selectAll('*').remove();
+		svg2.append('text').attr({ x: 25, y: 25, fill: '#000', stroke: 'none' }).text('Click to filter -->');
+		svg2.append('circle').attr({ id: 'cirTSC',cx: 155, cy: 20, r: 8, fill: '#4F81BD' });
+		svg2.append('text').attr({ x: 170, y: 25, fill: '#000', stroke: 'none' }).text('TSC value');
+		svg2.append('circle').attr({ id: 'cirCEN', cx: 290, cy: 20, r: 8, fill: '#F79646' });
+		svg2.append('text').attr({ x: 305, y: 25, fill: '#000', stroke: 'none' }).text('Census value');
+		svg2.append('rect').attr({ id: 'recTSC', x: 445, y: 10, width: 15, height: 18, fill: '#C0504D', 'shape-rendering': 'crispEdges' });
+		svg2.append('text').attr({ x: 465, y: 25, fill: '#000', stroke: 'none' }).text('TSC value is high');
+		svg2.append('rect').attr({ id: 'recCEN', x: 625, y: 10, width: 15, height: 18, fill: '#9BBB59', 'shape-rendering': 'crispEdges' });
+		svg2.append('text').attr({ x: 650, y: 25, fill: '#000', stroke: 'none' }).text('Census value is high');
+		svg2.append('rect').attr({ x: 830, y: 10, width: 75, height: 18, fill: '#eee', 'stroke': '#aaa','shape-rendering': 'crispEdges' });
+		svg2.append('text').attr({ id: 'clrFtr', x: 835, y: 25, 'cursor': 'pointer' }).text('Clear filter');
+		result = _.filter(data, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); });
+		result.sort(function(a, b){ return b[story.X] - a[story.X];}),
+		result2 = result;
+		extentX = d3.extent(result, function(d){ return Math.floor(d[story.X]);}),
+		extentYT = d3.extent(result, function(d){ return Math.floor(d[story.YT]);}),
+		extentYC = d3.extent(result, function(d){ return Math.floor(d[story.YC]);}),
+		extentYminmax = d3.extent(d3.merge([extentYT,extentYC]));			
+		xscaleD = d3.scale.sqrt()
+					.domain([extentX[0]-(getlength(extentX[0]) * 10), extentX[1]+(getlength(extentX[0]) * 10)])
+					.range([R, width - R]),
+		yscaleD = d3.scale.sqrt()
+					.domain([(extentYminmax[0] - (Math.pow(10, getlength(extentYminmax[0]) - 1))),extentYminmax[1]+(getlength(extentYminmax[1]) * 10)])
+					.range([height - R, R]); 
+		axes(xscaleD, yscaleD);
+		var district_boxS	= svg2.append('g').classed('distsgrp', true)
+				.selectAll('.districts').data(result).enter();	
+		district_boxS.append('rect')
+				.attr({ x: function(d){ return xscaleD(d[story.X]) - R / 8; }, 'data-r': function(d) { return d.District_Name; },	 
+								y: function(d){ return yscaleD(Math.max(d[story.YT],d[story.YC])) - R / 8; }, width: R/4, 
+								height: function(d){ return Math.abs(yscaleD(Math.max(d[story.YT],d[story.YC])) 
+												- yscaleD(Math.min(d[story.YT],d[story.YC]))) + R / 4;},
+								class: function(d){ return d[story.YT] - d[story.YC] < 0 ? 'distsBox districts distsBoxT' : 'distsBox districts distsBoxC' ; },
+								'data-q': function(d) { return d.State_Name; }, 
+								fill: function(d){ return d[story.YT] - d[story.YC] < 0 ? '#9BBB59' : '#C0504D' ; }
+				})			
+				.on('mouseover', function() {
+						var details = d3.select(this).text(); 
+						$('#copy_title').val(details).select();	
+				})
+				.append('title')
+				.text(function(d){ return d.State_Name+' - '+d.District_Name +' : TSC Finance = '+ N(d[story.X])+'. TSC data = ' 
+							+ N(d[story.YT])+'. Census data = ' + N(d[story.YC]) +'. Difference (TSC - Census) = ' + N(d[story.YT]) +' - '
+							+ N(d[story.YC]) +' = '+ N(d[story.YT] - d[story.YC]) + '.'; 
+				});
+		district_boxS.append('circle')	
+				.attr({ cx: function(d){ return xscaleD(d[story.X]); }, 
+								cy: function(d){ return yscaleD(Math.max(d[story.YT], d[story.YC])); }, r: R/9,
+								class: function(d){ return d[story.YT] - d[story.YC] > 0 ? 'distsT' : 'distsC';}, 
+								fill:	function(d){ return d[story.YT] - d[story.YC] > 0 ? '#4F81BD' : '#F79646';},
+								'data-q': function(d) { return d.State_Name; }, 
+								'data-r': function(d) { return d.District_Name; }, stroke: '#000'							
+				})
+				.append('title')
+				.text(function(d){ return d[story.YT] > d[story.YC] ? d.District_Name +' : TSC = ' + N(d[story.YT]) : 
+							d.District_Name +' : Census = ' + N(d[story.YC]);
+				});
+		district_boxS.append('circle')	
+				.attr({ cx: function(d){ return xscaleD(d[story.X]); }, 
+								cy: function(d){ return yscaleD(Math.min(d[story.YT], d[story.YC])); }, r: R/9,
+								class: function(d){ return d[story.YT] - d[story.YC] < 0 ? 'distsT' : 'distsC';}, 
+								fill: function(d){ return d[story.YT] - d[story.YC] < 0 ? '#4F81BD' : '#F79646';},
+								'data-q': function(d) { return d.State; }, 
+								'data-r': function(d) { return d.District_Name; }, stroke: '#000'
+				})
+				.append('title')
+				.text(function(d){ return d[story.YT] - d[story.YC] < 0 ? d.District_Name +' : TSC = ' + N(d[story.YT]) : 
+						d.District_Name +' : Census = ' + N(d[story.YC]);
+				});	
+		var lineDT = d3.svg.line()
+					.x(function(d){ return xscaleD(d[story.X]);})
+					.y(function(d){ return yscaleD(d[story.YT]);});
+		var lineDC = d3.svg.line()
+					.x(function(d){ return xscaleD(d[story.X]);})
+					.y(function(d){ return yscaleD(d[story.YC]);});			
+		district_boxS.append('path').attr({ d: function(d){ return lineDT(result);}, class: 'lineDT fade', stroke: '#4F81BD' });
+		district_boxS.append('path').attr({ d: function(d){ return lineDC(result);}, class: 'lineDC fade', stroke: '#F79646' });			
+		function getlength(n) {
+				return n.toString().length;
+		}		
+		svg2.select('#cirTSC').on('click', function(){
+			svg2.selectAll('*').classed('fade', false);
+			svg2.selectAll('.distsBoxC, .distsBoxT, .distsC, .lineDC').classed('fade', true);
+		});
+		svg2.select('#cirCEN').on('click', function(){		
+			svg2.selectAll('*').classed('fade', false);
+			svg2.selectAll('.distsBoxC, .distsBoxT, .distsT, .lineDT').classed('fade', true);	
+		});
+		svg2.select('#recTSC').on('click', function(){
+			svg2.selectAll('*').classed('fade', false);
+			svg2.selectAll('.distsBoxT, .distsC, .distsT, .lineDT, .lineDC').classed('fade', true);		
+			svg2.selectAll('.distsBoxC').classed('show', true);
+		});
+		svg2.select('#recCEN').on('click', function(){	
+			svg2.selectAll('*').classed('fade', false);	
+			svg2.selectAll('.distsBoxC, .distsC, .distsT, .lineDT, .lineDC').classed('fade', true);		
+			svg2.selectAll('.distsBoxT').classed('show', true);
+		});
+		svg2.select('#clrFtr').on('click', function(){
+			svg2.selectAll('.lineDT, .lineDC').classed('fade', true);	
+			svg2.selectAll('.distsBoxC, .distsBoxT, .distsC, .distsT').classed('fade', false);
+			d3.selectAll('.tooltip').remove();
+		});		
+		function axes(x, y){
+			svg2.selectAll('.axis').remove();
+			var xaxis = svg2.append('g')
+				.attr({ class: 'axis', transform: 'translate(0,' + (height - R) + ')' })
+				.call(d3.svg.axis()
+								.scale(x)
+								.orient('bottom')
+								//.ticks(t)
+								.tickFormat(function(d) { return d / 1000 + 'K';}))
+				.append('text')
+				.text(story.x2[0])
+				.attr({ transform: 'translate(-5, -5)', x: width - R, 'text-anchor': 'end' });
+			var yaxis = svg2.append('g')
+				.attr({ class: 'axis', transform: 'translate(' + R + ',0)' })
+				.call(d3.svg.axis()
+								.scale(y)
+								.orient('left')
+								//.ticks(t)
+								.tickFormat(function(d) { return d / 100000 + 'L';}))
+				.append('text')
+				.text(story.yT2[0])
+				.attr({ x: R, transform: 'translate(5,5) rotate(-90,' + R + ',' + R + ')', 'text-anchor': 'end', 'dominant-baseline': 'hanging' });
+		}
+		function grids(h0, h1, h2, y, v0, v1, v2, x){ 
+		// Lines joining x-axis and y-axis
+		  svg2.selectAll('.h, .v').remove();
+			svg2.append('g').selectAll('.h')
+					.data(d3.range(h0, h1, h2))   
+				.enter().append('line')
+					.attr({ class: 'h', x1: R, y1: function(d){ return y(d);}, x2: width - R, y2: function(d){ return y(d);} })
+					.style({ 'fill': 'none', 'stroke': '#ddd', 'shape-rendering': 'crispEdges'});
+			svg2.append('g').selectAll('.v')
+					.data(d3.range(v0, v1, v2))  
+				.enter().append('line')
+					.attr({ class: 'v', x1: function(d){ return x(d);}, y1: R, x2: function(d){ return x(d);}, y2: height - R })
+					.style({ 'fill': 'none', 'stroke': '#ddd', 'shape-rendering': 'crispEdges'});
+		}	
+	});	
 	d3.csv(story.data || datafile(), function(data) {
 		if(story.data){ $('#data_cont').hide(); d3.select('#data').attr('href', story.data); } else { $('#data_cont').show();}
-		var subset = initchart(story, data),		
+		var subset = initchart(story, data);		
+		svg1.selectAll('*').remove();
+		//set matrix
+		svg1.append('path')
+			.attr("d",'M 40 461 L 922 40 L 40 40')           
+			.style({ 'fill': '#B8E62E', 'fill-opacity': 0.3, 'stroke': '#000' });
+		svg1.append('path')
+			.attr("d",'M 40 461 L 922 40 L 922 461')           
+			.style({ 'fill': '#D73027', 'fill-opacity': 0.5, 'stroke': '#000' });		
+		var force = d3.layout.force()
+				.gravity(0)
+				.size([width, height]);
+		var R = story.R, k = story.K, a = story.A;		
+		var nodes = [], node = [], padding = 3;		
+		var centered;
+		var projection = d3.geo.mercator()
+				.scale(width*5.5)
+				.translate([-width+230, height+100]);			
+		var path = d3.geo.path()
+				.projection(projection);					
+		var topomaps = [];
 	  legend = d3.select('.legend.dorling');
 		legend.selectAll('*').remove();
 		var select = legend.append('select').attr('class', 'param input-medium'); 
     var subselect = legend.append('select').attr('class', 'subparam'),
     distselect = legend.append('select').attr('class', 'districts'),
-    group = (story.title).toUpperCase(),    
-	  result = _.filter(subset, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); });
-		tempresults = result;
+    result = _.filter(subset, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); });
+		var Range = story.range,
+		r = d3.scale.linear().domain(d3.extent(result, function(d){ return parseFloat(d[story.size]);})).range(Range);
 		select.selectAll('option')
 				.data(d3.keys(options))
 			.enter()
@@ -1211,89 +1335,159 @@ function draw_dorling(story) {
 		$('select.param').val(hashdec[2]);
 		$('select.subparam').val(hashdec[3]);
 		distselect.selectAll('option')
-				.data(tempresults)
+				.data(result)
 			.enter()
 				.append('option')
 				.text(function(d){ return d.District_Name; });				
-		distselect.on('change', function(d){
-			d3.selectAll('.tooltip').remove();
-			var dist = d3.select(this).property('value');
-			svg.selectAll('circle')
-        .data(tempresults)
-        .classed('mark', function(d){
-          return d.District_Name == dist ? true : false; 
-				});
-			var details = svg.select('.distsDor[data-q="' + dist + '"]').text();
-			$('#copy_title').val(details);
-			$('#copy_title').on('mouseover', function(){ $(this).select(); });		
-			$('.mark').tooltip({ title:function(){ return $('.mark title').text(); }, trigger:'focus', container:'body' }).tooltip('show');						
-		});
+		var xscale1 = d3.scale.linear().domain(story.xdom).range([R, width - R]);
+    var yscale1 = d3.scale.linear().domain(story.ydom).range([height - R, R])
+		var rDistrict = d3.scale.linear().domain(d3.extent(result.map(function(d) { return story.area1[1](d);}))).range([10, 20]);
+		var districts = svg1.selectAll('.district')    
+			.data(subset).enter();			
+		districts.append('circle')
+			.attr({ class: 'district hide', cx: function(d) { return xscale1(story.cx(d)); }, cy: function(d) { return yscale1(story.cy(d)); }, 
+					r: function(d){ return rDistrict(story.area1[1](d)); }, fill: story.color1, stroke: '#000', 'fill-opacity' : 0.9,
+					'data-q': function(d) { return d.State_Name; }, 'data-r': function(d) { return d.District_Name; } 
+			})
+			.classed( 'hide', function(d){ return d.State_Name == group ? false : true; })
+			.on('mouseover', function() {
+					var details = d3.select(this).text(); 
+					$('#copy_title').val(details).select();	
+			})
+			.append('title')
+      .text(story.hover1);
 		d3.csv('GeocodeLatLong.csv', function(geo){
-			georesult = _.filter(geo, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); });
-			var R = story.R,		
-			xscale = d3.scale.linear().domain(d3.extent(georesult, function(d){ return parseFloat(d.Longitude);})).range([240, width - 240]),		
-			yscale = d3.scale.linear().domain(d3.extent(georesult, function(d){ return parseFloat(d.Latitude);})).range([height - 80, 80]),
-			r = d3.scale.linear().domain(d3.extent(result, function(d){ return parseFloat(d[story.size]);})).range([10, 25]);				
+			var longminmax = d3.extent(geo, function(d){ return parseFloat(d.Longitude);}),
+			latminmax = d3.extent(geo, function(d){ return parseFloat(d.Latitude);});
+			var xscale = d3.scale.linear().domain(longminmax).range([295, 685]).clamp(true), 
+			yscale = d3.scale.linear().domain(latminmax).range([477, 60]).clamp(true); 
 			svg.selectAll('text').remove();		
 			var force = d3.layout.force()
 				.gravity(0)
 				.size([width, height]);
-			var nodes = georesult.map(function(d){ return {
-							x : xscale(d.Longitude), y : yscale(d.Latitude),
-							x0 : xscale(d.Longitude), y0 : yscale(d.Latitude)
-						}			
-			});
-			var node = svg.selectAll('.distsDor')
-					.data(tempresults)
-				.enter().append('circle')
-					.attr({ class: 'distsDor', r: function(d){ return r(d[story.size]); }, 
-									'data-q': function(d) { return d.District_Name; }, fill: story.color 
-					})
-					.on('mouseover', function(){ 
-						var details = d3.select(this).text(); 
-						$('#copy_title').val(details).select();
-					});					
-			node.append('title')
-					.text(story.hover);
-			var text = svg.selectAll('.tags')
-					.data(tempresults)
-				.enter().append('text')
-					.classed('tags', true)
-          .text(function(d){ return d.District_Name; });
-			force.nodes(nodes)
-					.charge(-350)
-					.on('tick', tick)
-					.start();
-			function tick(e) {
-					node.data(nodes)
-							.each(gravity(e.alpha * .5))
-							.attr({ cx: function(d) { return d.x; }, cy: function(d) { return d.y; } });							
-					 text.data(nodes)
-							.each(gravity(e.alpha * .5))
-							.attr({ x: function(d) { return d.x; }, y: function(d) { return d.y; } });
-				}		
-			  function gravity(k) {
-					return function(d) {
-						d.x += (d.x0 - d.x) * k; d.y += (d.y0 - d.y) * k;
-					};
-				}		
+			nodes = geo.map(function(d){ return {
+																x: xscale(d.Longitude), y: yscale(d.Latitude),
+																x0: xscale(d.Longitude), y0: yscale(d.Latitude)    
+															};
+			});	
+			var maps = []; 
+			d3.json('topojson/ind_states.json', function(json) {
+					svg.select('g').remove();	
+					maps = svg.append('g');
+					maps.selectAll('.feature')
+							.data(topojson.object(json, json.objects.india_states).geometries)
+						.enter().append('path')
+							.attr({ class: 'feature auto hide', 'data-q': function(d){ return d.properties.NAME.toUpperCase(); }, 
+											d: function(d){ topomaps.push([d.properties.NAME.toUpperCase(), d]); return path(d);} 
+							});
+					var node = maps.selectAll('.distCircs')
+							.data(geo)
+						.enter().append('circle')	
+							.attr({ class: 'distCircs', cx: function(d) { return xscale(d.Longitude); }, 
+											cy: function(d) { return yscale(d.Latitude); } 
+							})
+							.data(subset)
+							.attr({ r: function(d){ return d.State_Name == group ? r(d[story.size]) : 1;}, 'stroke': '#000', 'stroke-width': -1 + 'px', //r(d[story.size])
+											fill: story.color, 'data-q': function(d){ return d.State_Name; }, 'data-r': function(d){ return d.District_Name; }											
+							})							
+							.on('mouseover', function(){
+								var details = d3.select(this).text(); 
+								$('#copy_title').val(details).select();	
+							});				
+					node.append('title')
+							.text(story.hover);
+					maps.selectAll('text')
+							.data(geo)
+						.enter().append('text')
+							.attr('x', function(d){ return xscale(d.Longitude); })
+							.attr('y', function(d){ return yscale(d.Latitude); })
+							.data(subset)
+							.text(function(d){ return d.State_Name == group ? d.District_Name : ''; })
+							.style('font-size', function(d){ return 10 / k +'px'; })
+							.style('text-anchor', 'middle')
+							.style('dominant-baseline', 'middle');							
+					var selPath = _.filter(topomaps, function(m){ return m[0] == group; });
+					var D = selPath[0][1];
+					var centroid = path.centroid(D); x = centroid[0]; y = centroid[1];
+					svg.selectAll('.feature').classed('hide', true);
+					svg.selectAll('.distCircs').classed('hide', true);
+					svg.selectAll('.feature[data-q="' + group + '"]').classed('hide', false).style({ 'stroke-width': -1 + 'px' });
+					svg.selectAll('.distCircs[data-q="' + group + '"]').classed('hide', false); 		
+					maps.transition()
+						.duration(-1600)
+						.attr("transform", "translate(" + width / 2 + "," + height / a + ")scale(" + k + ")translate(" + -x + "," + -y + ")");
+			});						
 			subselect.on('change', function(d){
-					story.param1 = select.property('value');
-					story.param2 = subselect.property('value');
-					window.location.hash = encodeURIComponent(story.menu + '|' + story.title + '|' + story.param1 + '|' + story.param2);
-				});								
-		});		
+				story.param1 = select.property('value');
+				story.param2 = subselect.property('value');
+				window.location.hash = encodeURIComponent(story.menu + '|' + story.title + '|' + story.param1 + '|' + story.param2);
+			});								
+		});	
+		distselect.on('change', function(d){		
+			d3.selectAll('.tooltip').remove();
+			var subgroup = d3.select(this).property('value');
+			svg1.selectAll('circle').classed('mark', false);
+			svg2.selectAll('rect').classed('mark', false);
+      var result = _.filter(subset, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); });
+			svg1.selectAll('circle[data-q="' + group + '"]')
+        .data(result)
+        .classed('mark1', function(d){
+          return d.District_Name == subgroup ? true : false; 
+				});
+			$('.mark1').tooltip({ title:function(){ return $('.mark1 title').text(); }, trigger:'focus', container:'body' }).tooltip('show');								
+			svg2.selectAll('rect[data-q="' + group + '"]')
+        .data(result2)
+        .classed('mark2', function(d){
+          return d.District_Name == subgroup ? true : false; 
+				});
+			$('.mark2').tooltip({ title:function(){ return $('.mark2 title').text(); }, trigger:'focus', container:'body' }).tooltip('show');	
+			svg.selectAll('.distCircs')
+					.data(subset)
+					.classed('mark', function(d){ return d.District_Name == subgroup ? true : false; });
+			var details = svg.selectAll('.distCircs[data-q="' + group + '"][data-r="' + subgroup + '"]').text();
+			$('#copy_title').val(details);
+			$('#copy_title').on('mouseover', function(){ $(this).select(); });		
+			$('.mark').tooltip({ title:function(){ return $('.mark title').text(); }, trigger:'focus', container:'body' }).tooltip('show');						
+		});
+		var xaxis = svg1.append('g')
+      .classed('axis', true)
+			.attr('transform', 'translate(0,' + (height - R) + ')')
+      .call(d3.svg.axis()
+              .scale(xscale1)
+              .orient('bottom')
+              .tickFormat(d3.format('.0%')))
+      .append('text')
+      .text(story.x[0])
+			.attr({ transform: 'translate(0, -5)', x: width - R, 'text-anchor': 'end' });
+    var yaxis = svg1.append('g')
+      .attr('class', 'axis')
+      .attr('transform', 'translate(' + R + ',0)')
+      .call(d3.svg.axis()
+              .scale(yscale1)
+              .orient('left')
+              .tickFormat(d3.format('.0%')))
+      .append('text')
+      .text(story.y[0])
+			.attr({ x: R, transform: 'translate(5,0) rotate(-90,' + R + ',' + R + ')', 'text-anchor': 'end', 'dominant-baseline': 'hanging'  });
+		// Lines joining x-axis and y-axis
+		svg1.append('g').selectAll('.h')
+			.data(d3.range(0.2, story.ydom[1] , 0.2))
+			.enter().append('line')
+			.attr({ class: 'h', x1: R, y1: function(d){ return yscale1(d);}, 
+					x2: function(d){ return xscale1(d);}, y2: function(d){ return yscale1(d);} 
+			});
+		svg1.append('g').selectAll('.v')
+			.data(d3.range(0.2, story.xdom[1] , 0.2))
+			.enter().append('line')
+			.attr({ class: 'v', x1: function(d){ return xscale1(d);}, y1: function(d){ return yscale1(d);}, 
+					x2: function(d){ return xscale1(d);}, y2: height - R 
+			});
 	});
 }
 function draw_dorlingCart(story) {   // census 2001 vs 2011
-	d3.selectAll('.tooltip').remove();
 	d3.select('#data_cont div').style('padding-left','15px').style('margin-left','-10px');
 	d3.select('#data_cont div strong').text('Change Date : ');
 	d3.selectAll('#gradient_cont, .legend.dorlingCart').style('display', 'block');
-	d3.selectAll('#demo, #about').style('display', 'none');		
-	d3.select('#exp_text').text(' ');
-	d3.selectAll('#gradient text, .state_bubbles, .feature').remove();
-	d3.selectAll('path').remove();
 	var gradient = d3.select('#gradient');
 	gradient.append('rect')
 		.attr({ x : 0, y: 0, width : 958, height : 30, fill : 'url(#' + story.grad + ')' });
@@ -1308,10 +1502,7 @@ function draw_dorlingCart(story) {   // census 2001 vs 2011
 			svg.style('border', function(){ return window.location.search == '?embed=1' ?  '1px solid #fff' : '1px solid #ddd';});
 	var width = parseInt(svg.style('width'));
 	var height = parseInt(svg.style('height'));	
-	var force = d3.layout.force()
-			.gravity(0)
-			.size([width, height]); 
-	var nodes = [], node = [], padding = 3;		
+	var nodes = [], node = [];	
 	var centered;
 	var projection = d3.geo.mercator()
 			.scale(width*5.5)
@@ -1508,13 +1699,15 @@ if(window.location.search == '?embed=1'){
 	d3.select('#data_cont div').style('width', '455px');
 	d3.select('svg').style('border', 'none');
 	d3.select('#hide_btn').style('margin-left', '382px');
-	d3.selectAll('.navbar-inner, #menu, #subtitle, #exp_text, #copy_cont,.btn-group, #right_container, #details, #info, #slideshare, #download_cont, #source_cont, #source, footer').remove();	
+	d3.selectAll('.navbar-inner, #menu, #subtitle, #exp_text, #copy_cont,.btn-group, #slideshare').remove();	
+	d3.selectAll('#right_container, #details, #info, #download_cont, #source_cont, #source, footer').remove();	
 }
 function position() {
   this.transition()
 		.duration(400)
-		.attr({ x: function(d){ return d.x; }, y: function(d){ return d.y; }, width: function(d){ return d.dx; }, height: function(d){ return d.dy; },
-				class: function(d){ return "l" + d.depth; }, 'data-q': function(d){ return d.depth == 1 ? d.key : d.District_Name; }, 'data-r': function(d){ return d.depth == 2 ? d.State_Name : null; }
+		.attr({ x: function(d){ return d.x; }, y: function(d){ return d.y; }, width: function(d){ return d.dx; }, 
+						height: function(d){ return d.dy; }, 'data-q': function(d){ return d.depth == 1 ? d.key : d.District_Name; },
+				    class: function(d){ return "l" + d.depth; }, 'data-r': function(d){ return d.depth == 2 ? d.State_Name : null; }
 		});		
 }
 function positionText() { 
