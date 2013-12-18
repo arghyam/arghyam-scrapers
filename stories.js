@@ -636,7 +636,7 @@ var stories = [
 				'grad'   : 'gradient_legend_dorCart',
 				'percent': [1, 50, 98],
 				'pertext': [-1, 0, 1],
-				'IWP'    : 'true'
+				'IWP'    : 'false'
 		}),
 		dorling_story({
         'menu'   : 'State',
@@ -666,7 +666,7 @@ var stories = [
 				'range'	 : [1, 5],
 				'percent': [1, 50, 95],
 				'pertext': [0, 100, 200],
-				'IWP'    : 'true'					
+				'IWP'    : 'false'					
     }),
 		dorling_story({
         'menu'   : 'State',
@@ -696,7 +696,7 @@ var stories = [
 				'range'	 : [1, 3],
 				'percent': [1, 50, 95],
 				'pertext': [0, 100, 200],
-				'IWP'    : 'true'					
+				'IWP'    : 'false'					
     }),
 		dorling_story({
         'menu'   : 'State',
@@ -726,7 +726,7 @@ var stories = [
 				'range'	 : [1, 4],
 				'percent': [1, 50, 95],
 				'pertext': [0, 100, 200],
-				'IWP'    : 'true'					
+				'IWP'    : 'false'					
     }),
 		dorling_story({
         'menu'   : 'State',
@@ -756,7 +756,7 @@ var stories = [
 				'range'	 : [1, 3],
 				'percent': [1, 50, 95],
 				'pertext': [0, 100, 200],
-				'IWP'    : 'true'					
+				'IWP'    : 'false'					
     }),
 		dorling_story({
         'menu'   : 'State',
@@ -786,7 +786,7 @@ var stories = [
 				'range'	 : [1, 5],
 				'percent': [1, 50, 95],
 				'pertext': [0, 100, 200],
-				'IWP'    : 'true'					
+				'IWP'    : 'false'					
     }),
 		dorling_story({
         'menu'   : 'State',
@@ -816,7 +816,7 @@ var stories = [
 				'range'	 : [0.6, 1],
 				'percent': [1, 50, 95],
 				'pertext': [0, 100, 200],
-				'IWP'    : 'true'					
+				'IWP'    : 'false'					
     }),
 		dorling_story({
         'menu'   : 'State',
@@ -846,7 +846,7 @@ var stories = [
 				'range'	 : [0.6, 1],
 				'percent': [1, 50, 95],
 				'pertext': [0, 100, 200],
-				'IWP'    : 'true'					
+				'IWP'    : 'false'					
     }),
 		dorling_story({
         'menu'   : 'State',
@@ -876,7 +876,7 @@ var stories = [
 				'range'	 : [1, 4],
 				'percent': [1, 50, 95],
 				'pertext': [0, 100, 200],
-				'IWP'    : 'true'					
+				'IWP'    : 'false'					
     }),
 		dorling_story({
         'menu'   : 'State',
@@ -906,7 +906,7 @@ var stories = [
 				'range'	 : [0.6, 3],
 				'percent': [1, 50, 95],
 				'pertext': [0, 100, 200],
-				'IWP'    : 'true'					
+				'IWP'    : 'false'					
     }),
 		dorling_story({
         'menu'   : 'State',
@@ -936,7 +936,7 @@ var stories = [
 				'range'	 : [0.6, 3],
 				'percent': [1, 50, 95],
 				'pertext': [0, 100, 200],
-				'IWP'    : 'true'					
+				'IWP'    : 'false'					
     }),
 		dorling_story({
         'menu'   : 'State',
@@ -966,7 +966,7 @@ var stories = [
 				'range'	 : [1, 4],
 				'percent': [1, 50, 95],
 				'pertext': [0, 100, 200],
-				'IWP'    : 'true'					
+				'IWP'    : 'false'					
     }),
 		dorling_story({
         'menu'   : 'State',
@@ -996,7 +996,7 @@ var stories = [
 				'range'	 : [0.6, 3],
 				'percent': [1, 50, 95],
 				'pertext': [0, 100, 200],
-				'IWP'    : 'true'					
+				'IWP'    : 'false'					
     }),
 		dorling_story({
         'menu'   : 'State',
@@ -1026,7 +1026,7 @@ var stories = [
 				'range'	 : [1, 5],
 				'percent': [1, 50, 95],
 				'pertext': [0, 100, 200],
-				'IWP'    : 'true'					
+				'IWP'    : 'false'					
     }),
 		dorling_story({
         'menu'   : 'State',
@@ -1056,7 +1056,7 @@ var stories = [
 				'range'	 : [1, 3],
 				'percent': [1, 50, 95],
 				'pertext': [0, 100, 200],
-				'IWP'    : 'true'					
+				'IWP'    : 'false'					
     }),
 		dorling_story({
         'menu'   : 'State',
@@ -1086,7 +1086,7 @@ var stories = [
 				'range'	 : [1, 5],
 				'percent': [1, 50, 95],
 				'pertext': [0, 100, 200],
-				'IWP'    : 'true'					
+				'IWP'    : 'false'					
     }),
 		dorling_story({
         'menu'   : 'State',
@@ -1116,7 +1116,7 @@ var stories = [
 				'range'	 : [1, 5],
 				'percent': [1, 50, 95],
 				'pertext': [0, 100, 200],
-				'IWP'    : 'true'					
+				'IWP'    : 'false'					
     }),
 		dorling_story({
         'menu'   : 'State',
@@ -1146,7 +1146,7 @@ var stories = [
 				'range'	 : [0.6, 2],
 				'percent': [1, 50, 95],
 				'pertext': [0, 100, 200],
-				'IWP'    : 'true'					
+				'IWP'    : 'false'					
     }),
 		dorling_story({
         'menu'   : 'State',
@@ -1176,7 +1176,7 @@ var stories = [
 				'range'	 : [0.6, 2],
 				'percent': [1, 50, 95],
 				'pertext': [0, 100, 200],
-				'IWP'    : 'true'					
+				'IWP'    : 'false'					
     }),
 		dorling_story({
         'menu'   : 'State',
@@ -1206,7 +1206,7 @@ var stories = [
 				'range'	 : [0.6, 2],
 				'percent': [1, 50, 95],
 				'pertext': [0, 100, 200],
-				'IWP'    : 'true'					
+				'IWP'    : 'false'					
     }),
 		dorling_story({
         'menu'   : 'State',
@@ -1236,7 +1236,7 @@ var stories = [
 				'range'	 : [0.6, 1],
 				'percent': [1, 50, 95],
 				'pertext': [0, 100, 200],
-				'IWP'    : 'true'					
+				'IWP'    : 'false'					
     }),
 		dorling_story({
         'menu'   : 'State',
@@ -1266,7 +1266,7 @@ var stories = [
 				'range'	 : [1, 4],
 				'percent': [1, 50, 95],
 				'pertext': [0, 100, 200],
-				'IWP'    : 'true'					
+				'IWP'    : 'false'					
     }),
 		dorling_story({
         'menu'   : 'State',
@@ -1296,7 +1296,7 @@ var stories = [
 				'range'	 : [0.6, 1],
 				'percent': [1, 50, 95],
 				'pertext': [0, 100, 200],
-				'IWP'    : 'true'					
+				'IWP'    : 'false'					
     }),
 		dorling_story({
         'menu'   : 'State',
@@ -1326,7 +1326,7 @@ var stories = [
 				'range'	 : [0.6, 2],
 				'percent': [1, 50, 95],
 				'pertext': [0, 100, 200],
-				'IWP'    : 'true'					
+				'IWP'    : 'false'					
     }),
 		dorling_story({
         'menu'   : 'State',
@@ -1356,7 +1356,7 @@ var stories = [
 				'range'	 : [2, 5],
 				'percent': [1, 50, 95],
 				'pertext': [0, 100, 200],
-				'IWP'    : 'true'					
+				'IWP'    : 'false'					
     }),
 		dorling_story({
         'menu'   : 'State',
@@ -1386,7 +1386,7 @@ var stories = [
 				'range'	 : [0.6, 1],
 				'percent': [1, 50, 95],
 				'pertext': [0, 100, 200],
-				'IWP'    : 'true'					
+				'IWP'    : 'false'					
     }),
 		dorling_story({
         'menu'   : 'State',
@@ -1416,7 +1416,7 @@ var stories = [
 				'range'	 : [1, 4],
 				'percent': [1, 50, 95],
 				'pertext': [0, 100, 200],
-				'IWP'    : 'true'					
+				'IWP'    : 'false'					
     }),
 		dorling_story({
         'menu'   : 'State',
@@ -1446,7 +1446,7 @@ var stories = [
 				'range'	 : [0.6, 1],
 				'percent': [1, 50, 95],
 				'pertext': [0, 100, 200],
-				'IWP'    : 'true'					
+				'IWP'    : 'false'					
     }),
 		dorling_story({
         'menu'   : 'State',
@@ -1476,7 +1476,7 @@ var stories = [
 				'range'	 : [1, 5],
 				'percent': [1, 50, 95],
 				'pertext': [0, 100, 200],
-				'IWP'    : 'true'					
+				'IWP'    : 'false'					
     }),
 		dorling_story({
         'menu'   : 'State',
@@ -1506,7 +1506,7 @@ var stories = [
 				'range'	 : [0.6, 2],
 				'percent': [1, 50, 95],
 				'pertext': [0, 100, 200],
-				'IWP'    : 'true'					
+				'IWP'    : 'false'					
     }),
 		dorling_story({
         'menu'   : 'State',
@@ -1536,7 +1536,7 @@ var stories = [
 				'range'	 : [1, 5],
 				'percent': [1, 50, 95],
 				'pertext': [0, 100, 200],
-				'IWP'    : 'true'					
+				'IWP'    : 'false'					
     })
 ];
 // List of the historical data files, latest on top

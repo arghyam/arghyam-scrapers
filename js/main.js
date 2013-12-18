@@ -162,7 +162,7 @@ function draw(story) {
 	$('#emb_text').val('');
 	$('#status').val('');
   d3.select('#exp_text').text(' ');	
-	d3.selectAll('#about, #method, #demo, #brought').style('display', 'none');
+	d3.selectAll('#about, #method, #demo, #brought, #slideshare').style('display', 'none');
 	d3.selectAll('.legend, #chart1, #chart2, #gradient_cont, #right_container, #hide_text').style('display', 'none');
 	d3.selectAll('#source a, .treemap text, #columns text, #gradient text, .horiz0, .horiz1, .tooltip').remove();
 	d3.select('#visual').style('display', 'block');
@@ -217,8 +217,7 @@ function draw(story) {
 		cont.append('p').append('a').text('Click on the ppt for more help with using the visualisation.')
 					.style('cursor', 'pointer')
 			    .on('click', function(){ window.scrollTo(0, document.body.scrollHeight) ;});		
-	}
-	d3.select('#slideshare').style('display', 'none');
+	}	
 	if(window.location.search != '?embed=1'){
 		if(story.slideshare){
 			d3.select('#slideshare').style('display', 'block');
@@ -327,7 +326,7 @@ function draw_treemap(story) {
       svg.selectAll('rect').classed('mark', false);
 			svg.selectAll('rect[data-r="' + group + '"][data-q="' + subgroup + '"]').classed('mark', true);				
     });
-  });	
+  });
 }
 function draw_cartogram(story) {
 	// Add gradient legend for cartogram
@@ -691,10 +690,17 @@ function draw_boxscatter(story) {
 		    extentYC = d3.extent(nested_data, function(d){ return d.values['yC']; }),
 		    extentYminmax = d3.extent(d3.merge([extentYT,extentYC]));
 		//Set scale for state level visual		
-		var xscale = d3.scale.sqrt().domain([extentX[0] - 50 , extentX[1] + 10000]).range([R, width - R]),
-		    yscale = d3.scale.sqrt().domain([extentYminmax[0] - 20000, extentYminmax[1]]).range([height - R, R]); 		
-		grids(extentYminmax[0] - 100, extentYminmax[1], 1000000, yscale, extentX[0] - 10000, extentX[1] + 10000, 10000, xscale);		
+		var xscale = d3.scale.sqrt().clamp(true).domain([extentX[0] - 50 , extentX[1] + 10000]).range([R, width - R]),
+		    yscale = d3.scale.sqrt().clamp(true).domain([extentYminmax[0] - 20000, extentYminmax[1]]).range([height - R, R]); 		
+		grids(extentYminmax[0] - 100, extentYminmax[1], 1000000, yscale, extentX[0] - 10000, extentX[1] + 10000, 10000, xscale, 'statlines');
 		axes(xscale, yscale, 15);
+		var lineST = d3.svg.line()
+					.x(function(d){ return xscale(d.values['x']);})
+				  .y(function(d){ return yscale(d.values['yT']);});
+		var lineSC = d3.svg.line()
+					.interpolate('linear')
+					.x(function(d){ return xscale(d.values['x']);})
+					.y(function(d){ return yscale(d.values['yC']);});			
 		var state_boxS = svg.append('g').classed('states', true).selectAll('.rect')
 					.data(nested_data).enter();	
 		state_boxS.append('rect')
@@ -716,6 +722,8 @@ function draw_boxscatter(story) {
 								+ N(d.values['yC']) +'. Difference (TSC - Census) = ' + N(d.values['yT']) +' - '+ N(d.values['yC']) +' = '
 								+ N(d.values['yT'] - d.values['yC']) + '.'; 
 					});
+		state_boxS.append('path').attr({ d: function(){ return lineST(nested_data);}, class: 'lineST fade', stroke: '#4F81BD' });
+		state_boxS.append('path').attr({ d: function(){ return lineSC(nested_data);}, class: 'lineSC fade', stroke: '#F79646' });			
 		state_boxS.append('circle')
 					.attr({ cx: function(d){ return xscale(d.values['x']); }, 
 									cy: function(d){ return yscale(Math.max(d.values['yT'], d.values['yC'])); }, r: R/9,
@@ -739,18 +747,10 @@ function draw_boxscatter(story) {
 					.text(function(d){ return d.values['yT'] - d.values['yC'] < 0 ? d.key +' : TSC = ' + N(d.values['yT']) : 
 									d.key +' : Census = ' + N(d.values['yC']);
 					});
-		var lineST = d3.svg.line()
-				  .x(function(d){ return xscale(d.values['x']);})
-				  .y(function(d){ return yscale(d.values['yT']);});
-		var lineSC = d3.svg.line()
-					.interpolate('linear')
-					.x(function(d){ return xscale(d.values['x']);})
-					.y(function(d){ return yscale(d.values['yC']);});			
-		state_boxS.append('path').attr({ d: function(){ return lineST(nested_data);}, class: 'lineST fade', stroke: '#4F81BD' });
-		state_boxS.append('path').attr({ d: function(){ return lineSC(nested_data);}, class: 'lineSC fade', stroke: '#F79646' });
 		select.on('change', districtBox);
 		function districtBox(d){
 				svg.selectAll('.distsgrp').remove();
+				svg.selectAll('.statlines').classed('fade', true);
 				d3.selectAll('.tooltip').remove();
 				var selstate = d3.select(this).property('value');
 				if(selstate == 'select State'){
@@ -776,11 +776,21 @@ function draw_boxscatter(story) {
 					extentYCD = d3.extent(result, function(d){ return Math.floor(d[story.YC]);}),
 					extentYDminmax = d3.extent(d3.merge([extentYTD,extentYCD])),				
 					xscaleD = d3.scale.sqrt()
+								.clamp(true)	
 								.domain([extentXD[0]-(getlength(extentXD[0]) * 10), extentXD[1]+(getlength(extentXD[0]) * 10)])
 								.range([R, width - R]),
 					yscaleD = d3.scale.sqrt()
+								.clamp(true)
 								.domain([(extentYDminmax[0] - (Math.pow(10, getlength(extentYDminmax[0]) - 1))),extentYDminmax[1]+(getlength(extentYDminmax[1]) * 10)])
-								.range([height - R, R]); 
+								.range([height - R, R]);
+					var lineDT = d3.svg.line()
+								.x(function(d){ return xscaleD(d[story.X]);})
+								.y(function(d){ return yscaleD(d[story.YT]);});
+					var lineDC = d3.svg.line()
+								.x(function(d){ return xscaleD(d[story.X]);})
+								.y(function(d){ return yscaleD(d[story.YC]);});	
+					grids(0, extentYDminmax[1]+(getlength(extentYDminmax[1]) * 10), getYInterval(extentYDminmax[1]),	yscaleD,
+								0, extentXD[1]+(getlength(extentXD[0]) * 10), getXInterval(extentXD[1]), xscaleD, 'distlines'	);								
 					axes(xscaleD, yscaleD, 10);	
 					var district_boxS	= svg.append('g').classed('distsgrp', true)
 							.selectAll('.districts').data(result).enter();	
@@ -803,6 +813,8 @@ function draw_boxscatter(story) {
 										+ N(d[story.YT])+'. Census data = ' + N(d[story.YC]) +'. Difference (TSC - Census) = ' + N(d[story.YT]) +' - '
 										+ N(d[story.YC]) +' = '+ N(d[story.YT] - d[story.YC]) + '.'; 
 							});
+					district_boxS.append('path').attr({ d: function(d){ return lineDT(result);}, class: 'lineDT fade', stroke: '#4F81BD' });
+					district_boxS.append('path').attr({ d: function(d){ return lineDC(result);}, class: 'lineDC fade', stroke: '#F79646' });				
 					district_boxS.append('circle')	
 							.attr({ cx: function(d){ return xscaleD(d[story.X]); }, 
 											cy: function(d){ return yscaleD(Math.max(d[story.YT], d[story.YC])); }, r: R/9,
@@ -813,7 +825,7 @@ function draw_boxscatter(story) {
 							})
 							.on('click', stateBox)
 							.append('title')
-							.text(function(d){ return d[story.YT] > d[story.YC] ? d.District_Name +' : TSC = ' + N(d[story.YT]) : 
+							.text(function(d){ return d[story.YT] - d[story.YC] > 0 ? d.District_Name +' : TSC = ' + N(d[story.YT]) : 
 										d.District_Name +' : Census = ' + N(d[story.YC]);
 							});
 				 district_boxS.append('circle')	
@@ -829,14 +841,6 @@ function draw_boxscatter(story) {
 							.text(function(d){ return d[story.YT] - d[story.YC] < 0 ? d.District_Name +' : TSC = ' + N(d[story.YT]) : 
 									d.District_Name +' : Census = ' + N(d[story.YC]);
 							});
-					var lineDT = d3.svg.line()
-								.x(function(d){ return xscaleD(d[story.X]);})
-								.y(function(d){ return yscaleD(d[story.YT]);});
-					var lineDC = d3.svg.line()
-								.x(function(d){ return xscaleD(d[story.X]);})
-								.y(function(d){ return yscaleD(d[story.YC]);});			
-					district_boxS.append('path').attr({ d: function(d){ return lineDT(result);}, class: 'lineDT fade', stroke: '#4F81BD' });
-					district_boxS.append('path').attr({ d: function(d){ return lineDC(result);}, class: 'lineDC fade', stroke: '#F79646' });
 				}
 		}
 		subselect.on('change', function(){
@@ -850,20 +854,20 @@ function draw_boxscatter(story) {
       $('.mark').tooltip({ title:function(){ return $('.mark title').text(); }, trigger:'focus', container:'body' }).tooltip('show');						
 		});
 		svg.select('#cirTSC').on('click', function(){
-			svg.selectAll('*').classed('fade', false);
+			svg.selectAll('rect, circle, path').classed('fade', false);
 			svg.selectAll('.statsBoxC, .statsBoxT, .distsBoxC, .distsBoxT, .statsC, .distsC, .lineSC, .lineDC').classed('fade', true);
 		});
 		svg.select('#cirCEN').on('click', function(){		
-			svg.selectAll('*').classed('fade', false);
+			svg.selectAll('rect, circle, path').classed('fade', false);
 			svg.selectAll('.statsBoxC, .statsBoxT, .distsBoxC, .distsBoxT, .statsT, .distsT, .lineST, .lineDT').classed('fade', true);	
 		});
 		svg.select('#recTSC').on('click', function(){
-			svg.selectAll('*').classed('fade', false);
+			svg.selectAll('rect, circle, path').classed('fade', false);
 			svg.selectAll('.statsBoxT, .distsBoxT, .statsT, .statsC, .distsC, .distsT, .lineST, .lineSC, .lineDT, .lineDC').classed('fade', true);		
 			svg.selectAll('.statsBoxC, .distsBoxC').classed('show', true);
 		});
 		svg.select('#recCEN').on('click', function(){	
-			svg.selectAll('*').classed('fade', false);	
+			svg.selectAll('rect, circle, path').classed('fade', false);	
 			svg.selectAll('.statsBoxC, .distsBoxC, .statsT, .statsC, .distsC, .distsT, .lineST, .lineSC, .lineDT, .lineDC').classed('fade', true);		
 			svg.selectAll('.statsBoxT, .distsBoxT').classed('show', true);
 		});
@@ -871,17 +875,17 @@ function draw_boxscatter(story) {
 			svg.selectAll('.lineST, .lineSC, .lineDT, .lineDC').classed('fade', true);	
 			svg.selectAll('.statsBoxC, .statsBoxT, .distsBoxC, .distsBoxT, .statsC, .statsT, .distsC, .distsT').classed('fade', false);
 		});
-		function getlength(n) {
-				return n.toString().length;
-		}
 		function stateBox(d){
+					svg.selectAll('.statlines').classed('fade', false);
+					svg.selectAll('.distlines').remove();
 					d3.selectAll('.tooltip').remove();
+					svg.selectAll('.statelines').style('display', 'block');
 					select.property('value', 'select State');
 					subselect.selectAll('*').remove();
-					d3.selectAll('.distsgrp, .lineDT, .lineDC').remove();
+					svg.selectAll('.distsgrp, .lineDT, .lineDC').remove();
 					axes(xscale, yscale, 15);
 					svg.selectAll('.distgrp').classed('hide', true);
-					svg.selectAll('.states').classed('hide', false);
+					svg.selectAll('.states').classed('hide', false);					
 		}
 		function axes(x, y, t){
 					svg.selectAll('.axis').remove();
@@ -906,18 +910,18 @@ function draw_boxscatter(story) {
 						.text(story.yT[0])
 						.attr({ x: R, transform: 'translate(5,5) rotate(-90,' + R + ',' + R + ')', 'text-anchor': 'end', 'dominant-baseline': 'hanging' });
 		}
-		function grids(h0, h1, h2, y, v0, v1, v2, x){ 
+		function grids(h0, h1, h2, y, v0, v1, v2, x, Class){ 
 		// Lines joining x-axis and y-axis
-		  svg.selectAll('.h, .v').remove();
-			svg.append('g').selectAll('.h')
+			svg.selectAll('.distlines').remove();
+		  svg.append('g').selectAll('.h')
 					.data(d3.range(h0, h1, h2))   
 				.enter().append('line')
-					.attr({ class: 'h', x1: R, y1: function(d){ return y(d);}, x2: width - R, y2: function(d){ return y(d);} })
+					.attr({ class: 'h '+ Class, x1: R, y1: function(d){ return y(d);}, x2: width - R, y2: function(d){ return y(d);} })
 					.style({ 'fill': 'none', 'stroke': '#ddd', 'shape-rendering': 'crispEdges'});
 			svg.append('g').selectAll('.v')
 					.data(d3.range(v0, v1, v2))  
 				.enter().append('line')
-					.attr({ class: 'v', x1: function(d){ return x(d);}, y1: R, x2: function(d){ return x(d);}, y2: height - R })
+					.attr({ class: 'v ' + Class, x1: function(d){ return x(d);}, y1: R, x2: function(d){ return x(d);}, y2: height - R })
 					.style({ 'fill': 'none', 'stroke': '#ddd', 'shape-rendering': 'crispEdges'});
 		}	
   });
@@ -1152,20 +1156,30 @@ function draw_dorling(story) {
 		svg2.append('text').attr({ x: 650, y: 25, fill: '#000', stroke: 'none' }).text('Census value is high');
 		svg2.append('rect').attr({ x: 830, y: 10, width: 75, height: 18, fill: '#eee', 'stroke': '#aaa','shape-rendering': 'crispEdges' });
 		svg2.append('text').attr({ id: 'clrFtr', x: 835, y: 25, 'cursor': 'pointer' }).text('Clear filter');
-		result = _.filter(data, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); });
-		result.sort(function(a, b){ return b[story.X] - a[story.X];}),
+		var result = _.filter(data, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); });
+		result.sort(function(a, b){ return b[story.X] - a[story.X];});
 		result2 = result;
-		extentX = d3.extent(result, function(d){ return Math.floor(d[story.X]);}),
+		var extentX = d3.extent(result, function(d){ return Math.floor(d[story.X]);}),
 		extentYT = d3.extent(result, function(d){ return Math.floor(d[story.YT]);}),
 		extentYC = d3.extent(result, function(d){ return Math.floor(d[story.YC]);}),
-		extentYminmax = d3.extent(d3.merge([extentYT,extentYC]));			
+		extentYminmax = d3.extent(d3.merge([extentYT,extentYC])),
 		xscaleD = d3.scale.sqrt()
+					.clamp(true)
 					.domain([extentX[0]-(getlength(extentX[0]) * 10), extentX[1]+(getlength(extentX[0]) * 10)])
 					.range([R, width - R]),
 		yscaleD = d3.scale.sqrt()
+					.clamp(true)
 					.domain([(extentYminmax[0] - (Math.pow(10, getlength(extentYminmax[0]) - 1))),extentYminmax[1]+(getlength(extentYminmax[1]) * 10)])
 					.range([height - R, R]); 
+		grids(0, extentYminmax[1]+(getlength(extentYminmax[1]) * 10), getYInterval(extentYminmax[1]),	yscaleD,
+					0, extentX[1]+(getlength(extentX[0]) * 10), getXInterval(extentX[1]), xscaleD	);		
 		axes(xscaleD, yscaleD);
+		var lineDT = d3.svg.line()
+					.x(function(d){ return xscaleD(d[story.X]);})
+					.y(function(d){ return yscaleD(d[story.YT]);});
+		var lineDC = d3.svg.line()
+					.x(function(d){ return xscaleD(d[story.X]);})
+					.y(function(d){ return yscaleD(d[story.YC]);});			
 		var district_boxS	= svg2.append('g').classed('distsgrp', true)
 				.selectAll('.districts').data(result).enter();	
 		district_boxS.append('rect')
@@ -1186,6 +1200,8 @@ function draw_dorling(story) {
 							+ N(d[story.YT])+'. Census data = ' + N(d[story.YC]) +'. Difference (TSC - Census) = ' + N(d[story.YT]) +' - '
 							+ N(d[story.YC]) +' = '+ N(d[story.YT] - d[story.YC]) + '.'; 
 				});
+		district_boxS.append('path').attr({ d: function(d){ return lineDT(result);}, class: 'lineDT fade', stroke: '#4F81BD' });
+		district_boxS.append('path').attr({ d: function(d){ return lineDC(result);}, class: 'lineDC fade', stroke: '#F79646' });					
 		district_boxS.append('circle')	
 				.attr({ cx: function(d){ return xscaleD(d[story.X]); }, 
 								cy: function(d){ return yscaleD(Math.max(d[story.YT], d[story.YC])); }, r: R/9,
@@ -1195,7 +1211,7 @@ function draw_dorling(story) {
 								'data-r': function(d) { return d.District_Name; }, stroke: '#000'							
 				})
 				.append('title')
-				.text(function(d){ return d[story.YT] > d[story.YC] ? d.District_Name +' : TSC = ' + N(d[story.YT]) : 
+				.text(function(d){ return d[story.YT] - d[story.YC] > 0 ? d.District_Name +' : TSC = ' + N(d[story.YT]) : 
 							d.District_Name +' : Census = ' + N(d[story.YC]);
 				});
 		district_boxS.append('circle')	
@@ -1210,17 +1226,6 @@ function draw_dorling(story) {
 				.text(function(d){ return d[story.YT] - d[story.YC] < 0 ? d.District_Name +' : TSC = ' + N(d[story.YT]) : 
 						d.District_Name +' : Census = ' + N(d[story.YC]);
 				});	
-		var lineDT = d3.svg.line()
-					.x(function(d){ return xscaleD(d[story.X]);})
-					.y(function(d){ return yscaleD(d[story.YT]);});
-		var lineDC = d3.svg.line()
-					.x(function(d){ return xscaleD(d[story.X]);})
-					.y(function(d){ return yscaleD(d[story.YC]);});			
-		district_boxS.append('path').attr({ d: function(d){ return lineDT(result);}, class: 'lineDT fade', stroke: '#4F81BD' });
-		district_boxS.append('path').attr({ d: function(d){ return lineDC(result);}, class: 'lineDC fade', stroke: '#F79646' });			
-		function getlength(n) {
-				return n.toString().length;
-		}		
 		svg2.select('#cirTSC').on('click', function(){
 			svg2.selectAll('*').classed('fade', false);
 			svg2.selectAll('.distsBoxC, .distsBoxT, .distsC, .lineDC').classed('fade', true);
@@ -1297,15 +1302,13 @@ function draw_dorling(story) {
 				.gravity(0)
 				.size([width, height]);
 		var R = story.R, k = story.K, a = story.A;		
-		var nodes = [], node = [], padding = 3;		
-		var centered;
+		var nodes = [], node = [], topomaps = [], centered;
 		var projection = d3.geo.mercator()
 				.scale(width*5.5)
 				.translate([-width+230, height+100]);			
 		var path = d3.geo.path()
-				.projection(projection);					
-		var topomaps = [];
-	  legend = d3.select('.legend.dorling');
+				.projection(projection);
+	  var legend = d3.select('.legend.dorling');
 		legend.selectAll('*').remove();
 		var select = legend.append('select').attr('class', 'param input-medium'); 
     var subselect = legend.append('select').attr('class', 'subparam'),
@@ -1399,13 +1402,12 @@ function draw_dorling(story) {
 					maps.selectAll('text')
 							.data(geo)
 						.enter().append('text')
-							.attr('x', function(d){ return xscale(d.Longitude); })
-							.attr('y', function(d){ return yscale(d.Latitude); })
+							.attr({ x: function(d){ return xscale(d.Longitude); }, y: function(d){ return yscale(d.Latitude); } })
 							.data(subset)
 							.text(function(d){ return d.State_Name == group ? d.District_Name : ''; })
-							.style('font-size', function(d){ return 10 / k +'px'; })
-							.style('text-anchor', 'middle')
-							.style('dominant-baseline', 'middle');							
+							.style({ 'font-size': 10 / k +'px', 'text-anchor': 'left', 'dominant-baseline': 'bottom'})
+							.transition()
+							.attr("transform", function(d){ return "translate(" + (r(d[story.size])) + ",0)"; });						
 					var selPath = _.filter(topomaps, function(m){ return m[0] == group; });
 					var D = selPath[0][1];
 					var centroid = path.centroid(D); x = centroid[0]; y = centroid[1];
@@ -1701,6 +1703,15 @@ if(window.location.search == '?embed=1'){
 	d3.select('#hide_btn').style('margin-left', '382px');
 	d3.selectAll('.navbar-inner, #menu, #subtitle, #exp_text, #copy_cont,.btn-group, #slideshare').remove();	
 	d3.selectAll('#right_container, #details, #info, #download_cont, #source_cont, #source, footer').remove();	
+}
+function getlength(n) {
+		return n.toString().length;
+}		
+function getXInterval(n){
+	return n > 7000 ? 1000 : n > 2900 ? 500 : n > 1000 ? 200 : n > 800 ? 100 : n > 250 ? 50 : n > 100 ? 20 : n > 50 ? 10 : 2 ; 
+}
+function getYInterval(n){
+	return n > 750000 ? 100000 : n > 300000 ? 50000 : n > 140000 ? 20000 : n > 55000 ? 10000 : n > 25000 ? 5000 : n > 10000 ? 2000 : n > 5000 ? 1000 : n > 2500 ? 500 : n > 1000 ? 100 : 50;
 }
 function position() {
   this.transition()
