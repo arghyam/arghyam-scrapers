@@ -895,7 +895,7 @@ function draw_boxscatter(story) {
 										.scale(x)
 										.orient('bottom')
 										.ticks(t)
-										.tickFormat(function(d) { return d / 100000 + 'L';}))
+										.tickFormat(function(d) { return d >= 100000 ? d / 100000 + 'L' : d >= 1000 ? d / 1000 + 'k' : d;}))
 						.append('text')
 						.text(story.x[0])
 						.attr({ transform: 'translate(-5, -5)', x: width - R, 'text-anchor': 'end' });
@@ -905,7 +905,7 @@ function draw_boxscatter(story) {
 										.scale(y)
 										.orient('left')
 										.ticks(t)
-										.tickFormat(function(d) { return d / 100000 + 'L';}))
+										.tickFormat(function(d) { return d >= 100000 ? d / 100000 + 'L' : d >= 1000 ? d / 1000 + 'k' : d;}))
 						.append('text')
 						.text(story.yT[0])
 						.attr({ x: R, transform: 'translate(5,5) rotate(-90,' + R + ',' + R + ')', 'text-anchor': 'end', 'dominant-baseline': 'hanging' });
@@ -927,12 +927,12 @@ function draw_boxscatter(story) {
   });
 }
 function draw_stack(story) {
-	d3.selectAll('text, line').remove();
 	d3.select('.legend.stack').style('display', 'block');	
 	d3.select('#brought').style('display', function(){ return window.location.search == '?embed=1' ? 'block' : 'none';});
   d3.csv(story.data || datafile(), function(data) {
 		if(story.data){ $('#data_cont').hide(); d3.select('#data').attr('href', story.data); } else { $('#data_cont').show();}
     var subset = initchart(story, data);
+		svg.selectAll('*').remove();
     draw_date(data[data.length-1], story);
     var grouper = function(group) {
       return d3.nest()
@@ -1256,8 +1256,7 @@ function draw_dorling(story) {
 				.call(d3.svg.axis()
 								.scale(x)
 								.orient('bottom')
-								//.ticks(t)
-								.tickFormat(function(d) { return d / 1000 + 'K';}))
+								.tickFormat(function(d) { return d >= 100000 ? d / 100000 + 'L' : d >= 1000 ? d / 1000 + 'k' : d;}))
 				.append('text')
 				.text(story.x2[0])
 				.attr({ transform: 'translate(-5, -5)', x: width - R, 'text-anchor': 'end' });
@@ -1266,8 +1265,7 @@ function draw_dorling(story) {
 				.call(d3.svg.axis()
 								.scale(y)
 								.orient('left')
-								//.ticks(t)
-								.tickFormat(function(d) { return d / 100000 + 'L';}))
+								.tickFormat(function(d) { return d >= 100000 ? d / 100000 + 'L' : d >= 1000 ? d / 1000 + 'k' : d;}))
 				.append('text')
 				.text(story.yT2[0])
 				.attr({ x: R, transform: 'translate(5,5) rotate(-90,' + R + ',' + R + ')', 'text-anchor': 'end', 'dominant-baseline': 'hanging' });
