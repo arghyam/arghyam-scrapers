@@ -120,7 +120,8 @@ function scatter_story(story) {
     story.cols = story.cols || [];
     story.filter = function(d) { return d.District_Name.match(/^[A-Z]/); };
     story.color = function(d) { return gen_color(d[story.group[0]]); };
-    story.cx = story.x[1];
+    story.size = story.area[1];
+		story.cx = story.x[1];
     story.cy = story.y[1];
     story.xdom = story.xdom || [0, 1];
     story.ydom = story.ydom || [0, 1];
