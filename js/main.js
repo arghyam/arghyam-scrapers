@@ -406,215 +406,285 @@ function draw_cartogram(story) {
 		}	
 	});
 }
-var tempGroup = '', tempSubgroup = ''; 
+var tempgroupScat = [], tempsubgroupScat = [], stimes = 0;
 function draw_scatter(story) {
-  var beyond = [];
 	// Add scatterplot info container
-  d3.selectAll('#right_container, .legend.scatter, #hide_text').style('display','block');
+	d3.selectAll('#right_container, .legend.scatter, #hide_text').style('display','block');
 	d3.select('#brought').style('display', function(){ return window.location.search == '?embed=1' ? 'block' : 'none';});
 	d3.csv(story.data || datafile(), function(data) {
 		if(story.data){ $('#data_cont').hide(); d3.select('#data').attr('href', story.data); } else { $('#data_cont').show();}
-    var subset = initchart(story, data);
+	  var subset = initchart(story, data),
+		width = svg.attr('width'),
+		height = svg.attr('height'),
+		R = story.R,
+		beyond = [],  
+		legend = d3.select('.legend.scatter');
 		draw_date(data[data.length-1], story);
-		// TODO: Make these move
-    svg.selectAll('*').remove();
-    var width = parseInt(svg.style('width'), 10);
-    var height = svg.attr('height');		
-		//set matrix
-		svg.append('path')
-      .attr("d",'M 40 461 L 922 40 L 40 40')           
-			.style({ 'fill': '#B8E62E', 'fill-opacity': 0.3, 'stroke': '#000' });
-		svg.append('path')
-      .attr("d",'M 40 461 L 922 40 L 922 461')           
-			.style({ 'fill': '#D73027', 'fill-opacity': 0.5, 'stroke': '#000' });
-		var rmax = _.max(_.map(subset, story.area[1]));
-		// Set up the legend
-    var legend = d3.select('.legend.scatter');
-    legend.selectAll('*').remove();
-    var select = legend.append('select').attr('class', 'states');
-    var subselect = legend.append('select').attr('class', 'districts');
-    var groups = _.uniq(_.pluck(subset, story.group[0]));
-    groups.unshift('select State');
-		select.selectAll('option')
-        .data(groups)
-      .enter()
-        .append('option')
-        .text(String);
+		svg.selectAll('line, text').remove();    
+		legend.selectAll('*').remove();
+    var select = legend.append('select').attr('class', 'states'),
+		subselect = legend.append('select').attr('class', 'districts'),
+		groups = _.uniq(_.pluck(subset, story.group[0]));
+		groups.unshift('');
+		select.append('option').text('click State');
 		select.on('change', function() {
-			var group = d3.select(this).property('value');			
-		  d3.selectAll('.tooltip').remove();
-			d3.selectAll('.tags').style('display', 'none');      
-			if (group) {
-				tempGroup = group;	
-				svg.selectAll('circle').classed('fade', true);
-        svg.selectAll('circle[data-q="' + group + '"]')
-          .classed('fade hide mark', false)
-					.classed('show', true);
-				svg.select('.state[data-q="' + group + '"]').classed('hide', true);	
-			} else {
-				draw_scatter(story);
-        svg.selectAll('circle.fade').classed('fade', false);
-        svg.selectAll('circle.mark').classed('mark', false);
-			}
-			var result = _.filter(subset, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); });
-			result.unshift({"District_Name":"select District"});
-      subselect.selectAll('option').remove();
-      subselect.selectAll('option')
-          .data(result)
-        .enter()
-          .append('option')
-          .text(function(d){ return d.District_Name; });
-			var details = svg.selectAll('.state[data-q="' + group + '"]').text();
-			$('#copy_title').val(details);
-			$('#copy_title').on('mouseover', function(){ $(this).select(); });			
-		});			
+				d3.selectAll('.tooltip').remove();
+				var group = d3.select(this).property('value'),
+				result = _.filter(subset, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); });
+				result.unshift({"District_Name":"select District"});
+				tempgroupScat.push(group);
+				subselect.selectAll('option').remove();
+				subselect.selectAll('option')
+						.data(result)
+					.enter()
+						.append('option')
+						.text(function(d){ return d.District_Name; });	
+		});	
 		// Accumulated values of states
 		var states = d3.nest()
 				.key(function(d){ return d[story.group[0]]; })
 				.rollup(function(rows){ return {'cx'  : d3.mean(rows, function(d){ return story.cx(d);}),
-							                          'cy'  : d3.mean(rows, function(d){ return story.cy(d);}),
-																			  'rad' : d3.mean(rows, function(d){ return story.area[1](d);}),
-																				'rads': d3.sum(rows, function(d){ return story.area[1](d);})};
+					'cy'  : d3.mean(rows, function(d){ return story.cy(d);}),
+					'rad' : d3.mean(rows, function(d){ return story.size(d);}),
+					'rads': d3.sum(rows, function(d){ return story.size(d);})};
 				})
 				.entries(subset); 
 		states.sort(function(a, b){ return b.values.rads - a.values.rads;});			
-		var R = story.R;
-    var xscale = d3.scale.linear().domain(story.xdom).range([R, width - R]);
-    var yscale = d3.scale.linear().domain(story.ydom).range([height - R, R])
-		var rState = d3.scale.linear().domain(d3.extent(states.map(function(d) { return d.values['rads'];}))).range([4, 40]);
-		var rDistrict = d3.scale.linear().domain(d3.extent(subset.map(function(d) { return story.area[1](d);}))).range([4, 40]);
-		// District level bubbles
-		var districts = svg.selectAll('.district')    
-			.data(subset).enter();			
-		districts.append('circle')
-			.attr({ class: 'district hide', cx: function(d) { return xscale(story.cx(d)); }, cy: function(d) { return yscale(story.cy(d)); }, 
-					r: function(d){ return rDistrict(story.area[1](d)); }, fill: story.color, stroke: '#000', 
-					'data-q': function(d) { return d[story.group[0]]; }, 'data-r': function(d) { return d[story.group[1]]; } 
-			})
-			.on('mouseover', function() {
-        d3.select(this).classed('show', true);
-				d3.select(this).style('stroke', '#fff').style('stroke-opacity', 1);
-        var details = d3.select(this).text(); 
-				$('#copy_title').val(details).select();	
-      })
-      .on('mouseout', function() {
-        d3.select(this).classed('show', false);	
-				d3.select(this).style('stroke', '#000').style('stroke-opacity', 0.5);		
-      })
-      .on('click', function() {
-        svg.selectAll('.district')
-						.classed('show', false).classed('hide', true);
-				svg.selectAll('.state')
-						.classed('hide', false).classed('show', true);
-				svg.selectAll('.tags').style('display', 'block');		
-			})
-      .append('title')
-      .text(story.hover);
-		// State level bubbles		
-		var states = svg.selectAll('.state')
-			.data(states).enter();
-		states.append('circle')
-			.attr({ class: 'state', cx: function(d){ return xscale(d.values['cx']); }, cy: function(d) { return yscale(d.values['cy']); }, 
-					r: function(d) { return rState(d.values['rads']); }, fill: function(d){ return gen_color(d.key);}, 
-					stroke: '#000', 'stroke-opacity': .5, 'data-q': function(d) { return d.key; }
-			})
-			.on('mouseover', function(){ 
-				d3.select(this).classed('show', true);
-				d3.select(this).style({ 'stroke': '#fff', 'stroke-opacity': 1 });
-				var details = d3.select(this).text(); 
-				$('#copy_title').val(details).select();
-			})
-			.on('mouseout', function(){ 
-				d3.select(this).classed('show', false);	
-				d3.select(this).style({ 'stroke': '#000', 'stroke-opacity': .5 });
-			})
-			.on('click', function(){
-				var q = d3.select(this).attr('data-q');
-        svg.selectAll('.district[data-q="' + q + '"]').classed('hide', false);
-				svg.selectAll('.state').classed('hide', true);
-				svg.selectAll('.tags').style('display', 'none');
-			})
-			.append('title')
-			.text(function(d){ return d.key + ': ' + story.area[0] + ' = ' + N(d.values['rads']) +'. '+ story.x[0] + ' = ' 
-					+	P(d.values['cx']) +'. ' + story.y[0] + ' = ' + P(d.values['cy']); 
-			});			
-		states.append('text')
-			.attr({ class: 'tags hide', x: function(d) { return xscale(d.values['cx']); }, 
-					y: function(d) { return yscale(d.values['cy']) - rState(d.values['rads']) - 2; } 
-			})
-			.text(function(d){ return d.key;});
-		d3.select('#hide_text').on('click', function(){ 
-			if(!d3.select('.state').classed('hide')){ 
-				var hide = d3.selectAll('.tags').classed('hide');
-					d3.selectAll('.tags').classed('hide', !hide);
-			}		
-		});	
-		if(tempSubgroup){
-			svg.selectAll('circle[data-q="' + tempGroup + '"]')
-          .classed('fade hide mark', false)
-					.classed('show', true);					
-			svg.select('.state[data-q="' + tempGroup + '"]').classed('hide', true);
-			svg.selectAll('.state').classed('hide', true);
-			svg.selectAll('circle[data-q="' + tempGroup + '"]')
-				.on('click', function(){
-						svg.selectAll('.district')
-							.classed('show', false).classed('hide', true);
-						svg.selectAll('.state')
-							.classed('hide', false).classed('show', false);
+		var xscale = d3.scale.linear().domain(story.xdom).range([R, width - R]),
+		yscale = d3.scale.linear().domain(story.ydom).range([height - R, R]),
+		rState = d3.scale.linear().domain(d3.extent(states.map(function(d) { return d.values['rads'];}))).range([5, 40]),
+		rDistrict = d3.scale.linear().domain(d3.extent(subset.map(function(d) { return story.size(d);}))).range([5, 40]);
+		if(stimes == 0){	
+				svg.append('path')
+					.attr("d",'M 40 461 L 922 40 L 40 40')           
+					.style({ 'fill': '#B8E62E', 'fill-opacity': 0.3, 'stroke': '#000' });
+				svg.append('path')
+					.attr("d",'M 40 461 L 922 40 L 922 461')           
+					.style({ 'fill': '#D73027', 'fill-opacity': 0.5, 'stroke': '#000' });
+				// State level bubbles			
+				var states = svg.selectAll('.state')
+					.data(states).enter();
+				var stateCircles = states.append('circle')
+					.attr({ class: 'statesScat', cx: function(d){ return xscale(d.values['cx']); }, cy: function(d) { return yscale(d.values['cy']); }, 
+									r: function(d) { return rState(d.values['rads']); }, fill: function(d){ return gen_color(d.key);}, 
+									stroke: '#000', 'stroke-opacity': .5, 'data-q': function(d) { return d.key; }
+					})
+				  .on('mouseover', function(){ 
+							var bcx = d3.select(this).attr('cx'),
+							bcy = d3.select(this).attr('cy'),
+							br = d3.select(this).attr('r'),
+							bfill = d3.select(this).attr('fill');
+							svg.append('circle').attr({ class:'border', cx: bcx, cy: bcy, r: parseInt(br) + 6, fill:'none', 'stroke': bfill, 'stroke-width': '2px' });
+							var details = d3.select(this).text(); 
+							$('#copy_title').val(details).select();
+					})
+					.on('mouseout', function(){ 
+							svg.selectAll('.border').remove();
+					})
+					.on('click', distCircs)
+					.append('title')
+					.text(function(d){ return d.key + ': ' + story.area[0] + ' = ' + N(d.values['rads']) +'. '+ story.x[0] + ' = ' 
+							+	P(d.values['cx']) +'. ' + story.y[0] + ' = ' + P(d.values['cy']); 
 					});
+				states.append('text')
+					.attr({ class: 'tags hide', x: function(d) { return xscale(d.values['cx']); }, 
+							y: function(d) { return yscale(d.values['cy']) - rState(d.values['rads']); } 
+					})
+					.text(function(d){ return d.key;});
+				stimes++;	
+		}	else {	
+				svg.selectAll('.border').remove();
+				if(tempgroupScat.length > 0 ){
+					if(tempgroupScat[tempgroupScat.length -1] == '')
+					{
+						tempgroupScat.pop();						
+						var group = tempgroupScat[tempgroupScat.length - 1];							
+					}else{ 
+						var group = tempgroupScat[tempgroupScat.length - 1];
+					}
+					svg.selectAll('.districtsScat title').remove();
+					var result = _.filter(subset, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); });
+					result.unshift({"District_Name":"select District"});
+					var fade = svg.select('.statesScat').classed('fade');		
+					if(fade){ 
+							select.selectAll('option').remove();
+							select.append('option').text(group);
+							subselect.selectAll('option').remove();
+							subselect.selectAll('option')
+									.data(result)
+								.enter()
+									.append('option')
+									.text(function(d){ return d.District_Name; });
+							if(tempsubgroupScat.length > 0){
+								var subgroup = tempsubgroupScat[tempsubgroupScat.length - 1 ];
+								subselect.property('value', subgroup);
+							}else{
+								subselect.property('value', 'select District');
+							}
+					}else{		
+							select.property('value', 'click State');
+							subselect.selectAll('option').remove();
+					}		
+					result.shift();
+					result.sort(function(a, b){ return story.size(b) - story.size(a);});
+					svg.selectAll('.districtsScat[data-q="'+ group +'"]') 
+						.data(result)
+						.transition()
+						.attr({ cx: function(d) { return xscale(story.cx(d)); }, cy: function(d) { return yscale(story.cy(d)); }, 
+										r: function(d){ return rDistrict(story.size(d)); }
+						});
+					svg.selectAll('.districtsScat[data-q="'+ group +'"]') 
+						.data(result)	
+						.on('click', statCircs)
+						.append('title')
+						.text(story.hover);
+				}
+				svg.selectAll('.statesScat title').remove();
+				svg.selectAll('.tags').remove();
+				svg.selectAll('.statesScat')
+						.data(states)
+						.on('click', distCircs)
+						.append('title')
+						.text(function(d){ return d.key + ': ' + story.area[0] + ' = ' + N(d.values['rads']) +'. '+ story.x[0] + ' = ' 
+								+	P(d.values['cx']) +'. ' + story.y[0] + ' = ' + P(d.values['cy']); 
+						});	
+				svg.selectAll('.statesScat')
+						.data(states)
+						.transition()
+						.attr({ cx: function(d){ return xscale(d.values['cx']); }, cy: function(d) { return yscale(d.values['cy']); },
+										r: function(d) { return rState(d.values['rads']); }
+						});
+				svg.selectAll('.tags')
+					 .data(states)
+					 .enter().append('text')	
+ 					 .attr({ class: 'tags hide', x: function(d) { return xscale(d.values['cx']); }, 
+						    		y: function(d) { return yscale(d.values['cy']) - rState(d.values['rads']); } 
+					 })
+					.text(function(d){ return d.key;});
 		}
-		subselect.on('change', function() {
-      var subgroup = d3.select(this).property('value');
-			svg.selectAll('circle').classed('mark', false);
-      var group = d3.selectAll('.states').property('value');
-			var result = _.filter(subset, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); });
-			tempSubgroup = subgroup;
-			svg.selectAll('circle[data-q="' + group + '"]')
-        .data(result)
-        .classed('mark', function(d){
-          return d.District_Name == subgroup ? true : false; 
-				})
-				.classed('show', function(d){ 
-						return d.District_Name == subgroup ? true : false;
-			  });
-			d3.selectAll('.tooltip').remove();
-			var details = svg.select('.district[data-q="' + group + '"][data-r="' + subgroup + '"]').text();
-			$('#copy_title').val(details);
-			$('#copy_title').on('mouseover', function(){ $(this).select(); });	
-      $('.mark').tooltip({ title:function(){ return $('.mark title').text(); }, trigger:'focus', container:'body' }).tooltip('show');						
-		});	
-		var xaxis = svg.append('g')
-      .classed('axis', true)
+		d3.select('#hide_text').on('click', function(){ 
+			var fade = svg.select('.statesScat').classed('fade');		
+			if(!fade){ 
+				var hide = d3.selectAll('.tags').classed('hide');
+			  d3.selectAll('.tags').classed('hide', !hide);
+			}		
+	  });
+		subselect.on('change', function(){
+				svg.selectAll('circle').classed('mark', false);
+				var subgroup = d3.select(this).property('value'),
+				group = select.property('value'),
+			  result = _.filter(subset, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); });
+				result.sort(function(a, b){ return story.size(b) - story.size(a);});
+				tempsubgroupScat.push(subgroup);
+				svg.selectAll('.districtsScat') 
+						.data(result)
+						.classed('mark', function(d){
+							return d.District_Name == subgroup ? true : false; 
+						});						
+				d3.selectAll('.tooltip, .border').remove();
+				var bdistrict = svg.select('.districtsScat[data-q="' + group + '"][data-r="' + subgroup + '"]'),
+				bcx = bdistrict.attr('cx'),
+				bcy = bdistrict.attr('cy'),
+				br = bdistrict.attr('r');
+				svg.append('circle').attr({ class:'border', cx: bcx, cy: bcy, r: parseInt(br) + 6, fill:'none', 'stroke': '#444', 'stroke-width': '2px' });
+				var details = svg.select('.districtsScat[data-q="' + group + '"][data-r="' + subgroup + '"]').text();
+				$('#copy_title').val(details);
+				$('#copy_title').on('mouseover', function(){ $(this).select(); });	
+				$('.mark').tooltip({ title:function(){ return $('.mark title').text(); }, trigger:'focus', container:'body' }).tooltip('show');						
+		});
+		function distCircs(d) {
+				var group = d.key;
+				result = _.filter(subset, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); }),
+				state = svg.selectAll('.statesScat[data-q="' + group + '"]'),
+				cx = state.attr('cx'), cy = state.attr('cy'), fill = state.attr('fill');
+				tempgroupScat.push(group);
+				svg.selectAll('.tags').classed('hide', true);
+				svg.selectAll('.border').remove();
+				select.selectAll('option').remove();
+				select.append('option').text(group);
+				result.unshift({"District_Name":"select District"});
+				subselect.selectAll('option').remove();
+				subselect.selectAll('option')
+						.data(result)
+					.enter()
+						.append('option')
+						.text(function(d){ return d.District_Name; });	
+				result.shift();
+				result.sort(function(a, b){ return story.size(b) - story.size(a);});
+				svg.selectAll('.statesScat').classed('fade', true);
+				svg.selectAll('.districtsScat').remove();
+				var districts = svg.selectAll('.districtsScat')
+							.data(result)
+						 .enter().append('circle')
+							.attr({ cx: cx, cy: cy, fill: fill, r: 10, stroke: '#000', 'stroke-opacity': .5,
+										  'data-q': function(d) { return d.State_Name; }, 'data-r': function(d) { return d.District_Name; }
+							})
+							.on('mouseover', function(){ 
+									var bcx = d3.select(this).attr('cx'),
+									bcy = d3.select(this).attr('cy'),
+									br = d3.select(this).attr('r');
+									svg.append('circle').attr({ class:'border', cx: bcx, cy: bcy, r: parseInt(br) + 6, fill:'none', 'stroke': '#444', 'stroke-width': '2px' });
+									var details = d3.select(this).text(); 
+									$('#copy_title').val(details).select();
+							})
+							.on('mouseout', function(){ 
+									svg.selectAll('.border').remove();
+							});
+						districts.transition()
+							.duration(1000)
+							.attr({ class: 'districtsScat', cx: function(d) { return xscale(story.cx(d)); }, cy: function(d) { return yscale(story.cy(d)); }, 
+											r: function(d){ return rDistrict(story.size(d)); }
+							});
+						districts.on('click', statCircs)
+							.append('title')
+							.text(story.hover);					
+		}
+		function statCircs(d){
+				var group = d.State_Name,
+				state = svg.selectAll('.statesScat[data-q="' + group + '"]'),
+				cx = state.attr('cx'), cy = state.attr('cy'), r = state.attr('r');
+				svg.selectAll('.statesScat').classed('fade', false);
+				tempsubgroupScat = [];
+				svg.selectAll('.border').remove();
+				select.append('option').text('click State');
+				select.property('value', 'click State');	
+				subselect.selectAll('*').remove();	
+				svg.selectAll('.districtsScat')
+						.transition()
+						.duration(1000)
+						.attr({ cx: cx, cy: cy, r: r })
+						.each('end', function(){ svg.selectAll('.districtsScat').remove(); });
+				select.selectAll('option').style('display', 'none');								
+		}
+		svg.selectAll('g').remove();
+		var xAxis = d3.svg.axis().scale(xscale).orient('bottom').tickFormat(d3.format('.0%')),
+		yAxis = d3.svg.axis().scale(yscale).orient('left').tickFormat(d3.format('.0%')),
+		xaxis = svg.append('g')
+			.classed('axis', true)
 			.attr('transform', 'translate(0,' + (height - R) + ')')
-      .call(d3.svg.axis()
-              .scale(xscale)
-              .orient('bottom')
-              .tickFormat(d3.format('.0%')))
-      .append('text')
-      .text(story.x[0])
-			.attr({ transform: 'translate(0, -5)', x: width - R, 'text-anchor': 'end' });
-    var yaxis = svg.append('g')
-      .attr('class', 'axis')
-      .attr('transform', 'translate(' + R + ',0)')
-      .call(d3.svg.axis()
-              .scale(yscale)
-              .orient('left')
-              .tickFormat(d3.format('.0%')))
-      .append('text')
-      .text(story.y[0])
-			.attr({ x: R, transform: 'translate(5,0) rotate(-90,' + R + ',' + R + ')', 'text-anchor': 'end', 'dominant-baseline': 'hanging'  });
+			.call(xAxis)
+			.append('text')
+			.text(story.x[0])
+			.attr({ transform: 'translate(0, -5)', x: width - R, 'text-anchor': 'end' }),
+		yaxis = svg.append('g')
+			.attr('class', 'axis')
+			.attr('transform', 'translate(' + R + ',0)')
+			.call(yAxis)
+			.append('text')
+			.text(story.y[0])
+			.attr({ x: R, transform: 'translate(5,0) rotate(-90,' + R + ',' + R + ')', 'text-anchor': 'end', 'dominant-baseline': 'hanging'});
 		// Lines joining x-axis and y-axis
 		svg.append('g').selectAll('.h')
 			.data(d3.range(0.2, story.ydom[1] , 0.2))
-			.enter().append('line')
+		 .enter().append('line')
 			.attr({ class: 'h', x1: R, y1: function(d){ return yscale(d);}, 
-					x2: function(d){ return xscale(d);}, y2: function(d){ return yscale(d);} 
+							x2: function(d){ return xscale(d);}, y2: function(d){ return yscale(d);} 
 			});
 		svg.append('g').selectAll('.v')
 			.data(d3.range(0.2, story.xdom[1] , 0.2))
-			.enter().append('line')
+		 .enter().append('line')
 			.attr({ class: 'v', x1: function(d){ return xscale(d);}, y1: function(d){ return yscale(d);}, 
-					x2: function(d){ return xscale(d);}, y2: height - R 
+							x2: function(d){ return xscale(d);}, y2: height - R 
 			});
 		// Filter subgroups having values greater than 150%  
 		beyond = _.filter(subset, function(d){ return story.cy(d) > story.ydom[1] ? d : '' ;});  
@@ -636,10 +706,10 @@ function draw_scatter(story) {
         .enter()
           .append('td')
           .text(function(d){ return d;});
-	// Subtext for the info container	  
+		// Subtext for the info container	  
     d3.select('#info')
-		.text('These districts have achieved over '+ story.ydom[1] * 100 + '% , and are outside the graph.');
-  });
+				.text('These districts have achieved over '+ story.ydom[1] * 100 + '% , and are outside the graph.');
+	});
 }
 function draw_boxscatter(story) {
   d3.select('.legend.boxscatter').style('display', 'block');
@@ -1657,6 +1727,7 @@ function initchart(story, data) {
   var svgtype = svg.attr('data-type');
 	if (svgtype !== story.type) {
     svg.selectAll('*').remove();
+		stimes = 0;
 		if (svg.attr('data-type')) {
 			svg.classed(svgtype, false);
       d3.selectAll('[data-story="' + svgtype + '"]').style('display', null);
