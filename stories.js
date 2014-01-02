@@ -1,23 +1,23 @@
 var color = d3.scale.linear()
-    					.clamp(true)
-    					.domain([0, 0.5, 1, 2])
-    					.range(['#D73027', '#FFFFBF', '#1A9850', '#000']);
-		
+		.clamp(true)
+		.domain([0, 0.5, 1, 2])
+		.range(['#D73027', '#FFFFBF', '#1A9850', '#000']);
+
 var	colorsSocP = d3.scale.linear()
-							.clamp(true)
-							.domain([0, 0.6, 0.6, 0.7, 0.7, 2])
-							.range(['#D73027', '#D73027', '#90EE90', '#90EE90', '#1A9850', '#000']);
+		.clamp(true)
+		.domain([0, 0.6, 0.6, 0.7, 0.7, 2])
+		.range(['#D73027', '#D73027', '#90EE90', '#90EE90', '#1A9850', '#000']);
 
 var colorDorCart = d3.scale.linear()
-							.clamp(true)
-							.domain([-1, 0, 1])
-					    .range(['#D73027', '#FFFFBF', '#1A9850']);		
-		
+		.clamp(true)
+		.domain([-1, 0, 1])
+		.range(['#D73027', '#FFFFBF', '#1A9850']);
+
 var colorDor = d3.scale.linear()
-							.clamp(true)
-							.domain([0, 1, 2])
-					    .range(['#D73027', '#FFFFBF', '#1A9850']);		
-		
+		.clamp(true)
+		.domain([0, 1, 2])
+		.range(['#D73027', '#FFFFBF', '#1A9850']);
+
 // Display formats
 var F = d3.format(',.0f'); // Float
 var N = d3.format(',.0f'); // Number == int
@@ -25,22 +25,23 @@ var P = d3.format('.1%');  // Percent
 
 var options = {'Money spent':['Spending on rural sanitation', 'Money spent on building toilets for the rural poor', 'Plan vs. Actuals for schools - cumulative', 'Plan vs. Actuals for Anganwadis - cumulative'],'Toilets built':['Evaluation of toilets built for the rural poor', 'Coverage of Toilets - Rural Households', 'Plan vs. Actuals for schools', 'Plan vs. Actuals for Anganwadis']};
 
-var tmp_story = {'Spending on rural sanitation':{'url':['http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home', 'http://data.gov.in/dataset/nirmal-bharat-abhiyan-district-wise-financial-progress-date'],'cols':['Total_Projects_Outlay', 'ExpReported_Total'],'area':['Total plan', 'Total_Projects_Outlay'],'num':['Total spent', 'ExpReported_Total'],'den':['Total plan', 'Total_Projects_Outlay']},'Money spent on building toilets for the rural poor':{'url':['http://tsc.gov.in/tsc/Report/Financial/RptPercentageFinComponentStatewiseDistrictwise_net.aspx?id=FIN'],'cols':['BPL_Appr.(C+S+B)', 'BPL_Exp.(C+S+B)'],'area':['Total plan - Rural poor', 'BPL_Appr.(C+S+B)'],'num':['Total spent - Rural poor', 'BPL_Exp.(C+S+B)'],'den':['Total plan - Rural poor', 'BPL_Appr.(C+S+B)']},'Plan vs. Actuals for schools - cumulative':{'url':['http://tsc.gov.in/tsc/Report/Financial/RptPercentageFinComponentStatewiseDistrictwise_net.aspx?id=FIN'],'cols':['School_Appr.(C+S+B)', 'School_Exp.(C+S+B)'],'area':['Total plan - School', 'School_Appr.(C+S+B)'],'num':['Total spent - School', 'School_Exp.(C+S+B)'],'den':['Total plan - School', 'School_Appr.(C+S+B)']},'Plan vs. Actuals for Anganwadis - cumulative':{'url':['http://tsc.gov.in/tsc/Report/Financial/RptPercentageFinComponentStatewiseDistrictwise_net.aspx?id=FIN'],'cols':['Anganwadi_Appr.(C+S+B)', 'Anganwadi_Exp.(C+S+B)'],'area':['Total plan - Nursery Schools', 'Anganwadi_Appr.(C+S+B)'],'num':['Total spent - Nursery Schools', 'Anganwadi_Exp.(C+S+B)'],'den':['Total plan - Nursery Schools', 'Anganwadi_Appr.(C+S+B)']},'Evaluation of toilets built for the rural poor':{'url':['http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home',	'http://data.gov.in/dataset/nirmal-bharat-abhiyan-district-wise-physical-progress-as-on-date'],'cols':['PO_IHHL_BPL', 'PP_IHHL_BPL'],'area':['Toilets planned for rural poor', 'PO_IHHL_BPL'],'num':['Toilets built for rural poor', 'PP_IHHL_BPL'],'den':['Toilets planned for rural poor', 'PO_IHHL_BPL']},'Coverage of Toilets - Rural Households':{'url':['http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home','http://www.indiawaterportal.org/data/2011-census-household-tables-0'],'cols':['PP_IHHL_TOTAL', 'Rural_Households'],'area':['Total Rural Households Census 2011' , 'Rural_Households'],'num':['TSC total number of toilets built from 2001', 'PP_IHHL_TOTAL'],'den':['Total Rural Households Census 2011', 'Rural_Households'],'cen2001':['Census 2001 Rural Households (WT)', 'Census_2001_IHHL']},'Plan vs. Actuals for schools':{'url':['http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home'],'cols':['PO_School_Toilets', 'PP_School_Toilets'],'area':['Number of toilets to be built for Schools', 'PO_School_Toilets'],'num':['Number of toilets built for Schools', 'PP_School_Toilets'],'den':['Number of toilets to be built for Schools', 'PO_School_Toilets']},'Plan vs. Actuals for Anganwadis':{'url':['http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home'],'cols':['PO_Anganwadi_Toilets', 'PP_Anganwadi_Toilets'],'area':['Number of toilets to be built for Nursery Schools', 'PO_Anganwadi_Toilets'],'num':['Number of toilets built for Nursery Schools', 'PP_Anganwadi_Toilets'],'den':['Number of toilets to be built for Nursery Schools', 'PO_Anganwadi_Toilets']}};							
+var tmp_story = {'Spending on rural sanitation':{'url':['http://tsc.gov.in/tsc/Report/Financial/RptFinancialProgressStatewiseDistrictwise.aspx?id=Home', 'http://data.gov.in/dataset/nirmal-bharat-abhiyan-district-wise-financial-progress-date'],'cols':['Total_Projects_Outlay', 'ExpReported_Total'],'area':['Total plan', 'Total_Projects_Outlay'],'num':['Total spent', 'ExpReported_Total'],'den':['Total plan', 'Total_Projects_Outlay']},'Money spent on building toilets for the rural poor':{'url':['http://tsc.gov.in/tsc/Report/Financial/RptPercentageFinComponentStatewiseDistrictwise_net.aspx?id=FIN'],'cols':['BPL_Appr.(C+S+B)', 'BPL_Exp.(C+S+B)'],'area':['Total plan - Rural poor', 'BPL_Appr.(C+S+B)'],'num':['Total spent - Rural poor', 'BPL_Exp.(C+S+B)'],'den':['Total plan - Rural poor', 'BPL_Appr.(C+S+B)']},'Plan vs. Actuals for schools - cumulative':{'url':['http://tsc.gov.in/tsc/Report/Financial/RptPercentageFinComponentStatewiseDistrictwise_net.aspx?id=FIN'],'cols':['School_Appr.(C+S+B)', 'School_Exp.(C+S+B)'],'area':['Total plan - School', 'School_Appr.(C+S+B)'],'num':['Total spent - School', 'School_Exp.(C+S+B)'],'den':['Total plan - School', 'School_Appr.(C+S+B)']},'Plan vs. Actuals for Anganwadis - cumulative':{'url':['http://tsc.gov.in/tsc/Report/Financial/RptPercentageFinComponentStatewiseDistrictwise_net.aspx?id=FIN'],'cols':['Anganwadi_Appr.(C+S+B)', 'Anganwadi_Exp.(C+S+B)'],'area':['Total plan - Nursery Schools', 'Anganwadi_Appr.(C+S+B)'],'num':['Total spent - Nursery Schools', 'Anganwadi_Exp.(C+S+B)'],'den':['Total plan - Nursery Schools', 'Anganwadi_Appr.(C+S+B)']},'Evaluation of toilets built for the rural poor':{'url':['http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home',	'http://data.gov.in/dataset/nirmal-bharat-abhiyan-district-wise-physical-progress-as-on-date'],'cols':['PO_IHHL_BPL', 'PP_IHHL_BPL'],'area':['Toilets planned for rural poor', 'PO_IHHL_BPL'],'num':['Toilets built for rural poor', 'PP_IHHL_BPL'],'den':['Toilets planned for rural poor', 'PO_IHHL_BPL']},'Coverage of Toilets - Rural Households':{'url':['http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home','http://www.indiawaterportal.org/data/2011-census-household-tables-0'],'cols':['PP_IHHL_TOTAL', 'Rural_Households'],'area':['Total Rural Households Census 2011' , 'Rural_Households'],'num':['TSC total number of toilets built from 2001', 'PP_IHHL_TOTAL'],'den':['Total Rural Households Census 2011', 'Rural_Households'],'cen2001':['Census 2001 Rural Households (WT)', 'Census_2001_IHHL']},'Plan vs. Actuals for schools':{'url':['http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home'],'cols':['PO_School_Toilets', 'PP_School_Toilets'],'area':['Number of toilets to be built for Schools', 'PO_School_Toilets'],'num':['Number of toilets built for Schools', 'PP_School_Toilets'],'den':['Number of toilets to be built for Schools', 'PO_School_Toilets']},'Plan vs. Actuals for Anganwadis':{'url':['http://tsc.gov.in/tsc/Report/Physical/RptPhysicalProgessStateWiseDistrictwise.aspx?id=Home'],'cols':['PO_Anganwadi_Toilets', 'PP_Anganwadi_Toilets'],'area':['Number of toilets to be built for Nursery Schools', 'PO_Anganwadi_Toilets'],'num':['Number of toilets built for Nursery Schools', 'PP_Anganwadi_Toilets'],'den':['Number of toilets to be built for Nursery Schools', 'PO_Anganwadi_Toilets']}};
 
 function sum(d, metric) {
-  return d.depth == 2 ? d[metric] || d3.sum(metric, function(s) { return d[s] }) :
-         d.depth == 1 ? d3.sum(d.values, function(v) { return v[metric] || d3.sum(metric, function(s) { return v[s] }) })
-                      : 0
+	return d.depth == 2 ? d[metric] || d3.sum(metric, function(s) { return d[s] }) :
+				 d.depth == 1 ? d3.sum(d.values, function(v) { return v[metric] || d3.sum(metric, function(s) { return v[s] }) })
+				          : 0
 }
 
 function cumsum(series) {
-  var result = [], running = 0;
-  for (var i=0, l=series.length; i<l; i++) {
-      result.push([running, series[i]]);
-      running += series[i];
-  }
-  return result;
+	var result = [], running = 0;
+	for (var i=0, l=series.length; i<l; i++) {
+		result.push([running, series[i]]);
+		running += series[i];
+	}
+	return result;
 }
+
 // Colours taken from MS Office themes
 var gen_color_vals = [
     '#4e8542', '#c0504d', '#9bbb59', '#8064a2', '#4bacc6', '#f79646', 
@@ -49,170 +50,169 @@ var gen_color_vals = [
     '#B5AE53', '#848058', '#f07f09', '#9f2936', '#1b587c', '#604878', 
     '#95A39D', '#E8B54D', '#94C600', '#71685A', '#FF6700', '#909465',
     '#956B43', '#786C71', '#c19859', '#4f81bd', '#6bb1c9', '#FEA022',
-		'#ccc' 
+    '#ccc'
 ];
 
 var gen_color_keys = {};
 
 function gen_color(value) {
-  if (!gen_color_keys[value]) {
-      gen_color_keys[value] = gen_color_vals[d3.keys(gen_color_keys).length];
-  }
-  return gen_color_keys[value];
+	if (!gen_color_keys[value]) {
+		gen_color_keys[value] = gen_color_vals[d3.keys(gen_color_keys).length];
+	}
+	return gen_color_keys[value];
 }
+
 // Concatenates strings / arrays
 function join() {
-  var result = []
-  for (var i=0, l=arguments.length; i<l; i++) {
-      if (Array.isArray(arguments[i])) {
-          result.push.apply(result, arguments[i]);
-      } else {
-          result.push(arguments[i]);
-      }
+	var result = []
+	for (var i=0, l=arguments.length; i<l; i++) {
+		if (Array.isArray(arguments[i])) {
+    	result.push.apply(result, arguments[i]);
+    } else {
+    	result.push(arguments[i]);
+    }
   }
   return result;
 }
 
 function treemap_story(story) {
-  story.type = 'treemap';
-  story.cols = story.cols || join(story.area[1], story.num[1], story.den[1]);
-  story.size = function(d) { return sum(d, story.area[1]); };
-  story.filter = function(d) { return d.District_Name.match(/^[A-Z]/); }; 
-  story.color = story.colors || function(d) { return color((story.factor || 1) * sum(d, story.num[1]) / sum(d, story.den[1])).replace(/NaNNaNNaN/i, 'eee'); };
-  story.hover = function(d) {
-    var prefix = d.depth == 2 ? d['State_Name'] + ' - ' + d['District_Name'] + ': ' :
-                 d.depth == 1 ? d['key'] + ': '
-                              : '';
-    var num = sum(d, story.num[1]);
-    var den = sum(d, story.den[1]);
-    var size = sum(d, story.area[1]);
-    return (prefix +
-        story.area[0] + ' = ' + N(size) + '. ' +
-        story.num[0] + ' / ' + story.den[0] + ' = ' +
-        N(num) + ' / ' + N(den) + ' = ' + P(num / den)
-    );
-  };
-  return story;
+	story.type = 'treemap';
+	story.cols = story.cols || join(story.area[1], story.num[1], story.den[1]);
+	story.size = function(d) { return sum(d, story.area[1]); };
+	story.filter = function(d) { return d.District_Name.match(/^[A-Z]/); };
+	story.color = story.colors || function(d) { return color((story.factor || 1) * sum(d, story.num[1]) / sum(d, story.den[1])).replace(/NaNNaNNaN/i, 'eee'); };
+	story.hover = function(d) {
+		var prefix = d.depth == 2 ? d['State_Name'] + ' - ' + d['District_Name'] + ': ' :
+								 d.depth == 1 ? d['key'] + ': '	: '';
+		var num = sum(d, story.num[1]);
+		var den = sum(d, story.den[1]);
+		var size = sum(d, story.area[1]);
+		return (prefix +
+			story.area[0] + ' = ' + N(size) + '. ' +
+			story.num[0] + ' / ' + story.den[0] + ' = ' +
+			N(num) + ' / ' + N(den) + ' = ' + P(num / den)
+		);
+	};
+	return story;
 }
 
 function cartogram_story(story) {
-  story.type = 'cartogram';
-  story.cols = story.cols || join(story.area[1], story.num[1], story.den[1]);
-  story.size = function(d) { return sum(d, story.area[1]); };
+	story.type = 'cartogram';
+	story.cols = story.cols || join(story.area[1], story.num[1], story.den[1]);
+	story.size = function(d) { return sum(d, story.area[1]); };
 	story.filter = function(d) { return d.District_Name.match(/^[A-Z]/); };
-  story.color = story.colors || function(d) { return color((story.factor || 1) * sum(d, story.num[1]) / sum(d, story.den[1])).replace(/NaNNaNNaN/i, 'eee'); };
-  story.hover = function(d) {
-    var prefix = d.depth == 2 ? d['State_Name'] + ' - ' + d['District_Name'] + ': ' :
-                 d.depth == 1 ? d['key'] + ': '
-                              : '';
-    var num = sum(d, story.num[1]);
-    var den = sum(d, story.den[1]);
-    var size = sum(d, story.area[1]);
-    return (prefix +
-        story.area[0] + ' = ' + N(size) + '. ' +
-        story.num[0] + ' / ' + story.den[0] + ' = ' +
-        N(num) + ' / ' + N(den) + ' = ' + P(num / den)
-    );
-  };
-  return story;
+	story.color = story.colors || function(d) { return color((story.factor || 1) * sum(d, story.num[1]) / sum(d, story.den[1])).replace(/NaNNaNNaN/i, 'eee'); };
+	story.hover = function(d) {
+		var prefix = d.depth == 2 ? d['State_Name'] + ' - ' + d['District_Name'] + ': ' :
+								 d.depth == 1 ? d['key'] + ': ' : '';
+		var num = sum(d, story.num[1]);
+		var den = sum(d, story.den[1]);
+		var size = sum(d, story.area[1]);
+		return (prefix +
+			story.area[0] + ' = ' + N(size) + '. ' +
+			story.num[0] + ' / ' + story.den[0] + ' = ' +
+			N(num) + ' / ' + N(den) + ' = ' + P(num / den)
+		);
+	};
+	return story;
 }
 
 function scatter_story(story) {
-  story.type = 'scatter';
-  story.cols = story.cols || [];
-  story.filter = function(d) { return d.District_Name.match(/^[A-Z]/); };
-  story.color = function(d) { return gen_color(d[story.group[0]]); };
-  story.size = story.area[1];
+	story.type = 'scatter';
+	story.cols = story.cols || [];
+	story.filter = function(d) { return d.District_Name.match(/^[A-Z]/); };
+	story.color = function(d) { return gen_color(d[story.group[0]]); };
+	story.size = story.area[1];
 	story.cx = story.x[1];
-  story.cy = story.y[1];
-  story.xdom = story.xdom || [0, 1];
-  story.ydom = story.ydom || [0, 1];
-  story.hover = function(d) {
-    var prefix = d['State_Name'] + ' - ' + d['District_Name'] + ': ';
-    return (prefix +
-      story.area[0] + ' = ' + N(story.area[1](d)) + '. ' +
-      story.x[0]    + ' = ' + P(story.x[1](d)) + '. ' +
-      story.y[0]    + ' = ' + P(story.y[1](d)) + '.'
-    );
-  };
-  return story;
+	story.cy = story.y[1];
+	story.xdom = story.xdom || [0, 1];
+	story.ydom = story.ydom || [0, 1];
+	story.hover = function(d) {
+		var prefix = d['State_Name'] + ' - ' + d['District_Name'] + ': ';
+		return (prefix +
+			story.area[0] + ' = ' + N(story.area[1](d)) + '. ' +
+			story.x[0]    + ' = ' + P(story.x[1](d)) + '. ' +
+			story.y[0]    + ' = ' + P(story.y[1](d)) + '.'
+		);
+	};
+	return story;
 }
 
 function stack_story(story) {
-  story.type = 'stack';
-  // Needs to be specified explicitly.
-  story.cols = story.cols || [];
-  story.filter = function(d) { return d.District_Name.match(/^[A-Z]/); };
-  story.color = function(d) { return gen_color(d[story.group[0]]); };
-  story.hover = function(d, i) {
-    return story.cells[i] + ': ' + P(d[1]);
-  };
-  story.legend['%Rows%'] = story.rows.join(', ');
-  return story;
+	story.type = 'stack';
+	// Needs to be specified explicitly.
+	story.cols = story.cols || [];
+	story.filter = function(d) { return d.District_Name.match(/^[A-Z]/); };
+	story.color = function(d) { return gen_color(d[story.group[0]]); };
+	story.hover = function(d, i) {
+		return story.cells[i] + ': ' + P(d[1]);
+	};
+	story.legend['%Rows%'] = story.rows.join(', ');
+	return story;
 }
 
 function boxscatter_story(story) {
-  story.type = 'boxscatter';
-  story.cols = story.cols || [];
-  story.filter = function(d) { return d.District_Name.match(/^[A-Z]/); };
-  story.color = function(d) { return gen_color(d[story.group[0]]); };
-  story.X = story.x[1];
-  story.YT = story.yT[1];
-  story.YC = story.yC[1];
+	story.type = 'boxscatter';
+	story.cols = story.cols || [];
+	story.filter = function(d) { return d.District_Name.match(/^[A-Z]/); };
+	story.color = function(d) { return gen_color(d[story.group[0]]); };
+	story.X = story.x[1];
+	story.YT = story.yT[1];
+	story.YC = story.yC[1];
 	story.xdom = story.xdom || [0, 1];
-  story.ydom = story.ydom || [0, 1];
-  story.hover = function(d) {
-    var prefix = d['State_Name'] + ' - ' + d['District_Name'] + ': ';
-    return (prefix +
-      story.area[0] + ' = ' + N(story.area[1](d)) + '. ' +
-      story.x[0]    + ' = ' + P(story.x[1](d)) + '. ' +
-      story.y[0]    + ' = ' + P(story.y[1](d)) + '.'
-    );
-  };
-  return story;
+	story.ydom = story.ydom || [0, 1];
+	story.hover = function(d) {
+		var prefix = d['State_Name'] + ' - ' + d['District_Name'] + ': ';
+		return (prefix +
+			story.area[0] + ' = ' + N(story.area[1](d)) + '. ' +
+			story.x[0]    + ' = ' + P(story.x[1](d)) + '. ' +
+			story.y[0]    + ' = ' + P(story.y[1](d)) + '.'
+		);
+	};
+	return story;
 }
 
 function dorling_story(story) {
-  story.type = 'dorling';
-  story.cols = story.cols || [];
-  story.filter = function(d) { return d.District_Name.match(/^[A-Z]/); };
+	story.type = 'dorling';
+	story.cols = story.cols || [];
+	story.filter = function(d) { return d.District_Name.match(/^[A-Z]/); };
 	story.X = story.x2[1];
-  story.YT = story.yT2[1];
-  story.YC = story.yC2[1];
+	story.YT = story.yT2[1];
+	story.YC = story.yC2[1];
 	story.color2 = function(d) { return gen_color(d[story.group[0]]); };
-  story.size = story.area[1];
+	story.size = story.area[1];
 	story.cx = story.x[1];
-  story.cy = story.y[1];
+	story.cy = story.y[1];
 	story.color1 = function(d) { return gen_color(d[story.group[0]]); };
-  story.xdom = story.xdom || [0, 1];
-  story.ydom = story.ydom || [0, 1];
-  story.color = story.colors || function(d) { return colorDor((story.factor || 1) * d[story.num[1]] / d[story.den[1]]).replace(/NaNNaNNaN/i, 'eee'); };
-  story.hover = function(d) {
-    var prefix = d['State_Name'] +' - '+ d['District_Name'] + ' : ';
-    var num = story.num[1];
-    var den = story.den[1];
-    var size = story.area[1];
-    return (prefix +
-        story.area[0] + ' = ' + N(d[size]) + '. ' +
-        story.num[0] + ' / ' + story.den[0] + ' = ' +
-        N(d[num]) + ' / ' + N(d[den]) + ' = ' + P(d[num] / d[den])
-    );
-  };
+	story.xdom = story.xdom || [0, 1];
+	story.ydom = story.ydom || [0, 1];
+	story.color = story.colors || function(d) { return colorDor((story.factor || 1) * d[story.num[1]] / d[story.den[1]]).replace(/NaNNaNNaN/i, 'eee'); };
+	story.hover = function(d) {
+		var prefix = d['State_Name'] +' - '+ d['District_Name'] + ' : ';
+		var num = story.num[1];
+		var den = story.den[1];
+		var size = story.area[1];
+		return (prefix +
+			story.area[0] + ' = ' + N(d[size]) + '. ' +
+			story.num[0] + ' / ' + story.den[0] + ' = ' +
+			N(d[num]) + ' / ' + N(d[den]) + ' = ' + P(d[num] / d[den])
+		);
+	};
 	story.hover1 = function(d) {
-    var prefix = d['State_Name'] + ' - ' + d['District_Name'] + ': ';
-    return (prefix +
-      story.area1[0] + ' = ' + N(story.area1[1](d)) + '. ' +
-      story.x[0]    + ' = ' + P(story.x[1](d)) + '. ' +
-      story.y[0]    + ' = ' + P(story.y[1](d)) + '.'
-    );
-  };
-  return story;
+		var prefix = d['State_Name'] + ' - ' + d['District_Name'] + ': ';
+		return (prefix +
+			story.area1[0] + ' = ' + N(story.area1[1](d)) + '. ' +
+			story.x[0]    + ' = ' + P(story.x[1](d)) + '. ' +
+			story.y[0]    + ' = ' + P(story.y[1](d)) + '.'
+		);
+	};
+	return story;
 }
 
 function dorlingCart_story(story){
 	story.type = 'dorlingCart';
 	story.cols = story.cols || [];
-  story.filter = function(d) { return d.District_Name.match(/^[A-Z]/); };
+	story.filter = function(d) { return d.District_Name.match(/^[A-Z]/); };
 	story.size = story.area[1];
 	story.diff = story.cen2011_2001[1];
 	story.cen2001 = story.num[1];
@@ -221,8 +221,8 @@ function dorlingCart_story(story){
 }
 
 var stories = [
-  treemap_story({
-    'menu'			: 'Money spent',
+	treemap_story({
+		'menu'			: 'Money spent',
     'title'  		: 'Spending on rural sanitation',
 		'context'		: 'The rural sanitation scheme allocates funds different sanitation activities in villages. The main activities supported include ', 
 		'cont_p' 		: '$1) Construction of toilets - for people in their houses and public toilets and institutions such as schools and creches @' + 
@@ -1543,6 +1543,7 @@ var stories = [
 		'IWP'    		: 'false'					
   })
 ];
+
 // List of the historical data files, latest on top
 var datafiles = [
 		'data-22-Dec-2013.csv',
@@ -1569,12 +1570,12 @@ var datafiles = [
 		'data-28-Jul-2013.csv',
 		'data-21-Jul-2013.csv',
 		'data-14-Jul-2013.csv',
-    'data-07-Jul-2013.csv',
-    'data-30-Jun-2013.csv',
-    'data-25-Jun-2013.csv',
-    'data-16-Jun-2013.csv',
-    'data-09-Jun-2013.csv',
-    'data-02-Jun-2013.csv',
-    'data-29-May-2013.csv',
-    'data-23-May-2013.csv'
+		'data-07-Jul-2013.csv',
+		'data-30-Jun-2013.csv',
+		'data-25-Jun-2013.csv',
+		'data-16-Jun-2013.csv',
+		'data-09-Jun-2013.csv',
+		'data-02-Jun-2013.csv',
+		'data-29-May-2013.csv',
+		'data-23-May-2013.csv'
 ];
