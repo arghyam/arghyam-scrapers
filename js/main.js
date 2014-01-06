@@ -3,6 +3,7 @@
 var host = window.location.href;
 var iwp = 'http://arghyam.github.io/arghyam-scrapers/?#';
 console.log(host);
+var slides = [];
 d3.selectAll('.tooltip').remove();
 if(host == iwp){
 	var iwpStories = _.filter(stories, function(d){ return d.IWP == 'true'; });
@@ -219,21 +220,20 @@ function draw(story) {
 			    .on('click', function(){ window.scrollTo(0, document.body.scrollHeight) ;});		
 	}
 	$(window).bind('hashchange', function() {
- 			slides.length = 0;
- 			if(story.slideshare){
- 				slides.push(story.slideshare);
- 				d3.select('#pptFrame').attr('src', slides[slides.length-1]);
- 			}
- 	});
-	if(window.location.search != '?embed=1'){		
-		if(story.slideshare){
+		slides.length = 0;
+		if(window.location.search != '?embed=1' && story.slideshare){
 			d3.select('#slideshare').style('display', 'block');
 			slides.push(story.slideshare);
-			if(slides.length == 1){					
-				d3.select('#pptFrame').attr('src', slides[slides.length-1]);
-			}	
+			d3.select('#pptFrame').attr('src', slides[0]);
 		}
-	}	
+ 	});
+	if(window.location.search != '?embed=1' && story.slideshare){		
+		d3.select('#slideshare').style('display', 'block');
+		slides.push(story.slideshare);
+		if(slides.length == 1){					
+			d3.select('#pptFrame').attr('src', slides[slides.length-1]);
+		}
+	}
 }
 function draw_date(daterow, story) {
     var dates = _.uniq(_.map(story.cols, function(col) { return daterow[col]; }));
