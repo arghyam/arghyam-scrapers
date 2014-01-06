@@ -217,11 +217,21 @@ function draw(story) {
 		cont.append('p').append('a').text('Click on the ppt for more help with using the visualisation.')
 					.style('cursor', 'pointer')
 			    .on('click', function(){ window.scrollTo(0, document.body.scrollHeight) ;});		
-	}	
-	if(window.location.search != '?embed=1'){
+	}
+	$(window).bind('hashchange', function() {
+ 			slides.length = 0;
+ 			if(story.slideshare){
+ 				slides.push(story.slideshare);
+ 				d3.select('#pptFrame').attr('src', slides[slides.length-1]);
+ 			}
+ 	});
+	if(window.location.search != '?embed=1'){		
 		if(story.slideshare){
 			d3.select('#slideshare').style('display', 'block');
-			d3.select('#pptFrame').attr('src', story.slideshare);		
+			slides.push(story.slideshare);
+			if(slides.length == 1){					
+				d3.select('#pptFrame').attr('src', slides[slides.length-1]);
+			}	
 		}
 	}	
 }
