@@ -221,24 +221,29 @@ function draw(story) {
 	}
 	$(window).bind('hashchange', function() {
 		slides.length = 0;
-		if(window.location.search != '?embed=1' && story.slideshare){
-			d3.select('#slideshare').style('display', 'block');
-			slides.push(story.slideshare);
-			d3.select('#pptFrame').attr('src', slides[0]);
+		if(window.location.search != '?embed=1'){
+			if(story.slideshare){
+				d3.select('#slideshare').style('display', 'block');
+				slides.push(story.slideshare);
+				d3.select('#pptFrame').attr('src', slides[0]);
+			}else{
+				d3.select('#slideshare').style('display', 'none');
+			}	
 		}
  	});
-	if(window.location.search != '?embed=1' && story.slideshare){		
-		d3.select('#slideshare').style('display', 'block');
-		slides.push(story.slideshare);
-		if(slides.length == 1){					
-			d3.select('#pptFrame').attr('src', slides[slides.length-1]);
-		}
+	if(window.location.search != '?embed=1'){
+		if(story.slideshare){		
+			d3.select('#slideshare').style('display', 'block');
+			slides.push(story.slideshare);
+			if(slides.length == 1){					
+				d3.select('#pptFrame').attr('src', slides[slides.length-1]);
+			}
+		}else{
+			d3.select('#slideshare').style('display', 'none');	
+		}	
 	}
 }
-function draw_date(daterow, story) {
-    var dates = _.uniq(_.map(story.cols, function(col) { return daterow[col]; }));
-    d3.select('#date').text(dates.join(', '));
-}
+
 function draw_treemap(story) { 
 	// Add gradient legend for treemap
   d3.selectAll('#gradient_cont, .legend.treemap').style('display', 'block');
@@ -258,8 +263,7 @@ function draw_treemap(story) {
   d3.csv(story.data || datafile(), function(data) {
 		if(story.data){ $('#data_cont').hide(); d3.select('#data').attr('href', story.data); } else { $('#data_cont').show();}
 		var subset = initchart(story, data);
-    draw_date(data[data.length-1], story);
-		var treemap = d3.layout.treemap()
+    var treemap = d3.layout.treemap()
       .size([parseInt(svg.style('width'), 10), svg.attr('height')])
       .sticky(true)
 			.children(function(d) { return d.values; })
@@ -429,7 +433,6 @@ function draw_scatter(story) {
 		R = story.R,
 		beyond = [],  
 		legend = d3.select('.legend.scatter');
-		draw_date(data[data.length-1], story);
 		svg.selectAll('line, text').remove();    
 		legend.selectAll('*').remove();
     var select = legend.append('select').attr('class', 'states'),
@@ -727,7 +730,6 @@ function draw_boxscatter(story) {
 	d3.csv(story.data || datafile(), function(data) {
 		if(story.data){ $('#data_cont').hide(); d3.select('#data').attr('href', story.data); } else { $('#data_cont').show();}
     var subset = initchart(story, data);
-		draw_date(data[data.length-1], story);
 		svg.selectAll('*').remove();
 		svg.append('text').attr({ x: 25, y: 25, fill: '#000', stroke: 'none' }).text('Click to filter -->');
 		svg.append('circle').attr({ id: 'cirTSC',cx: 155, cy: 20, r: 8, fill: '#4F81BD' });
@@ -1013,7 +1015,6 @@ function draw_stack(story) {
 		if(story.data){ $('#data_cont').hide(); d3.select('#data').attr('href', story.data); } else { $('#data_cont').show();}
     var subset = initchart(story, data);
 		svg.selectAll('*').remove();
-    draw_date(data[data.length-1], story);
     var grouper = function(group) {
       return d3.nest()
         .rollup(function(leaves) {
@@ -1477,15 +1478,6 @@ function draw_dorling(story) {
 							});				
 					node.append('title')
 							.text(story.hover);
-					maps.selectAll('text')
-							.data(geo)
-						.enter().append('text')
-							.attr({ x: function(d){ return xscale(d.Longitude); }, y: function(d){ return yscale(d.Latitude); } })
-							.data(subset)
-							.text(function(d){ return d.State_Name == group ? d.District_Name : ''; })
-							.style({ 'font-size': 10 / k +'px', 'text-anchor': 'left', 'dominant-baseline': 'bottom'})
-							.transition()
-							.attr("transform", function(d){ return "translate(" + (r(d[story.size])) + ",0)"; });						
 					var selPath = _.filter(topomaps, function(m){ return m[0] == group; });
 					var D = selPath[0][1];
 					var centroid = path.centroid(D); x = centroid[0]; y = centroid[1];
