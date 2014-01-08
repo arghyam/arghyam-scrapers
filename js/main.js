@@ -433,26 +433,29 @@ function draw_scatter(story) {
 		R = story.R,
 		beyond = [],  
 		legend = d3.select('.legend.scatter');
+		//draw_date(data[data.length-1], story);
 		svg.selectAll('line, text').remove();    
 		legend.selectAll('*').remove();
     var select = legend.append('select').attr('class', 'states'),
 		subselect = legend.append('select').attr('class', 'districts'),
 		groups = _.uniq(_.pluck(subset, story.group[0]));
-		groups.unshift('');
-		select.append('option').text('click State');
-		select.on('change', function() {
-				d3.selectAll('.tooltip').remove();
-				var group = d3.select(this).property('value'),
-				result = _.filter(subset, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); });
-				result.unshift({"District_Name":"select District"});
-				tempgroupScat.push(group);
-				subselect.selectAll('option').remove();
-				subselect.selectAll('option')
-						.data(result)
-					.enter()
-						.append('option')
-						.text(function(d){ return d.District_Name; });	
-		});	
+		groups.unshift('select State');
+		select.selectAll('option')
+        .data(groups)
+      .enter()
+        .append('option')
+        .text(String);
+		select.on('change', function(){
+			var group = d3.select(this).property('value');			
+			d3.selectAll('.tooltip').remove();
+			svg.selectAll('.statesScat').classed('mark', false);
+      state = svg.selectAll('.statesScat[data-q="'+group+'"]');
+      state.classed('mark', true);
+      var details = state.text();    
+      $('#copy_title').val(details);
+			$('#copy_title').on('mouseover', function(){ $(this).select(); });	
+			$('.mark').tooltip({ title:function(){ return $('.mark title').text(); }, trigger:'focus', container:'body' }).tooltip('show');						
+	  });			
 		// Accumulated values of states
 		var states = d3.nest()
 				.key(function(d){ return d[story.group[0]]; })
@@ -503,7 +506,7 @@ function draw_scatter(story) {
 					.attr({ class: 'tags hide', x: function(d) { return xscale(d.values['cx']); }, 
 							y: function(d) { return yscale(d.values['cy']) - rState(d.values['rads']); } 
 					})
-					.text(function(d){ return d.key;});
+					.text(function(d){ return d.key;});					
 				stimes++;	
 		}	else {	
 				svg.selectAll('.border').remove();
@@ -520,8 +523,7 @@ function draw_scatter(story) {
 					result.unshift({"District_Name":"select District"});
 					var fade = svg.select('.statesScat').classed('fade');		
 					if(fade){ 
-							select.selectAll('option').remove();
-							select.append('option').text(group);
+							select.property('value', group);
 							subselect.selectAll('option').remove();
 							subselect.selectAll('option')
 									.data(result)
@@ -535,7 +537,7 @@ function draw_scatter(story) {
 								subselect.property('value', 'select District');
 							}
 					}else{		
-							select.property('value', 'click State');
+							select.property('value', 'select State');
 							subselect.selectAll('option').remove();
 					}		
 					result.shift();
@@ -606,6 +608,7 @@ function draw_scatter(story) {
 				$('.mark').tooltip({ title:function(){ return $('.mark title').text(); }, trigger:'focus', container:'body' }).tooltip('show');						
 		});
 		function distCircs(d) {
+				d3.selectAll('.tooltip').remove();
 				var group = d.key;
 				result = _.filter(subset, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); }),
 				state = svg.selectAll('.statesScat[data-q="' + group + '"]'),
@@ -613,8 +616,7 @@ function draw_scatter(story) {
 				tempgroupScat.push(group);
 				svg.selectAll('.tags').classed('hide', true);
 				svg.selectAll('.border').remove();
-				select.selectAll('option').remove();
-				select.append('option').text(group);
+				select.property('value', group);
 				result.unshift({"District_Name":"select District"});
 				subselect.selectAll('option').remove();
 				subselect.selectAll('option')
@@ -653,21 +655,21 @@ function draw_scatter(story) {
 							.text(story.hover);					
 		}
 		function statCircs(d){
+				d3.selectAll('.tooltip').remove();
+				svg.selectAll('.statesScat').classed('mark', false);	
 				var group = d.State_Name,
 				state = svg.selectAll('.statesScat[data-q="' + group + '"]'),
 				cx = state.attr('cx'), cy = state.attr('cy'), r = state.attr('r');
 				svg.selectAll('.statesScat').classed('fade', false);
 				tempsubgroupScat = [];
 				svg.selectAll('.border').remove();
-				select.append('option').text('click State');
-				select.property('value', 'click State');	
-				subselect.selectAll('*').remove();	
+				select.property('value', 'select State');
+				subselect.selectAll('option').remove();
 				svg.selectAll('.districtsScat')
 						.transition()
 						.duration(1000)
 						.attr({ cx: cx, cy: cy, r: r })
 						.each('end', function(){ svg.selectAll('.districtsScat').remove(); });
-				select.selectAll('option').style('display', 'none');								
 		}
 		svg.selectAll('g').remove();
 		var xAxis = d3.svg.axis().scale(xscale).orient('bottom').tickFormat(d3.format('.0%')),
@@ -1401,7 +1403,8 @@ function draw_dorling(story) {
 				.append('option')
 				.text(String);
 		var hashdec = decodeURIComponent(window.location.hash.replace(/^#/, '')).split('|');	
-		subselect.selectAll('option').data(options[hashdec[2]] || options['Money spent']).enter().append('option').text(String);
+		subselect.selectAll('option')
+			.data(options[hashdec[2]] || options['Money spent']).enter().append('option').text(String);
 		select.on('change', function(d){ 
 				var param = d3.select(this).property('value');				
 				var subparam = options[param];
