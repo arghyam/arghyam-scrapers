@@ -227,7 +227,7 @@ function draw(story) {
 					.style('cursor', 'pointer')
 			    .on('click', function(){ window.scrollTo(0, document.body.scrollHeight) ;});		
 	}
-	/*$(window).bind('hashchange', function() {
+	$(window).bind('hashchange', function() {
 		slides.length = 0;
 		if(window.location.search != '?embed=1'){
 			if(story.slideshare){
@@ -249,12 +249,8 @@ function draw(story) {
 		}else{
 			d3.select('#slideshare').style('display', 'none');	
 		}	
-	}*/
+	}
 }
-/*function draw_date(daterow, story) {
-    var dates = _.uniq(_.map(story.cols, function(col) { return daterow[col]; }));
-    d3.select('#date').text(dates.join(', '));
-}*/
 function draw_treemap(story) { 
 	// Add gradient legend for treemap
   d3.selectAll('#gradient_cont, .legend.treemap').style('display', 'block');
@@ -266,7 +262,7 @@ function draw_treemap(story) {
     .data(story.percent) // gradient percentage from svg defs
    .enter().append('text')
     .attr({ x: function(d){ return d + '%';}, y: 20 })
-    .data(story.pertext) // color domain
+    .data(story.pertext) 
     .text(function(d){ return d + '%'; })
     .style('fill', function(d, i){ return i == 3 ? 'white' : 'black';});
 	d3.select('#brought').style('display', function(){ return window.location.search == '?embed=1' ? 'block' : 'none';});	
@@ -274,8 +270,7 @@ function draw_treemap(story) {
   d3.csv(story.data || datafile(), function(data) {
 		if(story.data){ $('#data_cont').hide(); d3.select('#data').attr('href', story.data); } else { $('#data_cont').show();}
 		var subset = initchart(story, data);
-    //draw_date(data[data.length-1], story);
-		var treemap = d3.layout.treemap()
+    var treemap = d3.layout.treemap()
       .size([parseInt(svg.style('width'), 10), svg.attr('height')])
       .sticky(true)
 			.children(function(d) { return d.values; })
@@ -445,7 +440,6 @@ function draw_scatter(story) {
 		R = story.R,
 		beyond = [],  
 		legend = d3.select('.legend.scatter');
-		//draw_date(data[data.length-1], story);
 		svg.selectAll('line, text').remove();    
 		legend.selectAll('*').remove();
     var select = legend.append('select').attr('class', 'states'),
