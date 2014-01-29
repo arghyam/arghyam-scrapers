@@ -130,27 +130,40 @@
 				<li><a href="#MoneySpents" data-toggle="tab">Money Spent</a></li>
 				<li><a href="#ToiletsBuilts" data-toggle="tab">Toilets Built</a></li>
 				<li><a href="#Performances" data-toggle="tab">Performance</a></li>
-				<!-- <li><a href="#Censuss" data-toggle="tab">Census</a></li>			  -->
-			</ul>
+				<li><a href="#Censuss" data-toggle="tab">Census</a></li>			 
+			</ul>		
 			<div class="tab-content">
 			  <div class="tab-pane fade" id="MoneySpents">
-			  	<div>&nbsp;</div>
 			  	<div class="subparam" id="MoneySpent"></div>
 			  	<div><svg id="chartS1" width="955" height="500" style="border:1px solid #ddd;"></svg></div>
 			  </div>
 			  <div class="tab-pane fade" id="ToiletsBuilts">
-			  	<div>&nbsp;</div>
 			  	<div class="subparam" id="ToiletsBuilt"></div>
 			  	<div><svg id="chartS2" width="955" height="500" style="border:1px solid #ddd;"></svg></div>
 			  </div>
 			  <div class="tab-pane fade" id="Performances">
-			  	<div>&nbsp;</div>
 			  	<div><svg id="chartS3" width="960" height="500" ></svg></div>
 			  </div>
-			  <!-- <div class="tab-pane fade" id="Censuss">
-			  	<div>Census content goes here...</div>
-			  	<div><svg id="chartS4" width="960" height="500" style="border:1px solid #ddd;"></svg></div>
-			  </div> -->
+			  <div class="tab-pane fade" id="Censuss">
+			  	<div class="row-fluid">			  		
+				  	<div id="cenTitle" class="span11" style="font-size:1.5em;"></div>
+				  	<div class="span11">&nbsp;</div>
+				  	<div>
+							<div id="despT" class="span6" style="font-size:1.2em;"></div>
+				  		<div id="chartT" class="span6" style=""></div>				  							  	
+				  	</div>
+				  	<div class="span11"><hr class="bs-docs-separator"></div>
+				  	<div>
+				  		<div id="chartB" class="span6" style=""></div>					  	
+				  		<div id="despB" class="span6" style="font-size:1.2em;"></div>				  		
+				  	</div>
+				  	<div class="span11"><hr class="bs-docs-separator"></div>
+				  	<div>
+				  		<div id="despC" class="span6" style="font-size:1.2em;"></div>
+				  		<div id="chartC" class="span6" style="min-height:350px;"></div>					  
+				  	</div>
+				  </div>	
+			  </div>
 			</div>
 		</div>		
 	</div>
@@ -360,18 +373,6 @@
 	}
 	});
 	}); 
-</script>
-<script>
-	$("a[rel=popover]").popover({
-        offset: 10,
-        trigger: "hover",
-        content : function() {
-           return $('#popover-content').html();
-        }
-   })
-   .click(function(e) {
-        e.preventDefault()
-   })		
 </script>
 <script type="text/javascript">
   var _gaq = _gaq || [];

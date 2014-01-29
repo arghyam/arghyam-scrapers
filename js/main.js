@@ -1304,7 +1304,8 @@ function draw_dorling(story) { // state pages
 					svg2.select('g').remove();	
 					maps1 = svg1.append('g');
 					maps2 = svg2.append('g');
-				if(hashdec[2] == 'Money Spent'){					
+				if(hashdec[2] == 'Money Spent'){		
+					d3.selectAll('#legend_cont, #gradient_cont, #download_cont, #source_cont, #source').style('display', 'block');				
 					maps1.selectAll('.feature')
 							.data(topojson.object(json, json.objects.india_states).geometries)
 						.enter().append('path')
@@ -1335,7 +1336,8 @@ function draw_dorling(story) { // state pages
 						.duration(-1600)
 						.attr("transform", "translate(" + width / 2 + "," + height / a + ")scale(" + k + ")translate(" + -x + "," + -y + ")");		
 					maps1.selectAll('.distCircs[data-q="' + group + '"]').classed('hide', false); 							
-				}else if(hashdec[2] == 'Toilets Built'){					
+				}else if(hashdec[2] == 'Toilets Built'){	
+					d3.selectAll('#legend_cont, #gradient_cont, #download_cont, #source_cont, #source').style('display', 'block');					
 					maps2.selectAll('.featureTB')
 							.data(topojson.object(json, json.objects.india_states).geometries)
 						.enter().append('path')
@@ -1382,6 +1384,7 @@ function draw_dorling(story) { // state pages
 				var width = svg.attr('width'),
 						height = svg.attr('height');				
 				// TSC - scatterplot
+				d3.selectAll('#legend_cont, #download_cont, #source_cont, #source').style('display', 'block');
 				d3.select('#gradient_cont').style('display', 'none');
 				svg3.selectAll('*').remove();
 				svg3.append('path')
@@ -1440,6 +1443,18 @@ function draw_dorling(story) { // state pages
 					.attr({ class: 'v', x1: function(d){ return xscale1(d);}, y1: function(d){ return yscale1(d);}, 
 							x2: function(d){ return xscale1(d);}, y2: height - R 
 					});
+		}else{
+			d3.selectAll('#gradient_cont, #legend_cont, #download_cont, #source_cont, #source').style('display', 'none');
+			var statename = group.split(' ').join('');
+			d3.selectAll('#cenTitle, #despT, #chartT, #chartB, #despB, #despC, #chartC').selectAll('*').remove();
+			var despT = story.cen_t, despB = story.cen_b, despC = story.cen_c;
+			d3.select('#cenTitle').text('Comparing Census and rural sanitation scheme (TSC) data');
+			d3.select('#despT').text(despT);
+			d3.select('#chartT').append('img').attr('src', 'pdf/T'+statename+'.png');
+			d3.select('#despB').selectAll('.pb').data(despB).enter().append('p').text(String);
+			d3.select('#chartB').append('img').attr('src', 'pdf/B'+statename+'.png');
+			d3.select('#despC').selectAll('.pc').data(despC).enter().append('p').text(String);		
+			d3.select('#chartC').append('img').attr('src', 'pdf/C'+statename+'.png');
 		}
 		distselect.on('change', function(d){		
 			d3.selectAll('.tooltip').remove();
