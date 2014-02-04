@@ -106,7 +106,7 @@ d3.select('#home').on('click', function() {
 	}		
 });
 d3.select('#methodology').on('click', function () {
-	event.preventDefault();
+	d3.event.preventDefault();
 	window.location.replace('#methodology');
 	d3.selectAll('.tooltip').remove();	
 	d3.select('#method').style('display', 'block');		
@@ -163,8 +163,7 @@ hashchange();
 // When any menu option is clicked, draw it.
 function draw(story) {
 	if (d3.event) {
-    //d3.event.preventDefault();		
-    event.preventDefault();		
+    d3.event.preventDefault();		    
   }
   $('#emb_text').val('');
 	$('#status').val('');
