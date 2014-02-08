@@ -72,6 +72,9 @@
 		#tableData { font-family:arial; font-size: 12px; } 
 		#tableData tr.rows { background: #FCFCFC;}
 		#tableData tr:hover { background: #F5FAFF;}
+		.loader { position: fixed; left: 600px; top: 200px; width: 35px; height: 35px; z-index: 9999; 
+			background: url('img/loading.gif') no-repeat ;
+		}
 	</style>
   <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
 </head><body>
@@ -320,7 +323,7 @@
 	<div class="row-fluid">
 		<div style="margin-left:-1px;">
 			<h1>Data Change</h1>
-			<p>Description goes here...</p>
+			<!-- <p>Description goes here...</p> -->
 			<br>
 			<div class="pull-left">
 				<select id="date_changes"></select> 
@@ -332,8 +335,7 @@
 				</div>
 				<br>
 			</div>
-			<div id="tableData">
-				<!-- <div id="loading"><img src="img/loading.gif">Loading...</div> -->
+			<div id="tableData"><div class="loader"></div>				
 			</div>
 			<div class="box" style="width:500px; display:none"></div>			
 		</div>
@@ -377,6 +379,11 @@
 <script src="js/bootstrap.min.js"></script>
 <script src="stories.js"></script>
 <script src="js/main.js"></script>
+<script>
+	$('#tableData table').load(function() {
+		$(".loader").fadeOut("slow");
+	})
+</script>
 <script>
 	$(window).on('load resize', function() {
 	$('.row').each(function() {
