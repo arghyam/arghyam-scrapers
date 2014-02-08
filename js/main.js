@@ -105,6 +105,14 @@ d3.select('#home').on('click', function() {
 		d3.select('#demo').style('display', 'none');
 	}		
 });
+d3.select('#dataChanges').on('click', function(){
+	d3.event.preventDefault();	
+	window.location.replace('#datachanges');
+	d3.selectAll('.tooltip').remove();
+	d3.selectAll('#about, #method, #demo, #visual').style('display', 'none');
+	d3.select('#dataChange').style('display', 'block');
+	datachanges();
+});
 d3.select('#methodology').on('click', function () {
 	d3.event.preventDefault();
 	window.location.replace('#methodology');
@@ -129,6 +137,10 @@ function hashchange(e) {
 			d3.select('#about').style('display', 'block');
 			d3.selectAll('#demo, #visual, #dataChange, #method').style('display', 'none');
 		}
+	}else if(hash == 'datachanges'){
+		d3.select('#dataChange').style('display', 'block');
+		d3.selectAll('#about, #demo, #visual, #method').style('display', 'none');		
+		datachanges();		
 	}else if (hash == 'methodology'){		
 		d3.select('#method').style('display', 'block');
 		d3.selectAll('#about, #demo, #visual, #dataChange').style('display', 'none');		
@@ -137,7 +149,6 @@ function hashchange(e) {
 			var story = stories[i];
 			if((story.menu == hash[0]) && (story.title == hash[1])) {						
 					if(story.menu == 'State'){
-						//console.log(hash[2], hash[3]);
 						story.param1 = hash[2];
 						if(hash[2] == 'Performance' || hash[2] == 'Census'){
 							story.param2 = ' ';
@@ -1669,6 +1680,231 @@ function draw_dorlingCart(story) {   // census 2001 vs 2011
 				$('.mark').tooltip({ title:function(){ return $('.mark title').text(); }, trigger:'focus', container:'body' }).tooltip('show');						
 		});
 	});
+}
+function datachanges(){	
+	d3.select('#dataChange').style('display', 'block');
+	d3.csv('datachanges.csv', function(data){ //dataChanges
+		var total_columns = d3.keys(data[0]),
+				columns = total_columns.splice(4, total_columns.length - 1); 
+		var dates = _.uniq(_.pluck(data, 'Date')).reverse(),
+				tmpdates = dates.slice(0, 4),
+		select_date = d3.select('#date_changes');
+		select_date.selectAll('.options')
+ 			.data(tmpdates).enter().append('option').text(String);
+ 		var filtered_data = [], bars_data = [];
+ 		var cdate = select_date.property('value');
+ 		filtered_data = _.filter(data, function(d){ return d.Date == cdate; }); //tmpdates[0] || d.Date == tmpdates[1] || d.Date == tmpdates[2] || d.Date == tmpdates[3] ;});
+		bars_data = _.filter(data, function(d){ return d.Date == tmpdates[0] || d.Date == tmpdates[1] || d.Date == tmpdates[2] || d.Date == tmpdates[3] ;});
+		draw_table(filtered_data);
+		select_date.on('change', function(d, i){
+			var dt = d3.select(this).property('value'),
+					index = dates.indexOf(dt),
+					tmpdates = dates.slice(index, index + 4);
+			select_date.selectAll('option').remove();
+			select_date.selectAll('.options')
+		 		.data(tmpdates).enter().append('option').text(String);
+		 	$('#perf_btn').removeClass('btn-primary');	
+		 	$('#perf_btn').removeClass('active');	
+			$('#fin_btn').addClass('btn-primary');	
+			$('#fin_btn').addClass('active');	
+			filtered_data = _.filter(data, function(d){ return d.Date == dt;}); //tmpdates[0] || d.Date == tmpdates[1] || d.Date == tmpdates[2] || d.Date == tmpdates[3] ;});
+			bars_data = _.filter(data, function(d){ return d.Date == tmpdates[0] || d.Date == tmpdates[1] || d.Date == tmpdates[2] || d.Date == tmpdates[3] ;});
+			draw_table(filtered_data);					 		
+		});	 				
+		function draw_table(filtered_data){
+			d3.select('#tableData').selectAll('*').remove();
+			nestedStateData = d3.nest()
+					.key(function(d){ return d.State_Name; })
+					.rollup(function(rows){ return get_rollup(rows);  }) 					
+					.entries(filtered_data),
+			nestedDistrictData = d3.nest()
+					.key(function(d){ return [d.State_Name, d.District_Name]; })				
+					.rollup(function(rows){ return get_rollup(rows);  }) 
+					.entries(filtered_data),
+			state_level_data = d3.nest()
+					.key(function(d){ return [d.Date, d.State_Name]; })								
+					.rollup(function(rows){ return get_rollup(rows);  }) 					
+					.entries(bars_data),
+			dist_level_data = d3.nest()
+					.key(function(d){ return [d.Date, d.State_Name, d.District_Name]; })								
+					.entries(bars_data);
+			function get_rollup(rows){
+				return { 
+					'Outlay'								                     : d3.mean(rows, function(d){ return d['Outlay'];}),
+					'Centre_-_Amount_Released'									 : d3.mean(rows, function(d){ return d['Centre_-_Amount_Released'];}),
+					'State_-_Amount_Released'										 : d3.mean(rows, function(d){ return d['State_-_Amount_Released'];}),
+					'Beneficiary_-_Amount_Released'							 : d3.mean(rows, function(d){ return d['Beneficiary_-_Amount_Released'];}),
+					'Total_Amount_Released'											 : d3.mean(rows, function(d){ return d['Total_Amount_Released'];}),
+					'Expenditure_from_Centre_Share'							 : d3.mean(rows, function(d){ return d['Expenditure_from_Centre_Share'];}),
+					'Expenditure_from_State_Share'							 : d3.mean(rows, function(d){ return d['Expenditure_from_State_Share'];}),
+					'Expenditure_from_Beneficiary_Share'				 : d3.mean(rows, function(d){ return d['Expenditure_from_Beneficiary_Share'];}),
+					'Total_Expenditure'										       : d3.mean(rows, function(d){ return d['Total_Expenditure'];}),
+					'Total_Expenditure_on_BPL_toilets'					 : d3.mean(rows, function(d){ return d['Total_Expenditure_on_BPL_toilets'];}),
+					'Total_Expenditure_on_School_toilets'				 : d3.mean(rows, function(d){ return d['Total_Expenditure_on_School_toilets'];}),
+					'Total_Expenditure_on_Anganwadi_toilets'		 : d3.mean(rows, function(d){ return d['Total_Expenditure_on_Anganwadi_toilets'];}),
+					'Total_Expenditure_on_Sanitary_Complexes'		 : d3.mean(rows, function(d){ return d['Total_Expenditure_on_Sanitary_Complexes'];}),
+					'Construction_-_IHHL_BPL'										 : d3.mean(rows, function(d){ return d['Construction_-_IHHL_BPL'];}),
+					'Construction_-_IHHL_APL'										 : d3.mean(rows, function(d){ return d['Construction_-_IHHL_APL'];}),
+					'Construction_-_IHHL_Total'									 : d3.mean(rows, function(d){ return d['Construction_-_IHHL_Total'];}),
+					'Construction_-_Sanitary_Complexes_for_Women': d3.mean(rows, function(d){ return d['Construction_-_Sanitary_Complexes_for_Women'];}),
+					'Construction_-_Schools_toilets'						 : d3.mean(rows, function(d){ return d['Construction_-_Schools_toilets'];}),
+					'Construction_-_Anganwadi_toilets'					 : d3.mean(rows, function(d){ return d['Construction_-_Anganwadi_toilets'];}),
+					'Construction_-_Rural_Sanitary_Marts'				 : d3.mean(rows, function(d){ return d['Construction_-_Rural_Sanitary_Marts'];}),
+					'Construction_-_Production_Centres'					 : d3.mean(rows, function(d){ return d['Construction_-_Production_Centres'];})					
+				};
+			}
+			var states_districts  = ['+ ANDHRA PRADESH', '- ADILABAD', '- ANANTAPUR', '- CHITTOOR', '- CUDDAPAH', '- EAST GODAVARI', '- GUNTUR', '- KARIMNAGAR', '- KHAMMAM', '- KRISHNA', '- KURNOOL', '- MAHBUBNAGAR', '- MEDAK', '- NALGONDA', '- NELLORE', '- NIZAMABAD', '- PRAKASAM', '- RANGAREDDI', '- SRIKAKULAM', '- VISAKHAPATNAM', '- VIZIANAGARAM', '- WARANGAL', '- WEST GODAVARI', '+ ARUNACHAL PRADESH', '- ANJAW', '- CHANGLANG', '- DIBANG VALLEY', '- EAST KAMENG', '- EAST SIANG', '- KURUNG KUMEY', '- LOHIT', '- LOWER DIBANG VALLEY', '- LOWER SUBANSIRI', '- PAPUM PARE', '- TAWANG', '- TIRAP', '- UPPER SIANG', '- UPPER SUBANSIRI', '- WEST KAMENG', '- WEST SIANG', '+ ASSAM', '- BAGSHA', '- BARPETA', '- BONGAIGAON', '- CACHAR', '- CHIRANG', '- DARRANG', '- DHEMAJI', '- DHUBRI', '- DIBRUGARH', '- GOALPARA', '- GOLAGHAT', '- HAILAKANDI', '- JORHAT', '- KAMRUP', '- KARBI ANGLONG', '- KARIMGANJ', '- KOKRAJHAR', '- LAKHIMPUR', '- MARIGAON', '- NAGAON', '- NALBARI', '- NORTH CACHAR HILLS', '- SIBSAGAR', '- SONITPUR', '- TINSUKIA', '- UDALGURI', '+ BIHAR', '- ARARIA', '- ARWAL', '- AURANGABAD', '- BANKA', '- BEGUSARAI', '- BHAGALPUR', '- BHOJPUR', '- BUXAR', '- DARBHANGA', '- GAYA', '- GOPALGANJ', '- JAMUI', '- JEHANABAD', '- KAIMUR(BHABUA)', '- KATIHAR', '- KHAGARIA', '- KISHANGANJ', '- LAKHISARAI', '- MADHEPURA', '- MADHUBANI', '- MUNGER', '- MUZAFFARPUR', '- NALANDA', '- NAWADA', '- PASHCHIM CHAMPARAN', '- PATNA', '- PURBA CHAMPARAN', '- PURNIA', '- SAHARSA', '- SAMASTIPUR', '- SARAN', '- SASARAM(ROHTAS)', '- SHEIKHPURA', '- SHEOHAR', '- SITAMARHI', '- SIWAN', '- SUPAUL', '- VAISHALI', '+ CHHATTISGARH', '- BASTAR(JAGDALPUR)', '- BILASPUR', '- DANTEWADA', '- DHAMTARI', '- DURG', '- JANJGIR - CHAMPA', '- JASHPUR', '- KANKER', '- KAWARDHA(KABIRDHAM)', '- KORBA', '- KORIYA', '- MAHASAMUND', '- RAIGARH', '- RAIPUR', '- RAJNANDGAON', '- SURGUJA', '+ D & N HAVELI', '- DADRA AND NAGAR HAVELI', '+ GOA', '- NORTH GOA', '- SOUTH GOA', '+ GUJARAT', '- AHMEDABAD', '- AMRELI', '- ANAND', '- BANAS KANTHA', '- BHARUCH', '- BHAVNAGAR', '- DAHOD', '- DANGS', '- GANDHINAGAR', '- JAMNAGAR', '- JUNAGADH', '- KACHCHH', '- KHEDA', '- MAHESANA', '- NARMADA', '- NAVSARI', '- PANCH MAHALS', '- PATAN', '- PORBANDAR', '- RAJKOT', '- SABAR KANTHA', '- SURAT', '- SURENDRANAGAR', '- VADODARA', '- VALSAD', '+ HARYANA', '- AMBALA', '- BHIWANI', '- FARIDABAD', '- FATEHABAD', '- GURGAON', '- HISAR', '- JHAJJAR', '- JIND', '- KAITHAL', '- KARNAL', '- KURUKSHETRA', '- MAHENDRAGARH', '- MEWAT', '- PANCHKULA', '- PANIPAT', '- REWARI', '- ROHTAK', '- SIRSA', '- SONIPAT', '- YAMUNANAGAR', '+ HIMACHAL PRADESH', '- BILASPUR', '- CHAMBA', '- HAMIRPUR', '- KANGRA', '- KINNAUR', '- KULLU', '- LAHAUL & SPITI', '- MANDI', '- SHIMLA', '- SIRMAUR', '- SOLAN', '- UNA', '+ JAMMU & KASHMIR', '- ANANTNAG', '- BANDIPORA', '- BARAMULLA', '- BUDGAM', '- DODA', '- JAMMU', '- KARGIL', '- KATHUA', '- KISHTWAR', '- KULGAM', '- KUPWARA', '- LEH (LADAKH)', '- POONCH', '- PULWAMA', '- RAJAURI', '- RAMBAN', '- REASI', '- SAMBA', '- SHOPIAN', '- SRINAGAR', '- UDHAMPUR', '+ JHARKHAND', '- BOKARO', '- CHATRA', '- DEOGHAR', '- DHANBAD', '- DUMKA', '- GARHWA', '- GIRIDIH', '- GODDA', '- GUMLA', '- HAZARIBAGH', '- JAMTARA', '- KHUNTI', '- KODERMA', '- LATEHAR', '- LOHARDAGA', '- PAKUR', '- PALAMU', '- PASCHIM SINGHBHUM', '- PURBI SINGHBHUM', '- RAMGARH', '- RANCHI', '- SAHIBGANJ', '- SERAIKELA KHARSAWAN', '- SIMDEGA', '+ KARNATAKA', '- BAGALKOT', '- BANGALORE RURAL', '- BANGALORE URBAN', '- BELGAUM', '- BELLARY', '- BIDAR', '- BIJAPUR', '- CHAMARAJANAGAR', '- CHICKMAGALUR', '- CHIKBALLAPUR', '- CHITRADURGA', '- DAVANGERE', '- DHARWAD', '- GADAG', '- GULBARGA', '- HASSAN', '- HAVERI', '- KODAGU', '- KOLAR', '- KOPPAL', '- MANDYA', '- MANGALORE(DAKSHINA KANNADA)', '- MYSORE', '- RAICHUR', '- RAMANAGARA', '- SHIMOGA', '- TUMKUR', '- UDUPI', '- UTTAR KANNADA', '+ KERALA', '- ALAPPUZHA', '- ERNAKULAM', '- IDUKKI', '- KANNUR', '- KASARGOD', '- KOLLAM', '- KOTTAYAM', '- KOZHIKODE', '- MALAPPURAM', '- PALAKKAD', '- PATHANAMTHITTA', '- THIRUVANANTHAPURAM', '- THRISSUR', '- WAYANAD', '+ MADHYA PRADESH', '- ALIRAJPUR', '- ANUPPUR', '- ASHOKNAGAR', '- BALAGHAT', '- BARWANI', '- BETUL', '- BHIND', '- BHOPAL', '- BURHANPUR', '- CHHATARPUR', '- CHHINDWARA', '- DAMOH', '- DATIA', '- DEWAS', '- DHAR', '- DINDORI', '- GUNA', '- GWALIOR', '- HARDA', '- HOSHANGABAD', '- INDORE', '- JABALPUR', '- JHABUA', '- KATNI', '- KHANDWA(EAST NIMAR)', '- KHARGONE', '- MANDLA', '- MANDSAUR', '- MORENA', '- NARSINGHPUR', '- NEEMUCH', '- PANNA', '- RAISEN', '- RAJGARH', '- RATLAM', '- REWA', '- SAGAR', '- SATNA', '- SEHORE', '- SEONI', '- SHAHDOL', '- SHAJAPUR', '- SHEOPUR', '- SHIVPURI', '- SIDHI', '- SINGRAULI', '- TIKAMGARH', '- UJJAIN', '- UMARIA', '- VIDISHA', '+ MAHARASHTRA', '- AHMEDNAGAR', '- AKOLA', '- AMRAVATI', '- AURANGABAD', '- BEED', '- BHANDARA', '- BULDHANA', '- CHANDRAPUR', '- DHULE', '- GADCHIROLI', '- GONDIA', '- HINGOLI', '- JALGAON', '- JALNA', '- KOLHAPUR', '- LATUR', '- NAGPUR', '- NANDED', '- NANDURBAR', '- NASHIK', '- OSMANABAD', '- PARBHANI', '- PUNE', '- RAIGAD', '- RATNAGIRI', '- SANGLI', '- SATARA', '- SINDHUDURG', '- SOLAPUR', '- THANE', '- WARDHA', '- WASHIM', '- YAVATMAL', '+ MANIPUR', '- BISHNUPUR', '- CHANDEL', '- CHURACHANDPUR', '- IMPHAL EAST', '- IMPHAL WEST', '- SENAPATI', '- TAMENGLONG', '- THOUBAL', '- UKHRUL', '+ MEGHALAYA', '- EAST GARO HILLS', '- EAST KHASI HILLS', '- JAINTIA HILLS', '- RI BHOI', '- SOUTH GARO HILLS', '- WEST GARO HILLS', '- WEST KHASI HILLS', '+ MIZORAM', '- AIZAWL', '- CHAMPHAI', '- KOLASIB', '- LAWNGTLAI', '- LUNGLEI', '- MAMIT', '- SAIHA', '- SERCHHIP', '+ NAGALAND', '- DIMAPUR', '- KIPHIRE', '- KOHIMA', '- LONGLENG', '- MOKOKCHUNG', '- MON', '- PEREN', '- PHEK', '- TUENSANG', '- WOKHA', '- ZUNHEBOTO', '+ ORISSA', '- ANGUL', '- BALANGIR', '- BALESWAR', '- BARGARH', '- BHADRAK', '- BOUDH', '- CUTTACK', '- DEBAGARH', '- DHENKANAL', '- GAJAPATI', '- GANJAM', '- JAGATSINGHAPUR', '- JAJAPUR', '- JHARSUGUDA', '- KALAHANDI', '- KANDHAMAL', '- KENDRAPARA', '- KENDUJHAR', '- KHORDHA', '- KORAPUT', '- MALKANGIRI', '- MAYURBHANJ', '- NABARANGAPUR', '- NAYAGARH', '- NUAPADA', '- PURI', '- RAYAGADA', '- SAMBALPUR', '- SONEPUR', '- SUNDARGARH', '+ PUDUCHERRY', '- PONDICHERRY', '+ PUNJAB', '- AMRITSAR', '- BARNALA', '- BATHINDA', '- FARIDKOT', '- FATEHGARH SAHIB', '- FEROZEPUR', '- GURDASPUR', '- HOSHIARPUR', '- JALANDHAR', '- KAPURTHALA', '- LUDHIANA', '- MANSA', '- MOGA', '- MUKTSAR', '- NAWANSHAHR', '- PATIALA', '- RUPNAGAR', '- SAS NAGAR', '- SANGRUR', '- TARN TARAN', '+ RAJASTHAN', '- AJMER', '- ALWAR', '- BANSWARA', '- BARAN', '- BARMER', '- BHARATPUR', '- BHILWARA', '- BIKANER', '- BUNDI', '- CHITTORGARH', '- CHURU', '- DAUSA', '- DHOLPUR', '- DUNGARPUR', '- GANGANAGAR', '- HANUMANGARH', '- JAIPUR', '- JAISALMER', '- JALOR', '- JHALAWAR', '- JHUNJHUNU', '- JODHPUR', '- KARAULI', '- KOTA', '- NAGAUR', '- PALI', '- RAJSAMAND', '- SAWAI MADHOPUR', '- SIKAR', '- SIROHI', '- TONK', '- UDAIPUR', '+ SIKKIM', '- EAST SIKKIM', '- NORTH SIKKIM', '- SOUTH SIKKIM', '- WEST SIKKIM', '+ TAMIL NADU', '- COIMBATORE', '- CUDDALORE', '- DHARMAPURI', '- DINDIGUL', '- ERODE', '- KANCHIPURAM', '- KANYAKUMARI(NAGERCOIL)', '- KARUR', '- KRISHNAGIRI', '- MADURAI', '- NAGAPATTINAM', '- NAMAKKAL', '- NILGIRIS(UDHAGAMANDALAM)', '- PERAMBALUR', '- PUDUKKOTTAI', '- RAMANATHAPURAM', '- SALEM', '- SIVAGANGA', '- THANJAVUR', '- THENI', '- THOOTHUKUDI', '- TIRUCHIRAPPALLI', '- TIRUNELVELI', '- TIRUVALLUR', '- TIRUVANNAMALAI', '- TIRUVARUR', '- VELLORE', '- VILLUPURAM', '- VIRUDHUNAGAR', '+ TRIPURA', '- DHALAI', '- NORTH TRIPURA', '- SOUTH TRIPURA', '- WEST TRIPURA', '+ UTTAR PRADESH', '- AGRA', '- ALIGARH', '- ALLAHABAD', '- AMBEDKAR NAGAR', '- AURAIYA', '- AZAMGARH', '- BAGPAT', '- BAHRAICH', '- BALLIA', '- BALRAMPUR', '- BANDA', '- BARABANKI', '- BAREILLY', '- BASTI', '- BIJNOR', '- BUDAUN', '- BULANDSHAHR', '- CHANDAULI', '- CHITRAKOOT', '- DEORIA', '- ETAH', '- ETAWAH', '- FAIZABAD', '- FARRUKHABAD', '- FATEHPUR', '- FIROZABAD', '- GAUTAM BUDDHA NAGAR', '- GHAZIABAD', '- GHAZIPUR', '- GONDA', '- GORAKHPUR', '- HAMIRPUR', '- HARDOI', '- JALAUN', '- JAUNPUR', '- JHANSI', '- JYOTIBA PHULE NAGAR', '- KANNAUJ', '- KANPUR DEHAT', '- KANPUR NAGAR', '- KANSHIRAM NAGAR', '- KAUSHAMBI', '- KUSHINAGAR', '- LAKHIMPUR KHERI', '- LALITPUR', '- LUCKNOW', '- MAHAMAYA NAGAR(HATHRAS)', '- MAHARAJGANJ', '- MAHOBA', '- MAINPURI', '- MATHURA', '- MAU', '- MEERUT', '- MIRZAPUR', '- MORADABAD', '- MUZAFFARNAGAR', '- PILIBHIT', '- PRATAPGARH', '- RAE BARELI', '- RAMPUR', '- SAHARANPUR', '- SANT KABIR NAGAR', '- SANT RAVIDAS NAGAR( BHADOHI)', '- SHAHJAHANPUR', '- SHRAVASTI', '- SIDDHARTHNAGAR', '- SITAPUR', '- SONBHADRA', '- SULTANPUR', '- UNNAO', '- VARANASI', '+ UTTARAKHAND', '- ALMORA', '- BAGESHWAR', '- CHAMOLI', '- CHAMPAWAT', '- DEHRADUN', '- HARIDWAR', '- NAINITAL', '- PAURI(GARHWAL)', '- PITHORAGARH', '- RUDRAPRAYAG', '- TEHRI GARHWAL', '- UDHAM SINGH NAGAR', '- UTTARKASHI', '+ WEST BENGAL', '- BANKURA', '- BARDHAMAN', '- BIRBHUM', '- COOCH BEHAR', '- DAKSHIN DINAJPUR', '- DARJEELING', '- HOOGHLY', '- HOWRAH', '- JALPAIGURI', '- MALDA', '- MIDNAPUR EAST', '- MIDNAPUR WEST', '- MURSHIDABAD', '- NADIA', '- NORTH  PARAGANAS', '- PURULIA', '- SILIGURI', '- SOUTH PARAGANAS', '- UTTAR DINAJPUR'];
+			var table = d3.select('#tableData').append('table').attr({'width':'1170px'}).classed('table table-condensed', true),
+				thead = table.append('thead'),
+				tbody = table.append('tbody'),
+				headtr = thead.append('tr'),
+				bodytr = tbody.selectAll('tr').data(states_districts).enter().append('tr')
+					.attr('class', function(d){ return d.split(' ')[0] === '+' ? 'headers valuestr' : 'rows hide valuestr' ; }); 
+				headtr.append('th').text('STATE').style({'padding-left':'15px','background': '#000', 'color':'#fff'});
+				bodytr.append('td').style('max-width','100px').text(String)
+					 .style({'text-indent':function(d){ return d.split(' ')[0] === '-' ? '15px' : ''; }, 'color': function(d){ return d.split(' ')[0] === '+' ? 'blue' : '#000';} , 'cursor': function(d){ return d.split(' ')[0] === '+' ? 'pointer' : 'auto';} });	
+			var filtered_columns = [], filtered_state_data = {}, filtered_district_data = {};
+			columns.forEach(function(c){
+				var cells = {}, rows = [], celld = {}, rowd = [];
+				nestedStateData.forEach(function(s){	
+					cells[c] = {'key' : [s.key, c], 'values' : s.values[c]};
+					rows.push(cells[c]);
+					var districts = _.filter(nestedDistrictData, function(d){ return d.key.split(',')[0] == s.key });
+					districts.forEach(function(d){
+						celld[c] = {'key': [d.key, c], 'values': d.values[c]};
+						rowd.push(celld[c]);
+					});
+				});
+				var rows_values = [];
+				rows.forEach(function(d){
+					rows_values.push(d['values']);
+				});				
+				if(d3.sum(rows_values) !== 0){
+					filtered_columns.push(c);
+					headtr.append('td').style('border', '1px solid #fff').attr({'class': function(d){ return c.substring(0, 4);}}).style({'background': '#000', 'color':'#fff'}).append('div')
+				  	.attr({ class: 'tooltip1' , 'data-toggle':'tooltip', 'data-placement':'top', 'data-original-title': c.split('_').join(' ') })
+				  	.text(c.substring(0,4)).style({'cursor':'context-menu'});   
+					$('.tooltip1').tooltip();	
+					filtered_state_data[c] = rows;
+					filtered_district_data[c] = rowd;						
+				}
+			});		 
+			filtered_columns.forEach(function(c, ci){
+				var states = [], states_districts_values = [];
+				filtered_state_data[c].forEach(function(fs){
+					states.push(fs);
+				});
+				states.forEach(function(s, si){
+					var state_name = s.key[0], rows = [];
+					rows.push(s);
+					var districts = _.filter(filtered_district_data[c], function(d){ return d ? d.key[0].split(',')[0] == state_name : ''; });
+					districts.forEach(function(d, i){
+						rows.push(d);						
+					});
+					states_districts_values.push(rows);
+				});
+				var row_values = _.flatten(states_districts_values);
+				var td = bodytr.data(row_values).append('td').attr('class',function(d){ return c.substring(0, 4); })
+					.style({'border': '1px solid #fff', 'background' : function(d){ return d.values == 'Infinity' ? '#ddd' : colorDataChange(d.values); } });			
+				td.append('a')
+					.attr({'href': '#'}).style({'text-decoration':'none', 'color': '#000'})
+			 		.text(function(d){ return d.values == 'Infinity' ? '- - - -' : d.values.toFixed(2); }).style('cursor', 'context-menu');
+			});
+			$('table tr td.Cons').addClass('hide');
+			$('#perf_btn').click(function(){
+				$(this).addClass('btn-primary');
+				$('#fin_btn').removeClass('btn-primary active');
+				$('table tr td.Cons').removeClass('hide');
+				$('table tr td.Outl, td.Cent, td.Stat, td.Bene, td.Tota, td.Expe').addClass('hide');
+			});
+			$('#fin_btn').click(function(){
+				$(this).addClass('btn-primary');
+				$('#perf_btn').removeClass('btn-primary active');
+				$('table tr td.Cons').addClass('hide');
+				$('table tr td.Outl, td.Cent, td.Stat, td.Bene, td.Tota, td.Expe').removeClass('hide');
+			});
+			$('table tr.headers td:first-child').click(function() {
+	    	$(this).parent().nextAll('tr').each( function() {
+		        if ($(this).hasClass('headers')) {
+		            return false;
+		        }
+		        var hide = $(this).hasClass('hide');
+		        if(hide){
+		        	$(this).removeClass('hide');	
+		        }else{
+		        	$(this).addClass('hide');	
+		        }
+		    });	    
+			});
+			$('#tableData').ready(get_popover);
+			function get_popover(){
+				d3.selectAll('td a').on('mouseover', function(d){ 
+					d3.selectAll('.popover').remove();
+					$(this).popover({
+						html: true,
+						trigger: 'click',
+						title: get_title(d),
+						placement: function (d, i) {
+			        var pos = $(i).position();
+			        return (pos.left > 700) ? 'left' : 'right';			        
+				    },
+						content: draw_chart(d),
+						animation: false,
+						delay: {show: 0, hide: 100}															
+					})
+					.click(function(e) {
+				 	  e.preventDefault();
+				 	});
+				});
+			}
+			function get_title(d){
+				var l = d.key[0].split(',').length;
+				return l > 1 ? '<div>'+d.key[0].split(',')[1]+'</div>'+
+											 '<div> ('+d.key[0].split(',')[0]+')</div>'+	
+											 '<div> '+d.key[1].split('_').join(' ')+'</div>' : 
+											 '<div>'+d.key[0]+'</div>'+'<div> '+d.key[1].split('_').join(' ')+'</div>';				
+			}
+			function draw_chart(d){
+				var l = d.key[0].split(',').length, header = d.key[1],
+						width = 240, height = 200, margin = 10;
+
+				if(l > 1){
+					var state = d.key[0].split(',')[0], prevValue = [],
+							district = d.key[0].split(',')[1],
+							dataset = _.filter(dist_level_data, function(d){ return d.key.split(',')[1] == state && d.key.split(',')[2] == district; }),
+							max_values = d3.max(dataset.map(function(d){ return Math.abs(d.values[0][header]) ;})),
+							barHeight = d3.scale.linear().domain([0, max_values]).range([5, 90]),
+							svg = d3.select('.box').append('svg').attr({'width': width ,'height': height}).style('border', '1px solid #ddd');
+							svg.selectAll('rect').data(dataset)
+								.enter().append('rect')
+								.attr('x', function(d, i){ return i * ((width - margin) / (dataset.length + 0.1)) + margin;})
+								.attr('y', function(d){ return d.values[0][header] <= 0 ? (height / 2) : d.values[0][header] > 0 ? height / 2 - barHeight(Math.abs(d.values[0][header])) : 0; })
+								.attr('width', width / dataset.length - 8)
+								.attr('height', function(d){ prevValue.push(d.values[0][header]); return d.values[0][header] == 0 ? 1 : isNaN(d.values[0][header]) ? 0 : barHeight(Math.abs(d.values[0][header])) ; })
+								.attr('fill', function(d){ return d.values[0][header] < 0 ? 'brown' : d.values[0][header] > 0 ? 'steelblue' : ''; })
+								.append('title')
+								.text(function(d, i){ return 'Date: '+d.key.split(',')[0]+', Metric: '+header.split('_').join(' ')+',\nCurrent Value: '+d.values[0][header]+', Previous Value: '+(prevValue[i-1] ? prevValue[i-1] : 0)+',\nIncrease in value: '+ (d.values[0][header] - (prevValue[i-1] ? prevValue[i-1] : 0)); });				
+					return svg;
+				}else{
+					var state = d.key[0], prevValue = [],
+							dataset = _.filter(state_level_data, function(d){ return d.key.split(',')[1] == state; }),
+							max_values = d3.max(dataset.map(function(d){ return d.values[header] ;})),
+							barHeight = d3.scale.linear().domain([0, max_values]).range([5, 90]),
+							svg = d3.select('.box').append('svg').attr({'width': width ,'height': height}).style('border', '1px solid #ddd');
+							svg.selectAll('rect').data(dataset)
+								.enter().append('rect')
+								.attr('x', function(d, i){ return i * ((width - margin) / (dataset.length + 0.1)) + margin;})
+								.attr('y', function(d){ return d.values[header] <= 0 ? (height / 2) : d.values[header] > 0 ? height / 2 - barHeight(Math.abs(d.values[header])) : 0; })								
+								.attr('width', width / dataset.length - 8)
+								.attr('height', function(d){ prevValue.push(d.values[header]); return d.values[header] == 0 ? 1 : isNaN(d.values[header]) ? 0 : barHeight(Math.abs(d.values[header])) ; })
+								.attr('fill', function(d){ return d.values[header] < 0 ? 'brown' : d.values[header] > 0 ? 'steelblue' : ''; })
+					  		.append('title')
+								.text(function(d, i){ return 'Date: '+d.key.split(',')[0]+', Metric: '+header.split('_').join(' ')+',\nCurrent Value = '+d.values[header]+', Previous Value = '+(prevValue[i-1] ? prevValue[i-1] : 0)+',\nIncrease in value = '+ (d.values[header] - (prevValue[i-1] ? prevValue[i-1] : 0)); });		
+					return svg;
+				}
+			}
+		}			
+	});	
 }
 function initchart(story, data) { 
   // No transitions work for other chart types, so just empty it

@@ -68,7 +68,10 @@
 		.dorFade{ stroke:2; opacity:0.09; stroke-opacity:0.09; shape-rendering:crispEdges;}		
 		#cirTSC, #cirCEN, #recTSC, #recCEN, #recGRD { stroke: #000; cursor: pointer;}
 		.auto{ cursor: auto }
-		.popover{width: 600px !important;}
+		#tableData table{ border: 1px solid #ddd;}
+		#tableData { font-family:arial; font-size: 12px; } 
+		#tableData tr.rows { background: #FCFCFC;}
+		#tableData tr:hover { background: #F5FAFF;}
 	</style>
   <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
 </head><body>
@@ -78,6 +81,7 @@
 			<div class="container">
 				<a id="home" class="brand" href="#">Home</a>									
 				<ul class="nav"></ul>
+				<a id="dataChanges" class="brand" href="#"><span>Data Changes</span></a>
 				<a id="methodology" class="brand" href="#"><span>Methodology</span></a>			
 				<div style="margin-top:10px;" class="pull-right">
 					<a href="http://www.indiawaterportal.org/topics/rural-sanitation" target="_blank">State of Sanitation</a> brought to you by <a href="http://arghyam.org/" target="_blank">Arghyam</a>
@@ -310,6 +314,30 @@
 			<p>We are providing the data here with the understanding that we are not representing it to be accurate, correct or complete for your intended purpose. Please see India Water Portal's full <a href="http://www.indiawaterportal.org/disclaimer" target="_blank">disclaimer</a>.</p>
 		</div>	
 	</div>		
+</div>
+
+<div id="dataChange" class="container" style="display:none; min-height:455px;">
+	<div class="row-fluid">
+		<div style="margin-left:-1px;">
+			<h1>Data Change</h1>
+			<p>Description goes here...</p>
+			<br>
+			<div class="pull-left">
+				<select id="date_changes"></select> 
+			</div>
+			<div id="dataChangesbtns" class="pull-right" style="">				
+				<div class="btn-group pull-right" data-toggle="buttons">
+				  <button class="btn btn-primary active" id="fin_btn">Finance</button>
+				  <button class="btn" id="perf_btn">Performance</button>
+				</div>
+				<br>
+			</div>
+			<div id="tableData">
+				<!-- <div id="loading"><img src="img/loading.gif">Loading...</div> -->
+			</div>
+			<div class="box" style="width:500px; display:none"></div>			
+		</div>
+	</div>	
 </div>
 <br>
 <footer> 

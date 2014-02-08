@@ -17,6 +17,11 @@ var colorDor = d3.scale.linear()
 		.clamp(true)
 		.domain([0, 1, 2])
     .range(['#D73027', '#FFFFBF', '#1A9850']);		
+
+var colorDataChange = d3.scale.linear()
+    .clamp(true)
+    .domain([0, 1])
+    .range(['#D73027', '#1A9850']);          
 		
 // Display formats
 var F = d3.format(',.0f'); // Float
