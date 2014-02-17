@@ -1,7 +1,7 @@
-//var host = window.location.host;
-//var iwp = 'www.indiawaterportal.org';
-var host = window.location.href;
-var iwp = 'http://arghyam.github.io/arghyam-scrapers/?#';
+var host = window.location.host;
+var iwp = 'www.indiawaterportal.org';
+//var host = window.location.href;
+//var iwp = 'http://arghyam.github.io/arghyam-scrapers/?#';
 console.log(host);
 var slides = [];
 d3.selectAll('.tooltip').remove();
@@ -1696,7 +1696,7 @@ function datachanges(){
 		prev_data = _.filter(data, function(d){ return d.Date == dates[1];});
 		draw_table(filtered_data, prev_data);
 		select_date.on('change', function(d, i){
-			$('.loader').show();
+			//$('.loader').show();
 			dt = d3.select(this).property('value'), filtered_data = [];
 			index = dates.indexOf(dt);
 			prevdate = dates[index+1];					
