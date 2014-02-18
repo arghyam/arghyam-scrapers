@@ -1,7 +1,7 @@
-//var host = window.location.host;
-//var iwp = 'www.indiawaterportal.org';
-var host = window.location.href;
-var iwp = 'http://arghyam.github.io/arghyam-scrapers/?#';
+var host = window.location.host;
+var iwp = 'www.indiawaterportal.org';
+//var host = window.location.href;
+//var iwp = 'http://arghyam.github.io/arghyam-scrapers/?#';
 console.log(host);
 var slides = [];
 d3.selectAll('.tooltip').remove();
@@ -31,12 +31,12 @@ var submenu = parentmenu
   .append('ul')
   .classed('dropdown-menu', true);	
 var search = submenu.append('div').classed('dropdown-toggle', true);
-	search.append('input')
+search.append('input')
 		.attr({ type : 'text', id : 'search', placeholder : 'search...'})
 		.style('margin', '0 20px -20px 20px');		
-	search.append('i')
+search.append('i')
 		.classed('icon-search', true);		
-  submenu.selectAll('li')
+submenu.selectAll('li')
       .data(function(d) { return d.values; })
     .enter().append('li')
 			.append('a')
