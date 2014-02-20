@@ -1,8 +1,5 @@
-//var host = window.location.host;
-//var iwp = 'www.indiawaterportal.org';
-var host = window.location.href;
-var iwp = 'http://arghyam.github.io/arghyam-scrapers/?#';
-//var iwp = 'http://localhost/arghyam/arghyam-scrapers/?#';
+var host = window.location.host;
+var iwp = 'www.indiawaterportal.org';
 console.log(host);
 var slides = [];
 d3.selectAll('.tooltip').remove();
@@ -138,10 +135,10 @@ function hashchange(e) {
   if(hash == ''){
 		if(host == iwp){
 			d3.select('#demo').style('display', 'block');
-			d3.selectAll('#about, #visual, #dataChange, #method').style('display', 'none');
+			d3.selectAll('#stateicons, #about, #visual, #dataChange, #method').style('display', 'none');
 		}else{
 			d3.select('#about').style('display', 'block');
-			d3.selectAll('#demo, #visual, #dataChange, #method').style('display', 'none');
+			d3.selectAll('#stateicons, #demo, #visual, #dataChange, #method').style('display', 'none');
 		}
 	}else if(hash == 'states'){
 		d3.selectAll('#about, #demo, #visual, #dataChange, #method').style('display', 'none');
@@ -152,7 +149,7 @@ function hashchange(e) {
 		datachanges();		
 	}else if (hash == 'methodology'){		
 		d3.select('#method').style('display', 'block');
-		d3.selectAll('#about, #demo, #visual, #dataChange').style('display', 'none');		
+		d3.selectAll('#stateicons, #about, #demo, #visual, #dataChange').style('display', 'none');		
 	}else{
 		for (var i=0, l=stories.length; i<l; i++) {
 			var story = stories[i];
@@ -189,8 +186,7 @@ function draw(story) {
 	$('#status').val('');
   d3.select('#exp_text').text(' ');	
   d3.select('#otstate').style('display', 'block');
-	d3.select('#forstate').style('display', 'none');
-  d3.selectAll('#stateicons, #about, #method, #demo, #brought, #dataChange, #slideshare').style('display', 'none');
+	d3.selectAll('#stateicons, #about, #method, #demo, #brought, #dataChange, #slideshare, #forstate').style('display', 'none');
 	d3.selectAll('.legend, #chart1, #chart2, #gradient_cont, #right_container, #hide_text').style('display', 'none');
 	d3.selectAll('#source a, .treemap text, #columns text, #gradient text, .horiz0, .horiz1, .tooltip').remove();
 	d3.select('#visual').style('display', 'block');
@@ -1230,9 +1226,8 @@ function draw_stack(story) {
   });
 }
 function draw_dorling(story) { // state pages
-	d3.selectAll('.legend.dorling, #gradient_cont').style('display', 'block');  
+	d3.selectAll('.legend.dorling, #forstate, #gradient_cont').style('display', 'block');  
 	d3.select('#otstate').style('display', 'none');
-	d3.selectAll('#forstate').style('display', 'block');
 	var gradient = d3.select('#gradient');
   gradient.append('rect')
 		.attr({ x: 0, y: 0, width: 958, height: 30, fill: 'url(#'+ story.grad +')' });		
@@ -1242,7 +1237,7 @@ function draw_dorling(story) { // state pages
 		.attr({ x: function(d){ return d + '%';}, y: 20, fill: function(d, i){ return i == 3 ? 'white' : 'black';} })
 		.data(story.pertext) 
     .text(function(d){ return d + '%'; });	
-	d3.selectAll('.subparams').remove();
+  d3.selectAll('.subparams').remove();
 	var subparamMoney = d3.select('.subparam#MoneySpent').append('select').attr('class', 'subparams'),
 	 	subparamToilets = d3.select('.subparam#ToiletsBuilt').append('select').attr('class', 'subparams'),
 		hashdec = decodeURIComponent(window.location.hash.replace(/^#/, '')).split('|');
@@ -1283,21 +1278,21 @@ function draw_dorling(story) { // state pages
 	    svg4 = d3.select('#chartS4'),
 	    group = story.title.toUpperCase();			
 	d3.csv(story.data || datafile(), function(data) {
-		var subset = initchart(story, data);		
-		var R = story.R, k = story.K, a = story.A;		
-		var nodes = [], node1 = [], node2 = [], topomaps = [], centered;
-		var width = parseInt(svg.attr('width')),
-				height = parseInt(svg.attr('height'));
-		var projection = d3.geo.mercator()
-				.scale(width*5.5)
-				.translate([-width+230, height+100]);			
-		var path = d3.geo.path()
-				.projection(projection);
-	  var legend = d3.select('.legend.dorling');
+		var subset = initchart(story, data),		
+		R = story.R, k = story.K, a = story.A,		
+		nodes = [], node1 = [], node2 = [], topomaps = [], centered;
+		width = parseInt(svg.attr('width')),
+		height = parseInt(svg.attr('height')),
+		projection = d3.geo.mercator()
+			.scale(width*5.5)
+			.translate([-width+230, height+100]),			
+		path = d3.geo.path()
+			.projection(projection),
+		legend = d3.select('.legend.dorling');
 		legend.selectAll('*').remove();
 		var distselect = legend.append('select').attr('class', 'districts'),
-    result = _.filter(subset, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); });
-		var Range = story.range,
+    result = _.filter(subset, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); }),
+		Range = story.range,
 		r = d3.scale.linear().domain(d3.extent(result, function(d){ return parseFloat(d[story.size]);})).range(Range);
 		groups = result;
 		groups.unshift({"District_Name":"select District"});
@@ -1309,8 +1304,8 @@ function draw_dorling(story) { // state pages
 		result.shift();		
 		d3.csv('GeocodeLatLong.csv', function(geo){
 			var longminmax = d3.extent(geo, function(d){ return parseFloat(d.Longitude);}),
-			latminmax = d3.extent(geo, function(d){ return parseFloat(d.Latitude);});
-			var xscale = d3.scale.linear().domain(longminmax).range([295, 685]).clamp(true), 
+			latminmax = d3.extent(geo, function(d){ return parseFloat(d.Latitude);}),
+			xscale = d3.scale.linear().domain(longminmax).range([295, 685]).clamp(true), 
 			yscale = d3.scale.linear().domain(latminmax).range([477, 60]).clamp(true); 
 			nodes = geo.map(function(d){ return {
 								x: xscale(d.Longitude), y: yscale(d.Latitude),
@@ -1323,8 +1318,8 @@ function draw_dorling(story) { // state pages
 					svg2.select('g').remove();	
 					maps1 = svg1.append('g');
 					maps2 = svg2.append('g');
-				if(hashdec[2] == 'Money Spent'){		
-					d3.selectAll('#legend_cont, #gradient_cont, #download_cont, #source_cont, #source').style('display', 'block');				
+			  if(hashdec[2] == 'Money Spent'){		
+					d3.selectAll('#legend_cont, #download_cont, #source_cont, #source').style('display', 'block');
 					maps1.selectAll('.feature')
 							.data(topojson.object(json, json.objects.india_states).geometries)
 						.enter().append('path')
@@ -1347,9 +1342,9 @@ function draw_dorling(story) { // state pages
 							});
 					node1.append('title')
 							.text(story.hover);
-					var selPath = _.filter(topomaps, function(m){ return m[0] == group; });
-					var D = selPath[0][1];
-					var centroid = path.centroid(D); x = centroid[0]; y = centroid[1];
+					var selPath = _.filter(topomaps, function(m){ return m[0] == group; }),
+					D = selPath[0][1],
+					centroid = path.centroid(D); x = centroid[0]; y = centroid[1];
 					maps1.selectAll('.feature[data-q="' + group + '"]').classed('hide', false).style({ 'stroke-width': -1 + 'px' });
 					maps1.transition()
 						.duration(-1600)
@@ -1379,15 +1374,14 @@ function draw_dorling(story) { // state pages
 							});
 					node2.append('title')
 							.text(story.hover);
-					var selPath = _.filter(topomaps, function(m){ return m[0] == group; });
-					var D = selPath[0][1];
-					var centroid = path.centroid(D); x = centroid[0]; y = centroid[1];
+					var selPath = _.filter(topomaps, function(m){ return m[0] == group; }),
+					D = selPath[0][1],
+					centroid = path.centroid(D); x = centroid[0]; y = centroid[1];
 					maps2.selectAll('.featureTB[data-q="' + group + '"]').classed('hide', false).style({ 'stroke-width': -1 + 'px' });
 					maps2.transition()
 						.duration(-1600)
 						.attr("transform", "translate(" + width / 2 + "," + height / a + ")scale(" + k + ")translate(" + -x + "," + -y + ")");				
-					maps2.selectAll('.distCircsTB[data-q="' + group + '"]').classed('hide', false); 		
-							
+					maps2.selectAll('.distCircsTB[data-q="' + group + '"]').classed('hide', false); 
 				}										
 				subparamMoney.on('change', function(d){
 					story.param2 = subparamMoney.property('value');
@@ -1412,9 +1406,9 @@ function draw_dorling(story) { // state pages
 				svg3.append('path')
 					.attr("d",'M 40 461 L 922 40 L 922 461')           
 					.style({ 'fill': '#D73027', 'fill-opacity': 0.5, 'stroke': '#000' });	
-				var xscale1 = d3.scale.linear().domain(story.xdom).range([R, width - R]);
-		    var yscale1 = d3.scale.linear().domain(story.ydom).range([height - R, R]);
-				var rDistrict = d3.scale.linear().domain(d3.extent(result.map(function(d) { return story.area1[1](d);}))).range([10, 20]);
+				var xscale1 = d3.scale.linear().domain(story.xdom).range([R, width - R]),
+		    yscale1 = d3.scale.linear().domain(story.ydom).range([height - R, R]),
+				rDistrict = d3.scale.linear().domain(d3.extent(result.map(function(d) { return story.area1[1](d);}))).range([10, 20]);
 				var districts = svg3.selectAll('.districts')    
 					.data(subset).enter();			
 				districts.append('circle')
@@ -1462,7 +1456,7 @@ function draw_dorling(story) { // state pages
 					.attr({ class: 'v', x1: function(d){ return xscale1(d);}, y1: function(d){ return yscale1(d);}, 
 							x2: function(d){ return xscale1(d);}, y2: height - R 
 					});
-		}else{
+		}else if(hashdec[2] == 'Census'){
 			d3.selectAll('#gradient_cont, #legend_cont, #download_cont, #source_cont, #source').style('display', 'none');
 			var statename = group.split(' ').join('');
 			d3.selectAll('#cenTitle, #despT, #chartT, #chartB, #despB, #despC, #chartC').selectAll('*').remove();
@@ -1536,28 +1530,27 @@ function draw_dorlingCart(story) {   // census 2001 vs 2011
 		.data(story.pertext) 
     .text(function(d){ return d; })
     .style('fill', function(d, i){ return i == 3 ? 'white' : 'black';});
-	var svg = d3.select('#chart');
-			svg.style('border', function(){ return window.location.search == '?embed=1' ?  '1px solid #fff' : '1px solid #ddd';});
-	var width = parseInt(svg.style('width'));
-	var height = parseInt(svg.style('height'));	
-	var nodes = [], node = [];	
-	var centered;
+	var svg = d3.select('#chart'),
+	width = parseInt(svg.style('width')),
+	height = parseInt(svg.style('height')),
+	nodes = [], node = [], centered;
+	svg.style('border', function(){ return window.location.search == '?embed=1' ?  '1px solid #fff' : '1px solid #ddd';});
 	var projection = d3.geo.mercator()
 			.scale(width*5.5)
-			.translate([-width+230, height+100]);			
-	var path = d3.geo.path()
-			.projection(projection);					
-	var topomaps = [];		
+			.translate([-width+230, height+100]),
+	path = d3.geo.path()
+			.projection(projection),					
+	topomaps = [];		
 	d3.select('#brought').style('display', function(){ return window.location.search == '?embed=1' ? 'block' : 'none';});	
 	d3.csv(story.data || datafile(), function(data) {
 		svg.selectAll('*').remove();
 		if(story.data){ $('#data_cont').hide(); d3.select('#data').attr('href', story.data); } else { $('#data_cont').show();}
 		var subset = initchart(story, data),		
-	  legend = d3.select('.legend.dorlingCart');
-		legend.selectAll('*').remove();
-		var select = legend.append('select').attr('class', 'states'),
-    subselect = legend.append('select').attr('class', 'districts');
-		var groups = _.uniq(_.pluck(subset, story.group[0]));
+	  legend = d3.select('.legend.dorlingCart'),
+		select = legend.append('select').attr('class', 'states'),
+    subselect = legend.append('select').attr('class', 'districts'),
+		groups = _.uniq(_.pluck(subset, story.group[0]));
+		legend.selectAll('*').remove();		
     groups.unshift('select State');
 		result = _.filter(subset, function(d){ return d.State_Name == groups && !d.District_Name.match(/^Total/); });
 		select.selectAll('option')
@@ -1566,9 +1559,9 @@ function draw_dorlingCart(story) {   // census 2001 vs 2011
 				.append('option')
 				.text(String);
 		select.on('change', function(d){ 
-				var group = d3.select(this).property('value');			
 				d3.selectAll('.tooltip').remove();
-				var result = _.filter(subset, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); });
+				var group = d3.select(this).property('value'),				
+				result = _.filter(subset, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); });
 				result.unshift({"District_Name":"select District"});
 				subselect.selectAll('option').remove();
 				subselect.selectAll('option')
