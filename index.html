@@ -19,6 +19,7 @@
            -o-transition: all 0.3s ease-out;  /* Opera 10.50-12.00 */
               transition: all 0.3s ease-out;  /* Chrome 26, Firefox 16+, IE 10+, Opera 12.50+ */
     }
+    .dropdown-menu{ min-width: 300px; max-height: 475px; overflow:auto;}
 		.logo{ width:120px; height:90px; background:#fff; border:1px solid #999; -webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px}
 		.logo:hover{ border:1px solid #08c; -webkit-box-shadow:0 1px 4px rgba(0,105,214,0.25);-moz-box-shadow:0 1px 4px rgba(0,105,214,0.25);box-shadow:0 1px 4px rgba(0,105,214,0.25);}
 		footer{ padding:10px; background:#ddd; border-top:1px solid #888;}
@@ -143,32 +144,51 @@
 			</ul>		
 			<div class="tab-content">
 			  <div class="tab-pane fade" id="MoneySpents">
+			  	<h4>Money Spent</h4>
+			  	<p><b>Context: </b>The rural sanitation scheme allocates funds for different sanitation activities in villages. The main activities supported include: </p>
+			  	<p>&nbsp; &nbsp; 1). Construction of toilets - for individual households, public toilets and toilets for institutions such as schools and creches</p>
+			  	<p>&nbsp; &nbsp; 2). money for improving awareness on the need for toilets</p> 
+			  	<p>&nbsp; &nbsp; 3). creating a supply chain for manufacturing toilet-ware and</p> 
+			  	<p>&nbsp; &nbsp; 4). waste management efforts </p>
+			  	<p><b>Using the visualisation: </b>Use the drop down to toggle between spending on various components. Spending of each district is denoted by a corresponding circle. </p>
+			  	<p>&nbsp; &nbsp; 1). Size of the circle indicates budget set aside for that component</p>
+			  	<p>&nbsp; &nbsp; 2). Colour of the circle indicates how much the state / union territory has spent on rural sanitation when compared to what was planned. Greener the colour, better the spending.</p>
 			  	<div class="subparam" id="MoneySpent"></div>
 			  	<div><svg id="chartS1" width="955" height="500" style="border:1px solid #ddd;"></svg></div>
 			  </div>
 			  <div class="tab-pane fade" id="ToiletsBuilts">
+			  	<h4>Toilets Built</h4>
+			  	<p><b>Context: </b>The rural sanitation scheme promotes the construction of toilets in households, schools and nursery schools. These visuals will provide an understanding of   how well the scheme is building toilets in rural areas.</p>
+			  	<p><b>Using the visualisation: </b>Use the drop down to toggle between toilets built for households, schools and anganwadis (nursery schools).  Construction in each district is denoted by a corresponding circle.</p>
+			  	<p>&nbsp; &nbsp; 1). Size of the circle indicates number of toilets to be constructed</p>
+			  	<p>&nbsp; &nbsp; 2). Colour of the circle indicates achievement of construction by the state / union territory. Greener the colour, better the construction.</p>
 			  	<div class="subparam" id="ToiletsBuilt"></div>
 			  	<div><svg id="chartS2" width="955" height="500" style="border:1px solid #ddd;"></svg></div>
 			  </div>
 			  <div class="tab-pane fade" id="Performances">
+			  	<h4>Performance</h4>
+			  	<p><b>Context: </b>This visualisation compares spending on the rural sanitation scheme with construction of toilets for rural poor houses. Ideally, every district should fall on the linear trendline meaning that it spent a proportionate amount to how many toilets were constructed. Being off that line means that the state has either under-spent or overspent to build the same number of toilets. </p>
+			  	<p><b>Using the visualization: </b>Each circle represents one State / Union Territory. Click on a State or select from the drop down for the State and District that you want to see. The size of the circle represents rural poor toilets required. The x-axis is based on overall spending on rural sanitation (since toilet construction for the rural poor and allied activities is the biggest spend in the whole allotted sum). The y-axis is based on % toilets constructed for rural poor households. If the circle lies in the green part of thae graph - that means that the respective district is doing well, if it lies in the red part then it is not. </p>
 			  	<div><svg id="chartS3" width="960" height="500" ></svg></div>
 			  </div>
 			  <div class="tab-pane fade" id="Censuss">
+			  	<h4>Census</h4>
+			  	<p><b>Context: </b>When the 2011 Census data was published and asked about latrine owndership several states were in for a surprise as the numbers were completely different from the numbers that were being reported to the Ministry of Drinking Water and Sanitation's IMIS. Accountability Initiative looks at these numbers and analyses them for each state/ union territory. A full report can be accessed <a href="http://www.indiawaterportal.org/sites/indiawaterportal.org/files/fromoutlaystooutcomes_understandingthestatusofruralsanitationdata_accountabilityinitiative_arghyam_consolidated_report_2013.pdf" target="_blank">here</a>.</p>
 			  	<div class="row-fluid">			  		
-				  	<div id="cenTitle" class="span11" style="font-size:1.5em;"></div>
+				  	<div id="cenTitle" class="span11" style="font-size:1.1em;"></div>
 				  	<div class="span11">&nbsp;</div>
 				  	<div>
-							<div id="despT" class="span6" style="font-size:1.2em;"></div>
+							<div id="despT" class="span6" style="font-size:1em;"></div>
 				  		<div id="chartT" class="span6" style=""></div>				  							  	
 				  	</div>
 				  	<div class="span11"><hr class="bs-docs-separator"></div>
 				  	<div>
 				  		<div id="chartB" class="span6" style=""></div>					  	
-				  		<div id="despB" class="span6" style="font-size:1.2em;"></div>				  		
+				  		<div id="despB" class="span6" style="font-size:1em;"></div>				  		
 				  	</div>
 				  	<div class="span11"><hr class="bs-docs-separator"></div>
 				  	<div>
-				  		<div id="despC" class="span6" style="font-size:1.2em;"></div>
+				  		<div id="despC" class="span6" style="font-size:1em;"></div>
 				  		<div id="chartC" class="span6" style="min-height:350px;"></div>					  
 				  	</div>
 				  </div>	
@@ -227,7 +247,7 @@
       <p>Open defecation in rural india remains a problem that perplexes policy makers. The first, government level initiative to tackle it came in the form of the Central Rural Sanitation Programme in 1986. A subsidy driven approach was adopted. This programme morphed to take into account the necessity to educate and empower people to adopt and use toilets - the Total Sanitation Campaign in 1999  and to adopt a panchayat based approach rather than a household based one - the Nirmal Bharat Abhiyan in 2012. The scheme was allotted Rs. 3500 crores in 2012-13 budget (before revision) and around 27 lakh toilets were constructed last year.</p>
       <p>The Ministry of Drinking Water and Sanitation, Government of India, under which this scheme is housed puts out detailed financial and physical progress data. This is supposed to provide anyone who is interested a snapshot of the rural sanitation situation in the country. This was also a large scale attempt to decentralise data collection as districts enter data into the IMIS on the government website directly. What has resulted is a vast collection of cumulative data from 2001 on the status of sanitation, available up to the habitation level.</p>
       <p>This effort by the government to put data proactively on the website must provide much reason to rejoice. However, several concerns remain about the quality of the data that is available. The latest numbers that challenge the MDWS data come from the census, according to which around 3.5 crore toilets are missing.</p>
-      <p><a href="http://arghyam.org">Arghyam</a> is a public charitable foundation set up by Rohini Nilekani in 2005 - Safe, sustainable water for all.  One of our key focus areas is looking at government spends on sanitation - from both the qualitative aspects of data that is present on the website and also the implementation of  the government's scheme.</p>
+      <p><a href="http://arghyam.org" target="_blank">Arghyam</a> is a public charitable foundation set up by Rohini Nilekani in 2005 - Safe, sustainable water for all.  One of our key focus areas is looking at government spends on sanitation - from both the qualitative aspects of data that is present on the website and also the implementation of  the government's scheme.</p>
       <p>To answer questions about data, Arghyam is collaborating with Gramener. The aim of this collaboration is to understand the sanitation data better &amp; help open up the data actually.</p>
       <p>As a first step we are taking data off of the website and analysing it to understand it better. These analyses - as stories accompanied by visualisations will be uploaded periodically here.</p>
     </div>
@@ -299,11 +319,144 @@
 					<h3>Comparing spending to toilet construction</h3>
 					<p>How do toilet construction and spending on toilet construction compare?</p>
 				</a>
+				<a id="stateprofile" class="demo thumbnail pull-left" href="#states">
+					<h4 style="padding-left:5px">State Profiles</h4>
+					<img src="img/state_pages.png">
+					<h3>State performance in rural sanitation</h3>
+					<p>Find out how your state is doing in rural sanitation.</p>
+				</a>
 		</div>			
 	</div>
 	<div class="container" style="margin-top:25px;">
 		<p> For more queries and feedback please contact us: <a href="http://www.indiawaterportal.org/contact" target="_blank"><code>click here</code></a></p>
 	</div>
+</div>
+<div id="stateicons" class="container" style="display:none">
+	<h1>State profiles</h1>
+	<div class="row-fluid">
+		<div class="span12">
+				<a class="thumbnail stateicon pull-left" href="#State%7CAndhra%20Pradesh%7CMoney%20Spent%7CSpending%20on%20rural%20sanitation">
+					<h4 style="padding-left:5px">Andhra Pradesh</h4>
+					<img src="img/AP.png">					
+				</a>
+				<a class="thumbnail stateicon pull-left" href="#State%7CArunachal%20Pradesh%7CMoney%20Spent%7CSpending%20on%20rural%20sanitation">
+					<h4 style="padding-left:5px">Arunchal Pradesh</h4>
+					<img src="img/AR.png">					
+				</a>
+				<a class="thumbnail stateicon pull-left" href="#State%7CAssam%7CMoney%20Spent%7CSpending%20on%20rural%20sanitation">
+					<h4 style="padding-left:5px">Assam</h4>
+					<img src="img/AS.png">					
+				</a>
+				<a class="thumbnail stateicon pull-left" href="#State%7CBihar%7CMoney%20Spent%7CSpending%20on%20rural%20sanitation">
+					<h4 style="padding-left:5px">Bihar</h4>
+					<img src="img/BH.png">					
+				</a>
+				<a class="thumbnail stateicon pull-left" href="#State%7CChhattisgarh%7CMoney%20Spent%7CSpending%20on%20rural%20sanitation">
+					<h4 style="padding-left:5px">Chhattisgarh</h4>
+					<img src="img/CH.png">					
+				</a>
+				<a class="thumbnail stateicon pull-left" href="#State%7CD%20%26%20N%20Haveli%7CMoney%20Spent%7CSpending%20on%20rural%20sanitation">
+					<h4 style="padding-left:5px">D & N Haveli</h4>
+					<img src="img/D&NH.png">					
+				</a>
+				<a class="thumbnail stateicon pull-left" href="#State%7CGoa%7CMoney%20Spent%7CSpending%20on%20rural%20sanitation">
+					<h4 style="padding-left:5px">Goa</h4>
+					<img src="img/GA.png">					
+				</a>
+				<a class="thumbnail stateicon pull-left" href="#State%7CGujarat%7CMoney%20Spent%7CSpending%20on%20rural%20sanitation">
+					<h4 style="padding-left:5px">Gujarat</h4>
+					<img src="img/GJ.png">					
+				</a>
+				<a class="thumbnail stateicon pull-left" href="#State%7CHaryana%7CMoney%20Spent%7CSpending%20on%20rural%20sanitation">
+					<h4 style="padding-left:5px">Haryana</h4>
+					<img src="img/HR.png">					
+				</a>
+				<a class="thumbnail stateicon pull-left" href="#State%7CHimachal%20Pradesh%7CMoney%20Spent%7CSpending%20on%20rural%20sanitation">
+					<h4 style="padding-left:5px">Himachal Pradesh</h4>
+					<img src="img/HP.png">					
+				</a>
+				<a class="thumbnail stateicon pull-left" href="#State%7CJammu%20%26%20Kashmir%7CMoney%20Spent%7CSpending%20on%20rural%20sanitation">
+					<h4 style="padding-left:5px">Jammu & Kashmir</h4>
+					<img src="img/J&K.png">					
+				</a>
+				<a class="thumbnail stateicon pull-left" href="#State%7CJharkhand%7CMoney%20Spent%7CSpending%20on%20rural%20sanitation">
+					<h4 style="padding-left:5px">Jharkhand</h4>
+					<img src="img/JH.png">					
+				</a>
+				<a class="thumbnail stateicon pull-left" href="#State%7CKarnataka%7CMoney%20Spent%7CSpending%20on%20rural%20sanitation">
+					<h4 style="padding-left:5px">Karnataka</h4>
+					<img src="img/KR.png">					
+				</a>
+				<a class="thumbnail stateicon pull-left" href="#State%7CKerala%7CMoney%20Spent%7CSpending%20on%20rural%20sanitation">
+					<h4 style="padding-left:5px">Kerala</h4>
+					<img src="img/KL.png">					
+				</a>
+				<a class="thumbnail stateicon pull-left" href="#State%7CMadhya%20Pradesh%7CMoney%20Spent%7CSpending%20on%20rural%20sanitation">
+					<h4 style="padding-left:5px">Madhya Pradesh</h4>
+					<img src="img/MP.png">					
+				</a>
+				<a class="thumbnail stateicon pull-left" href="#State%7CMaharashtra%7CMoney%20Spent%7CSpending%20on%20rural%20sanitation">
+					<h4 style="padding-left:5px">Maharastra</h4>
+					<img src="img/MH.png">					
+				</a>
+				<a class="thumbnail stateicon pull-left" href="#State%7CManipur%7CMoney%20Spent%7CSpending%20on%20rural%20sanitation">
+					<h4 style="padding-left:5px">Manipur</h4>
+					<img src="img/MN.png">					
+				</a>
+				<a class="thumbnail stateicon pull-left" href="#State%7CMeghalaya%7CMoney%20Spent%7CSpending%20on%20rural%20sanitation">
+					<h4 style="padding-left:5px">Meghalya</h4>
+					<img src="img/MG.png">					
+				</a>
+				<a class="thumbnail stateicon pull-left" href="#State%7CMizoram%7CMoney%20Spent%7CSpending%20on%20rural%20sanitation">
+					<h4 style="padding-left:5px">Mizoram</h4>
+					<img src="img/MZ.png">					
+				</a>
+				<a class="thumbnail stateicon pull-left" href="#State%7CNagaland%7CMoney%20Spent%7CSpending%20on%20rural%20sanitation">
+					<h4 style="padding-left:5px">Nagaland</h4>
+					<img src="img/NG.png">					
+				</a>
+				<a class="thumbnail stateicon pull-left" href="#State%7COrissa%7CMoney%20Spent%7CSpending%20on%20rural%20sanitation">
+					<h4 style="padding-left:5px">Orissa</h4>
+					<img src="img/OR.png">					
+				</a>
+				<a class="thumbnail stateicon pull-left" href="#State%7CPuducherry%7CMoney%20Spent%7CSpending%20on%20rural%20sanitation">
+					<h4 style="padding-left:5px">Puducherry</h4>
+					<img src="img/PY.png">					
+				</a>
+				<a class="thumbnail stateicon pull-left" href="#State%7CPunjab%7CMoney%20Spent%7CSpending%20on%20rural%20sanitation">
+					<h4 style="padding-left:5px">Punjab</h4>
+					<img src="img/PJ.png">					
+				</a>
+				<a class="thumbnail stateicon pull-left" href="#State%7CRajasthan%7CMoney%20Spent%7CSpending%20on%20rural%20sanitation">
+					<h4 style="padding-left:5px">Rajasthan</h4>
+					<img src="img/RJ.png">					
+				</a>
+				<a class="thumbnail stateicon pull-left" href="#State%7CSikkim%7CMoney%20Spent%7CSpending%20on%20rural%20sanitation">
+					<h4 style="padding-left:5px">Sikkim</h4>
+					<img src="img/SK.png">					
+				</a>
+				<a class="thumbnail stateicon pull-left" href="#State%7CTamil%20Nadu%7CMoney%20Spent%7CSpending%20on%20rural%20sanitation">
+					<h4 style="padding-left:5px">Tamilnadu</h4>
+					<img src="img/TN.png">					
+				</a>
+				<a class="thumbnail stateicon pull-left" href="#State%7CTripura%7CMoney%20Spent%7CSpending%20on%20rural%20sanitation">
+					<h4 style="padding-left:5px">Tripura</h4>
+					<img src="img/TR.png">					
+				</a>
+				<a class="thumbnail stateicon pull-left" href="#State%7CUttar%20Pradesh%7CMoney%20Spent%7CSpending%20on%20rural%20sanitation">
+					<h4 style="padding-left:5px">Uttar Pradesh</h4>
+					<img src="img/UP.png">					
+				</a>
+				<a class="thumbnail stateicon pull-left" href="#State%7CUttarakhand%7CMoney%20Spent%7CSpending%20on%20rural%20sanitation">
+					<h4 style="padding-left:5px">Uttarakhand</h4>
+					<img src="img/UT.png">					
+				</a>
+				<a class="thumbnail stateicon pull-left" href="#State%7CWest%20Bengal%7CMoney%20Spent%7CSpending%20on%20rural%20sanitation">
+					<h4 style="padding-left:5px">West Bengal</h4>
+					<img src="img/WB.png">					
+				</a>
+		</div>
+	</div>	
 </div>
 <div id="method" class="container" style="display:none; min-height:455px;">
 	<div class="row-fluid">

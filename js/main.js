@@ -2,6 +2,7 @@
 //var iwp = 'www.indiawaterportal.org';
 var host = window.location.href;
 var iwp = 'http://arghyam.github.io/arghyam-scrapers/?#';
+//var iwp = 'http://localhost/arghyam/arghyam-scrapers/?#';
 console.log(host);
 var slides = [];
 d3.selectAll('.tooltip').remove();
@@ -96,7 +97,7 @@ if(host == iwp){
 }
 d3.select('#home').on('click', function() {
 	d3.selectAll('.tooltip').remove();
-	d3.selectAll('#visual, #dataChange, #method').style('display', 'none');
+	d3.selectAll('#stateicons, #visual, #dataChange, #method').style('display', 'none');
 	if(host == iwp){
 		d3.select('#demo').style('display', 'block');
 		d3.select('#about').style('display', 'none');
@@ -105,11 +106,16 @@ d3.select('#home').on('click', function() {
 		d3.select('#demo').style('display', 'none');
 	}		
 });
+d3.select('#stateprofile').on('click', function() {
+	d3.selectAll('.tooltip').remove();
+	d3.selectAll('#about, #demo, #visual, #dataChange, #method').style('display', 'none');
+	d3.select('#stateicons').style('display', 'block');			
+});
 d3.select('#dataChanges').on('click', function(){
 	d3.event.preventDefault();	
 	window.location.replace('#datachanges');
 	d3.selectAll('.tooltip').remove();
-	d3.selectAll('#about, #method, #demo, #visual').style('display', 'none');
+	d3.selectAll('#stateicons, #about, #method, #demo, #visual').style('display', 'none');
 	d3.select('#dataChange').style('display', 'block');
 	datachanges();
 });
@@ -137,6 +143,9 @@ function hashchange(e) {
 			d3.select('#about').style('display', 'block');
 			d3.selectAll('#demo, #visual, #dataChange, #method').style('display', 'none');
 		}
+	}else if(hash == 'states'){
+		d3.selectAll('#about, #demo, #visual, #dataChange, #method').style('display', 'none');
+		d3.select('#stateicons').style('display', 'block');			
 	}else if(hash == 'datachanges'){
 		d3.select('#dataChange').style('display', 'block');
 		d3.selectAll('#about, #demo, #visual, #method').style('display', 'none');		
@@ -181,7 +190,7 @@ function draw(story) {
   d3.select('#exp_text').text(' ');	
   d3.select('#otstate').style('display', 'block');
 	d3.select('#forstate').style('display', 'none');
-  d3.selectAll('#about, #method, #demo, #brought, #dataChange, #slideshare').style('display', 'none');
+  d3.selectAll('#stateicons, #about, #method, #demo, #brought, #dataChange, #slideshare').style('display', 'none');
 	d3.selectAll('.legend, #chart1, #chart2, #gradient_cont, #right_container, #hide_text').style('display', 'none');
 	d3.selectAll('#source a, .treemap text, #columns text, #gradient text, .horiz0, .horiz1, .tooltip').remove();
 	d3.select('#visual').style('display', 'block');
@@ -1571,7 +1580,7 @@ function draw_dorlingCart(story) {   // census 2001 vs 2011
 		});
 		var nested_data = d3.nest()
 				.key(function(d){ return d[story.group[0]]; })
-				.rollup(function(rows){ return { 'cen2011': d3.sum(rows, function(d){ return d[story.size]; }),
+				.rollup(function(rows){ return { 'cen2011'  : d3.sum(rows, function(d){ return d[story.size]; }),
 																				 'cen2001%' : d3.sum(rows, function(d){ return d[story.cen2001];}),
 																				 'cen2011%' : d3.sum(rows, function(d){ return d[story.cen2011];})
 																			 } 
