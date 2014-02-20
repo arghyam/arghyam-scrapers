@@ -100,10 +100,10 @@ d3.select('#home').on('click', function() {
 	d3.selectAll('#stateicons, #visual, #dataChange, #method').style('display', 'none');
 	if(host == iwp){
 		d3.select('#demo').style('display', 'block');
-		d3.select('#about').style('display', 'none');
+		d3.selectAll('#about, #stateicons').style('display', 'none');
 	}else{
 		d3.select('#about').style('display', 'block');
-		d3.select('#demo').style('display', 'none');
+		d3.selectAll('#demo, #stateicons').style('display', 'none');
 	}		
 });
 d3.select('#stateprofile').on('click', function() {
