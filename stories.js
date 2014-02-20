@@ -768,6 +768,7 @@ var stories = [
     'cen_t'  : "In 2001, the difference in the number of households without toilets between Census and rural sanitation scheme (TSC) was 0.06 lakhs. In 2011, the difference had grown to 66.08 lakhs.",
 		'cen_b'  : ["According to census data, only 32.2 percent of rural households had access to toilets in 2011. According to TSC the number is considerably larger: 75.9 percent."," The 2011 census indicates an increase of 12 percent in rural households from 126.76 lakhs in 2001 to 142.46 lakhs in 2011.","However, TSC has kept this figure constant at 2001 numbers. Thus, when census rural population numbers for 2011 are used to calculate achievement (TSC Actual), TSC's total achievement falls to 67.6 percent."],
 		'cen_c'  : ["How much more money needs to be spent to achieve total sanitation for 2011 household numbers?","According to the Census, the required expenditure is 18.3 times the amount spent from 1999 till 2011 (Rs 526.5 crores). According to TSC Actual data, it is 8.8 times.","Assuming the same rate of population growth, by 2022 there will be 161.99 lakh rural households. The scheme needs to acknowledge population trends and revise project objectives to receive the right amount of incentives."],
+    'slideshare':'https://onedrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21130&authkey=ANcrWIQwOv0tQWU&em=2',
     'IWP'    : 'true'					
   }),
   dorling_story({
@@ -801,7 +802,8 @@ var stories = [
     'cen_t'  : "In 2001, the difference in the number of households without toilets between Census and rural sanitation scheme (TSC) was 0.0006 lakhs. In 2011, the difference had grown to 0.64 lakhs.",
 		'cen_b'  : ["According to census data, only 52.7 percent of rural households had access to toilets in 2011. According to TSC the number is considerably larger: 82.3 percent.","The 2011 census indicates an increase of 19 percent in rural households from 1.65 lakhs in 2001 to 1.96 lakhs in 2011. However, TSC has kept this figure constant at 2001 numbers. Thus, when census rural population numbers for 2011 are used to calculate achievement (TSC Actual), TSC's total achievement falls to 69.2 percent."],
 		'cen_c'  : ["How much more money needs to be spent to achieve total sanitation for 2011 household numbers?","According to the Census, the required expenditure is 8.7 times the amount spent from 1999 till 2011 (Rs 10.7 crores). According to TSC Actual data, it is 5.6 times.","Assuming the same rate of population growth, by 2022 there will be 2.37 lakh rural households. The scheme needs to acknowledge population trends and revise project objectives to receive the right"],
-		'IWP'    : 'true'					
+		'slideshare':'https://onedrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21130&authkey=ANcrWIQwOv0tQWU&em=2',
+    'IWP'    : 'true'					
   }),
   dorling_story({
     'menu'   : 'State',
@@ -834,7 +836,8 @@ var stories = [
     'cen_t'  : "In 2001, the difference in the number of households without toilets between Census and rural sanitation scheme (TSC) was (0.014) lakhs with Census reporting less households without toilets than TSC. In 2011, the difference had grown to 18.74 lakhs.",
 		'cen_b'  : ["According to census data, only 59.6 percent of rural households had access to toilets in 2011. According to TSC the number is considerably larger: 92.9 percent.","The 2011 census indicates an increase by 27 percent in rural households from 42.2 lakhs in 2001 to 53.75 lakhs in 2011. However, TSC has kept this figure constant at 2001 numbers. Thus, when census rural population numbers for 2011 are used to calculate achievement (TSC Actual), TSC's total achievement falls to 73 percent."],
 		'cen_c'  : ["How much more money needs to be spent to achieve total sanitation for 2011 household numbers?","According to the Census, the required expenditure is 9.8 times the amount spent from 1999 till 2011 (Rs 220.9 crores). According to TSC Actual data, it is 6.6 times.","Assuming the same rate of population growth, by 2022 there will be 70.12 lakh rural households. The scheme needs to acknowledge population trends and revise project objectives to receive the right amount of incentives."],
-		'IWP'    : 'true'					
+		'slideshare':'https://onedrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21130&authkey=ANcrWIQwOv0tQWU&em=2',
+    'IWP'    : 'true'					
   }),
   dorling_story({
     'menu'   : 'State',
@@ -867,7 +870,8 @@ var stories = [
     'cen_t'  : "In 2001, the difference in the number of households without toilets between Census and rural sanitation scheme (TSC) was 0.018 lakhs. In 2011, the difference had grown to 61.82 lakhs.",
     'cen_b'  : ["According to census data, only 17.6 percent of rural households had access to toilets in 2011. According to TSC the number is 38.7 percent.","The 2011 census indicates an increase by 34 percent in rural households from 126.60 lakhs in 2001 to 169.27 lakhs in 2011. However, TSC has kept this figure constant at 2001 numbers. Thus, when census rural population numbers for 2011 are used to calculate achievement (TSC Actual), TSC's total achievement falls to 28.9 percent."],
     'cen_c'  : ["How much more money needs to be spent to achieve total sanitation for 2011 household numbers?","According to the Census, the required expenditure is 32.5 times the amount spent from 1999 till 2011 (Rs 429.7 crores). According to TSC Actual data, it is 28 times.","Assuming the same rate of population growth, by 2022 there will be 232.99 lakh rural households. The scheme needs to acknowledge population trends and revise project objectives to receive the right amount of incentives."],
-		'IWP'    : 'true'					
+		'slideshare':'https://onedrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21130&authkey=ANcrWIQwOv0tQWU&em=2',
+    'IWP'    : 'true'					
   }),
   dorling_story({
     'menu'   : 'State',
@@ -900,7 +904,8 @@ var stories = [
     'cen_t'  : "In 2001, the difference in the number of households without toilets between Census and rural sanitation scheme (TSC) was (0.006) lakhs with Census reporting less households without toilets than TSC. In 2011, the difference had grown to 24.10 lakhs.",
     'cen_b'  : ["According to census data, only 14.5 percent of rural households had access to toilets in 2011. According to TSC the number is considerably larger: 60.1 percent.","The 2011 census indicates an increase of 31 percent in rural households from 33.59 lakhs in 2001 to 43.84 lakhs in 2011. However, TSC has kept this figure constant at 2001 numbers. Thus, when census rural population numbers for 2011 are used to calculate achievement (TSC Actual), TSC's total achievement falls to 46.1 percent."],
     'cen_c'  : ["How much more money needs to be spent to achieve total sanitation for 2011 household numbers?", "According to the Census, the required expenditure is 20.7 times the amount spent from 1999 till 2011 (Rs 180.7 crores). According to TSC Actual data, it is 13.1 times.", "Assuming the same rate of population growth, by 2022 there will be 58.76 lakh rural households. The scheme needs to acknowledge population trends and revise project objectives to receive the right amount"],
-		'IWP'    : 'true'					
+		'slideshare':'https://onedrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21130&authkey=ANcrWIQwOv0tQWU&em=2',
+    'IWP'    : 'true'					
   }),
   dorling_story({
     'menu'   : 'State',
@@ -930,6 +935,7 @@ var stories = [
 		'range'	 : [0.6, 1],
 		'percent': [1, 37, 70, 95],
     'pertext': [0, 50, 100, 200],
+    'slideshare':'https://onedrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21130&authkey=ANcrWIQwOv0tQWU&em=2',
 		'IWP'    : 'true'					
   }),
   dorling_story({
@@ -963,7 +969,8 @@ var stories = [
     'cen_t'  : "In 2001, the difference in the number of households without toilets between Census and rural sanitation scheme (TSC) was 0.0002 lakhs. In 2011, TSC reported greater number of households without toilets than Census. The total difference was 0.021 lakhs.",
     'cen_b'  : ["According to census data, only 70.9 percent of rural households had access to toilets in 2011. According to TSC the number is 72.8 percent.", "The 2011 census indicates a decrease of 11 percent in rural households from 1.41 lakhs in 2001 to 1.25 lakhs in 2011.","However, TSC has kept this figure constant at 2001 numbers. Thus, when census rural population numbers for 2011 are used to calculate achievement (TSC Actual) TSC's total achievement increases to 82.1 percent."],
     'cen_c'  : ["How much more money needs to be spent to achieve total sanitation for 2011 household numbers?", "According to the Census, the required expenditure is 17.1 times the amount spent from 1999 till 2011 (Rs 2.1 crores). According to TSC Actual data, it is 10.5 times.", "Assuming the same rate of population growth, by 2022 there will be 1.09 lakh rural households. The scheme needs to acknowledge population trends and revise project objectives to receive the right amount of incentives."],
-		'IWP'    : 'true'					
+		'slideshare':'https://onedrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21130&authkey=ANcrWIQwOv0tQWU&em=2',
+    'IWP'    : 'true'					
   }),
   dorling_story({
     'menu'   : 'State',
@@ -996,7 +1003,8 @@ var stories = [
     'cen_t'  : "In 2001, the difference in the number of households without toilets between Census and rural sanitation scheme (TSC) was (0.027) lakhs, with Census reporting less households without toilets than TSC. In 2011, the Census number had grown significantly and it reported 42.61 lakhs more households without toilets than TSC.",
     'cen_b'  : ["According to census data, only 33 percent of rural households had access to toilets in 2011. According to TSC the number is considerably larger: 95.4 percent.", "The 2011 census indicates an increase in rural households by 15 percent from 58.86 lakhs in 2001 to 67.65 lakhs in 2011. However, TSC has kept this figure constant at 2001 numbers. Thus, when census rural population numbers are used to calculate achievement (TSC Actual), TSC’s total achievement falls to 83 percent. 4.6 times 18.1 times"],
     'cen_c'  : ["How much more money needs to be spent to achieve total sanitation for 2011 household numbers?", "According to the Census, the required expenditure is 18.1 times the amount spent from 1999 till 2011 (Rs 250.2 crores). According to TSC Actual data, it is 4.6 times.", "Assuming the same rate of population growth, by 2022 there will be 78.85 lakh rural households. The scheme needs to acknowledge population trends and revise project objectives to receive the right amount of incentives."],
-		'IWP'    : 'true'					
+		'slideshare':'https://onedrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21130&authkey=ANcrWIQwOv0tQWU&em=2',
+    'IWP'    : 'true'					
   }),
   dorling_story({
     'menu'   : 'State',
@@ -1029,7 +1037,8 @@ var stories = [
     'cen_t'  : "In 2001, the difference in the number of households without toilets between Census and rural sanitation scheme (TSC) was (0.009) lakhs, with Census reported marginally less households without toilets in 2001. In 2011, the Census numbers have grown significantly and it reported 13.02 lakhs more households without toilets than TSC.",
     'cen_b'  : ["According to census data, 56.1 percent of rural households had access to toilets in 2011. According to TSC achievement is a 100 percent.", "The 2011 census indicates an increase in rural households by 21 percent, from 24.54 lakhs in 2001 to 29.66 lakhs in 2011. However, TSC has kept this figure constant at 2001 numbers. Thus, when census rural population numbers for 2011 are used to calculate achievement (TSC Actual), TSC's total achievement falls to 82.8 percent."],
     'cen_c'  : ["How much more money needs to be spent to achieve total sanitation for 2011 household numbers?", "According to the Census, the required expenditure is 18.8 times the amount spent from 1999 till 2011 (Rs 69.3 crores). According to TSC Actual data, it is 7.4 times.", "Assuming the same rate of population growth, by 2022 there will be 36.53 lakh rural households. The scheme needs to acknowledge population trends and revise project objectives to receive the right amount of incentives."],
-		'IWP'    : 'true'					
+		'slideshare':'https://onedrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21130&authkey=ANcrWIQwOv0tQWU&em=2',
+    'IWP'    : 'true'					
   }),
   dorling_story({
     'menu'   : 'State',
@@ -1062,7 +1071,8 @@ var stories = [
     'cen_t'  : "In 2001, the difference in the number of households toilets between Census and rural sanitation scheme (TSC) was 0.0019 lakhs. In 2011, the difference had grown to 4.38 lakhs.",
     'cen_b'  : ["According to census data, 66.6 percent of rural households had access to toilets in 2011. According to TSC achievement is a 100 percent.", "The 2011 census indicates an increase in rural households by 19 percent, from 10.98 lakhs in 2001 to 13.11 lakhs in 2011.", "However, TSC has kept this figure constant at 2001 numbers. Thus, when census rural population numbers for 2011 are used to calculate achievement (TSC Actual), TSC’s total achievement falls to 83.7 percent."],
     'cen_c'  : ["How much more money needs to be spent to achieve total sanitation for 2011 household numbers?", "According to the Census, the required expenditure is 30.7 times the amount spent from 1999 till 2011 (Rs 14.3 crores). According to TSC Actual data, it is 14.9 times.", "Assuming the same rate of population growth, by 2022 there will be 15.93 lakh rural households. The scheme needs to acknowledge population trends and revise project objectives to receive the right amount of incentives."],
-		'IWP'    : 'true'					
+		'slideshare':'https://onedrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21130&authkey=ANcrWIQwOv0tQWU&em=2',
+    'IWP'    : 'true'					
   }),
   dorling_story({
     'menu'   : 'State',
@@ -1095,7 +1105,8 @@ var stories = [
     'cen_t'  : "In 2001, the difference in the number of households without toilets between Census and rural sanitation scheme (TSC) was (0.0001) lakhs, with Census reporting marginally less households without toilets. In 2011, Census numbers had increased significantly and it reported 5.98 lakhs more households without toilets than TSC.",
     'cen_b'  : ["According to census data, only 38.6 percent of rural households had access to toilets in 2011. According to TSC the number is considerably larger: 72.3 percent.", "The 2011 census indicates an increase in rural households by 29 percent, from 11.61 lakhs in 2001 to 14.98 lakhs in 2011.. However, TSC has kept this figure constant at 2001 numbers. Thus, when census rural population numbers for 2011 are used to calculate achievement (TSC Actual), TSC's total achievement falls to 56.1 percent. 20.5 times 28.7 times"],
     'cen_c'  : ["How much more money needs to be spent to achieve total sanitation for 2011 household numbers?", "According to the Census, the required expenditure is 28.7 times the amount spent from 1999 till 2011 (Rs 32 crores). According to TSC Actual data, it is 20.5 times.", "Assuming the same rate of population growth, by 2022 there will be 19.82 lakh rural households. The scheme needs to acknowledge population trends and revise project objectives to receive the right amount of incentives."],
-		'IWP'    : 'true'					
+		'slideshare':'https://onedrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21130&authkey=ANcrWIQwOv0tQWU&em=2',
+    'IWP'    : 'true'					
   }),
   dorling_story({
     'menu'   : 'State',
@@ -1128,7 +1139,8 @@ var stories = [
     'cen_t'  : "In 2001, the difference in the number of households without toilets between Census and rural sanitation scheme (TSC) was (0.011) lakhs, with Census reporting marginally less households without toilets. In 2011, Census numbers increased significantly and it reported 23.3 lakhs more households without toilets than TSC.",
     'cen_b'  : ["According to census data, only 7.6 percent of rural households had access to toilets in 2011. According to TSC achievement is 47.4 percent.", "The 2011 census indicates an increase in rural households by 23 percent, from 38.02 lakhs in 2001 to 46.86 lakhs in 2011. However, TSC has kept this figure constant at 2001 numbers. Thus, when census rural population numbers for 2011 are used to calculate achievement (TSC Actual), TSC's total achievement falls to 38.5 percent."],
     'cen_c'  : ["How much more money needs to be spent to achieve total sanitation by 2011 households numbers?", "According to the Census, the required expenditure is 23.7 times the amount spent from 1999 till 2011 (Rs 183 crores). According to TSC Actual data, it is 15.8 times.", "Assuming the same rate of population growth, by 2022 there will be 58.97 lakh rural households. The scheme needs to acknowledge population trends and revise project objectives to receive the right amount"],
-		'IWP'    : 'true'					
+		'slideshare':'https://onedrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21130&authkey=ANcrWIQwOv0tQWU&em=2',
+    'IWP'    : 'true'					
   }),
   dorling_story({
     'menu'   : 'State',
@@ -1161,7 +1173,8 @@ var stories = [
     'cen_t'  : "In 2001, the difference in the number of households without toilets between Census and rural sanitation scheme (TSC) was (0.002) lakhs, with Census having marginally less households without toilets. In 2011, Census numbers increased significantly and it reported 38.88 lakhs more households without toilets than TSC.",
     'cen_b'  : ["According to census data, only 28.4 percent of rural households had access to IHHLs in 2011. According to TSC the number is considerably larger: 73.9 percent.", "The 2011 census indicates an increase in rural households by 18 percent from 66.75 lakhs in 2001 to 78.64 lakhs in 2011. However, TSC has kept this figure constant at 2001 numbers. Thus, when census rural population numbers for 2011 are used to calculate achievement (TSC Actual), TSC's total achievement falls to 62.7 percent."],
     'cen_c'  : ["How much more money needs to be spent to achieve total sanitation by 2011 household numbers?", "According to the Census, the required expenditure is 24.5 times the amount spent from 1999 till 2011 (Rs 230.1 crores). According to TSC Actual data, it is 12.7 times.", "Assuming the same rate of population growth, by 2022 there will be 94.18 lakh rural households. The scheme needs to acknowledge population trends and revise project objectives to receive the right amount of incentives."],
-		'IWP'    : 'true'					
+		'slideshare':'https://onedrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21130&authkey=ANcrWIQwOv0tQWU&em=2',
+    'IWP'    : 'true'					
   }),
   dorling_story({
     'menu'   : 'State',
@@ -1194,7 +1207,8 @@ var stories = [
     'cen_t'  : "In 2001, the difference in the number of households without toilets between Census and rural sanitation scheme (TSC) was 0.017 lakhs. In 2011, the difference had grown to 2.79 lakhs.",
     'cen_b'  : ["According to census data, 93.2 percent of rural households had access to toilets in 2011. According to TSC achievement is a 100 percent.", "The number of rural households in Kerala fell by 17 percent, from 49.43 lakhs in 2001 to 40.96 lakhs in 2011. This is one reason why TSC's physical achievement exceeds the total number of households."],
     'cen_c'  : ["How much more money needs to be spent to achieve total sanitation by 2011 households numbers?", "According to the Census, the required expenditure is 2.2 times the amount spent from 1999 till 2011 (Rs 124.2 crores). According to TSC data the target has been met.", "It is important to note that Kerala’s IHHL coverage in 2001 was already up to 81.3 percent. Assuming the same rate of population growth, by 2022 there will be 33.31 lakh rural households. The scheme will need to acknowledge population trends and revise project objectives accordingly."],
-		'IWP'    : 'true'					
+		'slideshare':'https://onedrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21130&authkey=ANcrWIQwOv0tQWU&em=2',
+    'IWP'    : 'true'					
   }),
   dorling_story({
     'menu'   : 'State',
@@ -1227,7 +1241,8 @@ var stories = [
     'cen_t'  : "In 2001, the difference in the number of households without toilets between Census and rural sanitation scheme (TSC) was 0.031 lakhs. In 2011, the difference had grown to 84.52 lakhs.",
     'cen_b'  : ["According to census data, only 13.1 percent of rural households had access to toilets in 2011. According to TSC the number is considerably larger: 85.1 percent.", "The 2011 census indicates an increase in rural households by 37 percent, from 81.25 lakhs in 2001 to 111.22 lakhs in 2011.. However, TSC has kept this figure constant at 2001 numbers. Thus, when census rural population numbers for 2011 are used to calculate achievement (TSC Actual), TSC's total achievement falls to 62.1 percent."],
     'cen_c'  : ["How much more money needs to be spent to achieve total sanitation for 2011 household numbers?", "According to the Census, the required expenditure is 21.7 times the amount spent from 1999 till 2011 (Rs 445.7 crores). According to TSC Actual data, it is 9.4 times.", "Assuming the same rate of population growth, by 2022 there will be 157.12 lakh rural households. The scheme needs to acknowledge population trends and revise project objectives to receive the right amount of incentives."],
-		'IWP'    : 'true'					
+		'slideshare':'https://onedrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21130&authkey=ANcrWIQwOv0tQWU&em=2',
+    'IWP'    : 'true'					
   }),
   dorling_story({
     'menu'   : 'State',
@@ -1260,7 +1275,8 @@ var stories = [
 		'cen_t'  : "In 2001, the difference in the number of households without toilets between Census and rural sanitation scheme (TSC) was 0.011 lakhs. In 2011, the difference had grown to 56.51 lakhs.",
 		'cen_b'  : ["According to census data, only 38 percent of rural households had access to toilets in 2011. According to TSC the number is considerably larger: 78 percent.", "The 2011 census indicates an increase in rural households by 18 percent, from 109.94 lakhs in 2001 to 130.17 lakhs in 2011. However, TSC has kept this figure constant at 2001 numbers. Thus, when census rural population numbers for 2011 are used to calculate achievement (TSC Actual), TSC's total achievement falls to 65.9 percent."],
 		'cen_c'  : ["How much more money needs to be spent to achieve total sanitation by 2011 household numbers?", "According to the Census, the required expenditure is 26.5 times the amount spent from 1999 till 2011 (Rs 305.1 crores). According to TSC Actual data, it is 14.6 times.", "Assuming the same rate of population growth, by 2022 there will be 156.74 lakh rural households. The scheme needs to acknowledge population trends and revise project objectives to receive the right amount"],
-		'IWP'    : 'true'					
+		'slideshare':'https://onedrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21130&authkey=ANcrWIQwOv0tQWU&em=2',
+    'IWP'    : 'true'					
   }),
   dorling_story({
     'menu'   : 'State',
@@ -1293,7 +1309,8 @@ var stories = [
     'cen_t'  : "In 2001, the difference in the number of households without toilets between Census and rural sanitation scheme (TSC) was (0.0001) lakhs, with Census reporting marginally less number of households without toilets. In 2011, the difference between Census and TSC had grown significantly with Census reporting 0.470 lakhs more households without toilets than TSC.",
     'cen_b'  : ["According to census data, only 86 percent of rural households had access to toilets in 2011. According to TSC achievement is a 100 percent.", "The 2011 census indicates an increase of 13 percent in rural households from 2.96 lakhs in 2001 to 3.36 lakhs in 2011. However, TSC has kept this figure constant at 2001 numbers. Thus, when census rural population numbers for 2011 are used to calculate achievement (TSC Actual), TSC's total achievement falls to 88.3 percent."],
     'cen_c'  : ["How much more money needs to be spent to achieve total sanitation for 2011 household numbers?", "According to the Census, the required expenditure is 5 times the amount spent from 1999 till 2011 (Rs 9.3 crores). According to TSC Actual data, it is 4.2 times.", "Assuming the same rate of population growth, by 2022 there will be 3.85 lakh households. The scheme needs to acknowledge population trends and revise project objectives to receive the right amount of incentives."],
-		'IWP'    : 'true'					
+		'slideshare':'https://onedrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21130&authkey=ANcrWIQwOv0tQWU&em=2',
+    'IWP'    : 'true'					
   }),
   dorling_story({
     'menu'   : 'State',
@@ -1326,7 +1343,8 @@ var stories = [
     'cen_t'  : "In 2001, the difference in the number of households without toilets between Census and rural sanitation scheme (TSC) was (0.00002) lakhs, with Census reporting marginally less households without toilets. In 2011, Census reported 1.638 lakhs more households without toilets than TSC.",
     'cen_b'  : ["According to census data, only 53.9 percent of rural households had access to toilets in 2011. According to TSC achievement is 90.7 percent.", "The 2011 census indicates an increase of 28 percent in rural households from 3.30 lakhs in 2001 to 4.22 lakhs in 2011. However, TSC has kept this figure constant at 2001 numbers. Thus, when census rural population numbers for 2011 are used to calculate achievement (TSC Actual), TSC's total achievement falls to 70.8 percent."],
     'cen_c'  : ["How much more money needs to be spent to achieve total sanitation for 2011 household numbers?", "According to the Census, the required expenditure is 7.7 times the amount spent from 1999 till 2011 (Rs 25.2 crores). According to TSC Actual data, it is 4.9 times.", "Assuming the same rate of population growth, by 2022 there will be 5.54 lakh households. The scheme needs to acknowledge population trends and revise project objectives to receive the right amount of incentives."],
-		'IWP'    : 'true'					
+		'slideshare':'https://onedrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21130&authkey=ANcrWIQwOv0tQWU&em=2',
+    'IWP'    : 'true'					
   }),
   dorling_story({
     'menu'   : 'State',
@@ -1359,7 +1377,8 @@ var stories = [
     'cen_t'  : "In 2001, the difference in the number of households without toilets between Census and rural sanitation scheme (TSC) was 0.0003 lakhs. In 2011, the difference had grown to 0.16 lakhs.",
     'cen_b'  : ["According to census data, only 84.6 percent of rural households had access to toilets in 2011. According to TSC achievement is a 100 percent.", "The 2011 census indicates an increase of 32 percent in rural households from 0.79 lakhs in 2001 to 1.05 lakhs in 2011. However, TSC has kept this figure constant at 2001 numbers. Thus, when census rural population numbers for 2011 are used to calculate achievement (TSC Actual), TSC's total achievement falls to 75.7 percent."],
     'cen_c'  : ["How much more money needs to be spent to achieve total sanitation for 2011 household numbers?", "According to the Census, the required expenditure is 1.8 times the amount spent from 1999 till 2011 (Rs 8.8 crores). According to TSC Actual data, it is 2.9 times.", "Assuming the same rate of population growth, by 2022 there will be 1.43 lakh households. The scheme needs to acknowledge population trends and revise project objectives to receive the right amount of incentives."],
-		'IWP'    : 'true'					
+		'slideshare':'https://onedrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21130&authkey=ANcrWIQwOv0tQWU&em=2',
+    'IWP'    : 'true'					
   }),
   dorling_story({
     'menu'   : 'State',
@@ -1392,7 +1411,8 @@ var stories = [
     'cen_t'  : "In 2001, the difference in the number of households without toilets between Census and rural sanitation scheme (TSC) was 0.001 lakhs. In 2011, the difference had grown to 0.76 lakhs.",
     'cen_b'  : ["According to census data, only 69.2 percent of rural households had access to toilets in 2011. According to TSC achievement is considerably larger: 95.4 percent.", "The 2011 census indicates an increase of 7 percent in rural households from 2.65 lakhs in 2001 to 2.85 lakhs in 2011. However, TSC has kept this figure constant at 2001 numbers. Thus, when census rural population numbers for 2011 are used to calculate achievement (TSC Actual), TSC's total achievement falls to 88.9 percent."],
     'cen_c'  : ["How much more money needs to be spent to achieve total sanitation for 2011 household numbers?", "According to the Census, the required expenditure is 5.7 times the amount spent from 1999 till 2011 (Rs 15.4 crores). According to TSC Actual data, it is 2.1 times.", "Assuming the same rate of population growth, by 2022 there will be 3.08 lakh households. The scheme needs to acknowledge population trends and revise project objectives to receive the right amount of incentives."],
-		'IWP'    : 'true'					
+		'slideshare':'https://onedrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21130&authkey=ANcrWIQwOv0tQWU&em=2',
+    'IWP'    : 'true'					
   }),
   dorling_story({
     'menu'   : 'State',
@@ -1425,7 +1445,8 @@ var stories = [
     'cen_t'  : "In 2001, the difference in the number of households without toilets between Census and rural sanitation scheme (TSC) was 0.009 lakhs. In 2011, the difference had grown to 42.09 lakhs.",
     'cen_b'  : ["According to census data, only 14.1 percent of rural households had access to toilets in 2011. According to TSC achievement is considerably larger: 58.9 percent.", "The 2011 census indicates an increase of 20 percent in rural households from 67.83 lakhs in 2001 to 81.44 lakhs in 2011. However, TSC has kept this figure constant at 2001 numbers. Thus, when census rural population numbers for 2011 are used to calculate achievement (TSC Actual), TSC's total achievement falls to 49.1 percent."],
     'cen_c'  : ["How much more money needs to be spent to achieve total sanitation for 2011 household numbers?", "According to the Census, the required expenditure is 26.1 times the amount spent from 1999 till 2011 (Rs 268.5 crores). According to TSC Actual data, it is 15.4 times.", "Assuming the same rate of population growth, by 2022 there will be 99.59 lakh households. The scheme needs to acknowledge population trends and revise project objectives to receive the right amount of incentives."],
-		'IWP'    : 'true'					
+		'slideshare':'https://onedrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21130&authkey=ANcrWIQwOv0tQWU&em=2',
+    'IWP'    : 'true'					
   }),
   dorling_story({
     'menu'   : 'State',
@@ -1455,7 +1476,8 @@ var stories = [
 		'range'	 : [0.6, 1],
 		'percent': [1, 37, 70, 95],
     'pertext': [0, 50, 100, 200],
-		'IWP'    : 'true'					
+		'slideshare':'https://onedrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21130&authkey=ANcrWIQwOv0tQWU&em=2',
+    'IWP'    : 'true'					
   }),
   dorling_story({
     'menu'   : 'State',
@@ -1488,7 +1510,8 @@ var stories = [
     'cen_t'  : "In 2001, the difference in the number of households without toilets between Census and rural sanitation scheme (TSC) was 0.0036 lakhs. In 2011, the difference had grown to 3.57 lakhs.",
     'cen_b'  : ["According to census data, only 70.4 percent of rural households had access to toilets in 2011. According to TSC achievement is 77.5 percent.", "The 2011 census indicates an increase of 19 percent in rural households from 27.75 lakhs in 2001 to 33.16 lakhs in 2011. However, TSC has kept this figure constant at 2001 numbers. Thus, when census rural population numbers for 2011 are used to calculate achievement (TSC Actual), TSC's total achievement falls to 64.9 percent."],
     'cen_c'  : ["How much more money needs to be spent to achieve total sanitation for 2011 household numbers?", "According to the Census, the required expenditure is 298.3 times the amount spent from 1999 till 2011 (Rs 3.3 crores). According to TSC Actual data, it is 353.8 times.", "Assuming the same rate of population growth, by 2022 there will be 40.32 lakh households. The scheme needs to acknowledge population trends and revise project objectives to receive the right amount of incentives."],
-		'IWP'    : 'true'					
+		'slideshare':'https://onedrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21130&authkey=ANcrWIQwOv0tQWU&em=2',
+    'IWP'    : 'true'					
   }),
   dorling_story({
     'menu'   : 'State',
@@ -1521,7 +1544,8 @@ var stories = [
     'cen_t'  : "In 2001, the difference in the number of households without toilets between Census and rural sanitation scheme (TSC) was 0.005 lakhs. In 2011, the difference had grown to 50.27 lakhs.",
     'cen_b'  : ["According to census data, only 19.6 percent of rural households had access to toilets in 2011. According to TSC achievement is considerably larger: 63.6 percent.", "The 2011 census indicates an increase of 33 percent in rural households from 71.57 lakhs in 2001 to 94.90 lakhs in 2011. However, TSC has kept this figure constant at 2001 numbers. Thus, when census rural population numbers for 2011 are used to calculate achievement (TSC Actual), TSC's total achievement falls to 48 percent."],
     'cen_c'  : ["How much more money needs to be spent to achieve total sanitation for 2011 household numbers?", "According to the Census, the required expenditure is 85 times the amount spent from 1999 till 2011 (Rs 89.7 crores). According to TSC Actual data, it is 55 times.", "Assuming the same rate of population growth, by 2022 there will be 129.45 lakh households. The scheme needs to acknowledge population trends and revise project objectives to receive the right amount of incentives."],
-		'IWP'    : 'true'					
+		'slideshare':'https://onedrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21130&authkey=ANcrWIQwOv0tQWU&em=2',
+    'IWP'    : 'true'					
   }),
   dorling_story({
     'menu'   : 'State',
@@ -1554,7 +1578,8 @@ var stories = [
     'cen_t'  : "In 2001, the difference in the number of households without toilets between Census and rural sanitation scheme (TSC) was (0.0005) lakhs, with Census reporting marginally less household without toilets. In 2011, Census reported 0.15 lakhs more households without toilets than TSC.",
     'cen_b'  : ["According to census data, only 84.1 percent of rural households had access to toilets in 2011. According to TSC achievement is a 100 percent.", "The 2011 census indicates an increase of 1 percent in rural households from 0.917 lakhs in 2001 to 0.924 lakhs in 2011. However, TSC has kept this figure constant at 2001 numbers. Thus, when census rural population numbers for 2011 are used to calculate achievement (TSC Actual), TSC's total achievement falls to 99.3 percent."],
     'cen_c'  : ["How much more money needs to be spent to achieve total sanitation for 2011 household numbers?", "According to the Census, the required expenditure is 0.8 times the amount spent from 1999 till 2011 (Rs 19.4 crores). According to TSC Actual data, it is 0.03 times.", "Assuming the same rate of population growth, by 2022 there will be 0.93 lakh households. The scheme needs to acknowledge population trends and revise project objectives to receive the right amount of incentives."],
-		'IWP'    : 'true'					
+		'slideshare':'https://onedrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21130&authkey=ANcrWIQwOv0tQWU&em=2',
+    'IWP'    : 'true'					
   }),
   dorling_story({
     'menu'   : 'State',
@@ -1587,7 +1612,8 @@ var stories = [
     'cen_t'  : "In 2001, the difference in the number of households without toilets between Census and rural sanitation scheme (TSC) was (0.03) lakhs, with Census reporting marginally less households without toilets. In 2011, Census reported 70.69 lakhs more households without toilets than TSC.",
     'cen_b'  : ["According to census data, only 23.2 percent of rural households had access to toilets in 2011. According to TSC the number is considerably larger: 96.7 percent.", "The 2011 census indicates an increase of 16 percent in rural households from 82.75 lakhs in 2001 to 95.64 lakhs in 2011. However, TSC has kept this figure constant at 2001 numbers. Thus, when census rural population numbers for 2011 are used to calculate achievement (TSC Actual), TSC's total achievement falls to 83.6 percent."],
     'cen_c'  : ["How much more money needs to be spent to achieve total sanitation for 2011 households?", "According to the Census, the required expenditure is 16.6 times the amount spent from 1999 till 2011 (Rs 441.5 crores). According to TSC Actual data, it is 3.5 times.", "Assuming the same rate of population growth, by 2022 there will be 112.15 lakh households. The scheme needs to acknowledge population trends and revise project objectives to receive the right amount of incentives."],
-		'IWP'    : 'true'					
+		'slideshare':'https://onedrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21130&authkey=ANcrWIQwOv0tQWU&em=2',
+    'IWP'    : 'true'					
   }),
   dorling_story({
     'menu'   : 'State',
@@ -1620,7 +1646,8 @@ var stories = [
     'cen_t'  : "In 2001, the difference in the number of households without toilets between Census and rural sanitation scheme (TSC) was 0.001 lakhs. In 2011, the difference had grown to 1.12 lakhs.",
     'cen_b'  : ["According to census data, only 81.5 percent of rural households had access to toilets in 2011. According to TSC achievement is a 100 percent.", "The 2011 census indicates an increase of 13 percent in rural households from 5.40 lakhs in 2001 to 6.08 lakhs in 2011. However, TSC has kept this figure constant at 2001 numbers. Thus, when census rural population numbers for 2011 are used to calculate achievement (TSC Actual), TSC's total achievement falls to 88.8 percent."],
     'cen_c'  : ["How much more money needs to be spent to achieve total sanitation for 2011 household numbers?", "According to the Census, the required expenditure is 2.6 times the amount spent from 1999 till 2011 (Rs 43.5 crores). According to TSC Actual data, it is 1.6 times.", "Assuming the same rate of population growth, by 2022 there will be 6.93 lakh households. The scheme needs to acknowledge population trends and revise project objectives to receive the right amount of incentives."],  
-		'IWP'    : 'true'					
+		'slideshare':'https://onedrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21130&authkey=ANcrWIQwOv0tQWU&em=2',
+    'IWP'    : 'true'					
   }),
   dorling_story({
     'menu'   : 'State',
@@ -1653,7 +1680,8 @@ var stories = [
     'cen_t'  : ["In 2001, the difference in the number of households without toilets between Census and rural sanitation scheme (TSC) was 0.05 lakhs. In 2011, the difference had grown to 192.4 lakhs. "], 
 		'cen_b'  : ["According to census data, only 21.8 percent of rural households had access to toilets in 2011. According to TSC achievement is considerably larger: 96.7 percent.", "The 2011 census indicates an increase of 24 percent in rural households from 205.90 lakhs in 2001 to 254.75 lakhs in 2011. However, TSC has kept this figure constant at 2001 numbers. Thus, when census rural population numbers for 2011 are used to calculate achievement (TSC Actual), TSC's total achievement falls to 78.1 percent. "],
 		'cen_c'  : ["How much more money needs to be spent to achieve total sanitation for 2011 household numbers?", "According to the Census, the required expenditure is 11.3 times the amount spent from 1999 till 2011 (Rs 1759.9 crores). According to TSC Actual data, it is 3.2 times. "],
-		'IWP'    : 'true'					
+		'slideshare':'https://onedrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21130&authkey=ANcrWIQwOv0tQWU&em=2',
+    'IWP'    : 'true'					
   }),
   dorling_story({
     'menu'   : 'State',
@@ -1686,7 +1714,8 @@ var stories = [
     'cen_t'  : "In 2001, the difference in the number of households without toilets between Census and rural sanitation scheme (TSC) was 0.0001 lakhs. In 2011, the difference had grown to 4.22 lakhs.", 
     'cen_b'  : ["According to census data, only 54.1 percent of rural households had access to toilets in 2011. According to TSC achievement is 81.4 percent.", "The 2011 census indicates an increase of 17 percent in rural households from 11.96 lakhs in 2001 to 14.05 lakhs in 2011. However, TSC has kept this figure constant at 2001 numbers. Thus, when census rural population numbers are used to calculate achievement (TSC Actual), TSC's total achievement falls to 69.3 percent."],
     'cen_c'  : ["How much more money needs to be spent to achieve total sanitation for 2011 household numbers?", "According to the Census, the required expenditure is 14.8 times the amount spent from 1999 till 2011 (Rs 43.6 crores). According to TSC Actual data, it is 9.9 times.", "Assuming the same rate of population growth, by 2022 there will be 16.77 lakh households. The scheme needs to acknowledge population trends and revise project objectives to receive the right amount of incentives."], 
-		'IWP'    : 'true'					
+		'slideshare':'https://onedrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21130&authkey=ANcrWIQwOv0tQWU&em=2',
+    'IWP'    : 'true'					
   }),
   dorling_story({
     'menu'   : 'State',
@@ -1719,7 +1748,8 @@ var stories = [
     'cen_t'  : "In 2001, the difference in the number of households without toilets between Census and rural sanitation scheme (TSC) was 0.03 lakhs. In 2011, the difference had grown to 73.11 lakhs.",
 	  'cen_b'  : ["According to census data, only 46.7 percent of rural households had access to toilets in 2011. According to TSC achievement is a 100 percent.", "The 2011 census indicates an increase of 23 percent in rural households from 111.62 lakhs in 2001 to 137.17 lakhs in 2011. However, TSC has kept this figure constant at 2001 numbers. Thus, when census rural population numbers for 2011 are used to calculate achievement (TSC Actual), TSC’s total achievement falls to 81.4 percent."],
 		'cen_c'  : ["How much more money needs to be spent to achieve total sanitation for 2011 household numbers?", "According to the Census, the required expenditure is 18.9 times the amount spent from 1999 till 2011 (Rs 387.2 crores). According to TSC Actual data, it is 6.6 times.", "Assuming the same rate of population growth, by 2022 there will be 172.09 lakh households. The scheme needs to acknowledge population trends and revise project objectives to receive the right amount of incentives."],
-		'IWP'    : 'true'					
+		'slideshare':'https://onedrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21130&authkey=ANcrWIQwOv0tQWU&em=2',
+    'IWP'    : 'true'					
   })
 ];
 // List of the historical data files, latest on top
