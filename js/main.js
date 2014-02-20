@@ -2,6 +2,7 @@
 //var iwp = 'www.indiawaterportal.org';
 var host = window.location.href;
 var iwp = 'http://arghyam.github.io/arghyam-scrapers/?#';
+//var iwp = 'http://localhost/arghyam/arghyam-scrapers/?#';
 console.log(host);
 var slides = [];
 d3.selectAll('.tooltip').remove();
@@ -1532,27 +1533,27 @@ function draw_dorlingCart(story) {   // census 2001 vs 2011
 		.data(story.pertext) 
     .text(function(d){ return d; })
     .style('fill', function(d, i){ return i == 3 ? 'white' : 'black';});
-	var svg = d3.select('#chart'),
-	width = parseInt(svg.style('width')),
+	var svg = d3.select('#chart');
+			svg.style('border', function(){ return window.location.search == '?embed=1' ?  '1px solid #fff' : '1px solid #ddd';});
+	var width = parseInt(svg.style('width')),
 	height = parseInt(svg.style('height')),
 	nodes = [], node = [], centered;
-	svg.style('border', function(){ return window.location.search == '?embed=1' ?  '1px solid #fff' : '1px solid #ddd';});
 	var projection = d3.geo.mercator()
 			.scale(width*5.5)
-			.translate([-width+230, height+100]),
-	path = d3.geo.path()
-			.projection(projection),					
-	topomaps = [];		
+			.translate([-width+230, height+100]);			
+	var path = d3.geo.path()
+			.projection(projection);					
+	var topomaps = [];		
 	d3.select('#brought').style('display', function(){ return window.location.search == '?embed=1' ? 'block' : 'none';});	
 	d3.csv(story.data || datafile(), function(data) {
 		svg.selectAll('*').remove();
 		if(story.data){ $('#data_cont').hide(); d3.select('#data').attr('href', story.data); } else { $('#data_cont').show();}
 		var subset = initchart(story, data),		
-	  legend = d3.select('.legend.dorlingCart'),
-		select = legend.append('select').attr('class', 'states'),
+	  legend = d3.select('.legend.dorlingCart');
+		legend.selectAll('*').remove();
+		var select = legend.append('select').attr('class', 'states'),
     subselect = legend.append('select').attr('class', 'districts'),
 		groups = _.uniq(_.pluck(subset, story.group[0]));
-		legend.selectAll('*').remove();		
     groups.unshift('select State');
 		result = _.filter(subset, function(d){ return d.State_Name == groups && !d.District_Name.match(/^Total/); });
 		select.selectAll('option')
@@ -1561,9 +1562,9 @@ function draw_dorlingCart(story) {   // census 2001 vs 2011
 				.append('option')
 				.text(String);
 		select.on('change', function(d){ 
+				var group = d3.select(this).property('value');			
 				d3.selectAll('.tooltip').remove();
-				var group = d3.select(this).property('value'),				
-				result = _.filter(subset, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); });
+				var result = _.filter(subset, function(d){ return d.State_Name == group && !d.District_Name.match(/^Total/); });
 				result.unshift({"District_Name":"select District"});
 				subselect.selectAll('option').remove();
 				subselect.selectAll('option')
@@ -1575,7 +1576,7 @@ function draw_dorlingCart(story) {   // census 2001 vs 2011
 		});
 		var nested_data = d3.nest()
 				.key(function(d){ return d[story.group[0]]; })
-				.rollup(function(rows){ return { 'cen2011'  : d3.sum(rows, function(d){ return d[story.size]; }),
+				.rollup(function(rows){ return { 'cen2011': d3.sum(rows, function(d){ return d[story.size]; }),
 																				 'cen2001%' : d3.sum(rows, function(d){ return d[story.cen2001];}),
 																				 'cen2011%' : d3.sum(rows, function(d){ return d[story.cen2011];})
 																			 } 
@@ -1676,9 +1677,9 @@ function draw_dorlingCart(story) {   // census 2001 vs 2011
 			subselect.on('change', function(d){
 				d3.selectAll('.tooltip').remove();
 				svg.selectAll('.distCircs').classed('mark', false);
-				var group = select.property('value');
-				var subgroup = d3.select(this).property('value');
-				var details = svg.selectAll('.distCircs[data-q="' + group + '"][data-r="' + subgroup + '"]').classed('mark', true).text();
+				var group = select.property('value'),
+				subgroup = d3.select(this).property('value'),
+				details = svg.selectAll('.distCircs[data-q="' + group + '"][data-r="' + subgroup + '"]').classed('mark', true).text();
 				$('#copy_title').val(details);
 				$('#copy_title').on('mouseover', function(){ $(this).select(); });	
 				$('.mark').tooltip({ title:function(){ return $('.mark title').text(); }, trigger:'focus', container:'body' }).tooltip('show');						
