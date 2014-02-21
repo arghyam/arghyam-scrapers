@@ -1576,9 +1576,12 @@ function draw_dorlingCart(story) {   // census 2001 vs 2011
 		});
 		var nested_data = d3.nest()
 				.key(function(d){ return d[story.group[0]]; })
-				.rollup(function(rows){ return { 'cen2011': d3.sum(rows, function(d){ return d[story.size]; }),
-																				 'cen2001%' : d3.sum(rows, function(d){ return d[story.cen2001];}),
-																				 'cen2011%' : d3.sum(rows, function(d){ return d[story.cen2011];})
+				.rollup(function(rows){ return { 'C2011'   : d3.sum(rows, function(d){ return d[story.size]; }),
+																				 'cen2011' : d3.sum(rows, function(d){ return d[story.cen2011];}),	
+																				 'cen2001' : d3.sum(rows, function(d){ return d[story.cen2001];}),
+																				 'trh2011' : d3.sum(rows, function(d){ return d[story.trh2011];}),
+																				 'trh2001' : d3.sum(rows, function(d){ return d[story.trh2001];}),
+																				 'diff'    : d3.mean(rows, function(d){ return d[story.diff];})
 																			 } 
 				})
 				.entries(subset);
@@ -1618,18 +1621,19 @@ function draw_dorlingCart(story) {   // census 2001 vs 2011
 						.enter().append('circle')						
 							.attr({ class: 'statCircs', cx: function(d) { return d.x; }, cy: function(d) { return d.y; } })
 							.data(nested_data)
-							.attr({ 'data-q': function(d){ return d.key; }, r: function(d){ return Math.pow(d.values['cen2011'], 1/6) ; }, 
-											fill: function(d){ return colorDorCart(1 - d.values['cen2001%']/d.values['cen2011%']).replace(/NaNNaNNaN/i, 'eee');}	
+							.attr({ 'data-q': function(d){ return d.key; }, r: function(d){ return Math.pow(d.values['C2011'], 1/6) ; }, 
+											fill: function(d){ return colorDorCart(d.values['diff']).replace(/NaNNaNNaN/i, 'eee');}	
               })
 							.on('mouseover', function(){
 								var details = d3.select(this).text(); 
 								$('#copy_title').val(details).select();	
 							})
 							.append('title')
-							.text(function(d){ return d.key+' : '+story.area[0]+ ' = '+N(d.values['cen2011']) +'. ' 
-								+story.num[0]+' = '+N(d.values['cen2001%'])+'. '
-								+story.den[0]+' = '+N(d.values['cen2011%'])+'. '
-							  +'%'+story.den[0]+' - %'+story.num[0]+' = '+(1 - d.values['cen2001%']/d.values['cen2011%']);									 
+							.text(function(d){ return d.key+' : '+story.area[0]+ ' = '+N(d.values['C2011']) +'. ' 
+								+story.num[0]+' = '+N(d.values['cen2011'])+'. '
+								+story.den1[0]+' = '+N(d.values['trh2001'])+'. '
+								+story.num1[0]+' = '+N(d.values['cen2001'])+'. '
+							  +story.cen2011_2001[0]+' = '+d.values['diff'];									 
               });
 					node = g.selectAll('.distCircs')
 							.data(geo)
@@ -1639,7 +1643,7 @@ function draw_dorlingCart(story) {   // census 2001 vs 2011
 							})
 							.data(subset)
 							.attr({ r: function(d){ return Math.pow(d[story.size], 1/12 );}, 'stroke': '#000', 'stroke-width': 0.25,
-											fill: function(d){ return colorDorCart(1 - d[story.cen2001] / d[story.cen2011]).replace(/NaNNaNNaN/i, 'eee'); },
+											fill: function(d){ return colorDorCart(d[story.diff]).replace(/NaNNaNNaN/i, 'eee'); },
 											'data-q': function(d){ return d.State_Name; }, 'data-r': function(d){ return d.District_Name; }											
 							})							
 							.on('mouseover', function(){
@@ -1648,10 +1652,11 @@ function draw_dorlingCart(story) {   // census 2001 vs 2011
 							});
 					node.append('title')
 							.text(function(d){ return d.State_Name +' - '+d.District_Name+': '
-								  +story.area[0]+ ' = '+N(d[story.area[1]]) +'. ' 
-									+story.num[0]+' = '+N(d[story.cen2001])+'. '
-									+story.den[0]+' = '+N(d[story.cen2011])+'. '
-									+'%'+story.den[0]+' - %'+story.num[0]+' = '+(1 - d[story.cen2001]/d[story.cen2011]);									 									
+								  +story.area[0]+ ' = '+N(d[story.size]) +'. ' 
+									+story.num[0]+' = '+N(d[story.cen2011])+'. '
+									+story.den1[0]+' = '+N(d[story.trh2001])+'. '
+									+story.num1[0]+' = '+N(d[story.cen2001])+'. '
+									+story.cen2011_2001[0]+' = '+d[story.diff];									 									
 							});
 				});
 		});		

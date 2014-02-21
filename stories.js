@@ -304,8 +304,10 @@ function dorlingCart_story(story){
     story.filter = function(d) { return d.District_Name.match(/^[A-Z]/); };
 		story.size = story.area[1];
 		story.diff = story.cen2011_2001[1];
-		story.cen2001 = story.num[1];
-		story.cen2011 = story.den[1];
+		story.cen2011 = story.num[1];
+		story.trh2011 = story.den[1];
+    story.cen2001 = story.num1[1];
+    story.trh2001 = story.den1[1];
 		return story;
 }
 
@@ -726,12 +728,14 @@ var stories = [
 		'data'   : 'aggregated_census_data.csv',
 		'url'    : ['TBD'],
 		'group'  : ['State_Name'],
-		'cols'   : ['Census_2011_Total_Rural_Households','Census_2001_IHHL','Census_2011_IHHL'],
+		'cols'   : ['Census_2001_Total_Rural_Households','Census_2011_Total_Rural_Households','Census_2001_IHHL','Census_2011_IHHL'],
     'area'   : ['Census 2011 Total Rural Households', 'Census_2011_Total_Rural_Households'],
-		'cen2011_2001' : ['%census 2011 - %census 2001', '%Census_2011_IHHL - %Census_2001_IHHL'],
-		'num'    : ['Census 2001 Households with toilets', 'Census_2001_IHHL'],
-		'den'    : ['Census 2011 Households with toilets', 'Census_2011_IHHL'],
-		'R'      : 40,
+		'cen2011_2001' : ['Difference between Census 2011 with toilets and Census 2001 with toilets', 'C2011/TRH2011-C2001/TRH2001'],
+		'num'    : ['Census 2011 Households with toilets', 'Census_2011_IHHL'],
+		'den'    : ['Census 2011 Total Rural Households', 'Census_2011_Total_Rural_Households'],
+		'num1'   : ['Census 2001 Households with toilets', 'Census_2001_IHHL'],
+    'den1'   : ['Census 2001 Total Rural Households', 'Census_2001_Total_Rural_Households'],
+    'R'      : 40,
 		'grad'   : 'gradient_legend_dorCart',
 		'percent': [1, 50, 98],
 		'pertext': [-1, 0, 1],
