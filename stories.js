@@ -11,7 +11,7 @@ var	colorsSocP = d3.scale.linear()
 var colorDorCart = d3.scale.linear()
 		.clamp(true)
 		.domain([-1, 0, 1])
-    .range(['#D73027', '#FFFFBF', '#1A9850']);		
+    .range(['#D73027', '#FFFFBF', '#1A9850']); 		
 		
 var colorDor = d3.scale.linear()
 		.clamp(true)
@@ -1758,6 +1758,7 @@ var stories = [
 ];
 // List of the historical data files, latest on top
 var datafiles = [
+  'data-23-Feb-2014.csv',
   'data-16-Feb-2014.csv',
   'data-09-Feb-2014.csv',
   'data-02-Feb-2014.csv',
