@@ -1633,7 +1633,7 @@ function draw_dorlingCart(story) {   // census 2001 vs 2011
 								+story.num[0]+' = '+N(d.values['cen2011'])+'. '
 								+story.den1[0]+' = '+N(d.values['trh2001'])+'. '
 								+story.num1[0]+' = '+N(d.values['cen2001'])+'. '
-							  +story.cen2011_2001[0]+' = '+d.values['diff'];									 
+							  +story.cen2011_2001[0]+' = '+P(d.values['diff']);									 
               });
 					node = g.selectAll('.distCircs')
 							.data(geo)
@@ -1656,7 +1656,7 @@ function draw_dorlingCart(story) {   // census 2001 vs 2011
 									+story.num[0]+' = '+N(d[story.cen2011])+'. '
 									+story.den1[0]+' = '+N(d[story.trh2001])+'. '
 									+story.num1[0]+' = '+N(d[story.cen2001])+'. '
-									+story.cen2011_2001[0]+' = '+d[story.diff];									 									
+									+story.cen2011_2001[0]+' = '+P(d[story.diff]);									 									
 							});
 				});
 		});		

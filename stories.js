@@ -10,7 +10,7 @@ var	colorsSocP = d3.scale.linear()
 
 var colorDorCart = d3.scale.linear()
 		.clamp(true)
-		.domain([-1, 0, 1])
+		.domain([-0.5, 0, 0.5])
     .range(['#D73027', '#FFFFBF', '#1A9850']); 		
 		
 var colorDor = d3.scale.linear()
@@ -737,8 +737,8 @@ var stories = [
     'den1'   : ['Census 2001 Total Rural Households', 'Census_2001_Total_Rural_Households'],
     'R'      : 40,
 		'grad'   : 'gradient_legend_dorCart',
-		'percent': [1, 50, 98],
-		'pertext': [-1, 0, 1],
+		'percent': [1, 50, 96],
+		'pertext': ['-50%', '0', '50%'],
 		'IWP'    : 'false'
   }),
   dorling_story({
