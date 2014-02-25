@@ -22,6 +22,7 @@ var colorDor = d3.scale.linear()
 var F = d3.format(',.0f'); // Float
 var N = d3.format(',.0f'); // Number == int
 var P = d3.format('.1%');  // Percent
+var P2 = d3.format('.2%');  // Percent
 var options = {'Money Spent':
                 ['Spending on rural sanitation', 
                  'Money spent on building toilets for the rural poor', 

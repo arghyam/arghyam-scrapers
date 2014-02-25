@@ -1706,7 +1706,6 @@ function datachanges(){
 		prev_data = _.filter(data, function(d){ return d.Date == dates[1];});
 		draw_table(filtered_data, prev_data);
 		select_date.on('change', function(d, i){
-			//$('.loader').show();
 			dt = d3.select(this).property('value'), filtered_data = [];
 			index = dates.indexOf(dt);
 			prevdate = dates[index+1];					
@@ -1773,40 +1772,36 @@ function datachanges(){
 			headtr.append('th').text('STATE').style({'padding-left':'15px','background': '#000', 'color':'#fff'});
 			bodytr.append('td').style({'min-width':'120px','max-width':'120px'}).text(String)
 				 .style({'text-indent':function(d){ return d.split(' ')[0] === '-' ? '15px' : ''; }, 'color': function(d){ return d.split(' ')[0] === '+' ? 'blue' : '#000';} , 'cursor': function(d){ return d.split(' ')[0] === '+' ? 'pointer' : 'auto';} });	
-			filtered_columns = [];			
 			for(i=0,len=columns.length; col=columns[i], i<len; i++) {
 				rows = [];
 				for(j=0,lens=nestedStateData.length; state = nestedStateData[j], j<lens; j++){
 					rows.push(state.values[col]);
 				}
 				if(d3.sum(rows) != 0){
-					filtered_columns.push(col);
 					headtr.append('td').style({'background': '#000', 'color':'#fff', 'border': '1px solid #fff'}).attr({'class': function(d){ return col.substring(0, 4);}}).append('div')
 				  	.attr({ class: 'tooltip1' , 'data-toggle':'tooltip', 'data-placement':'top', 'data-original-title': col.split('_').join(' ') })
 				  	.text(col.split('_')[0].substring(0,6)).style({'cursor':'context-menu'});   
 					$('.tooltip1').tooltip();
+					row_values = [], prev_row_values = [];
+					for(j=0, lenS=state_level_data.length; state=state_level_data[j], prev_state=prev_state_level_data[j], j<lenS; j++){
+						row_values.push(state.values[col]);
+						prev_row_values.push(prev_state.values[col]);
+						districts = _.filter(district_level_data, function(d){ return d.key.split(',')[0] == state.key ;});
+						prev_districts = _.filter(prev_district_level_data, function(d){ return d.key.split(',')[0] == state.key ;});
+						for(k=0, lenD=districts.length; dist=districts[k],prev_dist=prev_districts[k], k<lenD; k++){
+							row_values.push(dist.values[0][col]);
+							prev_row_values.push(prev_dist.values[0][col]);														
+						}
+					}	
+					curValues = [];				
+					td = bodytr.data(row_values).append('td')
+					 		.style({'border': '1px solid #fff', 'color':'#000', 'background' : function(d){  curValues.push(d); return d == 'Infinity' ? '#ddd' : d == 0 ? '#fc8d59' : '#91cf60'; } }) 
+					 		.attr('class', function(d, i){ return col.substring(0, 4); })
+							.data(prev_row_values)
+							.append('div').attr({ class: 'tooltip1' , 'data-toggle':'tooltip', 'data-placement':'bottom', 'data-original-title': function(d, i){ return 'Current value: '+P2(curValues[i]) + ' , Previous value: '+P2(d)+' , Difference: '+P2(curValues[i] - d)+'.'; } });
+					td.data(row_values).text(function(d){ return d == 'Infinity' ? '- - - -' : Number(d).toFixed(3); }); 		
+					$('.tooltip1').tooltip();				 
 				}
-			}
-			for(i=0, len=filtered_columns.length; col = filtered_columns[i], i<len; i++){
-				row_values = [], prev_row_values = [];
-				for(j=0, lenS=state_level_data.length; state=state_level_data[j], prev_state=prev_state_level_data[j], j<lenS; j++){
-					row_values.push(state.values[col]);
-					prev_row_values.push(prev_state.values[col]);
-					districts = _.filter(district_level_data, function(d){ return d.key.split(',')[0] == state.key ;});
-					prev_districts = _.filter(prev_district_level_data, function(d){ return d.key.split(',')[0] == state.key ;});
-					for(k=0, lenD=districts.length; dist=districts[k],prev_dist=prev_districts[k], k<lenD; k++){
-						row_values.push(dist.values[0][col]);
-						prev_row_values.push(prev_dist.values[0][col]);						
-					}
-				}
-				curValues = [];				
-				td = bodytr.data(row_values).append('td')
-				 		.style({'border': '1px solid #fff', 'color':'#000', 'background' : function(d){ curValues.push(d); return d == 'Infinity' ? '#ddd' : d == 0 ? '#fc8d59' : '#91cf60'; } }) //colorDataChange(d.values)
-				 		.attr('class', function(d, i){ return col.substring(0, 4); })
-						.data(prev_row_values)
-						.append('div').attr({ class: 'tooltip1' , 'data-toggle':'tooltip', 'data-placement':'bottom', 'data-original-title': function(d, i){ return 'Current value: '+Number(curValues[i])+', Previous value: '+Number(d)+', Difference: '+Number(curValues[i] - d); } });
-				td.data(row_values).text(function(d){ return d == 'Infinity' ? '- - - -' : Number(d).toFixed(3); }); 		
-				$('.tooltip1').tooltip();				 
 			}
 			$('table tr td.Cons').addClass('hide');
 			$('#perf_btn').click(function(){
