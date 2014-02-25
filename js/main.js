@@ -1796,7 +1796,7 @@ function datachanges(){
 					prev_districts = _.filter(prev_district_level_data, function(d){ return d.key.split(',')[0] == state.key ;});
 					for(k=0, lenD=districts.length; dist=districts[k],prev_dist=prev_districts[k], k<lenD; k++){
 						row_values.push(dist.values[0][col]);
-						prev_row_values.push(prev_dist.values[0][col]);
+						prev_row_values.push(prev_dist.values[0][col]);						
 					}
 				}
 				curValues = [];				
@@ -1804,7 +1804,7 @@ function datachanges(){
 				 		.style({'border': '1px solid #fff', 'color':'#000', 'background' : function(d){ curValues.push(d); return d == 'Infinity' ? '#ddd' : d == 0 ? '#fc8d59' : '#91cf60'; } }) //colorDataChange(d.values)
 				 		.attr('class', function(d, i){ return col.substring(0, 4); })
 						.data(prev_row_values)
-						.append('div').attr({ class: 'tooltip1' , 'data-toggle':'tooltip', 'data-placement':'bottom', 'data-original-title': function(d, i){ return 'Current value: '+curValues[i]+', Previous value: '+d+', Difference: '+(curValues[i] - d); } });
+						.append('div').attr({ class: 'tooltip1' , 'data-toggle':'tooltip', 'data-placement':'bottom', 'data-original-title': function(d, i){ return 'Current value: '+Number(curValues[i])+', Previous value: '+Number(d)+', Difference: '+Number(curValues[i] - d); } });
 				td.data(row_values).text(function(d){ return d == 'Infinity' ? '- - - -' : Number(d).toFixed(3); }); 		
 				$('.tooltip1').tooltip();				 
 			}

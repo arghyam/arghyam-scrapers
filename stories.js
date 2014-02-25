@@ -730,7 +730,7 @@ var stories = [
 		'group'  : ['State_Name'],
 		'cols'   : ['Census_2001_Total_Rural_Households','Census_2011_Total_Rural_Households','Census_2001_IHHL','Census_2011_IHHL'],
     'area'   : ['Census 2011 Total Rural Households', 'Census_2011_Total_Rural_Households'],
-		'cen2011_2001' : ['Difference between Census 2011 with toilets and Census 2001 with toilets', 'C2011/TRH2011-C2001/TRH2001'],
+		'cen2011_2001' : ['Difference between Census 2011 Households with toilets and Census 2001 Households with toilets', 'C2011/TRH2011-C2001/TRH2001'],
 		'num'    : ['Census 2011 Households with toilets', 'Census_2011_IHHL'],
 		'den'    : ['Census 2011 Total Rural Households', 'Census_2011_Total_Rural_Households'],
 		'num1'   : ['Census 2001 Households with toilets', 'Census_2001_IHHL'],
