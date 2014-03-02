@@ -1462,8 +1462,15 @@ function draw_dorling(story) { // state pages
 		}else if(hashdec[2] == 'Census'){
 			d3.selectAll('#gradient_cont, #legend_cont, #download_cont, #source_cont, #source').style('display', 'none');
 			var statename = group.split(' ').join('');
-			d3.selectAll('#cenTitle, #despT, #chartT, #chartB, #despB, #despC, #chartC').selectAll('*').remove();
+			d3.selectAll('#svgcensus, #svgcensuslegend, #cenTitle, #despT, #chartT, #chartB, #despB, #despC, #chartC').selectAll('*').remove();
 			var despT = story.cen_t, despB = story.cen_b, despC = story.cen_c;
+			d3.select('#svgcensus')
+				.append('object')
+				.attr('data', 'census_svg/'+statename+'.svg')
+				.attr('width', 900)
+				.attr('height', 500);
+			 	//.attr('type', 'image/svg');		
+			d3.select('#svgcensuslegend').append('img').attr('src', 'census_svg/grad_legend_census.png') 		
 			d3.select('#cenTitle').text('Comparing Census and rural sanitation scheme (TSC) data');
 			d3.select('#despT').text(despT);
 			d3.select('#chartT').append('img').attr('src', 'pdf/T'+statename+'.png');
@@ -1718,6 +1725,7 @@ function datachanges(){
 			draw_table(filtered_data, prev_data);					 		
 		});
 		function draw_table(filtered_data, prev_data){			
+			$('.loader').show();
 			d3.select('#tableData').selectAll('*').remove();
 			nestedStateData = d3.nest()
 					.key(function(d){ return d.State_Name; })
