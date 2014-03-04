@@ -1704,25 +1704,35 @@ function datachanges(){
 	d3.csv('datachanges.csv', function(data){  
 		total_columns = d3.keys(data[0]),
 		columns = total_columns.splice(4, total_columns.length - 1); 
-		dates = _.uniq(_.pluck(data, 'Date')).reverse(),
-		select_date = d3.select('#date_changes');
+		dates = _.uniq(_.pluck(data, 'Date')), 
+		select_date = d3.select('#date_changes'),
+		month = [];	
+		for(d=0,ds=dates.length; date=dates[d], d<ds; d++){
+			month.push(date.slice(3, date.length));
+		}		
+		months = _.uniq(month).reverse();
 		select_date.selectAll('.options')
- 			.data(dates).enter().append('option').text(String);
- 		cdate = select_date.property('value'),
- 		filtered_data = _.filter(data, function(d){ return d.Date == cdate; }),
-		prev_data = _.filter(data, function(d){ return d.Date == dates[1];});
-		draw_table(filtered_data, prev_data);
+ 			.data(months).enter().append('option').text(String);
+ 		selected_date = select_date.property('value');
+ 		end_date = dates[dates.length-1]; 	
+ 		start_date = _.filter(dates, function(d){ return d.split('-')[1] == selected_date.split('-')[0];	});
+ 	 	filtered_data = _.filter(data, function(d){ return d.Date == end_date; });
+ 	 	prev_data = _.filter(data, function(d){ return d.Date == start_date[0];});
+ 	 	draw_table(filtered_data, prev_data);
 		select_date.on('change', function(d, i){
-			dt = d3.select(this).property('value'), filtered_data = [];
-			index = dates.indexOf(dt);
-			prevdate = dates[index+1];					
 			$('#perf_btn').removeClass('btn-primary');	
 		 	$('#perf_btn').removeClass('active');	
 			$('#fin_btn').addClass('btn-primary');	
 			$('#fin_btn').addClass('active');	
-			filtered_data = _.filter(data, function(d){ return d.Date == dt;}); 
-			prev_data = _.filter(data, function(d){ return d.Date == prevdate ;});
-			draw_table(filtered_data, prev_data);					 		
+		 	selected_date = d3.select(this).property('value');
+		 	start_date = _.filter(dates, function(d){ return d.split('-')[1] == selected_date.split('-')[0];	});
+		 	//console.log(start_date);
+		 	//console.log(start_date[0]);
+		 	end_date = start_date[start_date.length-1];
+		 	//console.log(end_date);
+		 	filtered_data = _.filter(data, function(d){ return d.Date == end_date; });
+ 	 		prev_data = _.filter(data, function(d){ return d.Date == start_date[0];});
+ 	 		draw_table(filtered_data, prev_data);			 		
 		});
 		function draw_table(filtered_data, prev_data){			
 			$('.loader').show();
@@ -1804,10 +1814,10 @@ function datachanges(){
 					curValues = [];				
 					td = bodytr.data(row_values).append('td')
 					 		.style({'border': '1px solid #fff', 'color':'#000', 'background' : function(d){  curValues.push(d); return d == 'Infinity' ? '#ddd' : d == 0 ? '#fc8d59' : '#91cf60'; } }) 
-					 		.attr('class', function(d, i){ return col.substring(0, 4); })
+					 		.attr('class', function(d, i){ return col.substring(0, 4); })							
 							.data(prev_row_values)
-							.append('div').attr({ class: 'tooltip1' , 'data-toggle':'tooltip', 'data-placement':'bottom', 'data-original-title': function(d, i){ return 'Current value: '+P2(curValues[i]) + ' , Previous value: '+P2(d)+' , Difference: '+P2(curValues[i] - d)+'.'; } });
-					td.data(row_values).text(function(d){ return d == 'Infinity' ? '- - - -' : Number(d).toFixed(3); }); 		
+							.append('div').attr({ class: 'tooltip1' , 'data-toggle':'tooltip', 'data-placement':'bottom', 'data-original-title': function(d, i){ return 'Current value ('+end_date+'): '+P2(curValues[i]) + ' , Previous value ('+start_date[0]+'): '+P2(d)+' , Difference: '+P2(curValues[i] - d)+'.'; } });
+					td.html('&nbsp;'); 		
 					$('.tooltip1').tooltip();				 
 				}
 			}
