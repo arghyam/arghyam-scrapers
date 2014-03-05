@@ -257,7 +257,7 @@ function draw(story) {
 			}	
 		}
  	});
-	if(window.location.search != '?embed=1'){
+	if(window.location.search != '?embed=1' && window.location.search != '#datachanges'){
 		if(story.slideshare){		
 			d3.select('#slideshare').style('display', 'block');
 			slides.push(story.slideshare);
