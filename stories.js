@@ -1759,6 +1759,7 @@ var stories = [
 ];
 // List of the historical data files, latest on top
 var datafiles = [
+  'data-02-Mar-2014.csv',
   'data-23-Feb-2014.csv',
   'data-16-Feb-2014.csv',
   'data-09-Feb-2014.csv',
