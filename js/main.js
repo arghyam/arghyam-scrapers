@@ -1466,11 +1466,11 @@ function draw_dorling(story) { // state pages
 			var despT = story.cen_t, despB = story.cen_b, despC = story.cen_c;
 			d3.select('#svgcensus')
 				.append('object')
-				.attr('data', 'census_svg/'+statename+'.svg')
+				.attr('data', 'census_svgs/'+statename+'.svg')
 				.attr('width', 900)
 				.attr('height', 500);
 			 	//.attr('type', 'image/svg');		
-			d3.select('#svgcensuslegend').append('img').attr('src', 'census_svg/grad_legend_census.png') 		
+			d3.select('#svgcensuslegend').append('img').attr('src', 'census_svgs/grad_legend_census.png') 		
 			d3.select('#cenTitle').text('Comparing Census and rural sanitation scheme (TSC) data');
 			d3.select('#despT').text(despT);
 			d3.select('#chartT').append('img').attr('src', 'pdf/T'+statename+'.png');
