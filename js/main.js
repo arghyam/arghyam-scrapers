@@ -189,6 +189,7 @@ function draw(story) {
 	$('#status').val('');
   d3.select('#exp_text').text(' ');	
   d3.select('#otstate').style('display', 'block');
+  d3.selectAll('#gradient_cont, #legend_cont, #download_cont, #source_cont, #source').style('display', 'block');
 	d3.selectAll('#stateicons, #about, #method, #demo, #brought, #dataChange, #slideshare, #forstate').style('display', 'none');
 	d3.selectAll('.legend, #chart1, #chart2, #gradient_cont, #right_container, #hide_text').style('display', 'none');
 	d3.selectAll('#source a, .treemap text, #columns text, #gradient text, .horiz0, .horiz1, .tooltip').remove();
