@@ -9,7 +9,7 @@ def latest(path):
     result = {}
     date = None
     for row in csv.DictReader(open(path)):
-        key = tuple(row[v].strip() for v in keys)
+        key = tuple(row[v].strip().upper() for v in keys)
 
         # Ignore Total rows
         if not all(key) or any(k.lower().find('total') >= 0 for k in key):
@@ -29,15 +29,16 @@ for column in csv.DictReader(open('summarise.csv')):
     if not column['File']:
         continue
 
+    col = column['Column']
+    src_col = column['SourceColumn'] or col
     if column['File'] not in files:
-        print column['File']
+        print '%s <- %s in %s' % (col, src_col, column['File'])
         path = os.path.join(root, column['File'])
         dates[column['File']], files[column['File']] = latest(path)
 
-    col = column['Column']
     fields.append(col)
     for index, row in files[column['File']].iteritems():
-        result.setdefault(index, {})[col] = row[col]
+        result.setdefault(index, {})[col] = row[src_col]
 
     result.setdefault(('_Updated', ''), {})[col] = dates[column['File']]
 

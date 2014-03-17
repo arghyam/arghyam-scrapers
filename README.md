@@ -22,9 +22,18 @@ Running on Linux
 
     # Run every time
     # --------------
-    cd arghyam-scrapers/tsc.gov.in
-    nohup find . -name 'scrape*.js' | xargs -n 1 -P 4 casperjs 2>&1 > log &
 
+    cd /home/ec2-user/arghyam-scrapers/tsc.gov.in
+    casperjs PercentageFinComponentStatewiseDistrictwise_net.js
+    casperjs FinancialProgressStatewiseDistrictwise.js
+    casperjs PhysicalProgessStateWiseDistrictwise.js
+    casperjs CategoriesIHHLStatewiseDistrictwise_net.js
+
+    # Run the XML crawlers
+    python xml2csv.py financialprogress
+    python xml2csv.py physicalprogress
+
+    # Create data.csv
     cd ..
     python summarise.py
 
