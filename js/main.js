@@ -1707,52 +1707,36 @@ function datachanges(){
  			.data(months).enter().append('option').text(String);
  		selected_date = select_date.property('value');
  		end_date = dates[dates.length-1]; 	
- 		start_date = _.filter(dates, function(d){ return d.split('-')[1] == selected_date.split('-')[0];	});
- 	 	filtered_data = _.filter(data, function(d){ return d.Date == end_date; });
- 	 	prev_data = _.filter(data, function(d){ return d.Date == start_date[0];});
- 	 	draw_table(filtered_data, prev_data);
+ 		filtered_data = _.filter(data, function(d){ return d.Date == end_date; });
+ 	 	draw_table(filtered_data);
 		select_date.on('change', function(d, i){
 			$('#perf_btn').removeClass('btn-primary');	
 		 	$('#perf_btn').removeClass('active');	
 			$('#fin_btn').addClass('btn-primary');	
 			$('#fin_btn').addClass('active');	
 		 	selected_date = d3.select(this).property('value');
-		 	start_date = _.filter(dates, function(d){ return d.split('-')[1] == selected_date.split('-')[0];	});
-		 	end_date = start_date[start_date.length-1];
-		 	filtered_data = _.filter(data, function(d){ return d.Date == end_date; });
- 	 		prev_data = _.filter(data, function(d){ return d.Date == start_date[0];});
- 	 		draw_table(filtered_data, prev_data);			 		
+		 	filtered_data = _.filter(data, function(d){ return d.Date.substring(3, 11) == selected_date; }); 
+ 	 		draw_table(filtered_data);			 		
 		});
-		function draw_table(filtered_data, prev_data){			
+		function draw_table(filtered_data){			
 			$('.loader').show();
 			d3.select('#tableData').selectAll('*').remove();
 			nestedStateData = d3.nest()
 					.key(function(d){ return d.State_Name; })
 					.rollup(function(rows){ return get_rollup(d3.sum, rows); }) 					
 					.entries(filtered_data),
-			state_level_data = d3.nest()
-					.key(function(d){ return d.State_Name; })
-					.rollup(function(rows){ return get_rollup(d3.sum, rows); })		
-					.entries(filtered_data),
 			district_level_data = d3.nest()
 					.key(function(d){ return [d.State_Name, d.District_Name]; })				
-					.entries(filtered_data),
-			prev_state_level_data = d3.nest()
-					.key(function(d){ return d.State_Name; })
-					.rollup(function(rows){ return get_rollup(d3.sum, rows); })		
-					.entries(prev_data),
-			prev_district_level_data = d3.nest()
-					.key(function(d){ return [d.State_Name, d.District_Name]; })				
-					.entries(prev_data);								
+					.entries(filtered_data);
 			states_districts  = ['+ ANDHRA PRADESH', '- ADILABAD', '- ANANTAPUR', '- CHITTOOR', '- CUDDAPAH', '- EAST GODAVARI', '- GUNTUR', '- KARIMNAGAR', '- KHAMMAM', '- KRISHNA', '- KURNOOL', '- MAHBUBNAGAR', '- MEDAK', '- NALGONDA', '- NELLORE', '- NIZAMABAD', '- PRAKASAM', '- RANGAREDDI', '- SRIKAKULAM', '- VISAKHAPATNAM', '- VIZIANAGARAM', '- WARANGAL', '- WEST GODAVARI', '+ ARUNACHAL PRADESH', '- ANJAW', '- CHANGLANG', '- DIBANG VALLEY', '- EAST KAMENG', '- EAST SIANG', '- KURUNG KUMEY', '- LOHIT', '- LOWER DIBANG VALLEY', '- LOWER SUBANSIRI', '- PAPUM PARE', '- TAWANG', '- TIRAP', '- UPPER SIANG', '- UPPER SUBANSIRI', '- WEST KAMENG', '- WEST SIANG', '+ ASSAM', '- BAGSHA', '- BARPETA', '- BONGAIGAON', '- CACHAR', '- CHIRANG', '- DARRANG', '- DHEMAJI', '- DHUBRI', '- DIBRUGARH', '- GOALPARA', '- GOLAGHAT', '- HAILAKANDI', '- JORHAT', '- KAMRUP', '- KARBI ANGLONG', '- KARIMGANJ', '- KOKRAJHAR', '- LAKHIMPUR', '- MARIGAON', '- NAGAON', '- NALBARI', '- NORTH CACHAR HILLS', '- SIBSAGAR', '- SONITPUR', '- TINSUKIA', '- UDALGURI', '+ BIHAR', '- ARARIA', '- ARWAL', '- AURANGABAD', '- BANKA', '- BEGUSARAI', '- BHAGALPUR', '- BHOJPUR', '- BUXAR', '- DARBHANGA', '- GAYA', '- GOPALGANJ', '- JAMUI', '- JEHANABAD', '- KAIMUR(BHABUA)', '- KATIHAR', '- KHAGARIA', '- KISHANGANJ', '- LAKHISARAI', '- MADHEPURA', '- MADHUBANI', '- MUNGER', '- MUZAFFARPUR', '- NALANDA', '- NAWADA', '- PASHCHIM CHAMPARAN', '- PATNA', '- PURBA CHAMPARAN', '- PURNIA', '- SAHARSA', '- SAMASTIPUR', '- SARAN', '- SASARAM(ROHTAS)', '- SHEIKHPURA', '- SHEOHAR', '- SITAMARHI', '- SIWAN', '- SUPAUL', '- VAISHALI', '+ CHHATTISGARH', '- BASTAR(JAGDALPUR)', '- BILASPUR', '- DANTEWADA', '- DHAMTARI', '- DURG', '- JANJGIR - CHAMPA', '- JASHPUR', '- KANKER', '- KAWARDHA(KABIRDHAM)', '- KORBA', '- KORIYA', '- MAHASAMUND', '- RAIGARH', '- RAIPUR', '- RAJNANDGAON', '- SURGUJA', '+ D & N HAVELI', '- DADRA AND NAGAR HAVELI', '+ GOA', '- NORTH GOA', '- SOUTH GOA', '+ GUJARAT', '- AHMEDABAD', '- AMRELI', '- ANAND', '- BANAS KANTHA', '- BHARUCH', '- BHAVNAGAR', '- DAHOD', '- DANGS', '- GANDHINAGAR', '- JAMNAGAR', '- JUNAGADH', '- KACHCHH', '- KHEDA', '- MAHESANA', '- NARMADA', '- NAVSARI', '- PANCH MAHALS', '- PATAN', '- PORBANDAR', '- RAJKOT', '- SABAR KANTHA', '- SURAT', '- SURENDRANAGAR', '- VADODARA', '- VALSAD', '+ HARYANA', '- AMBALA', '- BHIWANI', '- FARIDABAD', '- FATEHABAD', '- GURGAON', '- HISAR', '- JHAJJAR', '- JIND', '- KAITHAL', '- KARNAL', '- KURUKSHETRA', '- MAHENDRAGARH', '- MEWAT', '- PANCHKULA', '- PANIPAT', '- REWARI', '- ROHTAK', '- SIRSA', '- SONIPAT', '- YAMUNANAGAR', '+ HIMACHAL PRADESH', '- BILASPUR', '- CHAMBA', '- HAMIRPUR', '- KANGRA', '- KINNAUR', '- KULLU', '- LAHAUL & SPITI', '- MANDI', '- SHIMLA', '- SIRMAUR', '- SOLAN', '- UNA', '+ JAMMU & KASHMIR', '- ANANTNAG', '- BANDIPORA', '- BARAMULLA', '- BUDGAM', '- DODA', '- JAMMU', '- KARGIL', '- KATHUA', '- KISHTWAR', '- KULGAM', '- KUPWARA', '- LEH (LADAKH)', '- POONCH', '- PULWAMA', '- RAJAURI', '- RAMBAN', '- REASI', '- SAMBA', '- SHOPIAN', '- SRINAGAR', '- UDHAMPUR', '+ JHARKHAND', '- BOKARO', '- CHATRA', '- DEOGHAR', '- DHANBAD', '- DUMKA', '- GARHWA', '- GIRIDIH', '- GODDA', '- GUMLA', '- HAZARIBAGH', '- JAMTARA', '- KHUNTI', '- KODERMA', '- LATEHAR', '- LOHARDAGA', '- PAKUR', '- PALAMU', '- PASCHIM SINGHBHUM', '- PURBI SINGHBHUM', '- RAMGARH', '- RANCHI', '- SAHIBGANJ', '- SERAIKELA KHARSAWAN', '- SIMDEGA', '+ KARNATAKA', '- BAGALKOT', '- BANGALORE RURAL', '- BANGALORE URBAN', '- BELGAUM', '- BELLARY', '- BIDAR', '- BIJAPUR', '- CHAMARAJANAGAR', '- CHICKMAGALUR', '- CHIKBALLAPUR', '- CHITRADURGA', '- DAVANGERE', '- DHARWAD', '- GADAG', '- GULBARGA', '- HASSAN', '- HAVERI', '- KODAGU', '- KOLAR', '- KOPPAL', '- MANDYA', '- MANGALORE(DAKSHINA KANNADA)', '- MYSORE', '- RAICHUR', '- RAMANAGARA', '- SHIMOGA', '- TUMKUR', '- UDUPI', '- UTTAR KANNADA', '+ KERALA', '- ALAPPUZHA', '- ERNAKULAM', '- IDUKKI', '- KANNUR', '- KASARGOD', '- KOLLAM', '- KOTTAYAM', '- KOZHIKODE', '- MALAPPURAM', '- PALAKKAD', '- PATHANAMTHITTA', '- THIRUVANANTHAPURAM', '- THRISSUR', '- WAYANAD', '+ MADHYA PRADESH', '- ALIRAJPUR', '- ANUPPUR', '- ASHOKNAGAR', '- BALAGHAT', '- BARWANI', '- BETUL', '- BHIND', '- BHOPAL', '- BURHANPUR', '- CHHATARPUR', '- CHHINDWARA', '- DAMOH', '- DATIA', '- DEWAS', '- DHAR', '- DINDORI', '- GUNA', '- GWALIOR', '- HARDA', '- HOSHANGABAD', '- INDORE', '- JABALPUR', '- JHABUA', '- KATNI', '- KHANDWA(EAST NIMAR)', '- KHARGONE', '- MANDLA', '- MANDSAUR', '- MORENA', '- NARSINGHPUR', '- NEEMUCH', '- PANNA', '- RAISEN', '- RAJGARH', '- RATLAM', '- REWA', '- SAGAR', '- SATNA', '- SEHORE', '- SEONI', '- SHAHDOL', '- SHAJAPUR', '- SHEOPUR', '- SHIVPURI', '- SIDHI', '- SINGRAULI', '- TIKAMGARH', '- UJJAIN', '- UMARIA', '- VIDISHA', '+ MAHARASHTRA', '- AHMEDNAGAR', '- AKOLA', '- AMRAVATI', '- AURANGABAD', '- BEED', '- BHANDARA', '- BULDHANA', '- CHANDRAPUR', '- DHULE', '- GADCHIROLI', '- GONDIA', '- HINGOLI', '- JALGAON', '- JALNA', '- KOLHAPUR', '- LATUR', '- NAGPUR', '- NANDED', '- NANDURBAR', '- NASHIK', '- OSMANABAD', '- PARBHANI', '- PUNE', '- RAIGAD', '- RATNAGIRI', '- SANGLI', '- SATARA', '- SINDHUDURG', '- SOLAPUR', '- THANE', '- WARDHA', '- WASHIM', '- YAVATMAL', '+ MANIPUR', '- BISHNUPUR', '- CHANDEL', '- CHURACHANDPUR', '- IMPHAL EAST', '- IMPHAL WEST', '- SENAPATI', '- TAMENGLONG', '- THOUBAL', '- UKHRUL', '+ MEGHALAYA', '- EAST GARO HILLS', '- EAST KHASI HILLS', '- JAINTIA HILLS', '- RI BHOI', '- SOUTH GARO HILLS', '- WEST GARO HILLS', '- WEST KHASI HILLS', '+ MIZORAM', '- AIZAWL', '- CHAMPHAI', '- KOLASIB', '- LAWNGTLAI', '- LUNGLEI', '- MAMIT', '- SAIHA', '- SERCHHIP', '+ NAGALAND', '- DIMAPUR', '- KIPHIRE', '- KOHIMA', '- LONGLENG', '- MOKOKCHUNG', '- MON', '- PEREN', '- PHEK', '- TUENSANG', '- WOKHA', '- ZUNHEBOTO', '+ ORISSA', '- ANGUL', '- BALANGIR', '- BALESWAR', '- BARGARH', '- BHADRAK', '- BOUDH', '- CUTTACK', '- DEBAGARH', '- DHENKANAL', '- GAJAPATI', '- GANJAM', '- JAGATSINGHAPUR', '- JAJAPUR', '- JHARSUGUDA', '- KALAHANDI', '- KANDHAMAL', '- KENDRAPARA', '- KENDUJHAR', '- KHORDHA', '- KORAPUT', '- MALKANGIRI', '- MAYURBHANJ', '- NABARANGAPUR', '- NAYAGARH', '- NUAPADA', '- PURI', '- RAYAGADA', '- SAMBALPUR', '- SONEPUR', '- SUNDARGARH', '+ PUDUCHERRY', '- PONDICHERRY', '+ PUNJAB', '- AMRITSAR', '- BARNALA', '- BATHINDA', '- FARIDKOT', '- FATEHGARH SAHIB', '- FEROZEPUR', '- GURDASPUR', '- HOSHIARPUR', '- JALANDHAR', '- KAPURTHALA', '- LUDHIANA', '- MANSA', '- MOGA', '- MUKTSAR', '- NAWANSHAHR', '- PATIALA', '- RUPNAGAR', '- SAS NAGAR', '- SANGRUR', '- TARN TARAN', '+ RAJASTHAN', '- AJMER', '- ALWAR', '- BANSWARA', '- BARAN', '- BARMER', '- BHARATPUR', '- BHILWARA', '- BIKANER', '- BUNDI', '- CHITTORGARH', '- CHURU', '- DAUSA', '- DHOLPUR', '- DUNGARPUR', '- GANGANAGAR', '- HANUMANGARH', '- JAIPUR', '- JAISALMER', '- JALOR', '- JHALAWAR', '- JHUNJHUNU', '- JODHPUR', '- KARAULI', '- KOTA', '- NAGAUR', '- PALI', '- RAJSAMAND', '- SAWAI MADHOPUR', '- SIKAR', '- SIROHI', '- TONK', '- UDAIPUR', '+ SIKKIM', '- EAST SIKKIM', '- NORTH SIKKIM', '- SOUTH SIKKIM', '- WEST SIKKIM', '+ TAMIL NADU', '- COIMBATORE', '- CUDDALORE', '- DHARMAPURI', '- DINDIGUL', '- ERODE', '- KANCHIPURAM', '- KANYAKUMARI(NAGERCOIL)', '- KARUR', '- KRISHNAGIRI', '- MADURAI', '- NAGAPATTINAM', '- NAMAKKAL', '- NILGIRIS(UDHAGAMANDALAM)', '- PERAMBALUR', '- PUDUKKOTTAI', '- RAMANATHAPURAM', '- SALEM', '- SIVAGANGA', '- THANJAVUR', '- THENI', '- THOOTHUKUDI', '- TIRUCHIRAPPALLI', '- TIRUNELVELI', '- TIRUVALLUR', '- TIRUVANNAMALAI', '- TIRUVARUR', '- VELLORE', '- VILLUPURAM', '- VIRUDHUNAGAR', '+ TRIPURA', '- DHALAI', '- NORTH TRIPURA', '- SOUTH TRIPURA', '- WEST TRIPURA', '+ UTTAR PRADESH', '- AGRA', '- ALIGARH', '- ALLAHABAD', '- AMBEDKAR NAGAR', '- AURAIYA', '- AZAMGARH', '- BAGPAT', '- BAHRAICH', '- BALLIA', '- BALRAMPUR', '- BANDA', '- BARABANKI', '- BAREILLY', '- BASTI', '- BIJNOR', '- BUDAUN', '- BULANDSHAHR', '- CHANDAULI', '- CHITRAKOOT', '- DEORIA', '- ETAH', '- ETAWAH', '- FAIZABAD', '- FARRUKHABAD', '- FATEHPUR', '- FIROZABAD', '- GAUTAM BUDDHA NAGAR', '- GHAZIABAD', '- GHAZIPUR', '- GONDA', '- GORAKHPUR', '- HAMIRPUR', '- HARDOI', '- JALAUN', '- JAUNPUR', '- JHANSI', '- JYOTIBA PHULE NAGAR', '- KANNAUJ', '- KANPUR DEHAT', '- KANPUR NAGAR', '- KANSHIRAM NAGAR', '- KAUSHAMBI', '- KUSHINAGAR', '- LAKHIMPUR KHERI', '- LALITPUR', '- LUCKNOW', '- MAHAMAYA NAGAR(HATHRAS)', '- MAHARAJGANJ', '- MAHOBA', '- MAINPURI', '- MATHURA', '- MAU', '- MEERUT', '- MIRZAPUR', '- MORADABAD', '- MUZAFFARNAGAR', '- PILIBHIT', '- PRATAPGARH', '- RAE BARELI', '- RAMPUR', '- SAHARANPUR', '- SANT KABIR NAGAR', '- SANT RAVIDAS NAGAR( BHADOHI)', '- SHAHJAHANPUR', '- SHRAVASTI', '- SIDDHARTHNAGAR', '- SITAPUR', '- SONBHADRA', '- SULTANPUR', '- UNNAO', '- VARANASI', '+ UTTARAKHAND', '- ALMORA', '- BAGESHWAR', '- CHAMOLI', '- CHAMPAWAT', '- DEHRADUN', '- HARIDWAR', '- NAINITAL', '- PAURI(GARHWAL)', '- PITHORAGARH', '- RUDRAPRAYAG', '- TEHRI GARHWAL', '- UDHAM SINGH NAGAR', '- UTTARKASHI', '+ WEST BENGAL', '- BANKURA', '- BARDHAMAN', '- BIRBHUM', '- COOCH BEHAR', '- DAKSHIN DINAJPUR', '- DARJEELING', '- HOOGHLY', '- HOWRAH', '- JALPAIGURI', '- MALDA', '- MIDNAPUR EAST', '- MIDNAPUR WEST', '- MURSHIDABAD', '- NADIA', '- NORTH  PARAGANAS', '- PURULIA', '- SILIGURI', '- SOUTH PARAGANAS', '- UTTAR DINAJPUR'];
-			table = d3.select('#tableData').append('table').attr({'width':'1170px'}).classed('table table-condensed', true),
+			table = d3.select('#tableData').append('table').classed('table table-condensed', true),
 			thead = table.append('thead'),
 			tbody = table.append('tbody'),
 			headtr = thead.append('tr'),
 			bodytr = tbody.selectAll('tr').data(states_districts).enter().append('tr')
 				.attr('class', function(d){ return d.split(' ')[0] === '+' ? 'headers valuestr' : 'rows hide valuestr' ; }); 
-			headtr.append('th').text('STATE').style({'padding-left':'15px','background': '#000', 'color':'#fff'});
-			bodytr.append('td').style({'min-width':'120px','max-width':'120px'}).text(String)
+			headtr.append('th').attr('id','statenames').text('STATE');
+			bodytr.append('td').attr('id', 'statecol').text(String)
 				 .style({'text-indent':function(d){ return d.split(' ')[0] === '-' ? '15px' : ''; }, 'color': function(d){ return d.split(' ')[0] === '+' ? 'blue' : '#000';} , 'cursor': function(d){ return d.split(' ')[0] === '+' ? 'pointer' : 'auto';} });	
 			for(i=0,len=columns.length; col=columns[i], i<len; i++) {
 				rows = [];
@@ -1760,43 +1744,37 @@ function datachanges(){
 					rows.push(state.values[col]);
 				}
 				if(d3.sum(rows) != 0){
-					headtr.append('td').style({'background': '#000', 'color':'#fff', 'border': '1px solid #fff'}).attr({'class': function(d){ return col.substring(0, 4);}}).append('div')
-				  	.attr({ class: 'tooltip1' , 'data-toggle':'tooltip', 'data-placement':'top', 'data-original-title': col.split('_').join(' ') })
-				  	.text(col.split('_')[0].substring(0,6)).style({'cursor':'context-menu'});   
-					$('.tooltip1').tooltip();
-					row_values = [], prev_row_values = [];
-					for(j=0, lenS=state_level_data.length; state=state_level_data[j], prev_state=prev_state_level_data[j], j<lenS; j++){
+					headtr.append('td').attr({'id':'colnames', 'class': function(d){ return col.substring(0, 3);}}).append('div')
+				  	.text(col);   
+					row_values = [];
+					for(j=0, lenS=nestedStateData.length; state=nestedStateData[j], j<lenS; j++){
 						row_values.push(state.values[col]);
-						prev_row_values.push(prev_state.values[col]);
 						districts = _.filter(district_level_data, function(d){ return d.key.split(',')[0] == state.key ;});
-						prev_districts = _.filter(prev_district_level_data, function(d){ return d.key.split(',')[0] == state.key ;});
-						for(k=0, lenD=districts.length; dist=districts[k],prev_dist=prev_districts[k], k<lenD; k++){
+						for(k=0, lenD=districts.length; dist=districts[k], k<lenD; k++){
 							row_values.push(dist.values[0][col]);
-							prev_row_values.push(prev_dist.values[0][col]);														
 						}
 					}	
 					curValues = [];				
-					td = bodytr.data(row_values).append('td')
-					 		.style({'border': '1px solid #fff', 'color':'#000', 'background' : function(d){  curValues.push(d); return d == 0 ? '#ffffbf' : d < 0 ? '#fc8d59' : '#91cf60'; } })  
-					 		.attr('class', function(d, i){ return col.substring(0, 4); })							
-							//.data(prev_row_values)
+					td = bodytr.data(row_values).append('td').attr('id', 'cells')
+					 		.style({'background' : function(d){  curValues.push(d); return d == 0 ? '#ffffbf' : d < 0 ? '#fc8d59' : '#91cf60'; } })  
+					 		.attr('class', function(d, i){ return col.substring(0, 3); })							
 							.append('div').attr({ class: 'tooltip1' , 'data-toggle':'tooltip', 'data-placement':'bottom', 'data-original-title': function(d, i){ return d; } }); //'Current value ('+end_date+'): '+(curValues[i]) + ' , Previous value ('+start_date[0]+'): '+(d)+' , Difference: '+(curValues[i] - d)+'.';}
 					td.html('&nbsp;'); 		
 					$('.tooltip1').tooltip();				 
 				}
 			}
-			$('table tr td.Cons').addClass('hide');
+			$('table tr td.Con, td.IHH').addClass('hide');
 			$('#perf_btn').click(function(){
 				$(this).addClass('btn-primary');
 				$('#fin_btn').removeClass('btn-primary active');
-				$('table tr td.Cons').removeClass('hide');
-				$('table tr td.Outl, td.Cent, td.Stat, td.Bene, td.Tota, td.Expe').addClass('hide');
+				$('table tr td.Con, td.IHH').removeClass('hide');
+				$('table tr td.Out, td.Amt, td.Exp, td.Tot').addClass('hide');
 			});
 			$('#fin_btn').click(function(){
 				$(this).addClass('btn-primary');
 				$('#perf_btn').removeClass('btn-primary active');
-				$('table tr td.Cons').addClass('hide');
-				$('table tr td.Outl, td.Cent, td.Stat, td.Bene, td.Tota, td.Expe').removeClass('hide');
+				$('table tr td.Con, td.IHH').addClass('hide');
+				$('table tr td.Out, td.Amt, td.Exp, td.Tot').removeClass('hide');
 			});
 			$('table tr.headers td:first-child').click(function() {
 	    	$(this).parent().nextAll('tr').each( function() {
@@ -1868,27 +1846,27 @@ if(window.location.search == '?embed=1'){
 
 function get_rollup(c, rows){
 	return { 
-		'Outlay'								                     : c(rows, function(d){ return  d['Outlay'];}),
-		'Centre_-_Amount_Released'									 : c(rows, function(d){ return  d['Centre_-_Amount_Released'];}),
-		'State_-_Amount_Released'										 : c(rows, function(d){ return  d['State_-_Amount_Released'];}),
-		'Beneficiary_-_Amount_Released'							 : c(rows, function(d){ return  d['Beneficiary_-_Amount_Released'];}),
-		'Total_Amount_Released'											 : c(rows, function(d){ return  d['Total_Amount_Released'];}),
-		'Expenditure_from_Centre_Share'							 : c(rows, function(d){ return  d['Expenditure_from_Centre_Share'];}),
-		'Expenditure_from_State_Share'							 : c(rows, function(d){ return  d['Expenditure_from_State_Share'];}),
-		'Expenditure_from_Beneficiary_Share'				 : c(rows, function(d){ return  d['Expenditure_from_Beneficiary_Share'];}),
-		'Total_Expenditure'										       : c(rows, function(d){ return  d['Total_Expenditure'];}),
-		'Total_Expenditure_on_BPL_toilets'					 : c(rows, function(d){ return  d['Total_Expenditure_on_BPL_toilets'];}),
-		'Total_Expenditure_on_School_toilets'				 : c(rows, function(d){ return  d['Total_Expenditure_on_School_toilets'];}),
-		'Total_Expenditure_on_Anganwadi_toilets'		 : c(rows, function(d){ return  d['Total_Expenditure_on_Anganwadi_toilets'];}),
-		'Total_Expenditure_on_Sanitary_Complexes'		 : c(rows, function(d){ return  d['Total_Expenditure_on_Sanitary_Complexes'];}),
-		'Construction_-_IHHL_BPL'										 : c(rows, function(d){ return  d['Construction_-_IHHL_BPL'];}),
-		'Construction_-_IHHL_APL'										 : c(rows, function(d){ return  d['Construction_-_IHHL_APL'];}),
-		'Construction_-_IHHL_Total'									 : c(rows, function(d){ return  d['Construction_-_IHHL_Total'];}),
-		'Construction_-_Sanitary_Complexes_for_Women': c(rows, function(d){ return  d['Construction_-_Sanitary_Complexes_for_Women'];}),
-		'Construction_-_Schools_toilets'						 : c(rows, function(d){ return  d['Construction_-_Schools_toilets'];}),
-		'Construction_-_Anganwadi_toilets'					 : c(rows, function(d){ return  d['Construction_-_Anganwadi_toilets'];}),
-		'Construction_-_Rural_Sanitary_Marts'				 : c(rows, function(d){ return  d['Construction_-_Rural_Sanitary_Marts'];}),
-		'Construction_-_Production_Centres'					 : c(rows, function(d){ return  d['Construction_-_Production_Centres'];})			
+		'Outlay'								            : c(rows, function(d){ return  d['Outlay'];}),
+		'Amt. Released Centre'							: c(rows, function(d){ return  d['Amt. Released Centre'];}),
+		'Amt. Released State'								: c(rows, function(d){ return  d['Amt. Released State'];}),
+		'Amt. Released Beneficiary'					: c(rows, function(d){ return  d['Amt. Released Beneficiary'];}),
+		'Amt. Released Total'								: c(rows, function(d){ return  d['Amt. Released Total'];}),
+		'Expenditure Centre'								: c(rows, function(d){ return  d['Expenditure Centre'];}),
+		'Expenditure State'									: c(rows, function(d){ return  d['Expenditure State'];}),
+		'Expenditure Beneficiary'						: c(rows, function(d){ return  d['Expenditure Beneficiary'];}),
+		'Expenditure Total'									: c(rows, function(d){ return  d['Expenditure Total'];}),
+		'Total Expenditure BPL Toilets'			: c(rows, function(d){ return  d['Total Expenditure BPL Toilets'];}),
+		'Total Expenditure School Toilets'	: c(rows, function(d){ return  d['Total Expenditure School Toilets'];}),
+		'Total Expenditure Nursery toilets'	: c(rows, function(d){ return  d['Total Expenditure Nursery toilets'];}),
+		'Total Expenditure SCWs'		 				: c(rows, function(d){ return  d['Total Expenditure SCWs'];}),
+		'IHHL construction BPL'							: c(rows, function(d){ return  d['IHHL construction BPL'];}),
+		'IHHL construction APL'							: c(rows, function(d){ return  d['IHHL construction APL'];}),
+		'IHHL construction Total'						: c(rows, function(d){ return  d['IHHL construction Total'];}),
+		'Construction SCW'									: c(rows, function(d){ return  d['Construction SCW'];}),
+		'Construction School toilets'				: c(rows, function(d){ return  d['Construction School toilets'];}),
+		'Construction Nursery toilets'			: c(rows, function(d){ return  d['Construction Nursery toilets'];}),
+		'Construction RSMs'				 					: c(rows, function(d){ return  d['Construction RSMs'];}),
+		'Construction PCs'					 				: c(rows, function(d){ return  d['Construction PCs'];})			
 	};
 }
 

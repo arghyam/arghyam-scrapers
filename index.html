@@ -69,10 +69,14 @@
 		.dorFade{ stroke:2; opacity:0.09; stroke-opacity:0.09; shape-rendering:crispEdges;}		
 		#cirTSC, #cirCEN, #recTSC, #recCEN, #recGRD { stroke: #000; cursor: pointer;}
 		.auto{ cursor: auto }
-		#tableData table{ border: 1px solid #ddd;}
+		#tableData table{ border: 1px solid #ddd; width:1170px; }
 		#tableData { font-family:arial; font-size: 12px; } 
 		#tableData tr.rows { background: #FCFCFC;}
 		#tableData tr:hover { background: #F5FAFF;}
+		#tableData tr td#cells { border:1px solid #fff; }
+		#colnames { background: #000; color:#fff; border:1px solid #fff; max-width:25px; cursor:context-menu; }		
+		#statenames {padding-left:15px; background: #000; color:#fff; }
+		#statecol { min-width: 120px; max-width:120px; }
 		.loader { position: fixed; left: 0; top: 0; width: 100%; height: 100%; z-index: 9999999; display:none; 
 			background-image: url('img/loading.gif'); background-repeat: no-repeat ; background-position: center center;
 		}
