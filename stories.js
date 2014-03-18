@@ -536,7 +536,7 @@ var stories = [
   }),		
   treemap_story({
     'menu'   : 'Money spent',
-    'title'  : 'XML - 2',
+    'title'  : 'Total money spent on rural sanitation',
     'context': 'The rural sanitation scheme allocates funds different sanitation activities in villages. The main activities supported include ', 
     'cont_p' : '$1) Construction of toilets - for people in their houses and public toilets and institutions such as schools and creches @' + 
                '$2) money for improving awareness on need for toilets  @' + 
@@ -557,6 +557,7 @@ var stories = [
     'grad'   : 'gradient_legend',
 		'percent': [1, 37, 70, 95],
 		'pertext': [0, 50, 100, 200],
+    'slideshare': 'https://onedrive.live.com/redir?resid=44822B77589D1B71%21130',
 		'IWP'    : 'false'
   }),
   treemap_story({
@@ -690,7 +691,7 @@ var stories = [
   }),
   treemap_story({
     'menu'   : 'Toilets built',
-    'title'  : 'XML - 1 - second',
+    'title'  : 'Total Sanitation Coverage',
     'context': 'The states set targets for construction of toilets and meeting these targets are what determine performance as per the rural sanitation scheme. This visualisation looks at coverage of rural sanitation across the country. ',
     'cont_p' : ' @' +
                ' @',
@@ -709,6 +710,7 @@ var stories = [
     'grad'   : 'gradient_legend',
 		'percent': [1, 37, 70, 95],
 		'pertext': [0, 50, 100, 200],
+    'slideshare': 'https://onedrive.live.com/redir?resid=44822B77589D1B71%21132', 
 		'IWP'    : 'false'
   }),
   scatter_story({
