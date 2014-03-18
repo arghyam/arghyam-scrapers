@@ -369,7 +369,7 @@ var stories = [
   treemap_story({
     'menu'   : 'Money spent',
     'title'  : 'Money spent on sanitation coverage of rural schools',
-		'context': "School sanitation is highlighted as one of the important components under the Nirmal Bharat Abhiyan. The amount allotted for building school toilets is Rs.35,000 per school (Rs. 38,500 in hilly and difficult areas). This amount has not changed when from the current scheme's precursor, the total sanitation campaign guidelines of 2010." + 
+		'context': 'School sanitation is highlighted as one of the important components under the Nirmal Bharat Abhiyan. The amount allotted for building school toilets is Rs.35,000 per school (Rs. 38,500 in hilly and difficult areas). This amount has not changed when from the current scheme\'s precursor, the total sanitation campaign guidelines of 2010.' + 
                'This visualisation looks at the money planned to be spent to ensure that all rural, government schools have toilets.It assesses the performance of the scheme through the lens of amount spent vis a vis amount planned to be spent on money given to toilets for rural, government schools.',
 		'cont_p' : '',
 		'viz'    : 'Each large box represents one State. Click on it to reveal smaller boxes that represent a District. All amounts are in Rs. Lakhs.',
@@ -405,7 +405,7 @@ var stories = [
   treemap_story({
     'menu'   : 'Money spent',
     'title'  : 'Money spent on sanitation coverage of rural nursery schools',
-		'context': "Nursery schools or anganwadis were set up by Government of India to address child hunger and malnutrition. It is meant for children between the ages of 0 - 6 years. Providing safe sanitation in these become important to ensure good health. The idea is also to get children to learn to use a toilet from a very young age. The amount allotted for building baby-friendly nursery school toilets is Rs.8,000 per school (Rs. 10,000 in hilly and difficult areas). This amount has not changed when from the current scheme's precursor, the total sanitation campaign guidelines of 2010.",
+		'context': 'Nursery schools or anganwadis were set up by Government of India to address child hunger and malnutrition. It is meant for children between the ages of 0 - 6 years. Providing safe sanitation in these become important to ensure good health. The idea is also to get children to learn to use a toilet from a very young age. The amount allotted for building baby-friendly nursery school toilets is Rs.8,000 per school (Rs. 10,000 in hilly and difficult areas). This amount has not changed when from the current scheme\'s precursor, the total sanitation campaign guidelines of 2010.',
     'cont_p' : '',
     'viz'    : 'Each large box represents one State. Click on it to reveal smaller boxes that represent a District. All amounts are in Rs. Lakhs.',
     'viz_p'	 : '$1) Size of the box: Money planned to be set aside for coverage of nursery schools @' +
@@ -537,6 +537,16 @@ var stories = [
   treemap_story({
     'menu'   : 'Money spent',
     'title'  : 'XML - 2',
+    'context': 'The rural sanitation scheme allocates funds different sanitation activities in villages. The main activities supported include ', 
+    'cont_p' : '$1) Construction of toilets - for people in their houses and public toilets and institutions such as schools and creches @' + 
+               '$2) money for improving awareness on need for toilets  @' + 
+               '$3) creating a supply chain for manufacturing toilet-ware and @' + 
+               '$4) waste management efforts @',
+    'viz'    : 'Each large box represents one State. Click on it to reveal smaller boxes that represent a District. All amounts are in Rs. Lakhs.',
+    'viz_p'  : '$1) Size of the box: Money given to the states/ districts for spending on rural sanitation @' + 
+               '$2) Colour of the box: How much has the state / union territory spent on rural sanitation when compared to what was given @'+
+               '$3) The larger the size of the box, the greater the expenditure. Green and shades of green indicate spending according to plan while red and shades of red indicate failure to spend according to plan. @'+
+               'The data is sourced from Ministry of Drinking Water and Sanitation\'s XML files to data.gov.in',
 		'data'   : 'FinancialProgress.csv',
     'url'    : ['http://tsc.gov.in/tsc/NDSAP/StatewiseDistrictwiseFinancialProgress.xml'],
     'cols'   : ['Total_Release_of_funds','Total_Expenditure_Reported'],
@@ -593,7 +603,7 @@ var stories = [
 							 'This visualization presents what the TSC achievement looks like when analysed based on current household numbers.',
 		'calc'   : '(2001 Rural Households with Toilets + TSC cumulative achievement numbers (2001-current))/Total Rural Households (Census 2011).'+
 							 ' However, there are a couple of caveats to using this visual:',
-		'calc_p' : "$a) It uses TSC cumulative numbers from the Ministry's website. However, the census 2011 presented data that was starkly different from this data. A current exercise is being undertaken by the Ministry to re-do baseline numbers. These numbers therefore are up for revision @" +						
+		'calc_p' : '$a) It uses TSC cumulative numbers from the Ministry\'s website. However, the census 2011 presented data that was starkly different from this data. A current exercise is being undertaken by the Ministry to re-do baseline numbers. These numbers therefore are up for revision @' +						
 		           '$b) The achievements presented in this visual may therefore be more exaggerated than the actual achievements on the ground', 
 		'viz'		 : 'Each circle represents one State. Click on the state to zoom in, hover over the circle to see the data.',
 		'viz_p'  : '$1) Size of the circle: Total number of rural households as per 2011 census @' + 
@@ -658,7 +668,13 @@ var stories = [
   }),		
   treemap_story({
     'menu'   : 'Toilets built',
-    'title'  : 'XML - 1 - first',
+    'title'  : 'Toilets built for the rural poor - data.gov.in',
+    'context': 'The states set targets for construction of toilets, especially for rural poor toilets where they also have to provide an incentive. Meeting these targets are what determine performance as per the rural sanitation scheme. This visualisation measures the performance as per targets.',
+    'cont_p' : ' @',
+    'viz'    : 'Each large box represents one State. Click on it to reveal smaller boxes that represent a District.',
+    'viz_p'  : '$1) Size of the box: Target of toilets planned to be built for rural poor households @' +
+               '$2) Colour of the box: Toilets built for rural poor households when compared to the target @' +
+               '$3) The larger the size of the box, the greater the target. Green and shades of green indicate building of toilets according to target while red and shades of red indicate failure to meet targets. @', 
 		'data'   : 'PhysicalProgress.csv',
     'url'    : ['http://tsc.gov.in/tsc/NDSAP/StatewiseDistrictwisePhysicalProgress.xml'],
     'cols'   : ['Project_objectives_IHHL_BPL', 'Project_performance_IHHL_BPL'],
@@ -669,11 +685,20 @@ var stories = [
     'grad'   : 'gradient_legend',
 		'percent': [1, 37, 70, 95],
 		'pertext': [0, 50, 100, 200],
-		'IWP'    : 'false'
+    'slideshare': 'https://skydrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21118&authkey=AAX0ZIwWrOpxzHo&em=2', 
+    'IWP'    : 'true'
   }),
   treemap_story({
     'menu'   : 'Toilets built',
     'title'  : 'XML - 1 - second',
+    'context': 'The states set targets for construction of toilets and meeting these targets are what determine performance as per the rural sanitation scheme. This visualisation looks at coverage of rural sanitation across the country. ',
+    'cont_p' : ' @' +
+               ' @',
+    'viz'    : 'Each large box represents one State. Click on it to reveal smaller boxes that represent a District. ',
+    'viz_p'  : '$1) Size of the box: Target of toilets planned across rural India  @' +
+               '$2) Colour of the box: Toilets built for rural households when compared to the target  @' +
+               '$3) The larger the size of the box, the greater the target. Green and shades of green indicate building of toilets according to target while red and shades of red indicate failure to meet targets. @'+
+               '$ The data is sourced from Ministry of Drinking Water and Sanitation\'s XML files to data.gov.in', 
 		'data'   : 'PhysicalProgress.csv',
     'url'    : ['http://tsc.gov.in/tsc/NDSAP/StatewiseDistrictwisePhysicalProgress.xml'],
     'cols'   : ['Project_Objectives_IHHL_TOTAL', 'Project_Performance-IHHL_TOTAL'],
@@ -771,9 +796,9 @@ var stories = [
 		'range'	 : [1, 5],
 		'percent': [1, 37, 70, 95],
     'pertext': [0, 50, 100, 200],
-    'cen_t'  : "In 2001, the difference in the number of households without toilets between Census and rural sanitation scheme (TSC) was 0.06 lakhs. In 2011, the difference had grown to 66.08 lakhs.",
-		'cen_b'  : ["According to census data, only 32.2 percent of rural households had access to toilets in 2011. According to TSC the number is considerably larger: 75.9 percent."," The 2011 census indicates an increase of 12 percent in rural households from 126.76 lakhs in 2001 to 142.46 lakhs in 2011.","However, TSC has kept this figure constant at 2001 numbers. Thus, when census rural population numbers for 2011 are used to calculate achievement (TSC Actual), TSC's total achievement falls to 67.6 percent."],
-		'cen_c'  : ["How much more money needs to be spent to achieve total sanitation for 2011 household numbers?","According to the Census, the required expenditure is 18.3 times the amount spent from 1999 till 2011 (Rs 526.5 crores). According to TSC Actual data, it is 8.8 times.","Assuming the same rate of population growth, by 2022 there will be 161.99 lakh rural households. The scheme needs to acknowledge population trends and revise project objectives to receive the right amount of incentives."],
+    'cen_t'  : 'In 2001, the difference in the number of households without toilets between Census and rural sanitation scheme (TSC) was 0.06 lakhs. In 2011, the difference had grown to 66.08 lakhs.',
+		'cen_b'  : ['According to census data, only 32.2 percent of rural households had access to toilets in 2011. According to TSC the number is considerably larger: 75.9 percent."," The 2011 census indicates an increase of 12 percent in rural households from 126.76 lakhs in 2001 to 142.46 lakhs in 2011.","However, TSC has kept this figure constant at 2001 numbers. Thus, when census rural population numbers for 2011 are used to calculate achievement (TSC Actual), TSC\'s total achievement falls to 67.6 percent.'],
+		'cen_c'  : ['How much more money needs to be spent to achieve total sanitation for 2011 household numbers?","According to the Census, the required expenditure is 18.3 times the amount spent from 1999 till 2011 (Rs 526.5 crores). According to TSC Actual data, it is 8.8 times.","Assuming the same rate of population growth, by 2022 there will be 161.99 lakh rural households. The scheme needs to acknowledge population trends and revise project objectives to receive the right amount of incentives.'],
     'slideshare':'https://onedrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21130&authkey=ANcrWIQwOv0tQWU&em=2',
     'IWP'    : 'true'					
   }),
