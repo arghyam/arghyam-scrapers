@@ -1581,17 +1581,6 @@ function draw_dorlingCart(story) {   // census 2001 vs 2011
 						.text(function(d){ return d.District_Name; });
 				change(group);						
 		});
-		var nested_data = d3.nest()
-				.key(function(d){ return d[story.group[0]]; })
-				.rollup(function(rows){ return { 'C2011'   : d3.sum(rows, function(d){ return d[story.size]; }),
-																				 'cen2011' : d3.sum(rows, function(d){ return d[story.cen2011];}),	
-																				 'cen2001' : d3.sum(rows, function(d){ return d[story.cen2001];}),
-																				 'trh2011' : d3.sum(rows, function(d){ return d[story.trh2011];}),
-																				 'trh2001' : d3.sum(rows, function(d){ return d[story.trh2001];}),
-																				 'diff'    : d3.mean(rows, function(d){ return d[story.diff];})
-																			 } 
-				})
-				.entries(subset);
 		var maps = svg.append('g'),
 		    g = maps.append('g');
 		d3.csv('GeocodeLatLong.csv', function(geo){
@@ -1623,25 +1612,27 @@ function draw_dorlingCart(story) {   // census 2001 vs 2011
 							.attr({ class: 'feature auto', 'data-q': function(d){ return d.properties.NAME.toUpperCase(); }, 
 											d: function(d){ topomaps.push([d.properties.NAME.toUpperCase(), d]); return path(d);} 
 							});
-					g.selectAll('.statCircs')
-							.data(nodes)
-						.enter().append('circle')						
-							.attr({ class: 'statCircs', cx: function(d) { return d.x; }, cy: function(d) { return d.y; } })
-							.data(nested_data)
-							.attr({ 'data-q': function(d){ return d.key; }, r: function(d){ return Math.pow(d.values['C2011'], 1/6) ; }, 
-											fill: function(d){ return colorDorCart(d.values['diff']).replace(/NaNNaNNaN/i, 'eee');}	
-              })
-							.on('mouseover', function(){
-								var details = d3.select(this).text(); 
-								$('#copy_title').val(details).select();	
-							})
-							.append('title')
-							.text(function(d){ return d.key+' : '+story.area[0]+ ' = '+N(d.values['C2011']) +'. ' 
-								+story.num[0]+' = '+N(d.values['cen2011'])+'. '
-								+story.den1[0]+' = '+N(d.values['trh2001'])+'. '
-								+story.num1[0]+' = '+N(d.values['cen2001'])+'. '
-							  +story.cen2011_2001[0]+' = '+P(d.values['diff']);									 
-              });
+					d3.csv(story.data1, function(datas){
+						g.selectAll('.statCircs')
+									.data(nodes)
+								.enter().append('circle')						
+									.attr({ class: 'statCircs', cx: function(d) { return d.x; }, cy: function(d) { return d.y; } })
+									.data(datas)
+									.attr({'data-q':function(d){ return d[story.group]; }, r: function(d){ return Math.pow(d[story.size], 1/6);},
+											fill:function(d){ return colorDorCart(d[story.diff]).replace(/NaNNaNNaN/i, 'eee'); }
+									 })
+									.on('mouseover', function(){
+										var details = d3.select(this).text(); 
+										$('#copy_title').val(details).select();	
+									})
+									.append('title')
+									.text(function(d){ return d[story.group]+' : '+story.area[0]+' = '+N(d[story.size])+'. '
+										+story.num[0]+' = '+N(d[story.cen2011])+'. '
+										+story.den1[0]+' = '+N(d[story.trh2001])+'. '  
+										+story.num1[0]+' = '+N(d[story.cen2001])+'. '
+										+story.cen2011_2001[0]+' = '+P(d[story.diff])+' .'										
+		              });
+					});
 					node = g.selectAll('.distCircs')
 							.data(geo)
 						.enter().append('circle')	
@@ -1741,14 +1732,14 @@ function datachanges(){
 					.entries(filtered_data),
 			state_level_data = d3.nest()
 					.key(function(d){ return d.State_Name; })
-					.rollup(function(rows){ return get_rollup(d3.mean, rows); })		
+					.rollup(function(rows){ return get_rollup(d3.sum, rows); })		
 					.entries(filtered_data),
 			district_level_data = d3.nest()
 					.key(function(d){ return [d.State_Name, d.District_Name]; })				
 					.entries(filtered_data),
 			prev_state_level_data = d3.nest()
 					.key(function(d){ return d.State_Name; })
-					.rollup(function(rows){ return get_rollup(d3.mean, rows); })		
+					.rollup(function(rows){ return get_rollup(d3.sum, rows); })		
 					.entries(prev_data),
 			prev_district_level_data = d3.nest()
 					.key(function(d){ return [d.State_Name, d.District_Name]; })				
@@ -1786,10 +1777,10 @@ function datachanges(){
 					}	
 					curValues = [];				
 					td = bodytr.data(row_values).append('td')
-					 		.style({'border': '1px solid #fff', 'color':'#000', 'background' : function(d){  curValues.push(d); return d == 'Infinity' ? '#ddd' : d == 0 ? '#fc8d59' : '#91cf60'; } }) 
+					 		.style({'border': '1px solid #fff', 'color':'#000', 'background' : function(d){  curValues.push(d); return d == 0 ? '#ffffbf' : d < 0 ? '#fc8d59' : '#91cf60'; } })  
 					 		.attr('class', function(d, i){ return col.substring(0, 4); })							
-							.data(prev_row_values)
-							.append('div').attr({ class: 'tooltip1' , 'data-toggle':'tooltip', 'data-placement':'bottom', 'data-original-title': function(d, i){ return 'Current value ('+end_date+'): '+P2(curValues[i]) + ' , Previous value ('+start_date[0]+'): '+P2(d)+' , Difference: '+P2(curValues[i] - d)+'.'; } });
+							//.data(prev_row_values)
+							.append('div').attr({ class: 'tooltip1' , 'data-toggle':'tooltip', 'data-placement':'bottom', 'data-original-title': function(d, i){ return d; } }); //'Current value ('+end_date+'): '+(curValues[i]) + ' , Previous value ('+start_date[0]+'): '+(d)+' , Difference: '+(curValues[i] - d)+'.';}
 					td.html('&nbsp;'); 		
 					$('.tooltip1').tooltip();				 
 				}

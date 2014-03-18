@@ -726,7 +726,8 @@ var stories = [
   dorlingCart_story({
 		'menu'   : 'Performance',
     'title'  : 'Census 2001 vs. 2011',
-		'data'   : 'aggregated_census_data.csv',
+    'data'   : 'aggregated_census_data.csv',
+    'data1'  : 'aggregated_census_data_state.csv',
 		'url'    : ['TBD'],
 		'group'  : ['State_Name'],
 		'cols'   : ['Census_2001_Total_Rural_Households','Census_2011_Total_Rural_Households','Census_2001_IHHL','Census_2011_IHHL'],
