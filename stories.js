@@ -558,7 +558,7 @@ var stories = [
 		'percent': [1, 37, 70, 95],
 		'pertext': [0, 50, 100, 200],
     'slideshare': 'https://onedrive.live.com/redir?resid=44822B77589D1B71%21130',
-		'IWP'    : 'false'
+		'IWP'    : 'true'
   }),
   treemap_story({
     'menu'   : 'Toilets built',
@@ -693,8 +693,7 @@ var stories = [
     'menu'   : 'Toilets built',
     'title'  : 'Total Sanitation Coverage',
     'context': 'The states set targets for construction of toilets and meeting these targets are what determine performance as per the rural sanitation scheme. This visualisation looks at coverage of rural sanitation across the country. ',
-    'cont_p' : ' @' +
-               ' @',
+    'cont_p' : ' ',
     'viz'    : 'Each large box represents one State. Click on it to reveal smaller boxes that represent a District. ',
     'viz_p'  : '$1) Size of the box: Target of toilets planned across rural India  @' +
                '$2) Colour of the box: Toilets built for rural households when compared to the target  @' +
@@ -711,7 +710,7 @@ var stories = [
 		'percent': [1, 37, 70, 95],
 		'pertext': [0, 50, 100, 200],
     'slideshare': 'https://onedrive.live.com/redir?resid=44822B77589D1B71%21132', 
-		'IWP'    : 'false'
+		'IWP'    : 'true'
   }),
   scatter_story({
     'menu'   : 'Performance',
