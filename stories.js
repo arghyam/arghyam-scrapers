@@ -331,7 +331,7 @@ var stories = [
     'viz_p'  : '$1) Size of the box: Money given to the states/ districts for spending on rural sanitation @' + 
                '$2) Colour of the box: How much has the state / union territory spent on rural sanitation when compared to what was given @'+
                '$3) The larger the size of the box, the greater the expenditure. Green and shades of green indicate spending according to plan while red and shades of red indicate failure to spend according to plan. @'+
-               'The data is sourced from Ministry of Drinking Water and Sanitation\'s XML files to <a href="http://data.gov.in/catalog/nirmal-bharat-abhiyan-district-wise-financial-progress" target="_blank">Data.Gov.IN</a>.',
+               'The data is sourced from Ministry of Drinking Water and Sanitation\'s XML files to <a href="http://data.gov.in/catalog/nirmal-bharat-abhiyan-district-wise-financial-progress" target="_blank">Data.Gov.In</a>.',
     'data'   : 'FinancialProgress.csv',
     'url'    : ['http://tsc.gov.in/tsc/NDSAP/StatewiseDistrictwiseFinancialProgress.xml'],
     'cols'   : ['Total_Release_of_funds','Total_Expenditure_Reported'],
