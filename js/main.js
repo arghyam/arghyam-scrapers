@@ -1529,7 +1529,7 @@ function draw_dorling(story) { // state pages
 function draw_dorlingCart(story) {   // census 2001 vs 2011
 	d3.select('#data_cont div').style('padding-left','15px').style('margin-left','-10px');
 	d3.select('#data_cont div strong').text('Change Date : ');
-	d3.selectAll('#gradient_cont, .legend.dorlingCart').style('display', 'block');
+	d3.selectAll('.legend.dorlingCart').style('display', 'block');
 	var gradient = d3.select('#gradient');
 	gradient.append('rect')
 		.attr({ x : 0, y: 0, width : 958, height : 30, fill : 'url(#' + story.grad + ')' });
@@ -1619,7 +1619,7 @@ function draw_dorlingCart(story) {   // census 2001 vs 2011
 									.attr({ class: 'statCircs', cx: function(d) { return d.x; }, cy: function(d) { return d.y; } })
 									.data(datas)
 									.attr({'data-q':function(d){ return d[story.group]; }, r: function(d){ return Math.pow(d[story.size], 1/6);},
-											fill:function(d){ return colorDorCart(d[story.diff]).replace(/NaNNaNNaN/i, 'eee'); }
+											fill:function(d){ return  d[story.diff] == 0 ? '#ffffbf' : d[story.diff] < 0 ? '#fc8d59' : '#91cf60';} //colorDorCart(d[story.diff]).replace(/NaNNaNNaN/i, 'eee')
 									 })
 									.on('mouseover', function(){
 										var details = d3.select(this).text(); 
@@ -1641,7 +1641,7 @@ function draw_dorlingCart(story) {   // census 2001 vs 2011
 							})
 							.data(subset)
 							.attr({ r: function(d){ return Math.pow(d[story.size], 1/12 );}, 'stroke': '#000', 'stroke-width': 0.25,
-											fill: function(d){ return colorDorCart(d[story.diff]).replace(/NaNNaNNaN/i, 'eee'); },
+											fill: function(d){ return d[story.diff] == 0 ? '#ffffbf' : d[story.diff] < 0 ? '#fc8d59' : d[story.diff] > 0 ? '#91cf60' : '#eee'; }, //colorDorCart(d[story.diff]).replace(/NaNNaNNaN/i, 'eee')
 											'data-q': function(d){ return d.State_Name; }, 'data-r': function(d){ return d.District_Name; }											
 							})							
 							.on('mouseover', function(){
