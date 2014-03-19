@@ -1230,7 +1230,7 @@ function draw_stack(story) {
   });
 }
 function draw_dorling(story) { // state pages
-	d3.selectAll('.legend.dorling, #forstate, #gradient_cont').style('display', 'block');  
+	d3.selectAll('.legend.dorling, #data_cont, #forstate, #gradient_cont').style('display', 'block');  
 	d3.select('#otstate').style('display', 'none');
 	var gradient = d3.select('#gradient');
   gradient.append('rect')

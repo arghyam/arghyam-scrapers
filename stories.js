@@ -569,7 +569,7 @@ var stories = [
     'viz_p'  : '$1) Size of the box: Target of toilets planned across rural India  @' +
                '$2) Colour of the box: Toilets built for rural households when compared to the target  @' +
                '$3) The larger the size of the box, the greater the target. Green and shades of green indicate building of toilets according to target while red and shades of red indicate failure to meet targets. @'+
-               '$ The data is sourced from Ministry of Drinking Water and Sanitation\'s XML files to data.gov.in', 
+               'The data is sourced from Ministry of Drinking Water and Sanitation\'s XML files to data.gov.in', 
     'data'   : 'PhysicalProgress.csv',
     'url'    : ['http://tsc.gov.in/tsc/NDSAP/StatewiseDistrictwisePhysicalProgress.xml'],
     'cols'   : ['Project_Objectives_IHHL_TOTAL', 'Project_Performance-IHHL_TOTAL'],
@@ -751,10 +751,15 @@ var stories = [
   }),
   dorlingCart_story({
 		'menu'   : 'Performance',
-    'title'  : 'Census 2001 vs. 2011',
+    'title'  : 'Toilet coverage Census 2001 - 2011',
+    'context': 'Census of India collects information about rural sanitation coverage. The 2011 census numbers were significantly different from the numbers that were being reported to the Ministry of Drinking Water and Sanitation\'s IMIS. Sources indicate that the census numbers for coverage are more reliable than the tsc.gov.in ones for a number of reasons  <a href="http://www.indiawaterportal.org/sites/indiawaterportal.org/files/fromoutlaystooutcomes_understandingthestatusofruralsanitationdata_accountabilityinitiative_arghyam_consolidated_report_2013.pdf" target="_blank">(Click here to know more)</a>. This cartogram compares progress of states and districts between 2001 and 2011.',
+    'cont_p' : ' @',
+    'viz'    : 'Change in rural sanitation coverage between 2001 and 2011 Census data in each State is denoted by a circle. Select a state and district to look at the rate of change at a district level. ',
+    'viz_p'  : '$1) Size of the circle indicates number of rural households in 2011 @' +
+               '$2) Colour of the circle indicates achievement of construction by the state / union territory. Green indicates progress in construction from 2001 and 2011; red indicates that the coverage has decreased in these areas in 2011. Wherever values were not available e.g. due to a district being newly created between 2001 and 2011, the area is shaded in grey. @' ,               
     'data'   : 'aggregated_census_data.csv',
     'data1'  : 'aggregated_census_data_state.csv',
-		'url'    : ['TBD'],
+		'url'    : ['http://www.indiawaterportal.org/data/2011-census-household-tables-0', 'https://drive.google.com/folderview?id=0B9MvDRHquaP6TFlmcUhjY2VwalE&usp=sharing'],
 		'group'  : ['State_Name'],
 		'cols'   : ['Census_2001_Total_Rural_Households','Census_2011_Total_Rural_Households','Census_2001_IHHL','Census_2011_IHHL'],
     'area'   : ['Census 2011 Total Rural Households', 'Census_2011_Total_Rural_Households'],
@@ -767,7 +772,8 @@ var stories = [
 		'grad'   : 'gradient_legend_dorCart',
 		'percent': [1, 50, 96],
 		'pertext': ['-50%', '0', '50%'],
-		'IWP'    : 'false'
+    'slideshare': 'https://onedrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21136&authkey=AObMNSRj41zfDLo&em=2&wdAr=1.3333333333333333',
+		'IWP'    : 'true'
   }),
   dorling_story({
     'menu'   : 'State',
