@@ -699,7 +699,7 @@ var stories = [
     'viz_p'  : '$1) Size of the box: Target of toilets planned to be built for rural poor households @' +
                '$2) Colour of the box: Toilets built for rural poor households when compared to the target @' +
                '$3) The larger the size of the box, the greater the target. Green and shades of green indicate building of toilets according to target while red and shades of red indicate failure to meet targets. @'+
-               'The data is sourced from Ministry of Drinking Water and Sanitation\'s XML files to <a href="http://data.gov.in/catalog/nirmal-bharat-abhiyan-district-wise-physical-progress" target="_blank">Data.Gov.IN</a>. ', 
+               'The data is sourced from Ministry of Drinking Water and Sanitation\'s XML files to <a href="http://data.gov.in/catalog/nirmal-bharat-abhiyan-district-wise-physical-progress" target="_blank">Data.Gov.In</a>. ', 
 		'data'   : 'PhysicalProgress.csv',
     'url'    : ['http://tsc.gov.in/tsc/NDSAP/StatewiseDistrictwisePhysicalProgress.xml'],
     'cols'   : ['Project_objectives_IHHL_BPL', 'Project_performance_IHHL_BPL'],
