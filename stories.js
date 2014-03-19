@@ -321,6 +321,32 @@ function dataChange_story(story){
 var stories = [
   treemap_story({
     'menu'   : 'Money spent',
+    'title'  : 'Total money spent on rural sanitation',
+    'context': 'The rural sanitation scheme allocates funds different sanitation activities in villages. The main activities supported include ', 
+    'cont_p' : '$1) Construction of toilets - for people in their houses and public toilets and institutions such as schools and creches @' + 
+               '$2) money for improving awareness on need for toilets  @' + 
+               '$3) creating a supply chain for manufacturing toilet-ware and @' + 
+               '$4) waste management efforts @',
+    'viz'    : 'Each large box represents one State. Click on it to reveal smaller boxes that represent a District. All amounts are in Rs. Lakhs.',
+    'viz_p'  : '$1) Size of the box: Money given to the states/ districts for spending on rural sanitation @' + 
+               '$2) Colour of the box: How much has the state / union territory spent on rural sanitation when compared to what was given @'+
+               '$3) The larger the size of the box, the greater the expenditure. Green and shades of green indicate spending according to plan while red and shades of red indicate failure to spend according to plan. @'+
+               'The data is sourced from Ministry of Drinking Water and Sanitation\'s XML files to data.gov.in',
+    'data'   : 'FinancialProgress.csv',
+    'url'    : ['http://tsc.gov.in/tsc/NDSAP/StatewiseDistrictwiseFinancialProgress.xml'],
+    'cols'   : ['Total_Release_of_funds','Total_Expenditure_Reported'],
+    'group'  : ['State_Name'],
+    'area'   : ['Funds given', 'Total_Release_of_funds'],
+    'num'    : ['Funds spent', 'Total_Expenditure_Reported'],
+    'den'    : ['Funds given', 'Total_Release_of_funds'],
+    'grad'   : 'gradient_legend',
+    'percent': [1, 37, 70, 95],
+    'pertext': [0, 50, 100, 200],
+    'slideshare': 'https://onedrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21133&authkey=AFGtYgH7fL_P34M&em=2&wdAr=1.3333333333333333',
+    'IWP'    : 'true'
+  }),
+  treemap_story({
+    'menu'   : 'Money spent',
     'title'  : 'Spending on rural sanitation',
   	'context': 'The rural sanitation scheme allocates funds different sanitation activities in villages. The main activities supported include ', 
   	'cont_p' : '$1) Construction of toilets - for people in their houses and public toilets and institutions such as schools and creches @' + 
@@ -533,33 +559,30 @@ var stories = [
 		'lines'  : 'false',
     'legend' : { '%Blue%': 'APL SC + ST', '%Red%': 'Rural poor SC + ST', '%Green%': 'Others' },
 		'IWP'    : 'false'
-  }),		
-  treemap_story({
-    'menu'   : 'Money spent',
-    'title'  : 'Total money spent on rural sanitation',
-    'context': 'The rural sanitation scheme allocates funds different sanitation activities in villages. The main activities supported include ', 
-    'cont_p' : '$1) Construction of toilets - for people in their houses and public toilets and institutions such as schools and creches @' + 
-               '$2) money for improving awareness on need for toilets  @' + 
-               '$3) creating a supply chain for manufacturing toilet-ware and @' + 
-               '$4) waste management efforts @',
-    'viz'    : 'Each large box represents one State. Click on it to reveal smaller boxes that represent a District. All amounts are in Rs. Lakhs.',
-    'viz_p'  : '$1) Size of the box: Money given to the states/ districts for spending on rural sanitation @' + 
-               '$2) Colour of the box: How much has the state / union territory spent on rural sanitation when compared to what was given @'+
-               '$3) The larger the size of the box, the greater the expenditure. Green and shades of green indicate spending according to plan while red and shades of red indicate failure to spend according to plan. @'+
-               'The data is sourced from Ministry of Drinking Water and Sanitation\'s XML files to data.gov.in',
-		'data'   : 'FinancialProgress.csv',
-    'url'    : ['http://tsc.gov.in/tsc/NDSAP/StatewiseDistrictwiseFinancialProgress.xml'],
-    'cols'   : ['Total_Release_of_funds','Total_Expenditure_Reported'],
-    'group'  : ['State_Name'],
-    'area'   : ['Funds given', 'Total_Release_of_funds'],
-    'num'    : ['Funds spent', 'Total_Expenditure_Reported'],
-    'den'    : ['Funds given', 'Total_Release_of_funds'],
-    'grad'   : 'gradient_legend',
-		'percent': [1, 37, 70, 95],
-		'pertext': [0, 50, 100, 200],
-    'slideshare': 'https://onedrive.live.com/redir?resid=44822B77589D1B71%21130',
-		'IWP'    : 'true'
   }),
+  treemap_story({
+    'menu'   : 'Toilets built',
+    'title'  : 'Total Sanitation Coverage',
+    'context': 'The states set targets for construction of toilets and meeting these targets are what determine performance as per the rural sanitation scheme. This visualisation looks at coverage of rural sanitation across the country. ',
+    'cont_p' : ' ',
+    'viz'    : 'Each large box represents one State. Click on it to reveal smaller boxes that represent a District. ',
+    'viz_p'  : '$1) Size of the box: Target of toilets planned across rural India  @' +
+               '$2) Colour of the box: Toilets built for rural households when compared to the target  @' +
+               '$3) The larger the size of the box, the greater the target. Green and shades of green indicate building of toilets according to target while red and shades of red indicate failure to meet targets. @'+
+               '$ The data is sourced from Ministry of Drinking Water and Sanitation\'s XML files to data.gov.in', 
+    'data'   : 'PhysicalProgress.csv',
+    'url'    : ['http://tsc.gov.in/tsc/NDSAP/StatewiseDistrictwisePhysicalProgress.xml'],
+    'cols'   : ['Project_Objectives_IHHL_TOTAL', 'Project_Performance-IHHL_TOTAL'],
+    'group'  : ['State_Name'],
+    'area'   : ['Total number of toilets to be built', 'Project_Objectives_IHHL_TOTAL'],
+    'num'    : ['Total number of toilets built', 'Project_Performance-IHHL_TOTAL'],
+    'den'    : ['Total number of toilets to be built', 'Project_Objectives_IHHL_TOTAL'],
+    'grad'   : 'gradient_legend',
+    'percent': [1, 37, 70, 95],
+    'pertext': [0, 50, 100, 200],
+    'slideshare': 'https://onedrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21132&authkey=AEGV-T28vvC5tPI&em=2&wdAr=1.3333333333333333', 
+    'IWP'    : 'true'
+  }),  
   treemap_story({
     'menu'   : 'Toilets built',
     'title'  : 'Evaluation of toilets built for the rural poor',
@@ -688,30 +711,7 @@ var stories = [
 		'pertext': [0, 50, 100, 200],
     'slideshare': 'https://skydrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21118&authkey=AAX0ZIwWrOpxzHo&em=2', 
     'IWP'    : 'true'
-  }),
-  treemap_story({
-    'menu'   : 'Toilets built',
-    'title'  : 'Total Sanitation Coverage',
-    'context': 'The states set targets for construction of toilets and meeting these targets are what determine performance as per the rural sanitation scheme. This visualisation looks at coverage of rural sanitation across the country. ',
-    'cont_p' : ' ',
-    'viz'    : 'Each large box represents one State. Click on it to reveal smaller boxes that represent a District. ',
-    'viz_p'  : '$1) Size of the box: Target of toilets planned across rural India  @' +
-               '$2) Colour of the box: Toilets built for rural households when compared to the target  @' +
-               '$3) The larger the size of the box, the greater the target. Green and shades of green indicate building of toilets according to target while red and shades of red indicate failure to meet targets. @'+
-               '$ The data is sourced from Ministry of Drinking Water and Sanitation\'s XML files to data.gov.in', 
-		'data'   : 'PhysicalProgress.csv',
-    'url'    : ['http://tsc.gov.in/tsc/NDSAP/StatewiseDistrictwisePhysicalProgress.xml'],
-    'cols'   : ['Project_Objectives_IHHL_TOTAL', 'Project_Performance-IHHL_TOTAL'],
-    'group'  : ['State_Name'],
-    'area'   : ['Total number of toilets to be built', 'Project_Objectives_IHHL_TOTAL'],
-    'num'    : ['Total number of toilets built', 'Project_Performance-IHHL_TOTAL'],
-    'den'    : ['Total number of toilets to be built', 'Project_Objectives_IHHL_TOTAL'],
-    'grad'   : 'gradient_legend',
-		'percent': [1, 37, 70, 95],
-		'pertext': [0, 50, 100, 200],
-    'slideshare': 'https://onedrive.live.com/redir?resid=44822B77589D1B71%21132', 
-		'IWP'    : 'true'
-  }),
+  }),  
   scatter_story({
     'menu'   : 'Performance',
     'title'  : 'Comparing spending to toilet construction - TSC',

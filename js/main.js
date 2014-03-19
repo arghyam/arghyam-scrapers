@@ -1758,7 +1758,7 @@ function datachanges(){
 					td = bodytr.data(row_values).append('td').attr('id', 'cells')
 					 		.style({'background' : function(d){  curValues.push(d); return d == 0 ? '#ffffbf' : d < 0 ? '#fc8d59' : '#91cf60'; } })  
 					 		.attr('class', function(d, i){ return col.substring(0, 3); })							
-							.append('div').attr({ class: 'tooltip1' , 'data-toggle':'tooltip', 'data-placement':'bottom', 'data-original-title': function(d, i){ return d; } }); //'Current value ('+end_date+'): '+(curValues[i]) + ' , Previous value ('+start_date[0]+'): '+(d)+' , Difference: '+(curValues[i] - d)+'.';}
+							.append('div').attr({ class: 'tooltip1' , 'data-toggle':'tooltip', 'data-placement':'bottom', 'data-original-title': function(d, i){ return Math.round(d); } }); //'Current value ('+end_date+'): '+(curValues[i]) + ' , Previous value ('+start_date[0]+'): '+(d)+' , Difference: '+(curValues[i] - d)+'.';}
 					td.html('&nbsp;'); 		
 					$('.tooltip1').tooltip();				 
 				}
