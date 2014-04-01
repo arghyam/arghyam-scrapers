@@ -508,7 +508,14 @@
 	<div class="row-fluid">
 		<div style="margin-left:-1px;">
 			<h1>Data Change</h1>
-			<!-- <p>Description goes here...</p> -->
+			<p><b>Context:</b> Both physical achievement numbers and expenditure data must be updated by the districts once a month on to the IMIS. This is important to keep the data current. Understanding this is critical as it helps provide perspective on the trends that districts show on sanitation. For e.g. it helps explain why they are "under-achieving" in physical and financial progress as well.</p>
+			<p><b>Using the visualisation:</b> Toggle between finance and performance for expenditure and physical coverage data. Three colours are used in the visual:</p>
+			<ul>
+				<li>Green indicates that data was entered and there has been a positive change from previous value</li>
+				<li>Yellow indicates that there has been no data entry for that month</li>
+				<li>Red indicates that data entered is lesser than the previous value - which means a reduction in number.</li>
+			</ul>
+			<p id="datachange_ppt"><a style="cursor:pointer;">Click on the ppt for more help with using the visualisation.</a></p>
 			<br>
 			<div class="pull-left">
 				<select id="date_changes"></select> 
@@ -520,7 +527,8 @@
 				</div>
 				<br>
 			</div>
-			<div id="tableData"></div>			
+			<div id="tableData"></div>
+			<iframe width='500px' height='385px' frameborder='0' src='https://onedrive.live.com/embed?cid=44822B77589D1B71&resid=44822B77589D1B71%21138&authkey=AEpMNb3OEIUQTBY&em=2&wdAr=1.3333333333333333' width='350px' height='286px' frameborder='0'>This is an embedded <a target='_blank' href='http://office.com'>Microsoft Office</a> presentation, powered by <a target='_blank' href='http://office.com/webapps'>Office Online</a>.</iframe>			
 		</div>
 	</div>	
 </div>
@@ -587,6 +595,7 @@
 	}
 	});
 	}); 
+	d3.select('#datachange_ppt').on('click', function(){ window.scrollTo(0, document.body.scrollHeight); });
 </script>
 <script type="text/javascript">
   var _gaq = _gaq || [];
