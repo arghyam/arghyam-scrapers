@@ -187,6 +187,7 @@ function draw(story) {
   }
   $('#emb_text').val('');
 	$('#status').val('');
+	$('#emb_btn, #copy_btn').prop('disabled', false);  
   d3.select('#exp_text').text(' ');	
   d3.select('#otstate').style('display', 'block');
   d3.selectAll('#gradient_cont, #legend_cont, #download_cont, #source_cont, #source').style('display', 'block');
@@ -1230,7 +1231,8 @@ function draw_stack(story) {
   });
 }
 function draw_dorling(story) { // state pages
-	d3.selectAll('.legend.dorling, #data_cont, #forstate, #gradient_cont').style('display', 'block');  
+	d3.selectAll('.legend.dorling, #data_cont, #forstate, #gradient_cont').style('display', 'block');
+	$('#emb_btn, #copy_btn').prop('disabled', true);  
 	d3.select('#otstate').style('display', 'none');
 	var gradient = d3.select('#gradient');
   gradient.append('rect')
