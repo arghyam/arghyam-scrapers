@@ -185,10 +185,11 @@ function draw(story) {
 	if (d3.event) {
     d3.event.preventDefault();		    
   }
+  window.scrollTo(0, 0);
   $('#emb_text').val('');
 	$('#status').val('');
-	$('#emb_btn, #copy_btn').prop('disabled', false);  
-  d3.select('#exp_text').text(' ');	
+	$('#emb_btn, #copy_btn').prop('disabled', false);
+	d3.select('#exp_text').text(' ');	
   d3.select('#otstate').style('display', 'block');
   d3.selectAll('#gradient_cont, #legend_cont, #download_cont, #source_cont, #source').style('display', 'block');
 	d3.selectAll('#stateicons, #about, #method, #demo, #brought, #dataChange, #slideshare, #forstate').style('display', 'none');
@@ -1692,6 +1693,7 @@ function draw_dorlingCart(story) {   // census 2001 vs 2011
 	});
 }
 function datachanges(){	
+	window.scrollTo(0, 0);
 	$('.loader').show();
 	d3.select('#dataChange').style('display', 'block');
 	d3.csv('datachanges.csv', function(data){  
