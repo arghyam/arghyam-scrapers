@@ -185,7 +185,6 @@ function draw(story) {
 	if (d3.event) {
     d3.event.preventDefault();		    
   }
-  window.scrollTo(0, 0);
   $('#emb_text').val('');
 	$('#status').val('');
 	$('#emb_btn, #copy_btn').prop('disabled', false);
