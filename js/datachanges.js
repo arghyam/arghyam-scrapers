@@ -21,8 +21,8 @@ var datafiles = [
 		'../data-23-Feb-2014.csv',
 		'../data-02-Mar-2014.csv',
 		'../data-30-Mar-2014.csv',
-		'../data-06-Apr-2014.csv',
-		'../data-20-Apr-2014.csv'
+		'../data-06-Apr-2014.csv',		
+		'../data-27-Apr-2014.csv'
 ];
 
 var months = [], unique_months;
