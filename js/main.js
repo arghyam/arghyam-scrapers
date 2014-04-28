@@ -2,6 +2,7 @@
 //var iwp = 'www.indiawaterportal.org';
 var host = window.location.href;
 var iwp = 'http://arghyam.github.io/arghyam-scrapers/?#';
+//var iwp = 'http://localhost/arghyam/arghyam-scrapers/?#';
 console.log(host);
 var slides = [];
 d3.selectAll('.tooltip').remove();
